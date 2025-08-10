@@ -1,3 +1,4 @@
+import Card from "../ui/card";
 import GradientText from "../ui/GradientText";
 import Wrapper from "../Wrapper";
 
@@ -12,10 +13,10 @@ export default function HowItWorks() {
                 Three simple guides for each roles
             </p>
 
-            <Wrapper className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-8">
-                <div className="border rounded-md bg-white dark:bg-card p-4">
-                    <h1 className="text-5xl mb-2 overflow-hidden font-bold text-primary">
-                        <span>01</span>
+            <Wrapper className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                <Card>
+                    <h1 className="text-5xl md:text-6xl mb-2 overflow-hidden font-bold text-primary">
+                        <p className="-translate-x-4">01</p>
                     </h1>
                     <h4 className="font-semibold text-lg mb-2">Company</h4>
                     <p className="text-slate-700 dark:text-neutral-300/90 ">
@@ -25,10 +26,10 @@ export default function HowItWorks() {
                         decide whether to accept or decline candidates, helping
                         ensure they select the best fit for their organization.
                     </p>
-                </div>
-                <div className="border rounded-md bg-white dark:bg-card p-4 lg:scale-110">
-                    <h1 className="text-5xl mb-2 overflow-hidden font-bold text-primary">
-                        <span>02</span>
+                </Card>
+                <Card>
+                    <h1 className="text-5xl md:text-6xl mb-2 overflow-hidden font-bold text-primary">
+                        <p className="-translate-x-4">02</p>
                     </h1>
                     <h4 className="font-semibold text-lg mb-2">Student</h4>
                     <p className="text-slate-700 dark:text-neutral-300/90 ">
@@ -40,10 +41,10 @@ export default function HowItWorks() {
                         for the company’s decision on whether they are accepted
                         for the internship.
                     </p>
-                </div>
-                <div className="border rounded-md bg-white dark:bg-card p-4 md:col-span-2 lg:col-span-1">
-                    <h1 className="text-5xl mb-2 overflow-hidden font-bold text-primary">
-                        <span>03</span>
+                </Card>
+                <Card>
+                    <h1 className="text-5xl md:text-6xl mb-2 overflow-hidden font-bold text-primary">
+                        <p className="-translate-x-4">03</p>
                     </h1>
                     <h4 className="font-semibold text-lg mb-2">
                         OJT Instructor
@@ -56,7 +57,7 @@ export default function HowItWorks() {
                         with company representatives to help match students with
                         the right opportunities.
                     </p>
-                </div>
+                </Card>
             </Wrapper>
         </div>
     );
