@@ -12,7 +12,9 @@ import { MessageCircle, MessageSquare } from "lucide-react";
 export default function Navbar() {
     const pathname = usePathname();
     return (
-        <div className="fixed z-50 top-0 left-0 w-full px-3 border-b dark:border-b-neutral-900 py-3 bg-white dark:bg-transparent backdrop-blur-2xl">
+        <div className="fixed z-50 top-0 left-0 w-full px-3 py-3 bg-white dark:bg-transparent backdrop-blur-2xl">
+            <div className="absolute bottom-0 w-full left-0 h-[1px] bg-linear-to-r from-transparent via-neutral-400/20 dark:via-neutral-600/20 to-transparent"></div>
+
             <Wrapper className="grid grid-cols-2 md:grid-cols-3">
                 <Link href="/" className="flex items-center gap-2">
                     <p className="font-bold">InternMatch</p>
@@ -80,7 +82,9 @@ export default function Navbar() {
                         </Link>
                         <ThemeToggler />
                     </div>
-                    <Button size="sm">Sign In</Button>
+                    <Button size="sm" asChild>
+                        <Link href="/sign-in">Sign In</Link>
+                    </Button>
                 </div>
             </Wrapper>
         </div>
