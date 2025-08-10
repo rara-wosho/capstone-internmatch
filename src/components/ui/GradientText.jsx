@@ -6,7 +6,7 @@ export default function GradientText({ children, className }) {
             <h1
                 className={cn(
                     className,
-                    " font-bold hidden lg:inline-flex bg-clip-text text-transparent bg-gradient-to-r from-neutral-700 dark:from-neutral-200 to-violet-800 dark:to-violet-500"
+                    " font-bold hidden lg:inline-flex bg-clip-text text-transparent bg-linear-to-r from-neutral-600 dark:from-neutral-200 to-blue-800 dark:to-neutral-500"
                 )}
             >
                 {children}

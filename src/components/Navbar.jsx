@@ -12,7 +12,7 @@ export default function Navbar() {
     const pathname = usePathname();
     return (
         <div className="fixed z-50 top-0 left-0 w-full px-3 border-b dark:border-b-neutral-900 py-3 bg-white dark:bg-transparent backdrop-blur-2xl">
-            <Wrapper className="flex items-center justify-between">
+            <Wrapper className="grid grid-cols-2 md:grid-cols-3">
                 <Link href="/" className="flex items-center gap-2">
                     <p className="font-bold">InternMatch</p>
                 </Link>
@@ -59,9 +59,9 @@ export default function Navbar() {
                     </Link>
                     <ThemeToggler />
                 </div>
-                <div className="right hidden md:flex gap-2.5">
-                    <Button variant="outline">Register</Button>
+                <div className="right hidden md:flex justify-end gap-2.5">
                     <Button>Sign In</Button>
+                    <Button variant="outline">Follow Our Page</Button>
                 </div>
             </Wrapper>
         </div>

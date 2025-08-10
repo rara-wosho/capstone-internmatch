@@ -25,7 +25,9 @@ export default function RootLayout({ children }) {
             suppressHydrationWarning
             className={cn("scroll-smooth", geist.className)}
         >
-            <body className={`antialiased`}>
+            <body
+                className={`antialiased text-neutral-800 dark:text-neutral-200`}
+            >
                 <ThemeProvider
                     attribute="class"
                     defaultTheme="dark"

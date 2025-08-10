@@ -10,7 +10,9 @@ export default function Home() {
             <div className="px-3">
                 <HeroSection />
             </div>
-            <HowItWorks />
+            <div className="px-3">
+                <HowItWorks />
+            </div>
         </div>
     );
 }

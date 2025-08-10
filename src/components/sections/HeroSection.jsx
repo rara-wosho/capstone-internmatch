@@ -23,7 +23,9 @@ export default function HeroSection() {
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <Button>How It Works?</Button>
+                    <Button asChild>
+                        <Link href="#how-it-works">How It Works</Link>
+                    </Button>
                     <Button variant="outline" asChild>
                         <Link
                             className="flex items-center"
