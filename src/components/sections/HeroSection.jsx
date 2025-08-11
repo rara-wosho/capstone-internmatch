@@ -2,6 +2,7 @@ import { CircleQuestionMark, Mail, Sparkles } from "lucide-react";
 import { Button } from "../ui/button";
 import Wrapper from "../Wrapper";
 import Link from "next/link";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 
 export default function HeroSection() {
     return (
@@ -43,9 +44,25 @@ export default function HeroSection() {
                 </div>
             </Wrapper>
 
-            <p className="text-muted-foreground mt-8 text-sm">
-                Trusted by over 30+ students
-            </p>
+            <div className="flex items-center gap-2 mt-8">
+                <div className="flex items-center -space-x-2">
+                    <Avatar>
+                        {/* <AvatarImage src="https://github.com/shadcn.png" />  */}
+                        <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <Avatar>
+                        {/* <AvatarImage src="https://github.com/shadcn.png" />  */}
+                        <AvatarFallback>ID</AvatarFallback>
+                    </Avatar>
+                    <Avatar>
+                        {/* <AvatarImage src="https://github.com/shadcn.png" />  */}
+                        <AvatarFallback>MM</AvatarFallback>
+                    </Avatar>
+                </div>
+                <p className="text-muted-foreground text-sm">
+                    Trusted by over 30+ students
+                </p>
+            </div>
         </div>
     );
 }

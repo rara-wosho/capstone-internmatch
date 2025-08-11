@@ -23,8 +23,8 @@ export default function ContactSection() {
 
                     <div className="mt-3 flex flex-col gap-5">
                         <div className="flex items-center gap-3">
-                            <div className="rounded-lg bg-card inline-flex p-3">
-                                <Mail />
+                            <div className="rounded-lg bg-neutral-600 text-white dark:bg-card inline-flex p-2 md:p-3">
+                                <Mail size={18} />
                             </div>
                             <div>
                                 <p className="text-sm text-muted-foreground">
@@ -32,50 +32,52 @@ export default function ContactSection() {
                                 </p>
                                 <Link
                                     href="mailto:raeldevprojects@gmail.com"
-                                    className="text-secondary-foreground hover:text-accent-foreground"
+                                    className="text-secondary-foreground text-sm md:text-base hover:text-accent-foreground"
                                 >
                                     raeldevprojects@gmail.com
                                 </Link>
                             </div>
                         </div>
                         <div className="flex items-center gap-3">
-                            <div className="rounded-lg bg-card inline-flex p-3">
-                                <Phone />
+                            <div className="rounded-lg bg-neutral-600 text-white dark:bg-card inline-flex p-2 md:p-3">
+                                <Phone size={18} />
                             </div>
                             <div>
                                 <p className="text-sm text-muted-foreground">
                                     Phone #
                                 </p>
-                                <p className="text-secondary-foreground">
+                                <p className="text-secondary-foreground text-sm md:text-base">
                                     0912345678
                                 </p>
                             </div>
                         </div>
                         <div className="flex items-center gap-3">
-                            <div className="rounded-lg bg-card inline-flex p-3">
-                                <MapPinHouse />
+                            <div className="rounded-lg bg-neutral-600 text-white dark:bg-card inline-flex p-2 md:p-3">
+                                <MapPinHouse size={18} />
                             </div>
                             <div>
                                 <p className="text-sm text-muted-foreground">
                                     Location
                                 </p>
-                                <p className="text-secondary-foreground">
+                                <p className="text-secondary-foreground text-sm md:text-base">
                                     Misamis Occidental
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <Card className="ms-auto w-full max-w-lg bg-white p-3 md:p-5">
-                    <QuestionForm />
+                <div className="flex flex-col items-center md:items-end">
+                    <Card className="w-full max-w-lg bg-white p-3 md:p-5">
+                        <QuestionForm />
 
-                    <p className="text-xs text-muted-foreground text-center mt-3 py-2">
-                        By submitting the form, you agree to our{" "}
-                        <span className="text-accent-foreground">
-                            terms and conditions.
-                        </span>
-                    </p>
-                </Card>
+                        <p className="text-xs text-muted-foreground text-center mt-3 py-2">
+                            By submitting the form, you agree to our{" "}
+                            <span className="text-accent-foreground">
+                                terms and conditions.
+                            </span>
+                        </p>
+                    </Card>
+                </div>
             </div>
         </Wrapper>
     );
