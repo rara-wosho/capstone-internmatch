@@ -17,7 +17,7 @@ export default function HowItWorks() {
             </p>
 
             <Wrapper className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                <Card className="hover:-translate-y-2 transition-transform duration-300">
+                <Card className="hover:-translate-y-2 transition-transform duration-300 p-3 md:p-5">
                     <h1 className="text-5xl md:text-6xl mb-2 overflow-hidden font-bold text-primary flex">
                         <p className="-translate-x-4">01</p>
                     </h1>
@@ -32,7 +32,7 @@ export default function HowItWorks() {
                         ensure they select the best fit for their organization.
                     </p>
                 </Card>
-                <Card className="hover:-translate-y-2 transition-transform duration-300">
+                <Card className="hover:-translate-y-2 transition-transform duration-300 p-3 md:p-5">
                     <h1 className="text-5xl md:text-6xl mb-2 overflow-hidden font-bold text-primary flex">
                         <p className="-translate-x-4">02</p>
                     </h1>
@@ -49,7 +49,7 @@ export default function HowItWorks() {
                         for the internship.
                     </p>
                 </Card>
-                <Card className="hover:-translate-y-2 transition-transform duration-300">
+                <Card className="hover:-translate-y-2 transition-transform duration-300 p-3 md:p-5">
                     <h1 className="text-5xl md:text-6xl mb-2 overflow-hidden font-bold text-primary flex">
                         <p className="-translate-x-4">03</p>
                     </h1>
