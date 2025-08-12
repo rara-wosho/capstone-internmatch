@@ -8,6 +8,7 @@ import { ThemeToggler } from "./theme-toggler";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { MessageCircle, MessageSquare } from "lucide-react";
+import Logo from "./ui/Logo";
 
 export default function Navbar() {
     const pathname = usePathname();
@@ -17,6 +18,7 @@ export default function Navbar() {
 
             <Wrapper className="grid grid-cols-2 md:grid-cols-3">
                 <Link href="/" className="flex items-center gap-2">
+                    <Logo className="w-5 h-5" />
                     <p className="font-bold">InternMatch</p>
                 </Link>
                 <div className="hidden md:flex middle items-center justify-center gap-6 text-neutral-700 dark:text-neutral-300">

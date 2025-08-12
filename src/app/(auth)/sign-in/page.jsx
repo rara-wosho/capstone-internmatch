@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import Card from "@/components/ui/card";
 import FormLabel from "@/components/ui/FormLabel";
 import { Input } from "@/components/ui/input";
+import Logo from "@/components/ui/Logo";
 import PrimaryGradientText from "@/components/ui/PrimaryGradientText";
 import SubmitButton from "@/components/ui/SubmitButton";
 import Wrapper from "@/components/Wrapper";
@@ -23,7 +24,10 @@ export default function Page() {
             <div className="md:border-1 dark:bg-background dark:border-neutral-900 p-4 rounded-3xl shadow-xs flex items-center justify-center gap-4 w-full max-w-md">
                 <Card className="max-w-md px-3 md:px-5 py-4 w-full">
                     <div className="flex flex-col items-center justify-center mb-3">
-                        <ThemeToggler />
+                        <Logo
+                            className="w-10 aspect-square"
+                            containerStyle="mb-2 py-2"
+                        />
                         <h1 className="text-secondary-foreground font-bold text-2xl text-center">
                             Sign in to{" "}
                             <PrimaryGradientText>
