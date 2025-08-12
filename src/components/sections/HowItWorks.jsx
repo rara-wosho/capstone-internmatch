@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { Button } from "../ui/button";
 import Card from "../ui/card";
 import GradientText from "../ui/GradientText";
 import Wrapper from "../Wrapper";
@@ -66,6 +68,10 @@ export default function HowItWorks() {
                     </p>
                 </Card>
             </Wrapper>
+
+            <Button asChild className="mt-8">
+                <Link href="/about">Learn More</Link>
+            </Button>
         </div>
     );
 }

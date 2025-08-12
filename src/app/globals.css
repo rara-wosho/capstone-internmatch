@@ -57,19 +57,19 @@
     --shadow-2xl: 0px 2px 4px 0px hsl(0 0% 0% / 0.13);
     --tracking-normal: -0.025em;
     --spacing: 0.27rem;
+
+    --dots-color: rgba(100, 100, 100, 0.3);
 }
 
-/* .container {
+.bg-dots {
     background-color: transparent;
-    background-image: radial-gradient(
-        rgba(255, 255, 255, 0.08) 2px,
-        transparent 0
-    );
-    background-size: 40px 40px;
+    background-image: radial-gradient(var(--dots-color) 2px, transparent 0);
+    background-size: 100px 100px;
     background-position: -5px -5px;
-} */
+}
 
 .dark {
+    --dots-color: rgba(255, 255, 255, 0.1);
     /* original is 11 11 11 */
     --background: rgb(13, 13, 15);
     --foreground: oklch(0.9551 0 0);

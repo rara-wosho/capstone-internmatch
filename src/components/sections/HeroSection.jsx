@@ -1,4 +1,4 @@
-import { CircleQuestionMark, Mail, Sparkles } from "lucide-react";
+import { ArrowUpRight, Mail, Sparkles } from "lucide-react";
 import { Button } from "../ui/button";
 import Wrapper from "../Wrapper";
 import Link from "next/link";
@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 
 export default function HeroSection() {
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center">
+        <div className="min-h-screen flex flex-col items-center justify-center pt-2rem] md:pt-0 bg-dots">
             <Wrapper className="flex flex-col items-center justify-center gap-y-8 px-4">
                 <p className="rounded-full flex items-center gap-1 bg-accent text-accent-foreground border border-accent-foreground/40 text-xs px-3 py-1 translate-y-2">
                     <Sparkles size={12} /> New Startup
@@ -25,9 +25,9 @@ export default function HeroSection() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <Button asChild>
-                        <Link href="#how-it-works">
-                            How It Works
-                            <CircleQuestionMark />
+                        <Link href="/companies">
+                            Browse Companies
+                            <ArrowUpRight />
                         </Link>
                     </Button>
                     <Button variant="outline" asChild>

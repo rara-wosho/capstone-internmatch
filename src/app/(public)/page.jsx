@@ -13,7 +13,8 @@ export default function Home() {
                 <HowItWorks />
             </div>
 
-            <div className="px-3 py-[4rem] md:py-[6rem] bg-linear-to-t from-transparent to-blue-200/50 dark:to-blue-950/40 from-50%">
+            <div className="px-3 py-[4rem] md:py-[6rem] bg-linear-to-t from-transparent to-blue-200/50 dark:to-blue-950/40 from-50% relative">
+                <div className="absolute inset-0 bg-dots"></div>
                 <ContactSection />
             </div>
         </div>

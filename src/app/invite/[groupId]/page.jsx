@@ -10,9 +10,16 @@ import SubmitButton from "@/components/ui/SubmitButton";
 import { BookOpen, Mail } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import Image from "next/image";
 import Logo from "@/components/ui/Logo";
 import WhiteLogo from "@/components/ui/WhiteLogo";
+
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 export default function Page() {
     const params = useParams();
@@ -193,13 +200,17 @@ export default function Page() {
                             </div>
                             <div>
                                 <FormLabel>Year</FormLabel>
-                                <Input
-                                    required
-                                    name="year"
-                                    placeholder="Enter your year"
-                                    value={formData.year}
-                                    onChange={handleChange}
-                                />
+                                <Select required name="year" className="w-full">
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select year" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="1">1</SelectItem>
+                                        <SelectItem value="2">2</SelectItem>
+                                        <SelectItem value="3">3</SelectItem>
+                                        <SelectItem value="4">4</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                         </div>
                     </div>
