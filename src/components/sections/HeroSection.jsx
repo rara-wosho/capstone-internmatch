@@ -8,7 +8,7 @@ export default function HeroSection() {
     return (
         <div className="min-h-screen flex flex-col items-center justify-center">
             <Wrapper className="flex flex-col items-center justify-center gap-y-8 px-4">
-                <p className="rounded-full flex items-center gap-1 bg-accent text-accent-foreground border border-accent-foreground/40 text-xs px-3 py-1">
+                <p className="rounded-full flex items-center gap-1 bg-accent text-accent-foreground border border-accent-foreground/40 text-xs px-3 py-1 translate-y-2">
                     <Sparkles size={12} /> New Startup
                 </p>
                 <h1 className="font-bold text-4xl md:text-[3.4rem] text-center max-w-4xl bg-linear-to-br from-neutral-600 dark:from-neutral-400 via-neutral-700 dark:via-neutral-200 to-neutral-600 bg-clip-text text-transparent">
