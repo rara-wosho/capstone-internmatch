@@ -36,7 +36,7 @@ export default function BrowseCompanies({ companies }) {
                         <CompanyCard />
                     </div>
                 </div>
-                <TertiaryLabel className="mb-2">More for you</TertiaryLabel>
+                <TertiaryLabel className="mb-2">More to explore</TertiaryLabel>
 
                 <div className="grid grid-col-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
                     <CompanyCard />
