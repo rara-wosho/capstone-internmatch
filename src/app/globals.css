@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-    --background: rgb(245, 249, 254);
+    --background: rgb(245, 245, 250);
     --foreground: oklch(0 0 0);
     --card: oklch(0.994 0 0);
     --card-foreground: oklch(0 0 0);

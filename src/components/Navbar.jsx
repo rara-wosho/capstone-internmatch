@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { MessageCircle, MessageSquare } from "lucide-react";
 import Logo from "./ui/Logo";
+import MobileNavbar from "./MobileNavbar";
 
 export default function Navbar() {
     const pathname = usePathname();
@@ -87,6 +88,10 @@ export default function Navbar() {
                     <Button size="sm" asChild>
                         <Link href="/sign-in">Sign In</Link>
                     </Button>
+                </div>
+
+                <div className="ms-auto md:hidden">
+                    <MobileNavbar />
                 </div>
             </Wrapper>
         </div>

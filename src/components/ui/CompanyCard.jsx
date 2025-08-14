@@ -19,7 +19,7 @@ export default function CompanyCard() {
                 </div>
             </div>
 
-            <div className="p-2 flex flex-col">
+            <div className="py-2 flex flex-col md:px-2">
                 <p className="text-secondary-foreground font-semibold mb-1 truncate">
                     Card Title
                 </p>
