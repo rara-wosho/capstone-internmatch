@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 
 export default function HeroSection() {
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center pt-2rem] md:pt-0 bg-dots isolate">
+        <div className="min-h-screen flex flex-col items-center justify-center pt-[2rem] md:pt-0 bg-dots isolate">
             <div className="-z-10 bg-linear-to-b from-transparent to-blue-200/30 dark:to-blue-950/40 from-50% absolute inset-0"></div>
             <Wrapper className="flex flex-col items-center justify-center gap-y-8 px-4">
                 <p className="rounded-full flex items-center gap-1 bg-accent text-accent-foreground border border-accent-foreground/40 text-xs px-3 py-1 translate-y-2">

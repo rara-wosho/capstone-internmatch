@@ -3,7 +3,7 @@ import GradientText from "../ui/GradientText";
 import Wrapper from "../Wrapper";
 import { Mail, MapPinHouse, Phone } from "lucide-react";
 import Link from "next/link";
-import QuestionForm from "./QuestionForm";
+import QuestionForm from "../forms/QuestionForm";
 
 export default function ContactSection() {
     return (

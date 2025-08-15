@@ -19,7 +19,9 @@ export default function BrowseCompanies({ companies }) {
                             icon={<Search size={16} />}
                             placeholder="Search company"
                         />{" "}
-                        <Button variant="white">Search</Button>
+                        <Button className="h-10" variant="white">
+                            Search
+                        </Button>
                     </div>
 
                     <div className="shrink-0 ms-auto">

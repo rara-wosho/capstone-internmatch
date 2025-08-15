@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Button } from "./button";
-import { Activity, MapPin, Search } from "lucide-react";
+import { ArrowUpRight, BriefcaseBusiness, MapPin } from "lucide-react";
 import Link from "next/link";
 
 export default function CompanyCard() {
@@ -33,20 +33,20 @@ export default function CompanyCard() {
                     <p className="text-xs truncate">Cagayan De Oro City</p>
                 </div>
                 <div className="flex items-center text-muted-foreground gap-1.5 mb-4">
-                    <Activity size={14} />{" "}
+                    <BriefcaseBusiness size={14} />{" "}
                     <p className="text-xs">Frontend Development + more</p>
                 </div>
                 <div className="flex items-center gap-2">
+                    <Button variant="white" size="sm" className="grow">
+                        View Details
+                    </Button>
                     <Button variant="secondary" size="sm" asChild>
                         <Link
                             target="_blank"
                             href="https://www.google.com/search?q=hellow+there"
                         >
-                            <Search size={16} />
+                            <ArrowUpRight size={16} />
                         </Link>
-                    </Button>
-                    <Button variant="white" size="sm" className="grow">
-                        View Details
                     </Button>
                 </div>
             </div>
