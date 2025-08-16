@@ -2,9 +2,10 @@ import { ThemeToggler } from "@/components/theme-toggler";
 import BackButton from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/button";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
-import TertiaryLabel from "@/components/ui/TertiaryLabel";
 import Wrapper from "@/components/Wrapper";
 import { ChevronLeft, CircleQuestionMark } from "lucide-react";
+import Difficulty from "./Difficulty";
+import TertiaryLabel from "@/components/ui/TertiaryLabel";
 
 export default function Page() {
     return (
@@ -36,31 +37,27 @@ export default function Page() {
                             one sitting.
                         </p>
                     </div>
-
-                    <div className="mt-8 flex flex-col gap-y-3 text-muted-foreground">
-                        <p>Duration : 1 hour</p>
-                        <p>Number of questions : 30</p>
-                        <p>Type of questions : Multiple choice</p>
-                    </div>
-
-                    <div className="mt-10 flex flex-col items-center md:items-start border-t pt-10">
-                        <TertiaryLabel className="mb-3">
-                            Ready to take the test now? Click start test
-                        </TertiaryLabel>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 w-full max-w-lg gap-2">
-                            <Button
-                                asChild
-                                variant="secondary"
-                                className="order-2 sm:order-1"
-                            >
-                                <BackButton>Maybe Later</BackButton>
-                            </Button>
-                            <Button className="order-1 sm:order-2">
-                                Start Test
-                            </Button>
+                    <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 text-muted-foreground">
+                        <div className="bg-card rounded p-2">
+                            <TertiaryLabel className="mb-2">
+                                Duration
+                            </TertiaryLabel>
+                            <p>1 hour</p>
+                        </div>
+                        <div className="bg-card rounded p-2">
+                            <TertiaryLabel className="mb-2">
+                                Number of Questions
+                            </TertiaryLabel>
+                            <p>30</p>
+                        </div>
+                        <div className="bg-card rounded p-2">
+                            <TertiaryLabel className="mb-2">
+                                Type of Question
+                            </TertiaryLabel>
+                            <p>Multiple choice</p>
                         </div>
                     </div>
+                    <Difficulty />
                 </div>
             </Wrapper>
         </div>
