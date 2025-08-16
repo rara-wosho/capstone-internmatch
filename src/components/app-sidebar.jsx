@@ -222,7 +222,7 @@ export function AppSidebar({ role }) {
                             <SidebarMenuItem>
                                 <SidebarMenuButton className="text-destructive hover:bg-destructive/80 cursor-pointer hover:text-destructive-foreground">
                                     <LogOut />
-                                    <p>Logout</p>
+                                    <p>Sign Out</p>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
                         </SidebarMenu>

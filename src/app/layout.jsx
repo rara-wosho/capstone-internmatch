@@ -31,13 +31,13 @@ export default function RootLayout({ children }) {
             <body
                 className={`antialiased text-neutral-800 dark:text-neutral-200`}
             >
+                <NextTopLoader color="#8967d8" showSpinner={false} />
                 <ThemeProvider
                     attribute="class"
                     defaultTheme="dark"
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <NextTopLoader color="#8967d8" showSpinner={false} />
                     {children}
                     <Toaster richColors />
                 </ThemeProvider>

@@ -1,3 +1,9 @@
+import BrowseCompanies from "@/components/sections/BrowseCompanies";
+
 export default function Page() {
-    return <div>companies</div>;
+    return (
+        <div>
+            <BrowseCompanies />
+        </div>
+    );
 }

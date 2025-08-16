@@ -9,7 +9,10 @@ export default function Layout({ children }) {
             <AppSidebar role={role} />
             <main className="w-full">
                 <DashboardHeader />
-                <div className="p-3">{children}</div>
+                <div className="p-3 lg:p-4 mb-5">{children}</div>
+                <footer className="p-3 lg:p-4 border-t bg-white dark:bg-transparent">
+                    Footer
+                </footer>
             </main>
         </SidebarProvider>
     );

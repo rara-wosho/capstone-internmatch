@@ -8,7 +8,7 @@ import CompanyCard from "../ui/CompanyCard";
 
 export default function BrowseCompanies({ companies }) {
     return (
-        <Wrapper>
+        <>
             <div className="flex flex-col mb-8 md:mt-4">
                 <SecondaryLabel className="mb-4">
                     EXPLORE THE BEST COMPANIES NOW
@@ -18,7 +18,7 @@ export default function BrowseCompanies({ companies }) {
                         <Input
                             icon={<Search size={16} />}
                             placeholder="Search company"
-                        />{" "}
+                        />
                         <Button className="h-10" variant="white">
                             Search
                         </Button>
@@ -57,6 +57,6 @@ export default function BrowseCompanies({ companies }) {
                 <CompanyCard />
                 <CompanyCard />
             </div>
-        </Wrapper>
+        </>
     );
 }

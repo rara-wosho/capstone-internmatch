@@ -1,19 +1,49 @@
+import { LogOut, User } from "lucide-react";
 import { ThemeToggler } from "../theme-toggler";
-import { SidebarTrigger } from "./sidebar";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import {
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarTrigger,
+} from "./sidebar";
 
 export default function DashboardHeader() {
     return (
-        <div className="p-3 flex items-center w-full bg-white dark:bg-transparent border-b">
+        <div className="p-3 lg:p-4 flex items-center w-full bg-white dark:bg-transparent border-b">
             <SidebarTrigger />
 
             <div className="border-s ps-2 ms-1">
                 <p>Welcome back Admin</p>
             </div>
 
-            <div className="ms-auto flex items-center">
+            <div className="ms-auto flex items-center gap-3">
                 <ThemeToggler />
 
-                <p>Israel De Vera</p>
+                <Popover>
+                    <PopoverTrigger className="cursor-pointer">
+                        <div className="flex items-center gap-2">
+                            <div className="size-7 rounded-full border"></div>
+                            <p>Israel De Vera</p>
+                        </div>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-fit p-2 rounded-sm">
+                        <SidebarMenu className="text-secondary-foreground/80">
+                            <SidebarMenuItem>
+                                <SidebarMenuButton className="cursor-pointer">
+                                    <User />
+                                    Your Profile
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                            <SidebarMenuItem className="border-t dark:border-neutral-700">
+                                <SidebarMenuButton className="cursor-pointer">
+                                    <LogOut />
+                                    Sign Out
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        </SidebarMenu>
+                    </PopoverContent>
+                </Popover>
             </div>
         </div>
     );
