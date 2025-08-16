@@ -1,6 +1,18 @@
 "use client";
 
-import { Building2, ClipboardPen, Home, LayoutDashboard } from "lucide-react";
+import {
+    Building2,
+    ChevronDown,
+    ClipboardPen,
+    Dot,
+    Home,
+    LayoutDashboard,
+    LogOut,
+    MessageCircleQuestionMark,
+    MessageSquareMore,
+    Plane,
+    Settings,
+} from "lucide-react";
 
 import {
     Sidebar,
@@ -8,6 +20,7 @@ import {
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
+    SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
@@ -24,6 +37,7 @@ import {
     CollapsibleContent,
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import Logo from "./ui/Logo";
 
 export function AppSidebar({ role }) {
     const pathName = usePathname();
@@ -51,48 +65,47 @@ export function AppSidebar({ role }) {
                     label: "My Exams",
                     subItems: [
                         {
-                            href: "/student/my-exams/history",
-                            icon: <Building2 />,
-                            label: "History",
+                            href: "/student/my-exams/assessment-test",
+                            label: "Assessment Test",
                             isActiveLink:
-                                pathName === "/student/my-exams/history",
+                                pathName === "/student/my-exams/assesment-test",
                         },
                         {
-                            href: "/student/my-exams/upcoming",
-                            icon: <Building2 />,
-                            label: "Upcoming",
+                            href: "/student/my-exams/recent",
+                            label: "Recent Exams",
                             isActiveLink:
-                                pathName === "/student/my-exams/upcoming",
+                                pathName === "/student/my-exams/recent",
+                        },
+                        {
+                            href: "/student/my-exams/results",
+                            label: "Results",
+                            isActiveLink:
+                                pathName === "/student/my-exams/results",
                         },
                     ],
                 },
             ],
         },
         {
-            label: "Settings",
+            label: "Others",
             items: [
                 {
-                    href: "/student/settings",
-                    icon: <Home />,
-                    label: "Profile",
-                    isActiveLink: pathName === "/student/settings",
-                },
-            ],
-        },
-        {
-            label: "Support",
-            items: [
-                {
-                    href: "/support",
-                    icon: <Home />,
-                    label: "FAQs",
-                    isActiveLink: pathName === "/support",
+                    href: "/settings",
+                    icon: <Settings />,
+                    label: "Settings",
+                    isActiveLink: pathName === "/settings",
                 },
                 {
                     href: "/feedbacks",
-                    icon: <Home />,
-                    label: "Feedback",
+                    icon: <MessageSquareMore />,
+                    label: "Feedbacks",
                     isActiveLink: pathName === "/feedbacks",
+                },
+                {
+                    href: "/faq",
+                    icon: <MessageCircleQuestionMark />,
+                    label: "FAQs",
+                    isActiveLink: pathName === "/faq",
                 },
             ],
         },
@@ -101,6 +114,18 @@ export function AppSidebar({ role }) {
     return (
         <Sidebar collapsible="icon" className="border-0">
             <SidebarContent>
+                <SidebarHeader>
+                    <SidebarMenu>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton className="pointer-events-none">
+                                <Logo className="w-4 h-4" />
+                                <p className="font-bold text-secondary-foreground">
+                                    InternMatch
+                                </p>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarHeader>
                 {categories.map((category) => (
                     <SidebarGroup key={category.label}>
                         <SidebarGroupLabel>{category.label}</SidebarGroupLabel>
@@ -109,12 +134,10 @@ export function AppSidebar({ role }) {
                                 {category.items.map((item) => (
                                     <SidebarMenuItem key={item.label}>
                                         {item.subItems ? (
-                                            <Collapsible
-                                                defaultOpen
-                                                className="group/collapsible"
-                                            >
+                                            <Collapsible className="group/collapsible">
                                                 <CollapsibleTrigger asChild>
                                                     <SidebarMenuButton
+                                                        className="text-muted-foreground"
                                                         tooltip={item.label}
                                                         isActive={item.subItems.some(
                                                             (si) =>
@@ -125,6 +148,7 @@ export function AppSidebar({ role }) {
                                                         <span>
                                                             {item.label}
                                                         </span>
+                                                        <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
                                                     </SidebarMenuButton>
                                                 </CollapsibleTrigger>
                                                 <CollapsibleContent>
@@ -181,15 +205,7 @@ export function AppSidebar({ role }) {
                                                     }
                                                 >
                                                     {item.icon}
-                                                    <span
-                                                    // className={cn(
-                                                    //     "dark:text-neutral-300 text-neutral-800",
-                                                    //     item.isActiveLink &&
-                                                    //         "dark:text-neutral-100 text-white"
-                                                    // )}
-                                                    >
-                                                        {item.label}
-                                                    </span>
+                                                    <span>{item.label}</span>
                                                 </Link>
                                             </SidebarMenuButton>
                                         )}
@@ -199,6 +215,19 @@ export function AppSidebar({ role }) {
                         </SidebarGroupContent>
                     </SidebarGroup>
                 ))}
+
+                <SidebarGroup className="border-t border-sidebar-border/50">
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton className="text-destructive hover:bg-destructive/80 cursor-pointer hover:text-destructive-foreground">
+                                    <LogOut />
+                                    <p>Logout</p>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
             </SidebarContent>
         </Sidebar>
     );

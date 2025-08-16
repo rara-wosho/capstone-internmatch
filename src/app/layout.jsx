@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import NextTopLoader from "nextjs-toploader";
 
 const geist = Geist({
     subsets: ["latin"],
@@ -36,6 +37,7 @@ export default function RootLayout({ children }) {
                     enableSystem
                     disableTransitionOnChange
                 >
+                    <NextTopLoader color="#8967d8" showSpinner={false} />
                     {children}
                     <Toaster richColors />
                 </ThemeProvider>
