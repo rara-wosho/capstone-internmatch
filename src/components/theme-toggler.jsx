@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Moon, Sun } from "lucide-react";
+import { LaptopMinimal, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
@@ -25,14 +25,23 @@ export function ThemeToggler() {
                 </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setTheme("light")}>
-                    Light
+                <DropdownMenuItem
+                    className="flex items-center gap-2 text-secondary-foreground/80"
+                    onClick={() => setTheme("light")}
+                >
+                    <Sun /> Light
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("dark")}>
-                    Dark
+                <DropdownMenuItem
+                    className="flex items-center gap-2 text-secondary-foreground/80"
+                    onClick={() => setTheme("dark")}
+                >
+                    <Moon /> Dark
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("system")}>
-                    System
+                <DropdownMenuItem
+                    className="flex items-center gap-2 text-secondary-foreground/80"
+                    onClick={() => setTheme("system")}
+                >
+                    <LaptopMinimal /> System
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

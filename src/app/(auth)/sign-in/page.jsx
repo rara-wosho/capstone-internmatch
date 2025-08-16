@@ -18,7 +18,7 @@ export default function Page() {
                     </Link>
                 </Button>
             </div>
-            <div className="md:border-1 bg-background dark:bg-background dark:border-neutral-900 p-4 rounded-3xl shadow-xs flex items-center justify-center gap-4 w-full max-w-md">
+            <div className="md:border-1 bg-white dark:bg-background dark:border-neutral-900 p-3 md:p-4 rounded-3xl shadow-xs flex items-center justify-center gap-4 w-full max-w-md">
                 <Card className="max-w-md px-3 md:px-5 py-4 w-full">
                     <div className="flex flex-col items-center justify-center mb-3">
                         <Logo

@@ -7,14 +7,23 @@ import {
     SidebarMenuItem,
     SidebarTrigger,
 } from "./sidebar";
+import Logo from "./Logo";
 
 export default function DashboardHeader() {
     return (
         <div className="p-3 lg:p-4 flex items-center w-full bg-white dark:bg-transparent border-b">
             <SidebarTrigger />
 
-            <div className="border-s ps-2 ms-1">
-                <p>Welcome back Admin</p>
+            <div className="border-s ps-2 ms-1 flex items-center">
+                <div className="md:hidden inline-flex items-center gap-2">
+                    <Logo className="w-4 h-4" />
+                    <p className="font-bold text-secondary-foreground">
+                        InternMatch
+                    </p>
+                </div>
+                <p className="font-semibold hidden md:inline-block">
+                    Welcome back Admin
+                </p>
             </div>
 
             <div className="ms-auto flex items-center gap-3">
@@ -24,7 +33,9 @@ export default function DashboardHeader() {
                     <PopoverTrigger className="cursor-pointer">
                         <div className="flex items-center gap-2">
                             <div className="size-7 rounded-full border"></div>
-                            <p>Israel De Vera</p>
+                            <p className="hidden md:inline-block">
+                                Israel De Vera
+                            </p>
                         </div>
                     </PopoverTrigger>
                     <PopoverContent className="w-fit p-2 rounded-sm">

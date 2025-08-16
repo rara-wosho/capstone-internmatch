@@ -65,10 +65,9 @@ export function AppSidebar({ role }) {
                     label: "My Exams",
                     subItems: [
                         {
-                            href: "/student/my-exams/assessment-test",
+                            href: "/assessment-test",
                             label: "Assessment Test",
-                            isActiveLink:
-                                pathName === "/student/my-exams/assesment-test",
+                            isActiveLink: pathName === "/assesment-test",
                         },
                         {
                             href: "/student/my-exams/recent",
