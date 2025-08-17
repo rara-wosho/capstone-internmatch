@@ -58,7 +58,7 @@ export function AppSidebar({ role }) {
                     href: "/student/companies",
                     icon: <Building2 />,
                     label: "Companies",
-                    isActiveLink: pathName === "/student/companies",
+                    isActiveLink: pathName.startsWith("/student/companies"),
                 },
                 {
                     icon: <ClipboardPen />,

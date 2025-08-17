@@ -1,4 +1,4 @@
-import { LogOut, User } from "lucide-react";
+import { LogOut, Settings, User } from "lucide-react";
 import { ThemeToggler } from "../theme-toggler";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import {
@@ -22,7 +22,7 @@ export default function DashboardHeader() {
                     </p>
                 </div>
                 <p className="font-semibold hidden md:inline-block">
-                    Welcome back Admin
+                    Welcome back, Israel 👋
                 </p>
             </div>
 
@@ -43,7 +43,13 @@ export default function DashboardHeader() {
                             <SidebarMenuItem>
                                 <SidebarMenuButton className="cursor-pointer">
                                     <User />
-                                    Your Profile
+                                    Your profile
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton className="cursor-pointer">
+                                    <Settings />
+                                    Account settings
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
                             <SidebarMenuItem className="border-t dark:border-neutral-700">

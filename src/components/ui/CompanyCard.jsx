@@ -37,8 +37,10 @@ export default function CompanyCard() {
                     <p className="text-xs">Frontend Development + more</p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Button variant="white" size="sm" className="grow">
-                        View Details
+                    <Button variant="white" size="sm" className="grow" asChild>
+                        <Link href="/student/companies/daklsdas">
+                            View Details
+                        </Link>
                     </Button>
                     <Button variant="secondary" size="sm" asChild>
                         <Link
