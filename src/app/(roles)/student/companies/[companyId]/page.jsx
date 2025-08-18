@@ -4,6 +4,7 @@ import TertiaryLabel from "@/components/ui/TertiaryLabel";
 import Image from "next/image";
 import ExaminationSection from "./ExaminationSection";
 import { Button } from "@/components/ui/button";
+import BorderBox from "@/components/ui/BorderBox";
 
 const links = [
     { href: "", label: "Home" },
@@ -17,12 +18,12 @@ export default async function Page({ params }) {
         <div>
             <BreadCrumbs links={links} className="mb-4" />
 
-            <div className="grid grid-cols-1 md:grid-cols-[1.7fr_1fr] gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-[1.6fr_1fr] gap-x-6 gap-y-8">
                 {/* main content  */}
                 <div className="left ">
-                    <div className="bg-white dark:bg-transparent border rounded-lg p-5 mb-3">
-                        <div className="flex items-center gap-3 mb-5">
-                            <div className="relative size-24 shrink-0">
+                    <BorderBox className="bg-white dark:bg-transparent border rounded-lg mb-3">
+                        <div className="flex gap-3 mb-5">
+                            <div className="relative size-24 shrink-0 overflow-hidden rounded-sm">
                                 <Image
                                     src="https://i.pinimg.com/1200x/5f/33/c7/5f33c741560bb71ebedb831267603c1b.jpg"
                                     alt="comapny img"
@@ -31,7 +32,7 @@ export default async function Page({ params }) {
                                 />
                             </div>
                             <div className="w-full">
-                                <SecondaryLabel className="mb-1.5">
+                                <SecondaryLabel className="mb-1">
                                     Accenture Company
                                 </SecondaryLabel>
 
@@ -59,17 +60,32 @@ export default async function Page({ params }) {
                             vision applications. Experience with Python and deep
                             learning frameworks is preferred
                         </p>
-                    </div>
+                        <TertiaryLabel className="mb-2">
+                            About Our Company
+                        </TertiaryLabel>
+                        <p className="text-muted-foreground">
+                            Work on cutting-edge machine learning models for
+                            computer vision applications. Experience with Python
+                            and deep learning frameworks is preferredWork on
+                            cutting-edge machine learning models for computer
+                            vision applications. Experience with Python and deep
+                            learning frameworks is preferred
+                        </p>
+                        <TertiaryLabel className="mb-2">
+                            About Our Company
+                        </TertiaryLabel>
+                        <p className="text-muted-foreground">
+                            Work on cutting-edge machine learning models for
+                            computer vision applications. Experience with Python
+                            and deep learning frameworks is preferredWork on
+                            cutting-edge machine learning models for computer
+                            vision applications. Experience with Python and deep
+                            learning frameworks is preferred
+                        </p>
+                    </BorderBox>
 
                     {/* examination section  */}
-                    <div className="bg-white dark:bg-transparent border rounded-lg p-5">
-                        <ExaminationSection />
-                    </div>
-                </div>
-
-                {/* contact information  */}
-                <div className="right ">
-                    <div className="bg-white dark:bg-transparent border rounded-lg p-4">
+                    <BorderBox className="border bg-white dark:bg-transparent rounded-lg">
                         <TertiaryLabel className="mb-2">
                             Contact Information
                         </TertiaryLabel>
@@ -77,7 +93,12 @@ export default async function Page({ params }) {
                             <p>support@accenture.com</p>
                             <p>support@accenture.com</p>
                         </div>
-                    </div>
+                    </BorderBox>
+                </div>
+
+                {/* contact information  */}
+                <div className="right px-2">
+                    <ExaminationSection />
                 </div>
             </div>
         </div>
