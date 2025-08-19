@@ -4,14 +4,15 @@ import {
     Building2,
     ChevronDown,
     ClipboardPen,
-    Dot,
-    Home,
     LayoutDashboard,
     LogOut,
     MessageCircleQuestionMark,
     MessageSquareMore,
-    Plane,
     Settings,
+    Users,
+    BookOpen,
+    Calendar,
+    FileText,
 } from "lucide-react";
 
 import {
@@ -38,77 +39,195 @@ import {
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import Logo from "./ui/Logo";
+import { useMemo } from "react";
 
-export function AppSidebar({ role }) {
+// Centralized navigation configuration
+const navigationConfig = [
+    {
+        label: "Main",
+        items: [
+            {
+                href: "/student",
+                icon: <LayoutDashboard />,
+                label: "Dashboard",
+                roles: ["student"],
+            },
+            {
+                href: "/instructor",
+                icon: <LayoutDashboard />,
+                label: "Dashboard",
+                roles: ["instructor"],
+            },
+            {
+                href: "/company",
+                icon: <LayoutDashboard />,
+                label: "Dashboard",
+                roles: ["company"],
+            },
+            {
+                href: "/student/companies",
+                icon: <Building2 />,
+                label: "Companies",
+                roles: ["student"],
+            },
+            {
+                href: "/instructor/manage-groups",
+                icon: <Users />,
+                label: "Manage Groups",
+                roles: ["instructor"],
+            },
+            {
+                href: "/company/interns",
+                icon: <Users />,
+                label: "Manage Interns",
+                roles: ["company"],
+            },
+            {
+                icon: <ClipboardPen />,
+                label: "My Exams",
+                roles: ["student"],
+                subItems: [
+                    {
+                        href: "/assessment-test",
+                        label: "Assessment Test",
+                        icon: <FileText size={14} />,
+                    },
+                    {
+                        href: "/student/my-exams/recent",
+                        label: "Recent Exams",
+                        icon: <Calendar size={14} />,
+                    },
+                    {
+                        href: "/student/my-exams/results",
+                        label: "Results",
+                        icon: <BookOpen size={14} />,
+                    },
+                ],
+            },
+            {
+                icon: <ClipboardPen />,
+                label: "Exam Management",
+                roles: ["instructor"],
+                subItems: [
+                    {
+                        href: "/instructor/exams/create",
+                        label: "Create Exam",
+                        icon: <FileText />,
+                    },
+                    {
+                        href: "/instructor/exams/manage",
+                        label: "Manage Exams",
+                        icon: <Calendar />,
+                    },
+                    {
+                        href: "/instructor/exams/results",
+                        label: "View Results",
+                        icon: <BookOpen />,
+                    },
+                ],
+            },
+            {
+                icon: <ClipboardPen />,
+                label: "Internship Programs",
+                roles: ["company"],
+                subItems: [
+                    {
+                        href: "/company/programs/create",
+                        label: "Create Program",
+                        icon: <FileText />,
+                    },
+                    {
+                        href: "/company/programs/manage",
+                        label: "Manage Programs",
+                        icon: <Calendar />,
+                    },
+                    {
+                        href: "/company/applications",
+                        label: "Applications",
+                        icon: <BookOpen />,
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        label: "Others",
+        items: [
+            {
+                href: "/settings",
+                icon: <Settings />,
+                label: "Settings",
+                roles: ["student", "instructor", "company"],
+            },
+            {
+                href: "/feedbacks",
+                icon: <MessageSquareMore />,
+                label: "Feedbacks",
+                roles: ["student", "instructor", "company"],
+            },
+            {
+                href: "/faq",
+                icon: <MessageCircleQuestionMark />,
+                label: "FAQs",
+                roles: ["student", "instructor", "company"],
+            },
+        ],
+    },
+];
+
+// Helper function to check if a path is active
+const isPathActive = (itemPath, currentPath) => {
+    if (!itemPath) return false;
+
+    // Exact match for root paths
+    if (itemPath === currentPath) return true;
+
+    // For non-root paths, check if current path starts with item path
+    if (
+        itemPath !== "/student" &&
+        itemPath !== "/company" &&
+        itemPath !== "/instructor" &&
+        currentPath.startsWith(itemPath)
+    ) {
+        return true;
+    }
+    return false;
+};
+
+// Helper function to check if any sub-item is active
+const isAnySubItemActive = (subItems, currentPath) => {
+    if (!subItems) return false;
+    return subItems.some((subItem) => isPathActive(subItem.href, currentPath));
+};
+
+export function AppSidebar({ role, onSignOut }) {
     const pathName = usePathname();
     const { setOpenMobile } = useSidebar();
 
-    // Menu items.
-    const categories = [
-        {
-            label: "Main",
-            items: [
-                {
-                    href: "/student",
-                    icon: <LayoutDashboard />,
-                    label: "Dashboard",
-                    isActiveLink: pathName === "/student",
-                },
-                {
-                    href: "/student/companies",
-                    icon: <Building2 />,
-                    label: "Companies",
-                    isActiveLink: pathName.startsWith("/student/companies"),
-                },
-                {
-                    icon: <ClipboardPen />,
-                    label: "My Exams",
-                    subItems: [
-                        {
-                            href: "/assessment-test",
-                            label: "Assessment Test",
-                            isActiveLink: pathName === "/assesment-test",
-                        },
-                        {
-                            href: "/student/my-exams/recent",
-                            label: "Recent Exams",
-                            isActiveLink:
-                                pathName === "/student/my-exams/recent",
-                        },
-                        {
-                            href: "/student/my-exams/results",
-                            label: "Results",
-                            isActiveLink:
-                                pathName === "/student/my-exams/results",
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            label: "Others",
-            items: [
-                {
-                    href: "/settings",
-                    icon: <Settings />,
-                    label: "Settings",
-                    isActiveLink: pathName === "/settings",
-                },
-                {
-                    href: "/feedbacks",
-                    icon: <MessageSquareMore />,
-                    label: "Feedbacks",
-                    isActiveLink: pathName === "/feedbacks",
-                },
-                {
-                    href: "/faq",
-                    icon: <MessageCircleQuestionMark />,
-                    label: "FAQs",
-                    isActiveLink: pathName === "/faq",
-                },
-            ],
-        },
-    ];
+    // Filter navigation items based on user role
+    const filteredNavigation = useMemo(() => {
+        return navigationConfig
+            .map((section) => ({
+                ...section,
+                items: section.items.filter((item) =>
+                    item.roles.includes(role)
+                ),
+            }))
+            .filter((section) => section.items.length > 0); // Remove empty sections
+    }, [role]);
+
+    const handleLinkClick = () => {
+        setOpenMobile(false);
+    };
+
+    const handleSignOut = () => {
+        if (onSignOut) {
+            onSignOut();
+        } else {
+            // Default sign out behavior
+            console.log("Sign out clicked - implement your sign out logic");
+        }
+    };
 
     return (
         <Sidebar collapsible="icon" className="border-0">
@@ -125,22 +244,23 @@ export function AppSidebar({ role }) {
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </SidebarHeader>
-                {categories.map((category) => (
-                    <SidebarGroup key={category.label}>
-                        <SidebarGroupLabel>{category.label}</SidebarGroupLabel>
+
+                {filteredNavigation.map((section) => (
+                    <SidebarGroup key={section.label}>
+                        <SidebarGroupLabel>{section.label}</SidebarGroupLabel>
                         <SidebarGroupContent>
                             <SidebarMenu>
-                                {category.items.map((item) => (
+                                {section.items.map((item) => (
                                     <SidebarMenuItem key={item.label}>
                                         {item.subItems ? (
                                             <Collapsible className="group/collapsible">
                                                 <CollapsibleTrigger asChild>
                                                     <SidebarMenuButton
-                                                        className="text-muted-foreground"
+                                                        className="text-secondary-foreground/80"
                                                         tooltip={item.label}
-                                                        isActive={item.subItems.some(
-                                                            (si) =>
-                                                                si.isActiveLink
+                                                        isActive={isAnySubItemActive(
+                                                            item.subItems,
+                                                            pathName
                                                         )}
                                                     >
                                                         {item.icon}
@@ -153,31 +273,36 @@ export function AppSidebar({ role }) {
                                                 <CollapsibleContent>
                                                     <SidebarMenuSub>
                                                         {item.subItems.map(
-                                                            (sub) => (
+                                                            (subItem) => (
                                                                 <SidebarMenuSubItem
                                                                     key={
-                                                                        sub.label
+                                                                        subItem.label
                                                                     }
                                                                 >
                                                                     <SidebarMenuSubButton
                                                                         asChild
-                                                                        isActive={
-                                                                            sub.isActiveLink
-                                                                        }
+                                                                        isActive={isPathActive(
+                                                                            subItem.href,
+                                                                            pathName
+                                                                        )}
                                                                     >
                                                                         <Link
                                                                             href={
-                                                                                sub.href
+                                                                                subItem.href
                                                                             }
-                                                                            onClick={() =>
-                                                                                setOpenMobile(
-                                                                                    false
-                                                                                )
+                                                                            onClick={
+                                                                                handleLinkClick
                                                                             }
+                                                                            className="flex items-center gap-2"
                                                                         >
+                                                                            <div className="">
+                                                                                {
+                                                                                    subItem.icon
+                                                                                }
+                                                                            </div>
                                                                             <span>
                                                                                 {
-                                                                                    sub.label
+                                                                                    subItem.label
                                                                                 }
                                                                             </span>
                                                                         </Link>
@@ -192,16 +317,15 @@ export function AppSidebar({ role }) {
                                             <SidebarMenuButton
                                                 tooltip={item.label}
                                                 asChild
-                                                isActive={item.isActiveLink}
+                                                isActive={isPathActive(
+                                                    item.href,
+                                                    pathName
+                                                )}
                                             >
                                                 <Link
-                                                    className={cn(
-                                                        "text-muted-foreground"
-                                                    )}
+                                                    className="text-secondary-foreground/80"
                                                     href={item.href}
-                                                    onClick={() =>
-                                                        setOpenMobile(false)
-                                                    }
+                                                    onClick={handleLinkClick}
                                                 >
                                                     {item.icon}
                                                     <span>{item.label}</span>
@@ -215,13 +339,16 @@ export function AppSidebar({ role }) {
                     </SidebarGroup>
                 ))}
 
-                <SidebarGroup className="border-t border-sidebar-border/50">
+                <SidebarGroup>
                     <SidebarGroupContent>
-                        <SidebarMenu>
+                        <SidebarMenu className="border-t border-sidebar-border/50 pt-3">
                             <SidebarMenuItem>
-                                <SidebarMenuButton className="text-destructive hover:bg-destructive/80 cursor-pointer hover:text-destructive-foreground">
+                                <SidebarMenuButton
+                                    className="text-destructive hover:bg-destructive/80 cursor-pointer hover:text-destructive-foreground"
+                                    onClick={handleSignOut}
+                                >
                                     <LogOut />
-                                    <p>Sign Out</p>
+                                    <span>Sign Out</span>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
                         </SidebarMenu>

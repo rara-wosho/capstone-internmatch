@@ -11,7 +11,7 @@ import Logo from "./Logo";
 
 export default function DashboardHeader() {
     return (
-        <div className="sticky top-0 left-0 p-3 lg:p-4 flex items-center w-full bg-white border-b z-30 backdrop-blur-2xl dark:bg-background/70">
+        <div className="sticky top-0 left-0 px-3 lg:px-4 py-3 flex items-center w-full bg-white border-b z-30 backdrop-blur-2xl dark:bg-background/70">
             <SidebarTrigger />
 
             <div className="border-s ps-2 ms-1 flex items-center">
