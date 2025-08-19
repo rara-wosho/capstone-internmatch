@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Menu, MessageSquare } from "lucide-react";
+import { Menu, MessageSquare, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -17,7 +17,11 @@ export default function MobileNavbar() {
                 <Menu />
             </PopoverTrigger>
 
-            <PopoverContent className="flex flex-col gap-y-1.5">
+            <PopoverContent
+                sideOffset={15}
+                align="end"
+                className="flex flex-col gap-y-1.5"
+            >
                 <Link
                     onClick={() => setOpen(false)}
                     className={cn(

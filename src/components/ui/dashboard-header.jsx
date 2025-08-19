@@ -38,7 +38,11 @@ export default function DashboardHeader() {
                             </p>
                         </div>
                     </PopoverTrigger>
-                    <PopoverContent className="w-fit p-2 rounded-sm">
+                    <PopoverContent
+                        sideOffset={10}
+                        align="end"
+                        className="w-fit p-2 rounded-sm"
+                    >
                         <SidebarMenu className="text-secondary-foreground/80">
                             <SidebarMenuItem>
                                 <SidebarMenuButton className="cursor-pointer">

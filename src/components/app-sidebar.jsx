@@ -253,7 +253,13 @@ export function AppSidebar({ role, onSignOut }) {
                                 {section.items.map((item) => (
                                     <SidebarMenuItem key={item.label}>
                                         {item.subItems ? (
-                                            <Collapsible className="group/collapsible">
+                                            <Collapsible
+                                                defaultOpen={isAnySubItemActive(
+                                                    item.subItems,
+                                                    pathName
+                                                )}
+                                                className="group/collapsible"
+                                            >
                                                 <CollapsibleTrigger asChild>
                                                     <SidebarMenuButton
                                                         className="text-secondary-foreground/80"
@@ -295,11 +301,11 @@ export function AppSidebar({ role, onSignOut }) {
                                                                             }
                                                                             className="flex items-center gap-2"
                                                                         >
-                                                                            <div className="">
+                                                                            <span>
                                                                                 {
                                                                                     subItem.icon
                                                                                 }
-                                                                            </div>
+                                                                            </span>
                                                                             <span>
                                                                                 {
                                                                                     subItem.label
