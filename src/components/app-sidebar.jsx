@@ -235,10 +235,11 @@ export function AppSidebar({ role, onSignOut }) {
                 <SidebarHeader>
                     <SidebarMenu>
                         <SidebarMenuItem>
-                            <SidebarMenuButton className="pointer-events-none">
+                            <SidebarMenuButton className="pointer-events-none mt-1">
                                 <Logo className="w-4 h-4" />
-                                <p className="font-bold text-secondary-foreground">
-                                    InternMatch
+                                <p className="font-bold text-secondary-foreground/90 text-xl flex items-end">
+                                    Intern
+                                    <span className=" inline-flex">Match</span>
                                 </p>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
