@@ -2,30 +2,27 @@ import Link from "next/link";
 import AvatarInitial from "./avatar-initial";
 import { EllipsisVertical } from "lucide-react";
 import { Button } from "./button";
+import GroupCardOption from "./groupcard-option";
 
 export default function GroupCard() {
     return (
-        <div className="border bg-white shadow-xs dark:bg-card rounded-lg px-3 py-5 hover:bg-accent/20 dark:hover:bg-accent/50 hover:border-accent-foreground/40 transition-colors">
-            <div className="flex items-center">
+        <div className="border bg-white shadow-xs dark:bg-card rounded-lg hover:bg-accent/20 dark:hover:bg-accent/50 hover:border-accent-foreground/40 transition-colors flex items-center">
+            <Link
+                href="/instructor/manage-groups/hsdashief"
+                className="flex items-center ps-3 pe-2 py-5 w-full"
+            >
                 <AvatarInitial letter="G" />
-                <div className="flex flex-col w-[75%] ms-2">
-                    <Link
-                        href="#"
-                        className="hover:underline underline-offset-4"
-                    >
-                        <p className="font-semibold text-secondary-foreground truncate">
-                            This is a sample title
-                        </p>
-                    </Link>
-                    <p className="text-sm text-muted-foreground truncate">
-                        this is a sample description Lorem ipsum dolor sit amet
-                        consectetur adipisicing elit. Accusantium, aliquam!s
+                <div className="flex flex-col ms-2">
+                    <p className="font-semibold text-secondary-foreground ">
+                        This is a sample title
+                    </p>
+                    <p className="text-sm text-muted-foreground w-[75%] truncate">
+                        jan 17 2025
                     </p>
                 </div>
-
-                <button className="p-2 rounded-full hover:bg-accent ms-auto">
-                    <EllipsisVertical size={18} />
-                </button>
+            </Link>
+            <div className="ms-auto pe-2">
+                <GroupCardOption />
             </div>
         </div>
     );
