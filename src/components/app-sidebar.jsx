@@ -13,6 +13,7 @@ import {
     BookOpen,
     Calendar,
     FileText,
+    CircleUser,
 } from "lucide-react";
 
 import {
@@ -74,6 +75,12 @@ const navigationConfig = [
                 href: "/instructor/manage-groups",
                 icon: <Users />,
                 label: "Manage Groups",
+                roles: ["instructor"],
+            },
+            {
+                href: "/instructor/students",
+                icon: <CircleUser />,
+                label: "Students",
                 roles: ["instructor"],
             },
             {

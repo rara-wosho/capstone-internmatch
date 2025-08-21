@@ -2,10 +2,11 @@ import { Copy, Link } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import TertiaryLabel from "../ui/TertiaryLabel";
+import BorderBox from "../ui/BorderBox";
 
 export default function GroupInviteLink() {
     return (
-        <div className="p-3 bg-card border rounded-lg">
+        <BorderBox className="border rounded-lg bg-card">
             <div className="mb-3">
                 <TertiaryLabel>Invitation Link</TertiaryLabel>
             </div>
@@ -25,6 +26,6 @@ export default function GroupInviteLink() {
                     Copy
                 </Button>
             </div>
-        </div>
+        </BorderBox>
     );
 }

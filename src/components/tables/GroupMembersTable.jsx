@@ -11,11 +11,13 @@ import TertiaryLabel from "../ui/TertiaryLabel";
 import BackButton from "../ui/BackButton";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "../ui/button";
+import BorderBox from "../ui/BorderBox";
+import Link from "next/link";
 
 export default function GroupMembersTable() {
     return (
-        <div className="bg-card border rounded-lg p-3">
-            <div className="flex items-center px-2 mb-2">
+        <BorderBox className="border rounded-lg bg-card">
+            <div className="flex items-center mb-2">
                 <BackButton className="me-2">
                     <div className="rounded-full p-1 bg-secondary text-muted-foreground">
                         <ChevronLeft size={20} />
@@ -27,21 +29,154 @@ export default function GroupMembersTable() {
                 {/* <TableCaption>A list of your recent invoices.</TableCaption>  */}
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="w-[100px]">Invoice</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Method</TableHead>
-                        <TableHead className="text-right">Amount</TableHead>
+                        <TableHead className="font-bold">#</TableHead>
+                        <TableHead className="font-bold">
+                            Complete Name
+                        </TableHead>
+                        <TableHead className="font-bold">Email</TableHead>
+                        <TableHead className="font-bold">Course</TableHead>
+                        <TableHead className="font-bold">Gender</TableHead>
+                        <TableHead className="font-bold">Age</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="text-right">$250.00</TableCell>
+                    <TableRow className="text-muted-foreground">
+                        <TableCell>1</TableCell>
+                        <TableCell className="font-medium text-secondary-foreground flex items-center">
+                            <Link
+                                href="/instructor/students/hasldhskdh"
+                                className="hover:underline underline-offset-2 w-full"
+                            >
+                                Israel De Vera
+                            </Link>
+                        </TableCell>
+                        <TableCell>raeldevprojects@gmail.com</TableCell>
+                        <TableCell>BSIT</TableCell>
+                        <TableCell>Male</TableCell>
+                        <TableCell>20</TableCell>
+                    </TableRow>
+                    <TableRow className="text-muted-foreground">
+                        <TableCell>1</TableCell>
+                        <TableCell className="font-medium text-secondary-foreground flex items-center">
+                            <Link
+                                href="/instructor/students/hasldhskdh"
+                                className="hover:underline underline-offset-2 w-full"
+                            >
+                                Israel De Vera
+                            </Link>
+                        </TableCell>
+                        <TableCell>raeldevprojects@gmail.com</TableCell>
+                        <TableCell>BSIT</TableCell>
+                        <TableCell>Male</TableCell>
+                        <TableCell>20</TableCell>
+                    </TableRow>
+                    <TableRow className="text-muted-foreground">
+                        <TableCell>1</TableCell>
+                        <TableCell className="font-medium text-secondary-foreground flex items-center">
+                            <Link
+                                href="/instructor/students/hasldhskdh"
+                                className="hover:underline underline-offset-2 w-full"
+                            >
+                                Israel De Vera
+                            </Link>
+                        </TableCell>
+                        <TableCell>raeldevprojects@gmail.com</TableCell>
+                        <TableCell>BSIT</TableCell>
+                        <TableCell>Male</TableCell>
+                        <TableCell>20</TableCell>
+                    </TableRow>
+                    <TableRow className="text-muted-foreground">
+                        <TableCell>1</TableCell>
+                        <TableCell className="font-medium text-secondary-foreground flex items-center">
+                            <Link
+                                href="/instructor/students/hasldhskdh"
+                                className="hover:underline underline-offset-2 w-full"
+                            >
+                                Israel De Vera
+                            </Link>
+                        </TableCell>
+                        <TableCell>raeldevprojects@gmail.com</TableCell>
+                        <TableCell>BSIT</TableCell>
+                        <TableCell>Male</TableCell>
+                        <TableCell>20</TableCell>
+                    </TableRow>
+                    <TableRow className="text-muted-foreground">
+                        <TableCell>1</TableCell>
+                        <TableCell className="font-medium text-secondary-foreground flex items-center">
+                            <Link
+                                href="/instructor/students/hasldhskdh"
+                                className="hover:underline underline-offset-2 w-full"
+                            >
+                                Israel De Vera
+                            </Link>
+                        </TableCell>
+                        <TableCell>raeldevprojects@gmail.com</TableCell>
+                        <TableCell>BSIT</TableCell>
+                        <TableCell>Male</TableCell>
+                        <TableCell>20</TableCell>
+                    </TableRow>
+                    <TableRow className="text-muted-foreground">
+                        <TableCell>1</TableCell>
+                        <TableCell className="font-medium text-secondary-foreground flex items-center">
+                            <Link
+                                href="/instructor/students/hasldhskdh"
+                                className="hover:underline underline-offset-2 w-full"
+                            >
+                                Israel De Vera
+                            </Link>
+                        </TableCell>
+                        <TableCell>raeldevprojects@gmail.com</TableCell>
+                        <TableCell>BSIT</TableCell>
+                        <TableCell>Male</TableCell>
+                        <TableCell>20</TableCell>
+                    </TableRow>
+                    <TableRow className="text-muted-foreground">
+                        <TableCell>1</TableCell>
+                        <TableCell className="font-medium text-secondary-foreground flex items-center">
+                            <Link
+                                href="/instructor/students/hasldhskdh"
+                                className="hover:underline underline-offset-2 w-full"
+                            >
+                                Israel De Vera
+                            </Link>
+                        </TableCell>
+                        <TableCell>raeldevprojects@gmail.com</TableCell>
+                        <TableCell>BSIT</TableCell>
+                        <TableCell>Male</TableCell>
+                        <TableCell>20</TableCell>
+                    </TableRow>
+                    <TableRow className="text-muted-foreground">
+                        <TableCell>1</TableCell>
+                        <TableCell className="font-medium text-secondary-foreground flex items-center">
+                            <Link
+                                href="/instructor/students/hasldhskdh"
+                                className="hover:underline underline-offset-2 w-full"
+                            >
+                                Israel De Vera
+                            </Link>
+                        </TableCell>
+                        <TableCell>raeldevprojects@gmail.com</TableCell>
+                        <TableCell>BSIT</TableCell>
+                        <TableCell>Male</TableCell>
+                        <TableCell>20</TableCell>
+                    </TableRow>
+                    <TableRow className="text-muted-foreground">
+                        <TableCell>1</TableCell>
+                        <TableCell className="font-medium text-secondary-foreground flex items-center">
+                            <Link
+                                href="/instructor/students/hasldhskdh"
+                                className="hover:underline underline-offset-2 w-full"
+                            >
+                                Israel De Vera
+                            </Link>
+                        </TableCell>
+                        <TableCell>raeldevprojects@gmail.com</TableCell>
+                        <TableCell>BSIT</TableCell>
+                        <TableCell>Male</TableCell>
+                        <TableCell>20</TableCell>
                     </TableRow>
                 </TableBody>
             </Table>
-        </div>
+        </BorderBox>
     );
 }

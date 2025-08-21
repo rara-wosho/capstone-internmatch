@@ -1,10 +1,11 @@
 import { Calendar, Pencil, Users2 } from "lucide-react";
 import TertiaryLabel from "../ui/TertiaryLabel";
 import { Button } from "../ui/button";
+import BorderBox from "../ui/BorderBox";
 
 export default function AboutGroup() {
     return (
-        <div className="p-3 bg-card border rounded-lg">
+        <BorderBox className="border rounded-lg bg-card">
             <div className="flex items-center mb-3">
                 <TertiaryLabel>About</TertiaryLabel>
                 <div className="ms-auto">
@@ -24,6 +25,6 @@ export default function AboutGroup() {
                 <Calendar size={14} />
                 June 18 2025
             </p>
-        </div>
+        </BorderBox>
     );
 }
