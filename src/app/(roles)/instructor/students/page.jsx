@@ -1,8 +1,6 @@
+import SearchStudent from "@/components/forms/SearchStudent";
 import StudentsTable from "@/components/tables/StudentsTable";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
-import { Search } from "lucide-react";
 
 export default function Page() {
     return (
@@ -18,14 +16,7 @@ export default function Page() {
 
             <div className="">
                 <div className="mb-4">
-                    <div className="flex items-center gap-2 max-w-md">
-                        <Input
-                            icon={<Search size={16} />}
-                            placeholder="Seach student"
-                        />
-
-                        <Button variant="white">Search</Button>
-                    </div>
+                    <SearchStudent />
                 </div>
                 <StudentsTable />
             </div>

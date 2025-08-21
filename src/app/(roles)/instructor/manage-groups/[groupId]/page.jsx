@@ -19,7 +19,7 @@ export default async function Page({ params }) {
                 <BreadCrumbs links={links} />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-3 mt-4">
+            <div className="grid grid-cols-1 lg:grid-cols-[1.9fr_1fr] gap-3 mt-4">
                 <div className="order-2 lg:order-1">
                     <GroupMembersTable />
                 </div>

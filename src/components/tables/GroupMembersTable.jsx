@@ -1,25 +1,32 @@
+"use client";
+
 import {
     Table,
     TableBody,
     TableCaption,
     TableCell,
+    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
 import TertiaryLabel from "../ui/TertiaryLabel";
 import BackButton from "../ui/BackButton";
-import { ChevronLeft } from "lucide-react";
+import { Ban, BanIcon, ChevronLeft, Trash } from "lucide-react";
 import { Button } from "../ui/button";
 import BorderBox from "../ui/BorderBox";
 import Link from "next/link";
+import { useState } from "react";
+import { Input } from "../ui/input";
+import { Checkbox } from "../ui/checkbox";
 
-export default function GroupMembersTable() {
+export default function GroupMembersTable({ data }) {
+    const [markedIds, setMarkedIds] = useState([]);
     return (
         <BorderBox className="border rounded-lg bg-card">
             <div className="flex items-center mb-2">
                 <BackButton className="me-2">
-                    <div className="rounded-full p-1 bg-secondary text-muted-foreground">
+                    <div className="rounded-full p-1 hover:bg-secondary text-muted-foreground">
                         <ChevronLeft size={20} />
                     </div>
                 </BackButton>
@@ -29,7 +36,9 @@ export default function GroupMembersTable() {
                 {/* <TableCaption>A list of your recent invoices.</TableCaption>  */}
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="font-bold">#</TableHead>
+                        <TableHead>
+                            <Checkbox />
+                        </TableHead>
                         <TableHead className="font-bold">
                             Complete Name
                         </TableHead>
@@ -37,15 +46,18 @@ export default function GroupMembersTable() {
                         <TableHead className="font-bold">Course</TableHead>
                         <TableHead className="font-bold">Gender</TableHead>
                         <TableHead className="font-bold">Age</TableHead>
+                        <TableHead className="font-bold">Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     <TableRow className="text-muted-foreground">
-                        <TableCell>1</TableCell>
-                        <TableCell className="font-medium text-secondary-foreground flex items-center">
+                        <TableCell>
+                            <Checkbox />
+                        </TableCell>
+                        <TableCell className="font-medium text-secondary-foreground">
                             <Link
                                 href="/instructor/students/hasldhskdh"
-                                className="hover:underline underline-offset-2 w-full"
+                                className="hover:underline underline-offset-2"
                             >
                                 Israel De Vera
                             </Link>
@@ -54,13 +66,25 @@ export default function GroupMembersTable() {
                         <TableCell>BSIT</TableCell>
                         <TableCell>Male</TableCell>
                         <TableCell>20</TableCell>
+                        <TableCell>
+                            <div className="flex items-center gap-3">
+                                <button>
+                                    <BanIcon size={18} />
+                                </button>
+                                <button className="text-destructive">
+                                    <Trash size={18} />
+                                </button>
+                            </div>
+                        </TableCell>
                     </TableRow>
                     <TableRow className="text-muted-foreground">
-                        <TableCell>1</TableCell>
-                        <TableCell className="font-medium text-secondary-foreground flex items-center">
+                        <TableCell>
+                            <Checkbox />
+                        </TableCell>
+                        <TableCell className="font-medium text-secondary-foreground">
                             <Link
                                 href="/instructor/students/hasldhskdh"
-                                className="hover:underline underline-offset-2 w-full"
+                                className="hover:underline underline-offset-2"
                             >
                                 Israel De Vera
                             </Link>
@@ -69,28 +93,51 @@ export default function GroupMembersTable() {
                         <TableCell>BSIT</TableCell>
                         <TableCell>Male</TableCell>
                         <TableCell>20</TableCell>
+                        <TableCell>
+                            <div className="flex items-center gap-3">
+                                <button>
+                                    <BanIcon size={18} />
+                                </button>
+                                <button className="text-destructive">
+                                    <Trash size={18} />
+                                </button>
+                            </div>
+                        </TableCell>
                     </TableRow>
-                    <TableRow className="text-muted-foreground">
-                        <TableCell>1</TableCell>
-                        <TableCell className="font-medium text-secondary-foreground flex items-center">
-                            <Link
-                                href="/instructor/students/hasldhskdh"
-                                className="hover:underline underline-offset-2 w-full"
-                            >
-                                Israel De Vera
-                            </Link>
-                        </TableCell>
-                        <TableCell>raeldevprojects@gmail.com</TableCell>
-                        <TableCell>BSIT</TableCell>
-                        <TableCell>Male</TableCell>
-                        <TableCell>20</TableCell>
+                </TableBody>
+            </Table>
+
+            <div className="border-t pt-3 mt-8 px-2">
+                <h2 className="font-semibold text-secondary-foreground/70">
+                    Banned Students
+                </h2>
+            </div>
+            <Table>
+                {/* <TableCaption>A list of your recent invoices.</TableCaption>  */}
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>
+                            <Checkbox />
+                        </TableHead>
+                        <TableHead className="font-bold">
+                            Complete Name
+                        </TableHead>
+                        <TableHead className="font-bold">Email</TableHead>
+                        <TableHead className="font-bold">Course</TableHead>
+                        <TableHead className="font-bold">Gender</TableHead>
+                        <TableHead className="font-bold">Age</TableHead>
+                        <TableHead className="font-bold">Action</TableHead>
                     </TableRow>
+                </TableHeader>
+                <TableBody>
                     <TableRow className="text-muted-foreground">
-                        <TableCell>1</TableCell>
-                        <TableCell className="font-medium text-secondary-foreground flex items-center">
+                        <TableCell>
+                            <Checkbox />
+                        </TableCell>
+                        <TableCell className="font-medium text-secondary-foreground">
                             <Link
                                 href="/instructor/students/hasldhskdh"
-                                className="hover:underline underline-offset-2 w-full"
+                                className="hover:underline underline-offset-2"
                             >
                                 Israel De Vera
                             </Link>
@@ -99,81 +146,16 @@ export default function GroupMembersTable() {
                         <TableCell>BSIT</TableCell>
                         <TableCell>Male</TableCell>
                         <TableCell>20</TableCell>
-                    </TableRow>
-                    <TableRow className="text-muted-foreground">
-                        <TableCell>1</TableCell>
-                        <TableCell className="font-medium text-secondary-foreground flex items-center">
-                            <Link
-                                href="/instructor/students/hasldhskdh"
-                                className="hover:underline underline-offset-2 w-full"
-                            >
-                                Israel De Vera
-                            </Link>
+                        <TableCell>
+                            <div className="flex items-center gap-3">
+                                <button>
+                                    <BanIcon size={18} />
+                                </button>
+                                <button className="text-destructive">
+                                    <Trash size={18} />
+                                </button>
+                            </div>
                         </TableCell>
-                        <TableCell>raeldevprojects@gmail.com</TableCell>
-                        <TableCell>BSIT</TableCell>
-                        <TableCell>Male</TableCell>
-                        <TableCell>20</TableCell>
-                    </TableRow>
-                    <TableRow className="text-muted-foreground">
-                        <TableCell>1</TableCell>
-                        <TableCell className="font-medium text-secondary-foreground flex items-center">
-                            <Link
-                                href="/instructor/students/hasldhskdh"
-                                className="hover:underline underline-offset-2 w-full"
-                            >
-                                Israel De Vera
-                            </Link>
-                        </TableCell>
-                        <TableCell>raeldevprojects@gmail.com</TableCell>
-                        <TableCell>BSIT</TableCell>
-                        <TableCell>Male</TableCell>
-                        <TableCell>20</TableCell>
-                    </TableRow>
-                    <TableRow className="text-muted-foreground">
-                        <TableCell>1</TableCell>
-                        <TableCell className="font-medium text-secondary-foreground flex items-center">
-                            <Link
-                                href="/instructor/students/hasldhskdh"
-                                className="hover:underline underline-offset-2 w-full"
-                            >
-                                Israel De Vera
-                            </Link>
-                        </TableCell>
-                        <TableCell>raeldevprojects@gmail.com</TableCell>
-                        <TableCell>BSIT</TableCell>
-                        <TableCell>Male</TableCell>
-                        <TableCell>20</TableCell>
-                    </TableRow>
-                    <TableRow className="text-muted-foreground">
-                        <TableCell>1</TableCell>
-                        <TableCell className="font-medium text-secondary-foreground flex items-center">
-                            <Link
-                                href="/instructor/students/hasldhskdh"
-                                className="hover:underline underline-offset-2 w-full"
-                            >
-                                Israel De Vera
-                            </Link>
-                        </TableCell>
-                        <TableCell>raeldevprojects@gmail.com</TableCell>
-                        <TableCell>BSIT</TableCell>
-                        <TableCell>Male</TableCell>
-                        <TableCell>20</TableCell>
-                    </TableRow>
-                    <TableRow className="text-muted-foreground">
-                        <TableCell>1</TableCell>
-                        <TableCell className="font-medium text-secondary-foreground flex items-center">
-                            <Link
-                                href="/instructor/students/hasldhskdh"
-                                className="hover:underline underline-offset-2 w-full"
-                            >
-                                Israel De Vera
-                            </Link>
-                        </TableCell>
-                        <TableCell>raeldevprojects@gmail.com</TableCell>
-                        <TableCell>BSIT</TableCell>
-                        <TableCell>Male</TableCell>
-                        <TableCell>20</TableCell>
                     </TableRow>
                 </TableBody>
             </Table>

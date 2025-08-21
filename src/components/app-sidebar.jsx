@@ -14,6 +14,7 @@ import {
     Calendar,
     FileText,
     CircleUser,
+    Dot,
 } from "lucide-react";
 
 import {
@@ -112,24 +113,24 @@ const navigationConfig = [
                 ],
             },
             {
-                icon: <ClipboardPen />,
-                label: "Exam Management",
+                icon: <FileText />,
+                label: "Assessment Test",
                 roles: ["instructor"],
                 subItems: [
                     {
-                        href: "/instructor/exams/create",
-                        label: "Create Exam",
+                        href: "/instructor/assessment-test",
+                        label: "Manage",
                         icon: <FileText />,
                     },
                     {
-                        href: "/instructor/exams/manage",
-                        label: "Manage Exams",
-                        icon: <Calendar />,
+                        href: "/instructor/assessment-test/create",
+                        label: "Create Test",
+                        icon: <FileText />,
                     },
                     {
-                        href: "/instructor/exams/results",
-                        label: "View Results",
-                        icon: <BookOpen />,
+                        href: "/instructor/assessment-test/takers",
+                        label: "Takers",
+                        icon: <Calendar />,
                     },
                 ],
             },
@@ -276,7 +277,7 @@ export function AppSidebar({ role, onSignOut }) {
                                             >
                                                 <CollapsibleTrigger asChild>
                                                     <SidebarMenuButton
-                                                        className="text-secondary-foreground/80"
+                                                        className="text-secondary-foreground/80 whitespace-nowrap"
                                                         tooltip={item.label}
                                                         isActive={isAnySubItemActive(
                                                             item.subItems,
@@ -316,9 +317,11 @@ export function AppSidebar({ role, onSignOut }) {
                                                                             className="flex items-center gap-2"
                                                                         >
                                                                             <span>
-                                                                                {
-                                                                                    subItem.icon
-                                                                                }
+                                                                                <Dot
+                                                                                    size={
+                                                                                        16
+                                                                                    }
+                                                                                />
                                                                             </span>
                                                                             <span>
                                                                                 {
