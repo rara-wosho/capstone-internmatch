@@ -157,7 +157,13 @@ const navigationConfig = [
                 href: "/settings",
                 icon: <Settings />,
                 label: "Settings",
-                roles: ["student", "instructor", "company"],
+                roles: ["student", "company"],
+            },
+            {
+                href: "/instructor/settings",
+                icon: <Settings />,
+                label: "Settings",
+                roles: ["instructor"],
             },
             {
                 href: "/feedbacks",
