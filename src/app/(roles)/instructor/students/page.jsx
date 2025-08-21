@@ -1,6 +1,7 @@
 import SearchStudent from "@/components/forms/SearchStudent";
 import StudentsTable from "@/components/tables/StudentsTable";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
+import { Suspense } from "react";
 
 export default function Page() {
     return (
@@ -16,7 +17,9 @@ export default function Page() {
 
             <div className="">
                 <div className="mb-4">
-                    <SearchStudent />
+                    <Suspense fallback={null}>
+                        <SearchStudent />
+                    </Suspense>
                 </div>
                 <StudentsTable />
             </div>

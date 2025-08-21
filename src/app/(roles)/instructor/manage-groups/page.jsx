@@ -5,13 +5,16 @@ import { Input } from "@/components/ui/input";
 import SortData from "@/components/ui/SortData";
 import TertiaryLabel from "@/components/ui/TertiaryLabel";
 import { ArrowUpDown, Filter, Plus, Search, SortAsc } from "lucide-react";
+import { Suspense } from "react";
 
 export default function Page() {
     return (
         <div>
             <div className="flex items-center gap-x-2 md:gap-x-3 gap-y-3 justify-between flex-wrap mb-8">
                 <div className="flex items-center gap-2 md:gap-3 grow">
-                    <SearchGroup />
+                    <Suspense fallback={null}>
+                        <SearchGroup />
+                    </Suspense>
                     <SortData>
                         <Button
                             variant="secondary"
