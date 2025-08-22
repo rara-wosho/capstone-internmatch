@@ -221,7 +221,7 @@ const isAnySubItemActive = (subItems, currentPath) => {
 
 export function AppSidebar({ role, onSignOut }) {
     const pathName = usePathname();
-    const { setOpenMobile } = useSidebar();
+    const { setOpenMobile, setOpen } = useSidebar();
 
     // Filter navigation items based on user role
     const filteredNavigation = useMemo(() => {
