@@ -3,7 +3,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import DashboardHeader from "@/components/ui/dashboard-header";
 
 export default function Layout({ children }) {
-    const role = "instructor";
+    const role = "company";
     return (
         <SidebarProvider>
             <AppSidebar role={role} />

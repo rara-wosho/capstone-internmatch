@@ -23,7 +23,7 @@ import { Checkbox } from "../ui/checkbox";
 export default function GroupMembersTable({ data }) {
     const [markedIds, setMarkedIds] = useState([]);
     return (
-        <BorderBox className="border rounded-lg bg-card">
+        <BorderBox className="border rounded-md bg-card">
             <div className="flex items-center mb-2">
                 <BackButton className="me-2">
                     <div className="rounded-full p-1 hover:bg-secondary text-muted-foreground">

@@ -88,12 +88,7 @@ const navigationConfig = [
                 label: "Students",
                 roles: ["instructor"],
             },
-            {
-                href: "/company/interns",
-                icon: <Users />,
-                label: "Manage Interns",
-                roles: ["company"],
-            },
+
             {
                 icon: <ClipboardPen />,
                 label: "My Exams",
@@ -140,25 +135,31 @@ const navigationConfig = [
             },
             {
                 icon: <ClipboardPen />,
-                label: "Internship Programs",
+                label: "Internship Exam",
                 roles: ["company"],
                 subItems: [
                     {
-                        href: "/company/programs/create",
-                        label: "Create Program",
-                        icon: <FileText />,
-                    },
-                    {
-                        href: "/company/programs/manage",
-                        label: "Manage Programs",
+                        href: "/company/internship-exam/examinees",
+                        label: "Examinees",
                         icon: <Calendar />,
                     },
                     {
-                        href: "/company/applications",
-                        label: "Applications",
-                        icon: <BookOpen />,
+                        href: "/company/internship-exam/manage",
+                        label: "Manage Exam",
+                        icon: <Calendar />,
+                    },
+                    {
+                        href: "/company/internship-exam/create",
+                        label: "Create Exam",
+                        icon: <FileText />,
                     },
                 ],
+            },
+            {
+                href: "/company/applications",
+                icon: <BookOpen />,
+                label: "Applications",
+                roles: ["company"],
             },
         ],
     },
@@ -250,7 +251,7 @@ export function AppSidebar({ role, onSignOut }) {
     return (
         <Sidebar collapsible="icon" className="border-0">
             <SidebarContent>
-                <SidebarHeader>
+                <SidebarHeader className="h-14 flex items-center">
                     <SidebarMenu>
                         <SidebarMenuItem>
                             <SidebarMenuButton className="pointer-events-none mt-1">

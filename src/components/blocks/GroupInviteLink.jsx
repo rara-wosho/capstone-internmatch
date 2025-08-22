@@ -6,7 +6,7 @@ import BorderBox from "../ui/BorderBox";
 
 export default function GroupInviteLink() {
     return (
-        <BorderBox className="border rounded-lg bg-card">
+        <BorderBox className="border rounded-sm bg-card">
             <div className="mb-3">
                 <TertiaryLabel>Invitation Link</TertiaryLabel>
             </div>

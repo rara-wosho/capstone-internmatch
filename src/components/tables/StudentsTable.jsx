@@ -12,7 +12,7 @@ import Link from "next/link";
 
 export default function StudentsTable() {
     return (
-        <BorderBox className="border rounded-lg bg-card">
+        <BorderBox className="border rounded-sm bg-card">
             <Table>
                 <TableHeader>
                     <TableRow>

@@ -12,7 +12,7 @@ export default function SearchStudent() {
 
     return (
         <Form action="/instructor/students">
-            <div className="flex items-center gap-2 max-w-md">
+            <div className="flex items-center gap-2">
                 <Input
                     type="search"
                     name="search_query"
