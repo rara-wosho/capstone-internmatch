@@ -15,11 +15,15 @@ import {
     FileText,
     CircleUser,
     Dot,
+    Sun,
+    User2,
+    ChevronUp,
 } from "lucide-react";
 
 import {
     Sidebar,
     SidebarContent,
+    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
@@ -42,8 +46,8 @@ import {
 } from "@/components/ui/collapsible";
 import Logo from "./ui/Logo";
 import { useMemo } from "react";
-
-// Centralized navigation configuration
+import { Switch } from "./ui/switch";
+// Centralized navigation configurati on
 const navigationConfig = [
     {
         label: "Main",
