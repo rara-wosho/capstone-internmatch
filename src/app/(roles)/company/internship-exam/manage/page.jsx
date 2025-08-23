@@ -1,3 +1,4 @@
+import ManageExamCard from "@/components/exam/ManageExamCard";
 import BorderBox from "@/components/ui/BorderBox";
 import { Button } from "@/components/ui/button";
 import IconWrapper from "@/components/ui/IconWrapper";
@@ -8,7 +9,7 @@ import Link from "next/link";
 export default function Page() {
     return (
         <div className="lg:px-10">
-            <div className="flex items-center pb-5 pt-5 border-b">
+            <div className="flex items-center py-5 border-b mb-5">
                 <TertiaryLabel className="gap-2">
                     <IconWrapper className="hidden md:inline-block">
                         <FileText size={16} />
@@ -26,7 +27,11 @@ export default function Page() {
                 </div>
             </div>
 
-            <BorderBox className="border bg-card rounded-xl"></BorderBox>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                <ManageExamCard />
+                <ManageExamCard />
+                <ManageExamCard />
+            </div>
         </div>
     );
 }
