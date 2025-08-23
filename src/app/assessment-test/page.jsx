@@ -17,6 +17,7 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer";
+import BorderBox from "@/components/ui/BorderBox";
 
 export default function Page() {
     return (
@@ -168,14 +169,13 @@ export default function Page() {
                                         </div>
                                     </DrawerHeader>
                                     <DrawerFooter className="mb-8">
-                                        <DrawerClose>
-                                            <Button
-                                                variant="outline"
-                                                className="px-8"
-                                            >
-                                                Close
-                                            </Button>
-                                        </DrawerClose>
+                                        <Button
+                                            variant="outline"
+                                            className="px-8"
+                                            asChild
+                                        >
+                                            <DrawerClose>Close</DrawerClose>
+                                        </Button>
                                     </DrawerFooter>
                                 </Wrapper>
                             </DrawerContent>
@@ -195,24 +195,24 @@ export default function Page() {
                         </p>
                     </div>
                     <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 text-muted-foreground">
-                        <div className="bg-white dark:bg-card rounded p-2">
+                        <BorderBox className="bg-white dark:bg-card rounded-md">
                             <TertiaryLabel className="mb-2">
                                 Duration
                             </TertiaryLabel>
                             <p>1 hour</p>
-                        </div>
-                        <div className="bg-white dark:bg-card rounded p-2">
+                        </BorderBox>
+                        <BorderBox className="bg-white dark:bg-card rounded-md">
                             <TertiaryLabel className="mb-2">
                                 Number of Questions
                             </TertiaryLabel>
                             <p>30</p>
-                        </div>
-                        <div className="bg-white dark:bg-card rounded p-2">
+                        </BorderBox>
+                        <BorderBox className="bg-white dark:bg-card rounded-md">
                             <TertiaryLabel className="mb-2">
                                 Type of Question
                             </TertiaryLabel>
                             <p>Multiple choice</p>
-                        </div>
+                        </BorderBox>
                     </div>
                     <Difficulty />
                 </div>

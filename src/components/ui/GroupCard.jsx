@@ -6,7 +6,7 @@ import GroupCardOption from "./groupcard-option";
 
 export default function GroupCard() {
     return (
-        <div className="border bg-card rounded-sm hover:bg-accent/20 dark:hover:bg-accent/50 hover:border-accent-foreground/40 transition-colors flex items-center group">
+        <div className="border bg-card rounded-xl hover:bg-accent/20 dark:hover:bg-accent/50 hover:border-accent-foreground/40 transition-colors flex items-center group">
             <Link
                 href="/instructor/manage-groups/hsdashief"
                 className="flex items-center ps-3 pe-2 py-5 w-full"

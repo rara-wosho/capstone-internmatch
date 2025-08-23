@@ -5,7 +5,7 @@ import BorderBox from "../ui/BorderBox";
 
 export default function AboutGroup() {
     return (
-        <BorderBox className="border rounded-sm bg-card">
+        <BorderBox className="border rounded-xl bg-card">
             <div className="flex items-center mb-3">
                 <TertiaryLabel>About</TertiaryLabel>
                 <div className="ms-auto">

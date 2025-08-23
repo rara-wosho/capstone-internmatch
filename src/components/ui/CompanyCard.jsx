@@ -5,8 +5,8 @@ import Link from "next/link";
 
 export default function CompanyCard() {
     return (
-        <div className="bg-white border dark:border-neutral-900 dark:bg-card rounded-sm p-2 shadow-xs">
-            <div className="relative w-full aspect-[5/3.5] mb-3 rounded overflow-hidden ">
+        <div className="bg-white border dark:border-neutral-900 dark:bg-card rounded-xl p-2 shadow-xs">
+            <div className="relative w-full aspect-[5/3.5] mb-3 rounded-sm overflow-hidden ">
                 <Image
                     src="https://i.pinimg.com/1200x/5f/33/c7/5f33c741560bb71ebedb831267603c1b.jpg"
                     fill

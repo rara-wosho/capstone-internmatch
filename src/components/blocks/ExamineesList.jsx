@@ -15,7 +15,7 @@ export default function ExamineesList() {
                 Fundamentals of Web Development
             </h1>
 
-            <div className="border rounded-sm bg-card p-3">
+            <div className="border rounded-lg bg-card p-3">
                 <Table>
                     <TableHeader>
                         <TableRow>

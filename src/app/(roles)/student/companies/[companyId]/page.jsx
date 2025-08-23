@@ -21,7 +21,7 @@ export default async function Page({ params }) {
             <div className="grid grid-cols-1 md:grid-cols-[1.6fr_1fr] gap-x-6 gap-y-8">
                 {/* main content  */}
                 <div className="left ">
-                    <BorderBox className="bg-white dark:bg-transparent border rounded-lg mb-3">
+                    <BorderBox className="bg-white dark:bg-transparent border rounded-xl mb-3">
                         <div className="flex gap-3 mb-5">
                             <div className="relative size-24 shrink-0 overflow-hidden rounded-sm">
                                 <Image
@@ -85,7 +85,7 @@ export default async function Page({ params }) {
                     </BorderBox>
 
                     {/* examination section  */}
-                    <BorderBox className="border bg-white dark:bg-transparent rounded-lg">
+                    <BorderBox className="border bg-white dark:bg-transparent rounded-xl">
                         <TertiaryLabel className="mb-2">
                             Contact Information
                         </TertiaryLabel>
