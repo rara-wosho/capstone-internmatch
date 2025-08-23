@@ -1,12 +1,12 @@
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import Link from "next/link";
 
 export default function ExamineesList() {
     return (
@@ -15,26 +15,31 @@ export default function ExamineesList() {
                 Fundamentals of Web Development
             </h1>
 
-            <div className="border rounded-lg bg-card p-3">
+            <div className="border rounded-xl bg-card p-3">
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Invoice</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Method</TableHead>
-                            <TableHead className="text-right">Amount</TableHead>
+                            <TableHead>Complete Name</TableHead>
+                            <TableHead>School</TableHead>
+                            <TableHead>Course</TableHead>
+                            <TableHead>Date</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow>
+                        <TableRow className="text-sm text-muted-foreground">
                             <TableCell className="font-medium">
-                                INV001
+                                <Link
+                                    href="/company/internship-exam/examinees/23kdskf223"
+                                    className="text-secondary-foreground hover:underline underline-offset-2"
+                                >
+                                    Israel De Vera
+                                </Link>
                             </TableCell>
-                            <TableCell>Paid</TableCell>
-                            <TableCell>Credit Card</TableCell>
-                            <TableCell className="text-right">
-                                $250.00
+                            <TableCell>USTP</TableCell>
+                            <TableCell>
+                                Bachelor of Science in Information Technology
                             </TableCell>
+                            <TableCell>Jan 16 2025</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>

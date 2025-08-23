@@ -1,4 +1,4 @@
-import { LogOut, Settings, User } from "lucide-react";
+import { Bell, ChevronDown, LogOut, Settings, User } from "lucide-react";
 import { ThemeToggler } from "../theme-toggler";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import {
@@ -8,6 +8,7 @@ import {
     SidebarTrigger,
 } from "./sidebar";
 import Logo from "./Logo";
+import IconWrapper from "./IconWrapper";
 
 export default function DashboardHeader() {
     return (
@@ -27,14 +28,22 @@ export default function DashboardHeader() {
             </div>
 
             <div className="ms-auto flex items-center gap-3">
-                <ThemeToggler />
+                <div className="flex gap-2">
+                    <IconWrapper>
+                        <Bell size={16} />
+                    </IconWrapper>
+                    <div className="border rounded-sm bg-card">
+                        <ThemeToggler />
+                    </div>
+                </div>
 
                 <Popover>
                     <PopoverTrigger className="cursor-pointer">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2.5">
                             <div className="size-7 rounded-full border"></div>
-                            <p className="hidden md:inline-block">
+                            <p className="hidden md:inline-flex items-center gap-2.5">
                                 Israel De Vera
+                                <ChevronDown size={15} />
                             </p>
                         </div>
                     </PopoverTrigger>

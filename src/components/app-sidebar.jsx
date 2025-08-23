@@ -34,6 +34,7 @@ import {
     SidebarMenuSub,
     SidebarMenuSubButton,
     SidebarMenuSubItem,
+    SidebarTrigger,
     useSidebar,
 } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
@@ -256,7 +257,7 @@ export function AppSidebar({ role, onSignOut }) {
                         <SidebarMenuItem>
                             <SidebarMenuButton className="pointer-events-none mt-1">
                                 <Logo className="w-4 h-4" />
-                                <p className="font-bold text-secondary-foreground/90 text-xl flex items-end">
+                                <p className="font-bold text-secondary-foreground/90 text-xl flex items-center">
                                     Intern
                                     <span className=" inline-flex">Match</span>
                                 </p>
