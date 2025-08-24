@@ -3,7 +3,19 @@ import BorderBox from "@/components/ui/BorderBox";
 import { Button } from "@/components/ui/button";
 import IconWrapper from "@/components/ui/IconWrapper";
 import TertiaryLabel from "@/components/ui/TertiaryLabel";
-import { FileText, Plus, PlusCircle } from "lucide-react";
+import { FileText, PlusCircle } from "lucide-react";
+import ExamDetailsForm from "@/components/blocks/ExamDetailsForm";
+
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/drawer";
 import Link from "next/link";
 
 export default function Page() {
@@ -20,8 +32,10 @@ export default function Page() {
                 <div className="ms-auto">
                     <Button variant="white" asChild>
                         <Link href="/company/internship-exam/create">
-                            <PlusCircle />
-                            Create New
+                            <p className="flex gap-1.5 items-center">
+                                <PlusCircle />
+                                Create New
+                            </p>
                         </Link>
                     </Button>
                 </div>
