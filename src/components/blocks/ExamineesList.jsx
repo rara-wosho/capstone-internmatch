@@ -7,6 +7,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import BorderBox from "../ui/BorderBox";
 
 export default function ExamineesList() {
     return (
@@ -15,7 +16,7 @@ export default function ExamineesList() {
                 Fundamentals of Web Development
             </h1>
 
-            <div className="border rounded-xl bg-card p-3">
+            <BorderBox className="bg-card border rounded-xl">
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -41,9 +42,39 @@ export default function ExamineesList() {
                             </TableCell>
                             <TableCell>Jan 16 2025</TableCell>
                         </TableRow>
+                        <TableRow className="text-sm text-muted-foreground">
+                            <TableCell className="font-medium">
+                                <Link
+                                    href="/company/internship-exam/examinees/23kdskf223"
+                                    className="text-secondary-foreground hover:underline underline-offset-2"
+                                >
+                                    Israel De Vera
+                                </Link>
+                            </TableCell>
+                            <TableCell>USTP</TableCell>
+                            <TableCell>
+                                Bachelor of Science in Information Technology
+                            </TableCell>
+                            <TableCell>Jan 16 2025</TableCell>
+                        </TableRow>
+                        <TableRow className="text-sm text-muted-foreground">
+                            <TableCell className="font-medium">
+                                <Link
+                                    href="/company/internship-exam/examinees/23kdskf223"
+                                    className="text-secondary-foreground hover:underline underline-offset-2"
+                                >
+                                    Israel De Vera
+                                </Link>
+                            </TableCell>
+                            <TableCell>USTP</TableCell>
+                            <TableCell>
+                                Bachelor of Science in Information Technology
+                            </TableCell>
+                            <TableCell>Jan 16 2025</TableCell>
+                        </TableRow>
                     </TableBody>
                 </Table>
-            </div>
+            </BorderBox>
         </div>
     );
 }

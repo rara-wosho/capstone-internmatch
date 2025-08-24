@@ -9,7 +9,7 @@ export default function ExamsList() {
                 <div>
                     <p className="font-semibold flex items-center gap-2">
                         Exam{" "}
-                        <span className="border rounded-sm text-sm px-2 bg-card">
+                        <span className="border rounded-sm text-sm px-2 bg-neutral-800 text-neutral-50 dark:text-neutral-300 dark:bg-card">
                             3
                         </span>
                     </p>

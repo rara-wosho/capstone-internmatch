@@ -13,7 +13,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { CircleCheck } from "lucide-react";
+import { ArrowRight, CircleCheck } from "lucide-react";
 
 export default function ExamSection() {
     const [questions, setQuestions] = useState([]);
@@ -43,9 +43,14 @@ export default function ExamSection() {
                     </SelectContent>
                 </Select>
             </div>
-            <div className="flex items-center mb-2">
-                <Button variant="white">
-                    <CircleCheck /> Save Exam
+            <div className="flex items-center justify-end mb-2 gap-2">
+                <Button type="button" variant="dangerOutline">
+                    Reset form
+                </Button>
+                <Button variant="white" asChild>
+                    <p>
+                        Next step <ArrowRight />
+                    </p>
                 </Button>
             </div>
         </form>

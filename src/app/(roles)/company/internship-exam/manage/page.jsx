@@ -9,7 +9,7 @@ import Link from "next/link";
 export default function Page() {
     return (
         <div className="lg:px-10">
-            <div className="flex items-center py-5 border-b mb-5">
+            <div className="flex items-center pb-5 md:pb-7 pt-2 md:pt-5 border-b mb-5 md:mb-8">
                 <TertiaryLabel className="gap-2">
                     <IconWrapper className="hidden md:inline-block">
                         <FileText size={16} />
