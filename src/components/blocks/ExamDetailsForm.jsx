@@ -20,7 +20,7 @@ export default function ExamDetailsForm() {
         title: "",
         description: "",
         instruction: "",
-        duration: "",
+        duration: "60",
         mode: "classic",
     });
 
@@ -80,12 +80,10 @@ export default function ExamDetailsForm() {
                         <SelectValue placeholder="Exam duration" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="30m">30 minutes</SelectItem>
-                        <SelectItem value="1h">1 hour</SelectItem>
-                        <SelectItem value="1h30m">
-                            1 hour, 30 minutes
-                        </SelectItem>
-                        <SelectItem value="2h">2 hours</SelectItem>
+                        <SelectItem value="30">30 minutes</SelectItem>
+                        <SelectItem value="60">1 hour</SelectItem>
+                        <SelectItem value="90">1 hour, 30 minutes</SelectItem>
+                        <SelectItem value="120">2 hours</SelectItem>
                     </SelectContent>
                 </Select>
             </div>

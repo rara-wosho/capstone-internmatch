@@ -1,9 +1,8 @@
+import AddQuestionSection from "@/components/exam/AddQuestionSection";
 import BackButton from "@/components/ui/BackButton";
-import BorderBox from "@/components/ui/BorderBox";
 import { Button } from "@/components/ui/button";
-import IconWrapper from "@/components/ui/IconWrapper";
-import TertiaryLabel from "@/components/ui/TertiaryLabel";
-import { ChevronLeft, FileText, PlusCircle } from "lucide-react";
+import SecondaryLabel from "@/components/ui/SecondaryLabel";
+import { ChevronLeft, PlusCircle } from "lucide-react";
 
 export default function Page() {
     return (
@@ -11,10 +10,10 @@ export default function Page() {
             {/* header  */}
             <div className="flex items-center pb-5 md:pb-7 pt-2 md:pt-5 border-b mb-5 md:mb-8 flex-wrap md:flex-nowrap gap-x-10 gap-y-4">
                 <BackButton className="hover:bg-card rounded-sm pe-2 py-1 transition-colors">
-                    <TertiaryLabel className="gap-2">
+                    <SecondaryLabel className="gap-2">
                         <ChevronLeft />
                         <span>Funcamentals of programming</span>
-                    </TertiaryLabel>
+                    </SecondaryLabel>
                 </BackButton>
 
                 <div className="ms-auto grow md:grow-0 flex justify-end">
@@ -26,9 +25,7 @@ export default function Page() {
             </div>
 
             {/* content  */}
-            <BorderBox className="bg-card border rounded-xl">
-                add question
-            </BorderBox>
+            <AddQuestionSection />
         </div>
     );
 }
