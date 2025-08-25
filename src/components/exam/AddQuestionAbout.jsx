@@ -41,6 +41,10 @@ export default function AddQuestionAbout() {
                     <Switch checked disabled />
                 </div>
                 <div className="flex justify-between items-center mb-2.5">
+                    <FormLabel>Shuffle choices</FormLabel>
+                    <Switch checked disabled />
+                </div>
+                <div className="flex justify-between items-center mb-2.5">
                     <FormLabel>Exam duration</FormLabel>
                     <p className="text-sm text-muted-foreground">1hr</p>
                 </div>
