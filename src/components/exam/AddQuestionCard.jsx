@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { toast } from "sonner";
+import { Textarea } from "../ui/textarea";
 
 export default function AddQuestionCard({ id, initialQuestion }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -38,21 +39,34 @@ export default function AddQuestionCard({ id, initialQuestion }) {
 
     function handleDeleteChoice(index, isCorrect) {
         if (isCorrect) {
-            toast.warning("You cannot delete a correct answer", {
-                position: "bottom-left",
-            });
+            toast.warning("You cannot delete a correct answer");
             return;
         }
         if (choices.length > 2) {
             setChoices((prev) => prev.filter((_, i) => i !== index));
         } else {
-            toast.warning("Questions should have at least 2 choices.", {
-                position: "bottom-left",
-            });
+            toast.warning("Questions should have at least 2 choices.");
         }
     }
 
-    function handleSave() {
+    function handleSubmit(e) {
+        e.preventDefault();
+
+        // Check for empty fields
+        const hasEmptyField = choices.some((c) => c.text.trim() === "");
+        if (hasEmptyField) {
+            toast.error("You have a choice with no value.");
+            return;
+        }
+
+        // Check if at least one correct answer is chosen
+        const hasCorrectAnswer = choices.some((c) => c.isCorrect === true);
+        if (!hasCorrectAnswer) {
+            toast.error("Please select a correct answer.");
+            return;
+        }
+
+        // ✅ Passed validation
         setIsEditing(false);
     }
 
@@ -63,7 +77,7 @@ export default function AddQuestionCard({ id, initialQuestion }) {
     console.log("component render");
     return (
         <BorderBox className="border rounded-xl bg-card shadow-xs p-4">
-            <p className="text-sm text-muted-foreground mb-2">Question 1</p>
+            <p className="text-sm text-muted-foreground mb-2">Question {id}</p>
 
             {/* Display Mode */}
             {!isEditing && (
@@ -83,26 +97,40 @@ export default function AddQuestionCard({ id, initialQuestion }) {
 
             {/* Edit Mode */}
             {isEditing && (
-                <form className="space-y-3">
-                    <Input
-                        type="text"
+                <form className="space-y-3" onSubmit={handleSubmit}>
+                    <Textarea
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
                         placeholder="Enter your question"
+                        className="min-h-10"
                     />
 
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                         {choices.map((choice, index) => (
                             <div
                                 key={index}
                                 className="flex items-center gap-2"
                             >
+                                <Input
+                                    type="text"
+                                    value={choice.text}
+                                    onChange={(e) =>
+                                        handleChoiceChange(
+                                            index,
+                                            "text",
+                                            e.target.value
+                                        )
+                                    }
+                                    placeholder={`Choice ${index + 1}`}
+                                />
+
                                 <Button
                                     variant="secondary"
                                     type="button"
                                     size="icon"
                                     className={
-                                        choice.isCorrect && "bg-green-600"
+                                        choice.isCorrect &&
+                                        "bg-green-500/10 text-green-900 dark:text-green-300 dark:bg-green-700/10 border border-green-700"
                                     }
                                     asChild
                                 >
@@ -122,18 +150,6 @@ export default function AddQuestionCard({ id, initialQuestion }) {
                                         <Check size={16} />
                                     </label>
                                 </Button>
-                                <Input
-                                    type="text"
-                                    value={choice.text}
-                                    onChange={(e) =>
-                                        handleChoiceChange(
-                                            index,
-                                            "text",
-                                            e.target.value
-                                        )
-                                    }
-                                    placeholder={`Choice ${index + 1}`}
-                                />
 
                                 <Button
                                     size="icon"
@@ -170,9 +186,7 @@ export default function AddQuestionCard({ id, initialQuestion }) {
                         >
                             Cancel
                         </Button>
-                        <Button size="sm" onClick={handleSave}>
-                            Save changes
-                        </Button>
+                        <Button size="sm">Save changes</Button>
                     </div>
                 </form>
             )}
