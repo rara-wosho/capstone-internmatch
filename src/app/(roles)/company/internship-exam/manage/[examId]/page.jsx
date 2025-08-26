@@ -5,7 +5,18 @@ import BorderBox from "@/components/ui/BorderBox";
 import { Button } from "@/components/ui/button";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import TertiaryLabel from "@/components/ui/TertiaryLabel";
-import { ChevronLeft, PlusCircle } from "lucide-react";
+import { ChevronLeft, NotebookPen, PlusCircle } from "lucide-react";
+
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import AddQuestionModal from "@/components/exam/AddQuestionModal";
+import IconWrapper from "@/components/ui/IconWrapper";
 
 export default function Page() {
     const questions = [
@@ -25,17 +36,24 @@ export default function Page() {
                 </BackButton>
 
                 <div className="ms-auto grow md:grow-0 flex justify-end">
-                    <Button variant="white" className="sm:grow-0 grow">
-                        <PlusCircle />
-                        Add question
-                    </Button>
+                    <AddQuestionModal />
                 </div>
             </div>
 
             {/* content  */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
                 {/* list of questions  */}
-                <div className="lg:col-span-2 flex flex-col gap-3 order-2 lg:order-1">
+                <div className="lg:col-span-2 flex flex-col gap-1 order-2 lg:order-1">
+                    <BorderBox className="border rounded-t-xl bg-card shadow-xs">
+                        <TertiaryLabel className="space-x-2">
+                            <NotebookPen size={17} /> <p>Manage Questions</p>
+                            <div className="ms-auto">
+                                <p className="text-sm px-2 border rounded-sm">
+                                    50
+                                </p>
+                            </div>
+                        </TertiaryLabel>
+                    </BorderBox>
                     {questions.map((q) => (
                         <AddQuestionCard
                             key={q.id}

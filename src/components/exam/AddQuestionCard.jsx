@@ -76,7 +76,7 @@ export default function AddQuestionCard({ id, initialQuestion }) {
 
     console.log("component render");
     return (
-        <BorderBox className="border rounded-xl bg-card shadow-xs p-4">
+        <BorderBox className="border last:rounded-b-xl bg-card shadow-xs">
             <p className="text-sm text-muted-foreground mb-2">Question {id}</p>
 
             {/* Display Mode */}
