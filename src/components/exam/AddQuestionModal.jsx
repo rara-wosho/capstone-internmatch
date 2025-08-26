@@ -24,10 +24,10 @@ export default function AddQuestionModal() {
                     Add question
                 </DialogTrigger>
             </Button>
-            <DialogContent>
+            <DialogContent className="p-3 sm:p-5">
                 <div className="overflow-y-auto">
                     <DialogHeader>
-                        <DialogTitle>
+                        <DialogTitle className="py-2">
                             <TertiaryLabel className="space-x-2">
                                 <IconWrapper>
                                     <FileText size={16} />
@@ -35,14 +35,16 @@ export default function AddQuestionModal() {
                                 <p>New Question</p>
                             </TertiaryLabel>
                         </DialogTitle>
-                        <DialogDescription>
+                        <DialogDescription className="text-left">
                             You can add choices after saving the question
                         </DialogDescription>
 
                         <div className="overflow-y-auto max-h-[75vh] mt-2">
                             <form action="">
-                                <div className="mb-6">
-                                    <FormLabel>Question</FormLabel>
+                                <div className="mb-6 flex flex-col items-start">
+                                    <FormLabel className="text-left">
+                                        Question
+                                    </FormLabel>
                                     <Input placeholder="What is a software?" />
                                 </div>
 

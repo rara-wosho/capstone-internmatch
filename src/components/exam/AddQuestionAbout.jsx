@@ -1,17 +1,15 @@
-import { Edit, PenLine } from "lucide-react";
 import BorderBox from "../ui/BorderBox";
 import FormLabel from "../ui/FormLabel";
 import { Switch } from "../ui/switch";
 import TertiaryLabel from "../ui/TertiaryLabel";
+import AboutExamModal from "./AboutExamModal";
 
 export default function AddQuestionAbout() {
     return (
         <BorderBox className="border rounded-xl bg-card shadow-xs">
             <div className="flex items-center mb-3">
                 <TertiaryLabel>About</TertiaryLabel>
-                <button className="ms-auto cursor-pointer px-2">
-                    <PenLine size={16} />
-                </button>
+                <AboutExamModal />
             </div>
             <div className="flex flex-col">
                 <div className="mb-4">
