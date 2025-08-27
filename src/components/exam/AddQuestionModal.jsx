@@ -132,7 +132,7 @@ export default function AddQuestionModal({ onQuestionAdded }) {
                 </DialogTrigger>
             </Button>
 
-            <DialogContent className="p-3 sm:p-5 overflow-y-auto max-h-[90svh]">
+            <DialogContent className="p-3 sm:p-5 overflow-y-auto max-h-[90svh] md:max-w-3xl">
                 <div>
                     <DialogHeader>
                         <DialogTitle className="py-2">
@@ -258,11 +258,7 @@ export default function AddQuestionModal({ onQuestionAdded }) {
                                             Cancel
                                         </Button>
                                     </DialogClose>
-                                    <DialogClose asChild>
-                                        <Button type="submit">
-                                            Save question
-                                        </Button>
-                                    </DialogClose>
+                                    <Button type="submit">Save question</Button>
                                 </DialogFooter>
                             </form>
                         </div>

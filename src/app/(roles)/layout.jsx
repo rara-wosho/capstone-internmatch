@@ -7,7 +7,7 @@ import PrivateFooter from "@/components/ui/PrivateFooter";
 import { Input } from "@/components/ui/input";
 
 export default function Layout({ children }) {
-    const role = "company";
+    const role = "student";
     return (
         <SidebarProvider>
             <AppSidebar role={role} />

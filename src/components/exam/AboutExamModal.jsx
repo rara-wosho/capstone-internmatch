@@ -77,9 +77,7 @@ export default function AboutExamModal() {
 
                                 <DialogFooter>
                                     <DialogClose asChild>
-                                        <Button variant="outline">
-                                            Cancel
-                                        </Button>
+                                        <Button variant="ghost">Cancel</Button>
                                     </DialogClose>
                                     <Button type="submit">Save changes</Button>
                                 </DialogFooter>

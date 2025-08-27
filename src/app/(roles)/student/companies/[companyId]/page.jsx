@@ -8,7 +8,7 @@ import BorderBox from "@/components/ui/BorderBox";
 
 const links = [
     { href: "", label: "Home" },
-    { href: "/students/companies", label: "Companies" },
+    { href: "/student/companies", label: "Companies" },
     { href: "", label: "Company details" },
 ];
 
