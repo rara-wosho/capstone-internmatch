@@ -13,7 +13,9 @@ export default function AddQuestionCard({ id, initialQuestion }) {
     const [question, setQuestion] = useState(initialQuestion);
     const [choices, setChoices] = useState([
         { text: "Choice A", isCorrect: true },
-        { text: "Choice B", isCorrect: false },
+        { text: "", isCorrect: false },
+        { text: "", isCorrect: false },
+        { text: "", isCorrect: false },
     ]);
 
     function handleAddChoice() {
@@ -74,24 +76,26 @@ export default function AddQuestionCard({ id, initialQuestion }) {
         setIsEditing(false);
     }
 
-    console.log("component render");
     return (
         <BorderBox className="border last:rounded-b-xl bg-card shadow-xs">
             <p className="text-sm text-muted-foreground mb-2">Question {id}</p>
 
             {/* Display Mode */}
             {!isEditing && (
-                <div className="flex flex-col gap-4">
-                    <div className="flex items-center">
+                <div className="flex flex-col">
+                    <div className="flex items-center mb-1">
                         <h1 className="w-full">{question}</h1>
                         <button
                             onClick={() => setIsEditing(true)}
-                            className="p-1 hover:text-accent-foreground"
+                            className="p-1 hover:text-accent-foreground cursor-pointer"
                             aria-label="Edit question"
                         >
                             <PenLine size={16} />
                         </button>
                     </div>
+                    <p className="text-sm text-muted-foreground">
+                        Answer: Platypus
+                    </p>
                 </div>
             )}
 
@@ -169,24 +173,26 @@ export default function AddQuestionCard({ id, initialQuestion }) {
                         ))}
                     </div>
 
-                    <button
-                        type="button"
-                        onClick={handleAddChoice}
-                        className="flex items-center gap-1 text-sm text-accent-foreground cursor-pointer"
-                    >
-                        <Plus size={14} /> Add choice
-                    </button>
-
-                    <div className="flex gap-2 justify-end">
-                        <Button
+                    <div className="flex justify-between mt-5">
+                        <button
                             type="button"
-                            variant="secondary"
-                            onClick={handleCancel}
-                            size="sm"
+                            onClick={handleAddChoice}
+                            className="flex items-center gap-1 text-sm text-accent-foreground cursor-pointer"
                         >
-                            Cancel
-                        </Button>
-                        <Button size="sm">Save changes</Button>
+                            <Plus size={14} /> Add choice
+                        </button>
+
+                        <div className="flex gap-2 justify-end">
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                onClick={handleCancel}
+                                size="sm"
+                            >
+                                Cancel
+                            </Button>
+                            <Button size="sm">Save changes</Button>
+                        </div>
                     </div>
                 </form>
             )}

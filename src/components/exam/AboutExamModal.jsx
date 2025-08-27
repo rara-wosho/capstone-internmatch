@@ -23,8 +23,8 @@ export default function AboutExamModal() {
             <DialogTrigger className="ms-auto cursor-pointer">
                 <PenLine size={16} />
             </DialogTrigger>
-            <DialogContent className="p-3 sm:p-5 overflow-y-auto max-h-[90vh]">
-                <div className="overflow-y-auto">
+            <DialogContent className="p-3 sm:p-5 overflow-y-auto max-h-[90svh]">
+                <div>
                     <DialogHeader>
                         <DialogTitle className="py-1">
                             <TertiaryLabel>
@@ -49,27 +49,27 @@ export default function AboutExamModal() {
                                     </div>
                                 </div>
 
-                                <div className="flex flex-col mb-6 gap-y-2">
+                                <div className="flex flex-col mb-6 gap-y-2 items-start">
                                     <p className="mb-1">Settings</p>
-                                    <div className="flex justify-between items-center">
+                                    <div className="flex justify-between items-center w-full">
                                         <FormLabel>
                                             Open for examinees
                                         </FormLabel>
                                         <Switch />
                                     </div>
-                                    <div className="flex justify-between items-center">
+                                    <div className="flex justify-between items-center w-full">
                                         <FormLabel>Shuffle questions</FormLabel>
                                         <Switch />
                                     </div>
-                                    <div className="flex justify-between items-center">
+                                    <div className="flex justify-between items-center w-full">
                                         <FormLabel>Shuffle choices</FormLabel>
                                         <Switch />
                                     </div>
-                                    <div className="mt-1">
+                                    <div className="mt-1 w-full flex flex-col items-start">
                                         <FormLabel>Exam duration</FormLabel>
                                         <Input placeholder="minutes" />
                                     </div>
-                                    <div className="">
+                                    <div className="w-full flex flex-col items-start">
                                         <FormLabel>Mode</FormLabel>
                                         <Input placeholder="minutes" />
                                     </div>
