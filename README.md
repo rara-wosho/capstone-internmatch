@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# InternMatch: An Internship Placement Platform
 
-## Getting Started
+A web platform built with **Next.js, Tailwind CSS, and shadcn/ui** that connects **students, OJT instructors, and company representatives** in an organized internship placement process.
 
-First, run the development server:
+## 🚀 Features
+
+### 👩‍🎓 Students
+
+-   Create an account and explore internship opportunities
+-   Take company-created exams to showcase skills
+-   View exam results and application status
+
+### 👨‍🏫 OJT Instructors
+
+-   Manage and organize students
+-   Track application progress
+-   Support students throughout their internship journey
+
+### 🏢 Company Representatives
+
+-   Create and manage exams for applicants
+-   Review student results and decide whether to accept
+
+## 📖 How It Works
+
+1. **Students** sign up, browse internships, and take exams.
+2. **Companies** create exams and evaluate student results.
+3. **Instructors** monitor and organize student applications.
+
+## ⚡ Tech Stack
+
+-   [Next.js](https://nextjs.org/) – React framework for server-side rendering and routing
+-   [Tailwind CSS](https://tailwindcss.com/) – Utility-first CSS framework
+-   [shadcn/ui](https://ui.shadcn.com/) – Accessible and customizable UI components
+-   [Supabase](https://supabase.com/) an open-source, Backend-as-a-Service (BaaS) platform that serves as an alternative to Firebase, offering a suite of tools to build applications quickly.
+
+## ⚠️ Important Notes
+
+-   Some UI components may **not work properly on Safari versions below 16.4**.
+
+## 🛠️ Getting Started
+
+### Prerequisites
+
+-   Node.js 18+
+-   npm or yarn
+
+## Run Locally
+
+Clone the project
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  git clone https://github.com/rara-wosho/capstone-internmatch.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Go to the project directory
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+  cd capstone-internmatch
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Install dependencies
 
-## Learn More
+```bash
+  npm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+Create environment file
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+  cp .env.example .env
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Update environment variables in .env
 
-## Deploy on Vercel
+```bash
+SUPABASE_PUBLIC_ANON_KEY
+SUPABASE_PUBLIC_URL
+SUPABASE_SECRET_KEY
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Start the server
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+  npm run dev
+```
+
+## Deployment
+
+### Vercel Deployment
+
+1. Push your code to GitHub
+
+2. Connect your GitHub repository to Vercel
+
+3. Configure environment variables in .env file
+
+-   `SUPABASE_PUBLIC_ANON_KEY`
+-   `SUPABASE_PUBLIC_URL`
+-   `SUPABASE_SECRET_KEY`
+
+4. Deploy
+
+## License
+
+This project is licensed under the
+[MIT](https://choosealicense.com/licenses/mit/)
+License.
+
+## Contributors
+
+-   [rara-wosho](https://github.com/rara-wosho) - Developer
+-   [mhera-c1](https://github.com/mhera-c1) - Support analyst

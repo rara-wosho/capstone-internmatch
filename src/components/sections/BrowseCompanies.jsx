@@ -1,9 +1,7 @@
 import { Building, Building2, LayoutGrid, List, Search } from "lucide-react";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 import SecondaryLabel from "../ui/SecondaryLabel";
 import TertiaryLabel from "../ui/TertiaryLabel";
-import Wrapper from "../Wrapper";
 import CompanyCard from "../ui/CompanyCard";
 import IconWrapper from "../ui/IconWrapper";
 
@@ -16,19 +14,9 @@ export default function BrowseCompanies({ companies }) {
                         <IconWrapper className="me-2">
                             <Building2 size={17} />
                         </IconWrapper>
-                        Explore companies now
+                        Companies
                     </SecondaryLabel>
                     <div className="flex items-center gap-2.5 grow justify-end">
-                        {/* <div className="flex items-center gap-2 w-full max-w-lg">
-                            <Input
-                                icon={<Search size={16} />}
-                                placeholder="Search company"
-                            />
-                            <Button className="h-10" variant="white">
-                                Search
-                            </Button>
-                        </div> */}
-
                         <div className="flex items-center gap-3 grow">
                             <div className="flex items-center h-9 rounded-sm border bg-secondary grow sm:grow-0">
                                 <button className="px-3 flex text-sm items-center gap-2 border-e border-neutral-500">
