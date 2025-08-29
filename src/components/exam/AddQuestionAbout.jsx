@@ -1,3 +1,4 @@
+import { BookOpen, Settings } from "lucide-react";
 import BorderBox from "../ui/BorderBox";
 import FormLabel from "../ui/FormLabel";
 import { Switch } from "../ui/switch";
@@ -8,7 +9,9 @@ export default function AddQuestionAbout() {
     return (
         <BorderBox className="border rounded-xl bg-card shadow-xs">
             <div className="flex items-center mb-3">
-                <TertiaryLabel>About</TertiaryLabel>
+                <TertiaryLabel>
+                    <BookOpen size={18} className="text-sky-600" /> About
+                </TertiaryLabel>
                 <AboutExamModal />
             </div>
             <div className="flex flex-col">
@@ -29,7 +32,9 @@ export default function AddQuestionAbout() {
             </div>
 
             <div className="border-t mt-4 pt-5">
-                <TertiaryLabel className="mb-3">Settings</TertiaryLabel>
+                <TertiaryLabel className="mb-3">
+                    <Settings size={18} className="text-green-600" /> Settings
+                </TertiaryLabel>
                 <div className="flex justify-between items-center mb-2.5">
                     <FormLabel>Open for examinees</FormLabel>
                     <Switch checked disabled />

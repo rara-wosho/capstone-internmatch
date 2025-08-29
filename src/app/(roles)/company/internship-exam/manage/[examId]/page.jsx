@@ -25,9 +25,9 @@ export default function Page() {
         { id: 3, question: "three hsalsjd lskjda s" },
     ];
     return (
-        <div className="lg:px-10">
+        <div>
             {/* header  */}
-            <div className="flex items-center pb-5 md:pb-7 pt-2 md:pt-5 border-b mb-5 md:mb-8 flex-wrap md:flex-nowrap gap-x-10 gap-y-4">
+            <div className="flex items-center pb-5 md:pb-7 border-b mb-5 md:mb-8 flex-wrap md:flex-nowrap gap-x-10 gap-y-4">
                 <BackButton className="hover:text-primary-text rounded-sm pe-2 transition-colors">
                     <SecondaryLabel className="gap-2 text-left">
                         <ChevronLeft />
@@ -45,8 +45,9 @@ export default function Page() {
                 {/* list of questions  */}
                 <div className="lg:col-span-2 flex flex-col gap-1 order-2 lg:order-1">
                     <BorderBox className="border rounded-t-xl bg-card shadow-xs">
-                        <TertiaryLabel className="space-x-2">
-                            <NotebookPen size={17} /> <p>Manage Questions</p>
+                        <TertiaryLabel>
+                            <NotebookPen size={18} className="text-amber-600" />{" "}
+                            <p>Manage Questions</p>
                             <div className="ms-auto">
                                 <p className="text-sm px-2 border rounded-sm">
                                     50

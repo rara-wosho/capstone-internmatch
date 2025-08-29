@@ -125,7 +125,7 @@ export default function AddQuestionModal({ onQuestionAdded }) {
 
     return (
         <Dialog>
-            <Button variant="white" asChild className="sm:grow-0 grow">
+            <Button asChild className="sm:grow-0 grow">
                 <DialogTrigger>
                     <PlusCircle />
                     Add question

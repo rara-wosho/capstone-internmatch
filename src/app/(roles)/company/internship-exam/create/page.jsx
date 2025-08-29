@@ -8,22 +8,20 @@ import Link from "next/link";
 
 export default function Page() {
     return (
-        <div className="lg:p-10">
-            <div className="mx-auto max-w-xl">
-                <div className="bg-card rounded-xl shadow-xs">
-                    <BorderBox className="border-b">
-                        <TertiaryLabel className="gap-2">
-                            <IconWrapper className="hidden md:inline-block">
-                                <FileText size={16} />
-                            </IconWrapper>
-                            <span>Create Exam</span>
-                        </TertiaryLabel>
-                    </BorderBox>
+        <div className="mx-auto max-w-xl">
+            <div className="bg-card rounded-xl shadow-xs">
+                <BorderBox className="border-b">
+                    <TertiaryLabel className="gap-2">
+                        <IconWrapper className="hidden md:inline-block">
+                            <FileText size={17} />
+                        </IconWrapper>
+                        <span>Create New Exam</span>
+                    </TertiaryLabel>
+                </BorderBox>
 
-                    <BorderBox>
-                        <ExamDetailsForm />
-                    </BorderBox>
-                </div>
+                <BorderBox>
+                    <ExamDetailsForm />
+                </BorderBox>
             </div>
         </div>
     );

@@ -12,10 +12,10 @@ import IconWrapper from "./IconWrapper";
 
 export default function DashboardHeader() {
     return (
-        <div className="sticky top-0 left-0 px-3 lg:px-4 py-3 flex items-center w-full bg-white border-b z-30 backdrop-blur-2xl dark:bg-background/70">
+        <div className="sticky top-0 left-0 px-3 md:px-5 lg:px-8 py-3 flex items-center w-full bg-white border-b z-30 backdrop-blur-2xl dark:bg-background/70">
             <SidebarTrigger />
 
-            <div className="border-s ps-2 ms-1 flex items-center">
+            <div className="border-s ps-2 ms-2 flex items-center">
                 <div className="md:hidden inline-flex items-center gap-2">
                     <Logo className="w-4 h-4" />
                     <p className="font-bold text-secondary-foreground">

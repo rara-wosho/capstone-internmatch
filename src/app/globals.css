@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-    --background: rgb(247, 247, 250);
+    --background: rgb(248, 248, 250);
     --foreground: oklch(0 0 0);
     --card: rgb(253, 253, 253);
     --card-foreground: oklch(0 0 0);
@@ -58,7 +58,7 @@
     --tracking-normal: -0.025em;
     --spacing: 0.27rem;
 
-    --dots-color: rgba(100, 100, 100, 0.3);
+    --dots-color: rgba(100, 100, 100, 0.25);
 }
 
 .bg-dots {

@@ -7,7 +7,7 @@ import PrivateFooter from "@/components/ui/PrivateFooter";
 import { Input } from "@/components/ui/input";
 
 export default function Layout({ children }) {
-    const role = "student";
+    const role = "company";
     return (
         <SidebarProvider>
             <AppSidebar role={role} />
@@ -15,7 +15,7 @@ export default function Layout({ children }) {
                 <div className="min-h-screen">
                     <DashboardHeader />
 
-                    <div className="p-3 lg:p-4 mb-5">{children}</div>
+                    <div className="p-3 md:p-5 lg:p-8 mb-5">{children}</div>
                 </div>
                 <PrivateFooter />
             </main>

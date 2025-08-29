@@ -7,8 +7,8 @@ import SecondaryLabel from "@/components/ui/SecondaryLabel";
 
 export default function Page() {
     return (
-        <div className="lg:px-10">
-            <div className="flex items-center pb-5 md:pb-7 pt-2 md:pt-5 border-b mb-5 md:mb-8">
+        <div>
+            <div className="flex items-center pb-5 md:pb-7 border-b mb-5 md:mb-8">
                 <SecondaryLabel className="gap-2">
                     <IconWrapper className="hidden md:inline-block">
                         <FileText size={16} />
@@ -17,7 +17,7 @@ export default function Page() {
                 </SecondaryLabel>
 
                 <div className="ms-auto">
-                    <Button variant="white" asChild>
+                    <Button asChild>
                         <Link href="/company/internship-exam/create">
                             <p className="flex gap-1.5 items-center">
                                 <PlusCircle />
