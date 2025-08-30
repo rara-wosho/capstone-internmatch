@@ -1,6 +1,7 @@
 import AboutGroup from "@/components/blocks/AboutGroup";
 import GroupInviteLink from "@/components/blocks/GroupInviteLink";
 import GroupMembersTable from "@/components/tables/GroupMembersTable";
+import BorderBox from "@/components/ui/BorderBox";
 import BreadCrumbs from "@/components/ui/BreadCrumbs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,29 +18,33 @@ export default async function Page({ params }) {
     const { groupId } = await params;
     return (
         <div>
-            <div className="flex items-end flex-wrap gap-y-2 gap-x-10 md:py-1">
-                <div className="">
-                    <SecondaryLabel>Sir amins group</SecondaryLabel>
-                    <BreadCrumbs links={links} />
-                </div>
-
-                <div className="ms-auto grow lg:grow-0 flex items-center gap-2">
-                    <Input type="search" placeholder="Search" />
-                    <Button variant="white">
-                        Search <Search />
-                    </Button>
-                </div>
+            <div className="mb-3 md:mb-5">
+                <SecondaryLabel>Sir amins group</SecondaryLabel>
+                <BreadCrumbs links={links} />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-[1.9fr_1fr] gap-3 mt-4">
-                <div className="order-2 lg:order-1">
-                    <GroupMembersTable />
-                </div>
-
-                <div className="flex flex-col gap-3 order-1 lg:order-2">
+            <div className="grid grid-cols-1 gap-3 md:gap-4 mt-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     <AboutGroup />
                     <GroupInviteLink />
                 </div>
+
+                <BorderBox className="border bg-card rounded-xl">
+                    <div className="flex items-center gap-2 mb-4">
+                        <Input
+                            type="search"
+                            placeholder="Search student"
+                            icon={<Search size={16} />}
+                        />
+                        <Button variant="white">
+                            <span className="hidden md:inline-block">
+                                Search
+                            </span>{" "}
+                            <Search />
+                        </Button>
+                    </div>
+                    <GroupMembersTable />
+                </BorderBox>
             </div>
         </div>
     );

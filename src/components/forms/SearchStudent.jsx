@@ -17,7 +17,7 @@ export default function SearchStudent() {
                     type="search"
                     name="search_query"
                     icon={<Search size={16} />}
-                    placeholder="Seach student"
+                    placeholder="Search student, group, etc."
                     defaultValue={search}
                 />
 

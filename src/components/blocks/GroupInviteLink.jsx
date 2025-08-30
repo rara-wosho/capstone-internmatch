@@ -8,7 +8,9 @@ export default function GroupInviteLink() {
     return (
         <BorderBox className="border rounded-xl bg-card">
             <div className="mb-3">
-                <TertiaryLabel>Invitation Link</TertiaryLabel>
+                <TertiaryLabel>
+                    <Link size={17} /> Invitation Link
+                </TertiaryLabel>
             </div>
 
             <p className="text-xs text-muted-foreground mb-2">

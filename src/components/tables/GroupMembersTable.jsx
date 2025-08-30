@@ -23,7 +23,7 @@ import { Checkbox } from "../ui/checkbox";
 export default function GroupMembersTable({ data }) {
     const [markedIds, setMarkedIds] = useState([]);
     return (
-        <BorderBox className="border rounded-xl bg-card">
+        <>
             <div className="flex items-center mb-2">
                 <BackButton className="me-2">
                     <div className="rounded-full p-1 hover:bg-secondary text-muted-foreground">
@@ -46,6 +46,9 @@ export default function GroupMembersTable({ data }) {
                         <TableHead className="font-bold">Course</TableHead>
                         <TableHead className="font-bold">Gender</TableHead>
                         <TableHead className="font-bold">Age</TableHead>
+                        <TableHead className="font-bold text-center">
+                            Exam Access
+                        </TableHead>
                         <TableHead className="font-bold">Action</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -66,6 +69,11 @@ export default function GroupMembersTable({ data }) {
                         <TableCell>BSIT</TableCell>
                         <TableCell>Male</TableCell>
                         <TableCell>20</TableCell>
+                        <TableCell className="text-center">
+                            <div className="border rounded-full inline-flex items-center px-2 py-[1px]">
+                                <span className="text-xs">Not allowed</span>
+                            </div>
+                        </TableCell>
                         <TableCell>
                             <div className="flex items-center gap-3">
                                 <button>
@@ -93,6 +101,13 @@ export default function GroupMembersTable({ data }) {
                         <TableCell>BSIT</TableCell>
                         <TableCell>Male</TableCell>
                         <TableCell>20</TableCell>
+                        <TableCell className="text-center">
+                            <div className="border border-green-600 dark:border-green-500 rounded-full inline-flex items-center px-2 py-[1px]">
+                                <span className="text-xs text-green-600 dark:text-green-500">
+                                    Allowed
+                                </span>
+                            </div>
+                        </TableCell>
                         <TableCell>
                             <div className="flex items-center gap-3">
                                 <button>
@@ -159,6 +174,6 @@ export default function GroupMembersTable({ data }) {
                     </TableRow>
                 </TableBody>
             </Table>
-        </BorderBox>
+        </>
     );
 }

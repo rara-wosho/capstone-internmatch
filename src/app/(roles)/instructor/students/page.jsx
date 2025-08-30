@@ -1,5 +1,6 @@
 import SearchStudent from "@/components/forms/SearchStudent";
 import StudentsTable from "@/components/tables/StudentsTable";
+import BorderBox from "@/components/ui/BorderBox";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { Suspense } from "react";
 
@@ -13,13 +14,14 @@ export default function Page() {
                         A list of all students in your groups
                     </p>
                 </div>
-
-                <div className="ms-auto grow lg:max-w-lg">
+            </div>
+            <BorderBox className="border rounded-xl bg-card mb-3">
+                <div className="ms-auto grow">
                     <Suspense fallback={null}>
                         <SearchStudent />
                     </Suspense>
                 </div>
-            </div>
+            </BorderBox>
 
             <div className="">
                 <StudentsTable />
