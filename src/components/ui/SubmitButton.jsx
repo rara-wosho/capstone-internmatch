@@ -20,7 +20,7 @@ const SubmitButton = ({
         <Button
             size={size}
             variant={variant}
-            className={cn(className, "rounded")}
+            className={cn(className)}
             type={type}
             disabled={pending || disabled}
         >

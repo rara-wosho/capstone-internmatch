@@ -7,7 +7,14 @@ import FormLabel from "@/components/ui/FormLabel";
 import { Input } from "@/components/ui/input";
 import PrimaryGradientText from "@/components/ui/PrimaryGradientText";
 import SubmitButton from "@/components/ui/SubmitButton";
-import { BookOpen, Mail } from "lucide-react";
+import {
+    ArrowLeft,
+    ArrowRight,
+    BookOpen,
+    Mail,
+    MessageCircle,
+    MessagesSquare,
+} from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import Logo from "@/components/ui/Logo";
@@ -20,6 +27,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import PrimaryLabel from "@/components/ui/PrimaryLabel";
+import { Button } from "@/components/ui/button";
+import IconWrapper from "@/components/ui/IconWrapper";
 
 export default function Page() {
     const params = useParams();
@@ -27,11 +37,7 @@ export default function Page() {
 
     const [formData, setFormData] = useState({
         firstName: "",
-        middleName: "",
         lastName: "",
-        school: "",
-        course: "",
-        year: "",
         email: "",
         password: "",
         confirmPassword: "",
@@ -59,7 +65,7 @@ export default function Page() {
             return;
         }
 
-        // If all good
+        // If all goods
         toast.success("Account created successfully!", {
             position: "top-center",
         });
@@ -67,9 +73,9 @@ export default function Page() {
     };
 
     return (
-        <div className="min-h-screen flex">
+        <div className="min-h-screen flex flex-col lg:pl-[400px]">
             {/* left content */}
-            <aside className="hidden lg:flex overflow-hidden w-[360px] bg-primary dark:bg-card p-8 flex-col relative isolate">
+            <aside className="hidden h-screen lg:flex overflow-hidden w-[400px] bg-primary dark:bg-card p-8 flex-col fixed top-0 left-0 isolate">
                 <div className="w-[560px] aspect-square rounded-full dark:bg-violet-500/0 bg-violet-400/40 absolute -z-10 -top-[15rem] -left-[12rem]"></div>
                 <div className="w-[100px] aspect-square rounded-full dark:bg-violet-500/0 bg-violet-400/30 absolute -z-10 bottom-[11.5rem] right-[1rem]"></div>
                 <div className="w-[290px] aspect-square rounded-full dark:bg-violet-500/0 bg-violet-400/40 absolute -z-10 -bottom-[8rem] -right-[6rem]"></div>
@@ -107,127 +113,54 @@ export default function Page() {
             </aside>
 
             {/* Main content */}
-            <main className="p-3 md:px-4 md:py-8 grow bg-linear-to-br from-transparent to-blue-200/20 dark:to-blue-950/15 from-50%">
-                <div className="flex flex-col bg-white md:bg-transparent p-3 md:p-0 border md:border-0 items-center md:items-start rounded-lg dark:bg-neutral-900/30 dark:border-neutral-900 dark:md:bg-transparent">
-                    <div className="mb-4 mt-2 lg:hidden">
-                        <Logo className="w-8 h-9" />
-                    </div>
-                    <h4 className="font-bold text-xl text-muted-foreground mb-3 text-center md:text-start">
-                        You are invited to{" "}
-                        <PrimaryGradientText>
-                            CREATE AN ACCOUNT
-                        </PrimaryGradientText>
-                    </h4>
-                    <p className="text-muted-foreground text-sm mb-1 text-center md:text-start">
-                        Group name :{" "}
-                        <span className="font-bold italic">
-                            Sir Amin's group
-                        </span>
-                    </p>
-                    <p className="text-muted-foreground text-sm">
-                        Status :{" "}
-                        <span className="font-bold italic">Active</span>
+            <main className="px-4 py-16 grow bg-[rgb(254,254,254)] dark:bg-background flex flex-col items-center justify-center">
+                <div className="flex items-center flex-col mt-6 md:mt-1 mb-8 md:mb-10 gap-2">
+                    <PrimaryLabel>Create an Account</PrimaryLabel>
+                    <p className="max-w-md text-center">
+                        You are invited to join the group{" "}
+                        <strong>Sir amins group</strong>
                     </p>
                 </div>
 
                 <form
                     onSubmit={handleSubmit}
-                    className="pt-4 mt-4 border-t dark:border-neutral-900"
+                    className="mx-auto max-w-lg w-full md:px-4"
                 >
                     {/* Personal Info */}
-                    <div className="mb-6">
-                        <h1 className="text-lg text-secondary-foreground font-semibold">
-                            Tell us something about yourself
-                        </h1>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                            <div>
-                                <FormLabel>First Name</FormLabel>
-                                <Input
-                                    required
-                                    name="firstName"
-                                    placeholder="Enter your first name"
-                                    value={formData.firstName}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div>
-                                <FormLabel>Middle Name (Optional)</FormLabel>
-                                <Input
-                                    name="middleName"
-                                    placeholder="Enter your middle name"
-                                    value={formData.middleName}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div>
-                                <FormLabel>Last Name</FormLabel>
-                                <Input
-                                    required
-                                    name="lastName"
-                                    placeholder="Enter your last name"
-                                    value={formData.lastName}
-                                    onChange={handleChange}
-                                />
-                            </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                        <div>
+                            <FormLabel>First Name</FormLabel>
+                            <Input
+                                required
+                                name="firstName"
+                                placeholder="Tyrelle"
+                                value={formData.firstName}
+                                onChange={handleChange}
+                            />
                         </div>
-                    </div>
 
-                    {/* Academic Info */}
-                    <div className="mb-6">
-                        <h1 className="text-lg text-secondary-foreground font-semibold">
-                            Academic Information
-                        </h1>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                            <div>
-                                <FormLabel>School</FormLabel>
-                                <Input
-                                    required
-                                    name="school"
-                                    placeholder="Enter your school"
-                                    value={formData.school}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div>
-                                <FormLabel>Course/Program</FormLabel>
-                                <Input
-                                    required
-                                    name="course"
-                                    placeholder="Enter your course/program"
-                                    value={formData.course}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div>
-                                <FormLabel>Year</FormLabel>
-                                <Select required name="year" className="w-full">
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Select year" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="1">1</SelectItem>
-                                        <SelectItem value="2">2</SelectItem>
-                                        <SelectItem value="3">3</SelectItem>
-                                        <SelectItem value="4">4</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
+                        <div>
+                            <FormLabel>Last Name</FormLabel>
+                            <Input
+                                required
+                                name="lastName"
+                                placeholder="Constello"
+                                value={formData.lastName}
+                                onChange={handleChange}
+                            />
                         </div>
                     </div>
 
                     {/* Credentials */}
-                    <div className="mb-6">
-                        <h1 className="text-lg text-secondary-foreground font-semibold">
-                            Credentials
-                        </h1>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                    <div className="mb-8">
+                        <div className="grid grid-cols-1 gap-3">
                             <div>
                                 <FormLabel>Email</FormLabel>
                                 <Input
                                     required
                                     name="email"
                                     type="email"
-                                    placeholder="e.g. Zhand@gmail.com"
+                                    placeholder="tyrelle@sample.com"
                                     value={formData.email}
                                     onChange={handleChange}
                                 />
@@ -257,25 +190,39 @@ export default function Page() {
                         </div>
                     </div>
 
+                    {/* cta buttons */}
+                    <p className="text-sm text-muted-foreground">
+                        By creating an account, you agree to our terms and
+                        conditions
+                    </p>
                     {/* Actions */}
-                    <div className="py-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-3 gap-y-4">
-                        <div className="md:col-span-2 flex items-center justify-center sm:justify-start order-2 sm:order-1">
-                            <p>
-                                Already have an account?{" "}
-                                <Link
-                                    href="/sign-in"
-                                    className="text-accent-foreground"
-                                >
-                                    Sign In
-                                </Link>
+                    <div className="flex flex-col gap-3 mt-3">
+                        <SubmitButton>Create Account</SubmitButton>
+                        <div className="relative border-b inline-flex my-7">
+                            <p className="bg-white dark:bg-background text-center leading-2 p-3 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap">
+                                Already have an account?
                             </p>
                         </div>
-                        <SubmitButton className="order-1 sm:order-2">
-                            Create Account
-                        </SubmitButton>
+
+                        <Button variant="outline" type="button" asChild>
+                            <Link href="/sign-in">
+                                <p>Sign in instead</p>
+                                <ArrowRight />
+                            </Link>
+                        </Button>
                     </div>
                 </form>
             </main>
+
+            {/* footer  */}
+            <div className="border-t py-8 px-4 md:px-5 lg:px-8 flex justify-between items-center">
+                <p className="text-sm text-muted-foreground">
+                    Internmatch. All rights reserved
+                </p>
+                <IconWrapper>
+                    <MessagesSquare size={17} />
+                </IconWrapper>
+            </div>
         </div>
     );
 }
