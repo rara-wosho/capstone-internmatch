@@ -1,4 +1,5 @@
 import { ThemeToggler } from "@/components/theme-toggler";
+import AvatarInitial from "@/components/ui/avatar-initial";
 import { Button } from "@/components/ui/button";
 import Card from "@/components/ui/card";
 import FormLabel from "@/components/ui/FormLabel";
@@ -8,7 +9,7 @@ import Logo from "@/components/ui/Logo";
 import PrimaryGradientText from "@/components/ui/PrimaryGradientText";
 import PrimaryLabel from "@/components/ui/PrimaryLabel";
 import SubmitButton from "@/components/ui/SubmitButton";
-import { House, Lock, Mail } from "lucide-react";
+import { GraduationCap, House, Lock, Mail, Star } from "lucide-react";
 import Link from "next/link";
 
 export default function Page() {
@@ -21,26 +22,43 @@ export default function Page() {
 
                 <ThemeToggler className="border rounded-sm bg-card p-2" />
             </div>
-            <div className="p-0 md:p-5 flex flex-col items-center justify-center min-h-[calc(90vh-65px)]">
+            <div className="p-0 md:p-5 flex flex-col items-center justify-center min-h-[calc(100vh-65px)] bg-linear-to-b from-transparent to-blue-200/50 dark:to-blue-950/40 from-50% relative md:pb-14">
                 {/* wrapper  */}
-                <div className="p-2 lg:p-5 gap-8 lg:border rounded-3xl flex items-center w-full max-w-[1100px] bg-[rgb(253,253,253)] dark:bg-background">
-                    <div className="flex-col hidden lg:flex w-3xl items-center justify-center">
-                        <PrimaryLabel className="max-w-md">
-                            "Programming isn't about what you know; it's about
-                            what you can figure out."
-                        </PrimaryLabel>
+                <div className="p-2 lg:p-5 gap-8 lg:border rounded-3xl flex items-center w-full max-w-[1100px] lg:bg-[rgb(253,253,253)] lg:dark:bg-background relative isolate overflow-hidden">
+                    <div className="hidden lg:block rounded-[100%] border-4 border-neutral-100 dark:border-neutral-900 h-[200px] w-[500px] absolute -left-20 -top-32 -z-10"></div>
+                    <div className="hidden lg:block rounded-[100%] border-4 border-neutral-100 dark:border-neutral-900 h-[400px] w-[1000px] absolute -right-[200px] -bottom-[300px] -z-10"></div>
+
+                    <div className="flex-col hidden lg:flex w-3xl p-16 items-start justify-between bg-dots">
+                        <div className="flex items-center gap-2 mb-6 text-yellow-500">
+                            <Star fill="yellow" size={15} />
+                            <Star fill="yellow" size={15} />
+                            <Star fill="yellow" size={15} />
+                            <Star fill="yellow" size={15} />
+                            <Star fill="yellow" size={15} />
+                        </div>
+                        <div>
+                            <p className="text-xl font-semibold text-secondary-foreground">
+                                Lorem ipsum dolor sit, amet consectetur
+                                adipisicing elit. Provident, id! Lorem ipsum
+                                dolor sit amet.
+                            </p>
+                        </div>
+                        <div className="flex items-center mt-6 gap-3">
+                            <AvatarInitial letter="ID" />
+                            <div>
+                                <p className="text-sm font-semibold text-secondary-foreground">
+                                    Israel De Vera
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                    Founder, Internmatch
+                                </p>
+                            </div>
+                        </div>
                     </div>
                     <Card className="max-w-md p-5 w-full mx-auto">
-                        <div className="flex flex-col items-center justify-center mb-3">
-                            <Logo
-                                className="w-10 aspect-square"
-                                containerStyle="mb-2 py-2"
-                            />
-                            <h1 className="text-secondary-foreground font-bold text-2xl text-center">
-                                Sign in to{" "}
-                                <PrimaryGradientText>
-                                    InternMatch
-                                </PrimaryGradientText>
+                        <div className="flex flex-col items-center justify-center mb-3 mt-5">
+                            <h1 className="text-secondary-foreground font-bold text-3xl mb-1 text-center">
+                                Welcome Back!
                             </h1>
                             <p className="text-center text-muted-foreground text-sm">
                                 Please enter your credentials
@@ -92,7 +110,7 @@ export default function Page() {
                 </div>
             </div>
 
-            <div className="border-t p-8 mt-14">
+            <div className="border-t p-8">
                 <p className="text-sm text-muted-foreground">InternMatch</p>
             </div>
         </>
