@@ -1,16 +1,15 @@
 import { ThemeToggler } from "@/components/theme-toggler";
-import AvatarInitial from "@/components/ui/avatar-initial";
-import { Button } from "@/components/ui/button";
 import Card from "@/components/ui/card";
 import FormLabel from "@/components/ui/FormLabel";
-import IconWrapper from "@/components/ui/IconWrapper";
 import { Input } from "@/components/ui/input";
 import Logo from "@/components/ui/Logo";
-import PrimaryGradientText from "@/components/ui/PrimaryGradientText";
-import PrimaryLabel from "@/components/ui/PrimaryLabel";
 import SubmitButton from "@/components/ui/SubmitButton";
-import { GraduationCap, House, Lock, Mail, Star } from "lucide-react";
+import { Lock, Mail, Star } from "lucide-react";
 import Link from "next/link";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Checkbox } from "@/components/ui/checkbox";
+import AddInstructorForm from "@/components/add-instructor-form";
 
 export default function Page() {
     return (
@@ -44,7 +43,10 @@ export default function Page() {
                             </p>
                         </div>
                         <div className="flex items-center mt-6 gap-3">
-                            <AvatarInitial letter="ID" />
+                            <Avatar>
+                                <AvatarImage src="/images/profile.JPG" />
+                                <AvatarFallback>ID</AvatarFallback>
+                            </Avatar>
                             <div>
                                 <p className="text-sm font-semibold text-secondary-foreground">
                                     Israel De Vera
@@ -84,12 +86,21 @@ export default function Page() {
                                         placeholder="Enter your password"
                                     />
                                 </div>
-                                <Link
-                                    href="/forgot-password"
-                                    className="text-sm text-muted-foreground hover:text-accent-foreground"
-                                >
-                                    Forgot password?
-                                </Link>
+                                <div className="pt-4 flex items-center justify-between">
+                                    <label
+                                        htmlFor="remember-me"
+                                        className="flex items-center gap-2 text-sm font-light text-muted-foreground"
+                                    >
+                                        <Checkbox id="remember-me" />
+                                        Remember me
+                                    </label>
+                                    <Link
+                                        href="/forgot-password"
+                                        className="text-sm text-secondary-foreground/80 hover:text-accent-foreground"
+                                    >
+                                        Forgot password?
+                                    </Link>
+                                </div>
 
                                 <SubmitButton className="w-full mt-8">
                                     Sign In

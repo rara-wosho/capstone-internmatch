@@ -39,6 +39,12 @@ export async function updateSession(request) {
     //     data: { user },
     // } = await supabase.auth.getUser();
 
+    // if (user) {
+    //     console.log("user:", user);
+    // } else {
+    //     console.log("there is no user");
+    // }
+
     // // if the user is already logged in, redirect them to the home page
     // if (request.nextUrl.pathname === "/login" && user) {
     //     const url = request.nextUrl.clone();
