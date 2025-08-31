@@ -35,39 +35,22 @@ export async function updateSession(request) {
 
     // IMPORTANT: DO NOT REMOVE auth.getUser()
 
-    // const {
-    //     data: { user },
-    // } = await supabase.auth.getUser();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
 
-    // if (user) {
-    //     console.log("user:", user);
-    // } else {
-    //     console.log("there is no user");
-    // }
+    console.log("current user: ", user);
 
-    // // if the user is already logged in, redirect them to the home page
-    // if (request.nextUrl.pathname === "/login" && user) {
-    //     const url = request.nextUrl.clone();
-    //     url.pathname = "/";
-    //     return NextResponse.redirect(url);
-    // }
-
-    // // If the user is not logged in, check if they are trying to access a protected route
-    // // If they are, redirect them to the login page
-    // if (
-    //     !user &&
-    //     !request.nextUrl.pathname.startsWith("/sign-up") &&
-    //     request.nextUrl.pathname !== "/" &&
-    //     request.nextUrl.pathname !== "/about" &&
-    //     request.nextUrl.pathname !== "/login" &&
-    //     !request.nextUrl.pathname.startsWith("/feedback") &&
-    //     !request.nextUrl.pathname.startsWith("/join")
-    // ) {
-    //     // no user, potentially respond by redirecting the user to the login page
-    //     const url = request.nextUrl.clone();
-    //     url.pathname = "/login";
-    //     return NextResponse.redirect(url);
-    // }
+    if (
+        !user &&
+        !request.nextUrl.pathname === "/" &&
+        !request.nextUrl.pathname.startsWith("/sign-in")
+    ) {
+        // no user, potentially respond by redirecting the user to the login page
+        const url = request.nextUrl.clone();
+        url.pathname = "/sign-in";
+        return NextResponse.redirect(url);
+    }
 
     // IMPORTANT: You *must* return the supabaseResponse object as it is.
     // If you're creating a new response object with NextResponse.next() make sure to:

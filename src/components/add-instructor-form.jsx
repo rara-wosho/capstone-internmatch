@@ -17,6 +17,7 @@ export default function AddInstructorForm() {
 
         if (!success) {
             toast.error("Unable to add instructor");
+            return;
         }
 
         if (data) {

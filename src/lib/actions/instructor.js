@@ -1,6 +1,6 @@
 "use server";
 
-import { supabaseAdmin } from "../supabase/admin";
+import { supabaseAdmin } from "../../utils/supabase/admin";
 
 export async function createInstructor(formData) {
     // get and sanitize formdata
