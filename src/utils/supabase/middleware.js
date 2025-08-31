@@ -12,11 +12,13 @@ export async function updateSession(request) {
                 getAll() {
                     return request.cookies.getAll();
                 },
-
-                // this code is from chatgpt
                 setAll(cookiesToSet) {
-                    // only set on response, not request
-                    supabaseResponse = NextResponse.next({ request });
+                    cookiesToSet.forEach(({ name, value }) =>
+                        request.cookies.set(name, value)
+                    );
+                    supabaseResponse = NextResponse.next({
+                        request,
+                    });
                     cookiesToSet.forEach(({ name, value, options }) =>
                         supabaseResponse.cookies.set(name, value, options)
                     );
