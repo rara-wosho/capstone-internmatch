@@ -110,7 +110,7 @@ export default function Page() {
                 </div>
             </div>
 
-            <div className="border-t p-8">
+            <div className="p-8">
                 <p className="text-sm text-muted-foreground">InternMatch</p>
             </div>
         </>
