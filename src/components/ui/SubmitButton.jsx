@@ -24,8 +24,8 @@ const SubmitButton = ({
             type={type}
             disabled={pending || disabled}
         >
-            {children}
             {pending ? <Loader size={14} className="animate-spin" /> : icon}
+            {children}
         </Button>
     );
 };

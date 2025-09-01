@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Checkbox } from "@/components/ui/checkbox";
 import AddInstructorForm from "@/components/add-instructor-form";
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
     return (
@@ -102,11 +103,25 @@ export default function Page() {
                                     </Link>
                                 </div>
 
-                                <SubmitButton className="w-full mt-8">
+                                <SubmitButton className="w-full mt-7">
                                     Sign In
                                 </SubmitButton>
 
-                                <p className="mt-6 text-center text-sm text-muted-foreground">
+                                <p className="relative py-4 text-sm text-muted-foreground text-center after:absolute after:h-[1px] after:w-[42%] after:bg-secondary after:top-1/2 after:right-0 after:-translate-y-1/2 before:absolute before:h-[1px] before:w-[42%] before:bg-secondary before:top-1/2 before:left-0 before:-translate-y-1/2">
+                                    Or
+                                </p>
+
+                                <Button
+                                    variant="outline"
+                                    className="w-full"
+                                    asChild
+                                >
+                                    <Link href="/register">
+                                        Create an Account
+                                    </Link>
+                                </Button>
+
+                                {/* <p className="mt-6 text-center text-sm text-muted-foreground">
                                     Or register your company.{" "}
                                     <Link
                                         href="/register"
@@ -114,7 +129,7 @@ export default function Page() {
                                     >
                                         Click here
                                     </Link>
-                                </p>
+                                </p> */}
                             </form>
                         </div>
                     </Card>

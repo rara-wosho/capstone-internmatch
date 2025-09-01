@@ -1,3 +1,5 @@
+"use client";
+
 import {
     Dialog,
     DialogClose,
@@ -10,19 +12,41 @@ import {
 } from "@/components/ui/dialog";
 
 import { Button } from "../ui/button";
-import { Plus, Users } from "lucide-react";
+import { CircleCheckBig, CirclePlus, Users } from "lucide-react";
 import IconWrapper from "../ui/IconWrapper";
 import Form from "next/form";
 import FormLabel from "../ui/FormLabel";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
+import { toast } from "sonner";
+import SubmitButton from "../ui/SubmitButton";
+import { createGroup } from "@/lib/actions/group";
+import { useSession } from "@/context/SessionContext";
+
 export default function AddGroupModal() {
+    const { loading, user } = useSession();
+    if (loading) return null;
+
+    console.log(user);
+
+    async function handleCreateGroup(formData) {
+        formData.append("instructor-id", user.id);
+        const { success } = await createGroup(formData);
+
+        if (!success) {
+            toast.error("Unable to add group", { position: "top-right" });
+            return;
+        }
+
+        toast.success("Group created successfully!", { position: "top-right" });
+    }
+
     return (
         <Dialog>
             <Button asChild className="grow md:grow-0">
                 <DialogTrigger>
-                    New Group <Plus />
+                    <CirclePlus /> New Group
                 </DialogTrigger>
             </Button>
             <DialogContent className="overflow-y-auto max-h-[90svh]">
@@ -37,20 +61,35 @@ export default function AddGroupModal() {
                         Provide group details in the form below
                     </DialogDescription>
                 </DialogHeader>
-                <Form>
+
+                <Form action={handleCreateGroup}>
                     <div className="mb-3">
-                        <FormLabel>Group Name</FormLabel>
-                        <Input placeholder="Awesome group" />
+                        <FormLabel htmlFor="name">Group Name</FormLabel>
+                        <Input
+                            id="name"
+                            name="name"
+                            placeholder="Awesome group"
+                            required
+                        />
                     </div>
                     <div className="mb-7">
-                        <FormLabel>Description (Optional)</FormLabel>
-                        <Textarea placeholder="This group is awesome..." />
+                        <FormLabel htmlFor="description">
+                            Description (Optional)
+                        </FormLabel>
+                        <Textarea
+                            id="description"
+                            name="description"
+                            placeholder="This group is awesome..."
+                        />
                     </div>
+
                     <DialogFooter>
                         <Button type="button" variant="ghost" asChild>
                             <DialogClose>Cancel</DialogClose>
                         </Button>
-                        <Button>Save New Group</Button>
+                        <SubmitButton icon={<CircleCheckBig />}>
+                            Add Group
+                        </SubmitButton>
                     </DialogFooter>
                 </Form>
             </DialogContent>
