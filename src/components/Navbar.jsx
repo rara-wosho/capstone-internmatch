@@ -25,9 +25,8 @@ export default function Navbar() {
                 <div className="hidden md:flex middle items-center justify-center gap-6 text-neutral-700 dark:text-neutral-300">
                     <Link
                         className={cn(
-                            pathname === "/" &&
-                                "text-primary-text border-b-3 border-primary-text",
-                            "py-1 font-semibold transition-colors hover:text-primary-text"
+                            pathname === "/" && "text-primary-text",
+                            "py-1 font-semibold relative after:absolute after:h-[2px] after:w-0 hover:after:w-full after:bg-primary-text after:left-0 after:bottom-0 transition-all after:transition-all  hover:text-primary-text"
                         )}
                         href="/"
                     >
@@ -35,9 +34,8 @@ export default function Navbar() {
                     </Link>
                     <Link
                         className={cn(
-                            pathname === "/about" &&
-                                "text-primary-text border-b-3 border-primary-text",
-                            "py-1 font-semibold transition-colors hover:text-primary-text"
+                            pathname === "/about" && "text-primary-text",
+                            "py-1 font-semibold relative after:absolute after:h-[2px] after:w-0 hover:after:w-full after:bg-primary-text after:left-0 after:bottom-0 transition-all after:transition-all hover:text-primary-text"
                         )}
                         href="/about"
                     >
@@ -45,9 +43,8 @@ export default function Navbar() {
                     </Link>
                     <Link
                         className={cn(
-                            pathname === "/companies" &&
-                                "text-primary-text border-b-3 border-primary-text",
-                            "py-1 font-semibold transition-colors hover:text-primary-text"
+                            pathname === "/companies" && "text-primary-text",
+                            "py-1 font-semibold relative after:absolute after:h-[2px] after:w-0 hover:after:w-full after:bg-primary-text after:left-0 after:bottom-0 transition-all after:transition-all hover:text-primary-text"
                         )}
                         href="/companies"
                     >
@@ -55,9 +52,8 @@ export default function Navbar() {
                     </Link>
                     <Link
                         className={cn(
-                            pathname === "/feedbacks" &&
-                                "text-primary-text border-b-3 border-primary-text",
-                            "py-1 font-semibold transition-colors hover:text-primary-text"
+                            pathname === "/feedbacks" && "text-primary-text",
+                            "py-1 font-semibold relative after:absolute after:h-[2px] after:w-0 hover:after:w-full after:bg-primary-text after:left-0 after:bottom-0 transition-all after:transition-all hover:text-primary-text"
                         )}
                         href="/feedbacks"
                     >

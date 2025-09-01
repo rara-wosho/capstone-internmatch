@@ -23,7 +23,7 @@ export default function ContactSection() {
 
                     <div className="mt-3 flex flex-col gap-5">
                         <div className="flex items-center gap-3">
-                            <div className="rounded-lg bg-neutral-600 text-white dark:bg-card inline-flex p-2 md:p-3">
+                            <div className="rounded-lg bg-neutral-800 text-white dark:bg-card inline-flex p-2 md:p-3">
                                 <Mail size={18} />
                             </div>
                             <div>
@@ -39,7 +39,7 @@ export default function ContactSection() {
                             </div>
                         </div>
                         <div className="flex items-center gap-3">
-                            <div className="rounded-lg bg-neutral-600 text-white dark:bg-card inline-flex p-2 md:p-3">
+                            <div className="rounded-lg bg-neutral-800 text-white dark:bg-card inline-flex p-2 md:p-3">
                                 <Phone size={18} />
                             </div>
                             <div>
@@ -52,7 +52,7 @@ export default function ContactSection() {
                             </div>
                         </div>
                         <div className="flex items-center gap-3">
-                            <div className="rounded-lg bg-neutral-600 text-white dark:bg-card inline-flex p-2 md:p-3">
+                            <div className="rounded-lg bg-neutral-800 text-white dark:bg-card inline-flex p-2 md:p-3">
                                 <MapPinHouse size={18} />
                             </div>
                             <div>
