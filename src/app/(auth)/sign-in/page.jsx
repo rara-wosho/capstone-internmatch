@@ -1,3 +1,5 @@
+"use client";
+
 import { ThemeToggler } from "@/components/theme-toggler";
 import Card from "@/components/ui/card";
 import FormLabel from "@/components/ui/FormLabel";
@@ -9,10 +11,28 @@ import Link from "next/link";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Checkbox } from "@/components/ui/checkbox";
-import AddInstructorForm from "@/components/add-instructor-form";
 import { Button } from "@/components/ui/button";
+import { signIn } from "@/lib/actions/auth";
+import { toast } from "sonner";
 
 export default function Page() {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+
+        const { success } = await signIn(formData);
+
+        if (!success) {
+            toast.error("Failed to sign in. Invalid credentials", {
+                position: "top-right",
+            });
+
+            return;
+        }
+
+        toast.success("Successfully signed in!");
+    };
     return (
         <>
             <div className="flex items-center justify-between px-4 h-[65px]">
@@ -28,6 +48,7 @@ export default function Page() {
                     <div className="hidden lg:block rounded-[100%] border-4 border-neutral-100 dark:border-neutral-900 h-[200px] w-[500px] absolute -left-20 -top-32 -z-10"></div>
                     <div className="hidden lg:block rounded-[100%] border-4 border-neutral-100 dark:border-neutral-900 h-[400px] w-[1000px] absolute -right-[200px] -bottom-[300px] -z-10"></div>
 
+                    {/* left section  */}
                     <div className="flex-col hidden lg:flex w-3xl p-16 items-start justify-between bg-dots">
                         <div className="flex items-center gap-2 mb-6 text-yellow-500">
                             <Star fill="yellow" size={15} />
@@ -58,6 +79,8 @@ export default function Page() {
                             </div>
                         </div>
                     </div>
+
+                    {/* left section  */}
                     <Card className="max-w-md p-5 w-full mx-auto">
                         <div className="flex flex-col items-center justify-center mb-3 mt-5">
                             <h1 className="text-secondary-foreground font-bold text-3xl mb-1 text-center">
@@ -67,7 +90,10 @@ export default function Page() {
                                 Please enter your credentials
                             </p>
 
-                            <form action="" className="w-full mt-4 md:mt-8">
+                            <form
+                                onSubmit={handleSubmit}
+                                className="w-full mt-4 md:mt-8"
+                            >
                                 <div className="mb-3">
                                     <FormLabel>Email</FormLabel>
                                     <Input
@@ -115,6 +141,7 @@ export default function Page() {
                                     variant="outline"
                                     className="w-full"
                                     asChild
+                                    type="button"
                                 >
                                     <Link href="/register">
                                         Create an Account

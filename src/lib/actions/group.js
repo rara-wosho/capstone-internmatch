@@ -11,19 +11,17 @@ export async function createGroup(formData) {
     const supabase = await createClient();
 
     // fk ojt instructor id is default to auth.id, so i did not put it in object to be inserted
-    const { error } = await supabase
-        .from("groups")
-        .insert({
-            ojt_instructor_id: instructor_id,
-            group_name: name,
-            group_description: description,
-        });
+    const { error } = await supabase.from("groups").insert({
+        ojt_instructor_id: instructor_id,
+        group_name: name,
+        group_description: description,
+    });
 
     if (error) {
         console.log(error);
-        return { success: false };
+        return { success: false, returnedData: { name, description } };
     }
 
     revalidatePath("/instructor/manage-groups");
-    return { success: true };
+    return { success: true, returnedData: { name, description } };
 }

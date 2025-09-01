@@ -23,19 +23,30 @@ import { toast } from "sonner";
 import SubmitButton from "../ui/SubmitButton";
 import { createGroup } from "@/lib/actions/group";
 import { useSession } from "@/context/SessionContext";
+import { useState } from "react";
 
 export default function AddGroupModal() {
+    const [returnedValue, setReturnedValue] = useState({
+        name: "",
+        description: "",
+    });
     const { loading, user } = useSession();
     if (loading) return null;
 
-    console.log(user);
+    if (!user) {
+        toast.warning("There is no user");
+    }
 
     async function handleCreateGroup(formData) {
-        formData.append("instructor-id", user.id);
-        const { success } = await createGroup(formData);
+        formData.append("instructor-id", user?.id ?? null);
+        const {
+            success,
+            returnedData: { name, description },
+        } = await createGroup(formData);
 
         if (!success) {
             toast.error("Unable to add group", { position: "top-right" });
+            setReturnedValue({ name, description });
             return;
         }
 
@@ -68,6 +79,7 @@ export default function AddGroupModal() {
                         <Input
                             id="name"
                             name="name"
+                            defaultValue={returnedValue.name}
                             placeholder="Awesome group"
                             required
                         />
@@ -79,6 +91,7 @@ export default function AddGroupModal() {
                         <Textarea
                             id="description"
                             name="description"
+                            defaultValue={returnedValue.description}
                             placeholder="This group is awesome..."
                         />
                     </div>

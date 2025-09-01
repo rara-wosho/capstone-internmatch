@@ -37,7 +37,7 @@ import {
     SidebarTrigger,
     useSidebar,
 } from "@/components/ui/sidebar";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
@@ -48,6 +48,7 @@ import {
 import Logo from "./ui/Logo";
 import { useMemo } from "react";
 import { Switch } from "./ui/switch";
+import { signOut } from "@/lib/actions/auth";
 // Centralized navigation configurati on
 const navigationConfig = [
     {
@@ -220,8 +221,10 @@ const isAnySubItemActive = (subItems, currentPath) => {
     return subItems.some((subItem) => isPathActive(subItem.href, currentPath));
 };
 
-export function AppSidebar({ role, onSignOut }) {
+export function AppSidebar({ role }) {
     const pathName = usePathname();
+    const router = useRouter();
+
     const { setOpenMobile } = useSidebar();
 
     // Filter navigation items based on user role
@@ -240,13 +243,14 @@ export function AppSidebar({ role, onSignOut }) {
         setOpenMobile(false);
     };
 
-    const handleSignOut = () => {
-        if (onSignOut) {
-            onSignOut();
-        } else {
-            // Default sign out behavior
-            console.log("Sign out clicked - implement your sign out logic");
+    const handleSignOut = async () => {
+        const { success } = await signOut();
+        if (!success) {
+            toast.error("Unable to sign you out");
+            return;
         }
+
+        router.push("/sign-in");
     };
 
     return (
