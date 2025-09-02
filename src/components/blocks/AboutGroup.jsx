@@ -2,8 +2,9 @@ import { BookOpen, Calendar, Pencil, Users2 } from "lucide-react";
 import TertiaryLabel from "../ui/TertiaryLabel";
 import { Button } from "../ui/button";
 import BorderBox from "../ui/BorderBox";
+import { dateFormatter } from "@/utils/date-formatter";
 
-export default function AboutGroup() {
+export default function AboutGroup({ data }) {
     return (
         <BorderBox className="border rounded-xl bg-card">
             <div className="flex items-center mb-3">
@@ -18,14 +19,14 @@ export default function AboutGroup() {
             </div>
 
             <p className="text-sm italic text-muted-foreground mb-3">
-                No description provided.
+                {data?.group_description ?? "No description provided."}
             </p>
             <p className="text-sm text-muted-foreground mb-1 flex items-center gap-2">
                 <Users2 size={14} /> 8 Members
             </p>
             <p className="text-sm text-muted-foreground mb-1 flex items-center gap-2">
                 <Calendar size={14} />
-                June 18 2025
+                {dateFormatter(data?.created_at)}
             </p>
         </BorderBox>
     );

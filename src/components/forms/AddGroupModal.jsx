@@ -30,15 +30,13 @@ export default function AddGroupModal() {
         name: "",
         description: "",
     });
-    const { loading, user } = useSession();
-    if (loading) return null;
+    // const { loading, user } = useSession();
+    // if (loading) return null;
 
-    if (!user) {
-        toast.warning("There is no user");
-    }
+    console.log("add group modal render");
 
     async function handleCreateGroup(formData) {
-        formData.append("instructor-id", user?.id ?? null);
+        // formData.append("instructor-id", user?.id ?? null);
         const {
             success,
             returnedData: { name, description },

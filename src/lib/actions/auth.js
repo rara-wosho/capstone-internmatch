@@ -1,5 +1,6 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { createClient } from "../supabase/server";
 
 export async function signIn(formData) {
@@ -8,17 +9,20 @@ export async function signIn(formData) {
 
     const supabase = await createClient();
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const {
+        error,
+        data: { user },
+    } = await supabase.auth.signInWithPassword({
         email,
         password,
     });
 
     if (error) {
         console.log(error.message);
-        return { success: false };
+        return { success: false, error: error.message };
     }
 
-    return { success: true };
+    return { success: true, role: user?.user_metadata.role };
 }
 
 export async function signOut() {

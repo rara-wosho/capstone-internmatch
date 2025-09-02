@@ -14,6 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { signIn } from "@/lib/actions/auth";
 import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 export default function Page() {
     const handleSubmit = async (e) => {
@@ -21,17 +22,21 @@ export default function Page() {
 
         const formData = new FormData(e.target);
 
-        const { success } = await signIn(formData);
+        const { success, error, role } = await signIn(formData);
 
         if (!success) {
-            toast.error("Failed to sign in. Invalid credentials", {
+            toast.error("We couldn’t sign you in. " + error, {
                 position: "top-right",
             });
 
             return;
         }
 
-        toast.success("Successfully signed in!");
+        if (success) {
+            if (role === "instructor") {
+                redirect("/instructor");
+            }
+        }
     };
     return (
         <>
