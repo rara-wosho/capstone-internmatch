@@ -26,12 +26,11 @@ import { useSession } from "@/context/SessionContext";
 import { useState } from "react";
 
 export default function AddGroupModal() {
+    const [open, setOpen] = useState(false);
     const [returnedValue, setReturnedValue] = useState({
         name: "",
         description: "",
     });
-    // const { loading, user } = useSession();
-    // if (loading) return null;
 
     console.log("add group modal render");
 
@@ -49,10 +48,13 @@ export default function AddGroupModal() {
         }
 
         toast.success("Group created successfully!", { position: "top-right" });
+        setTimeout(() => {
+            setOpen(false);
+        }, 800);
     }
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <Button asChild className="grow md:grow-0">
                 <DialogTrigger>
                     <CirclePlus /> New Group

@@ -15,8 +15,6 @@ const links = [
     { href: "", label: "Group details" },
 ];
 export default async function Page({ params }) {
-    await new Promise((res) => setTimeout(res, 5000));
-
     const { groupId } = await params;
     const db = await createClient();
     const { data } = await db
@@ -36,7 +34,7 @@ export default async function Page({ params }) {
             <div className="grid grid-cols-1 gap-3 md:gap-4 mt-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     <AboutGroup data={data} />
-                    <GroupInviteLink />
+                    <GroupInviteLink groupId={groupId} />
                 </div>
 
                 <BorderBox className="border bg-card rounded-xl">
