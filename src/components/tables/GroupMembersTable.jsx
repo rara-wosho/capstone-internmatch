@@ -20,8 +20,9 @@ import { useState } from "react";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
 
-export default function GroupMembersTable({ data }) {
+export default function GroupMembersTable({ members }) {
     const [markedIds, setMarkedIds] = useState([]);
+
     return (
         <>
             <div className="flex items-center mb-2">
@@ -53,72 +54,43 @@ export default function GroupMembersTable({ data }) {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow className="text-muted-foreground">
-                        <TableCell>
-                            <Checkbox />
-                        </TableCell>
-                        <TableCell className="font-medium text-secondary-foreground">
-                            <Link
-                                href="/instructor/students/hasldhskdh"
-                                className="hover:underline underline-offset-2"
-                            >
-                                Israel De Vera
-                            </Link>
-                        </TableCell>
-                        <TableCell>raeldevprojects@gmail.com</TableCell>
-                        <TableCell>BSIT</TableCell>
-                        <TableCell>Male</TableCell>
-                        <TableCell>20</TableCell>
-                        <TableCell className="text-center">
-                            <div className="border rounded-full inline-flex items-center px-2 py-[1px]">
-                                <span className="text-xs">Not allowed</span>
-                            </div>
-                        </TableCell>
-                        <TableCell>
-                            <div className="flex items-center gap-3">
-                                <button>
-                                    <BanIcon size={18} />
-                                </button>
-                                <button className="text-destructive">
-                                    <Trash size={18} />
-                                </button>
-                            </div>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow className="text-muted-foreground">
-                        <TableCell>
-                            <Checkbox />
-                        </TableCell>
-                        <TableCell className="font-medium text-secondary-foreground">
-                            <Link
-                                href="/instructor/students/hasldhskdh"
-                                className="hover:underline underline-offset-2"
-                            >
-                                Israel De Vera
-                            </Link>
-                        </TableCell>
-                        <TableCell>raeldevprojects@gmail.com</TableCell>
-                        <TableCell>BSIT</TableCell>
-                        <TableCell>Male</TableCell>
-                        <TableCell>20</TableCell>
-                        <TableCell className="text-center">
-                            <div className="border border-green-600 dark:border-green-500 rounded-full inline-flex items-center px-2 py-[1px]">
-                                <span className="text-xs text-green-600 dark:text-green-500">
-                                    Allowed
-                                </span>
-                            </div>
-                        </TableCell>
-                        <TableCell>
-                            <div className="flex items-center gap-3">
-                                <button>
-                                    <BanIcon size={18} />
-                                </button>
-                                <button className="text-destructive">
-                                    <Trash size={18} />
-                                </button>
-                            </div>
-                        </TableCell>
-                    </TableRow>
+                    {members.map((member) => (
+                        <TableRow
+                            key={member.id}
+                            className="text-muted-foreground"
+                        >
+                            <TableCell>
+                                <Checkbox />
+                            </TableCell>
+                            <TableCell className="font-medium text-secondary-foreground">
+                                <Link
+                                    href="/instructor/students/hasldhskdh"
+                                    className="hover:underline underline-offset-2"
+                                >
+                                    Israel De Vera
+                                </Link>
+                            </TableCell>
+                            <TableCell>raeldevprojects@gmail.com</TableCell>
+                            <TableCell>BSIT</TableCell>
+                            <TableCell>Male</TableCell>
+                            <TableCell>20</TableCell>
+                            <TableCell className="text-center">
+                                <div className="border rounded-full inline-flex items-center px-2 py-[1px]">
+                                    <span className="text-xs">Not allowed</span>
+                                </div>
+                            </TableCell>
+                            <TableCell>
+                                <div className="flex items-center gap-3">
+                                    <button>
+                                        <BanIcon size={18} />
+                                    </button>
+                                    <button className="text-destructive">
+                                        <Trash size={18} />
+                                    </button>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    ))}
                 </TableBody>
             </Table>
 

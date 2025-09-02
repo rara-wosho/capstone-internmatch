@@ -19,7 +19,9 @@ export default function AboutGroup({ data }) {
             </div>
 
             <p className="text-sm italic text-muted-foreground mb-3">
-                {data?.group_description ?? "No description provided."}
+                {data?.group_description
+                    ? data.group_description
+                    : "No description provided."}
             </p>
             <p className="text-sm text-muted-foreground mb-1 flex items-center gap-2">
                 <Users2 size={14} /> 8 Members

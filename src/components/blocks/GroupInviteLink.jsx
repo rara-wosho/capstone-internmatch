@@ -7,7 +7,7 @@ import TertiaryLabel from "../ui/TertiaryLabel";
 import BorderBox from "../ui/BorderBox";
 import { useState } from "react";
 
-export default function GroupInviteLink({ groupId }) {
+export default function GroupInviteLink({ groupId, is_shareable }) {
     const inviteUrl = `${
         process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
     }/invite/${groupId}`;
@@ -26,6 +26,8 @@ export default function GroupInviteLink({ groupId }) {
         }
     };
 
+    const handleToggleShareable = async (id) => {};
+
     return (
         <BorderBox className="border rounded-xl bg-card">
             <div className="mb-3">
@@ -40,9 +42,13 @@ export default function GroupInviteLink({ groupId }) {
             <Input readOnly value={inviteUrl} />
 
             <div className="flex items-center mt-4 mb-1 gap-2">
-                <Button size="sm" variant="destructive">
+                <Button
+                    onClick={() => handleToggleShareable(groupId)}
+                    size="sm"
+                    variant={is_shareable ? "destructive" : "success"}
+                >
                     <LinkIcon />
-                    Deactivate Link
+                    {is_shareable ? "Deactivate" : "Activate"} Link
                 </Button>
                 <Button
                     size="sm"
