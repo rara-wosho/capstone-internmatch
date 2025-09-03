@@ -9,8 +9,9 @@ import { useState } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { createStudentAccount } from "@/lib/actions/student";
 
-export default function CreateStudentAccountForm() {
+export default function CreateStudentAccountForm9({ groupId }) {
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -24,7 +25,7 @@ export default function CreateStudentAccountForm() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         // Check password length
@@ -42,10 +43,17 @@ export default function CreateStudentAccountForm() {
         }
 
         // If all goods
-        toast.success("Account created successfully!", {
-            position: "top-center",
-        });
-        console.log("Form submitted:", formData);
+        const { success, error } = await createStudentAccount(
+            formData,
+            groupId
+        );
+
+        if (!success) {
+            toast.error(error);
+            return;
+        }
+
+        toast.success("Account created successfully!");
     };
 
     return (
@@ -119,7 +127,13 @@ export default function CreateStudentAccountForm() {
 
             {/* cta buttons */}
             <p className="text-sm text-muted-foreground">
-                By creating an account, you agree to our terms and conditions
+                By creating an account, you agree to our{" "}
+                <Link
+                    href="/terms-conditions"
+                    className="text-accent-foreground"
+                >
+                    terms and conditions
+                </Link>
             </p>
             {/* Actions */}
             <div className="flex flex-col gap-3 mt-3">

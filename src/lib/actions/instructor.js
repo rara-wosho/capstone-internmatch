@@ -31,7 +31,6 @@ export async function createInstructor(formData) {
         .insert({ id: userId, firstname, lastname, email });
 
     if (tableError) {
-        console.error("Table insert error:", tableError?.message);
         // rollback: delete auth user to keep things consistent
         await supabaseAdmin.auth.admin.deleteUser(userId);
         return { success: false, data: null };
