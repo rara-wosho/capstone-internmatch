@@ -1,6 +1,7 @@
 import AboutGroup from "@/components/blocks/AboutGroup";
 import GroupInviteLink from "@/components/blocks/GroupInviteLink";
 import GroupMembersTable from "@/components/tables/GroupMembersTable";
+import BackButton from "@/components/ui/BackButton";
 import BorderBox from "@/components/ui/BorderBox";
 import BreadCrumbs from "@/components/ui/BreadCrumbs";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ import { createClient } from "@/lib/supabase/server";
 import {
     BookOpen,
     Calendar,
+    ChevronLeft,
     CircleAlert,
     Link,
     Pencil,
@@ -76,9 +78,13 @@ export default async function Page({ params }) {
     return (
         <div className="mb-20">
             <div className="mb-3 md:mb-5">
-                <SecondaryLabel>
-                    {data?.group_name ?? "Unknown group"}
-                </SecondaryLabel>
+                <BackButton className="flex items-center gap-1">
+                    <ChevronLeft />
+                    <SecondaryLabel className="text-left">
+                        {data?.group_name ?? "Unknown group"}
+                        sit amet.
+                    </SecondaryLabel>
+                </BackButton>
                 <BreadCrumbs links={links} />
             </div>
 

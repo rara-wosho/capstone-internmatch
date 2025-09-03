@@ -38,8 +38,8 @@ export default function GroupMembersTable({ members }) {
     return (
         <>
             {markedIds.length > 0 && (
-                <div className="border border-t sm:border sm:rounded-xl fixed bottom-0 sm:bottom-3 md:bottom-5 left-1/2 -translate-x-1/2 w-full sm:max-w-lg z-50 sm:shadow-md">
-                    <div className="flex items-center justify-between bg-card sm:rounded-t-xl border-b p-3">
+                <div className="border border-t sm:border sm:rounded-xl fixed bottom-0 sm:bottom-3 md:bottom-5 left-1/2 -translate-x-1/2 w-full sm:max-w-max z-50 sm:shadow-md bg-card flex flex-col">
+                    <div className="flex items-center justify-between  sm:rounded-t-xl border-b p-3">
                         <p className="text-sm text-muted-foreground">
                             {markedIds.length} selected
                         </p>
@@ -51,16 +51,17 @@ export default function GroupMembersTable({ members }) {
                             Cancel <X size={18} />
                         </button>
                     </div>
-                    <div className="bg-card sm:rounded-b-xl p-3">
-                        <div className="flex items-center gap-2 justify-end">
+                    <div className="sm:rounded-b-xl overflow-x-auto">
+                        <div className="flex items-center gap-2 shrink-0 min-w-max p-3 sm:flex-row-reverse">
+                            <Button variant="success">Allow exam access</Button>
+                            <Button variant="destructive">
+                                Revoke exam access
+                            </Button>
                             <Button variant="outline">
                                 <Ban />
                             </Button>
                             <Button variant="outline">
                                 <Trash />
-                            </Button>
-                            <Button variant="success">
-                                <Check /> Allow exam access
                             </Button>
                         </div>
                     </div>
@@ -114,7 +115,7 @@ export default function GroupMembersTable({ members }) {
                             </TableCell>
                             <TableCell className="font-medium text-secondary-foreground">
                                 <Link
-                                    href="/instructor/students/hasldhskdh"
+                                    href={`/instructor/students/${member.id}`}
                                     className="hover:underline underline-offset-2"
                                 >
                                     {member.lastname} {member.firstname}
