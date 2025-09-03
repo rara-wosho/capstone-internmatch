@@ -74,7 +74,7 @@ export default async function Page({ params }) {
     }
 
     return (
-        <div>
+        <div className="mb-20">
             <div className="mb-3 md:mb-5">
                 <SecondaryLabel>
                     {data?.group_name ?? "Unknown group"}
