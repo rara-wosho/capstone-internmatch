@@ -15,6 +15,7 @@ export default function Logo({ className, containerStyle }) {
                     fill
                     className="object-contain"
                     alt="officiail-logo"
+                    sizes="100%"
                 />
             </div>
         </div>

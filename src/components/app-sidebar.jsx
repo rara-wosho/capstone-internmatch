@@ -49,6 +49,8 @@ import Logo from "./ui/Logo";
 import { useMemo } from "react";
 import { Switch } from "./ui/switch";
 import { signOut } from "@/lib/actions/auth";
+import { useSession } from "@/context/SessionContext";
+
 // Centralized navigation configurati on
 const navigationConfig = [
     {
@@ -221,9 +223,12 @@ const isAnySubItemActive = (subItems, currentPath) => {
     return subItems.some((subItem) => isPathActive(subItem.href, currentPath));
 };
 
-export function AppSidebar({ role }) {
+export function AppSidebar() {
     const pathName = usePathname();
     const router = useRouter();
+    const { user } = useSession();
+
+    const role = user?.user_metadata?.role;
 
     const { setOpenMobile } = useSidebar();
 

@@ -5,11 +5,10 @@ import PrivateFooter from "@/components/ui/PrivateFooter";
 import { SessionProvider } from "@/context/SessionContext";
 
 export default function Layout({ children }) {
-    const role = "instructor";
     return (
         <SessionProvider>
             <SidebarProvider>
-                <AppSidebar role={role} />
+                <AppSidebar />
                 <main className="w-full">
                     <div className="min-h-screen">
                         <DashboardHeader />

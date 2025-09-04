@@ -24,6 +24,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
     return (
         <html
+            data-scroll-behavior="smooth"
             lang="en"
             suppressHydrationWarning
             className={cn("scroll-smooth", geist.className)}
