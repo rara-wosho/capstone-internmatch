@@ -13,9 +13,11 @@ import Logo from "./Logo";
 import IconWrapper from "./IconWrapper";
 import { useSession } from "@/context/SessionContext";
 import Link from "next/link";
+import SignOutModal from "./SignOutModal";
 
 export default function DashboardHeader() {
     const { user } = useSession();
+
     return (
         <div className="sticky top-0 left-0 px-3 md:px-5 lg:px-8 py-3 flex items-center w-full bg-white border-b z-30 backdrop-blur-2xl dark:bg-background/70">
             <SidebarTrigger />
@@ -80,10 +82,12 @@ export default function DashboardHeader() {
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
                             <SidebarMenuItem className="border-t dark:border-neutral-700">
-                                <SidebarMenuButton className="cursor-pointer">
-                                    <LogOut />
-                                    Sign Out
-                                </SidebarMenuButton>
+                                <SignOutModal>
+                                    <SidebarMenuButton className="cursor-pointer">
+                                        <LogOut />
+                                        Sign Out
+                                    </SidebarMenuButton>
+                                </SignOutModal>
                             </SidebarMenuItem>
                         </SidebarMenu>
                     </PopoverContent>

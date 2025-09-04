@@ -33,11 +33,9 @@ export async function updateSession(request) {
 
     // IMPORTANT: DO NOT REMOVE auth.getUser()
 
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
-
-    console.log("Current user: ", user);
+    // const {
+    //     data: { user },
+    // } = await supabase.auth.getUser();
 
     // if (
     //     !user &&

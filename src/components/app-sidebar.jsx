@@ -50,6 +50,7 @@ import { useMemo } from "react";
 import { Switch } from "./ui/switch";
 import { signOut } from "@/lib/actions/auth";
 import { useSession } from "@/context/SessionContext";
+import SignOutModal from "./ui/SignOutModal";
 
 // Centralized navigation configurati on
 const navigationConfig = [
@@ -225,7 +226,6 @@ const isAnySubItemActive = (subItems, currentPath) => {
 
 export function AppSidebar() {
     const pathName = usePathname();
-    const router = useRouter();
     const { user } = useSession();
 
     const role = user?.user_metadata?.role;
@@ -246,16 +246,6 @@ export function AppSidebar() {
 
     const handleLinkClick = () => {
         setOpenMobile(false);
-    };
-
-    const handleSignOut = async () => {
-        const { success } = await signOut();
-        if (!success) {
-            toast.error("Unable to sign you out");
-            return;
-        }
-
-        router.push("/sign-in");
     };
 
     return (
@@ -381,13 +371,12 @@ export function AppSidebar() {
                     <SidebarGroupContent>
                         <SidebarMenu className="border-t border-sidebar-border/50 pt-3">
                             <SidebarMenuItem>
-                                <SidebarMenuButton
-                                    className="text-destructive hover:bg-destructive/80 cursor-pointer hover:text-destructive-foreground"
-                                    onClick={handleSignOut}
-                                >
-                                    <LogOut />
-                                    <span>Sign Out</span>
-                                </SidebarMenuButton>
+                                <SignOutModal>
+                                    <SidebarMenuButton className="text-destructive hover:bg-destructive/80 cursor-pointer hover:text-destructive-foreground">
+                                        <LogOut />
+                                        <span>Sign Out</span>
+                                    </SidebarMenuButton>
+                                </SignOutModal>
                             </SidebarMenuItem>
                         </SidebarMenu>
                     </SidebarGroupContent>
