@@ -1,8 +1,8 @@
 import { BookOpen, Calendar, Pencil, Users2 } from "lucide-react";
 import TertiaryLabel from "../ui/TertiaryLabel";
-import { Button } from "../ui/button";
 import BorderBox from "../ui/BorderBox";
 import { dateFormatter } from "@/utils/date-formatter";
+import EditGroupModal from "../forms/EditGroupModal";
 
 export default function AboutGroup({ data, memberCount }) {
     return (
@@ -12,9 +12,7 @@ export default function AboutGroup({ data, memberCount }) {
                     <BookOpen size={17} /> About
                 </TertiaryLabel>
                 <div className="ms-auto">
-                    <button className="hover:text-accent-foreground cursor-pointer px-1.5">
-                        <Pencil size={16} />
-                    </button>
+                    <EditGroupModal group={data} />
                 </div>
             </div>
 

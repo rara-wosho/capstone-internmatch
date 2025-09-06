@@ -26,6 +26,25 @@ export async function createGroup(formData) {
     return { success: true, returnedData: { name, description } };
 }
 
+// edit group details
+export async function editGroup(groupId, values) {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+        .from("groups")
+        .update({
+            group_name: values.group_name,
+            group_description: values.group_description,
+        })
+        .eq("id", groupId);
+
+    if (error) {
+        return { success: false };
+    }
+
+    return { success: true };
+}
+
 export async function toggleGroupShareable(groupId, value) {
     const supabase = await createClient();
 

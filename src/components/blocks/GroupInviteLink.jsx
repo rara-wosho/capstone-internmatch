@@ -78,15 +78,15 @@ export default function GroupInviteLink({ groupId, is_shareable }) {
             </div>
 
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-y-2 mt-4 mb-1 p-2 border rounded-lg">
-                <p className="text-sm text-muted-foreground flex items-center gap-1.5 sm:pl-1.5">
-                    Status:
-                    <span
+                <div className="text-sm text-muted-foreground flex items-center gap-1.5 sm:pl-1.5">
+                    <p>Status: </p>
+                    <p
                         className={`font-semibold ${
                             shareable ? "text-green-600" : "text-destructive"
                         }`}
                     >
                         {shareable ? "Active" : "Inactive"}
-                    </span>
+                    </p>
                     {/* ✅ Dot indicator */}
                     <div
                         className={`size-2 rounded-full ${
@@ -99,7 +99,7 @@ export default function GroupInviteLink({ groupId, is_shareable }) {
                             }`}
                         ></div>
                     </div>
-                </p>
+                </div>
 
                 <Button
                     onClick={handleToggleShareable}

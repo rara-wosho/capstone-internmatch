@@ -23,7 +23,7 @@ export default async function Page({ searchParams }) {
         redirect("/sign-in");
     }
 
-    const search = searchParams?.search_query?.trim() || "";
+    const search = (await searchParams)?.search_query?.trim() || "";
 
     let query = supabase
         .from("groups")
