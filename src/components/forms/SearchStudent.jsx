@@ -1,27 +1,60 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { RotateCcw, Search } from "lucide-react";
 import Form from "next/form";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import SubmitButton from "../ui/SubmitButton";
+import { Button } from "../ui/button";
+import { useState } from "react";
 
-export default function SearchStudent() {
+export default function SearchField({ actionPath, placeholder, className }) {
     const params = useSearchParams();
     const search = params.get("search_query") || "";
 
+    const [key, setKey] = useState(search || "");
+    const router = useRouter();
+
+    const handleChange = (e) => {
+        setKey(e.currentTarget.value);
+    };
+
+    const handleReset = () => {
+        setKey("");
+        router.push(actionPath); // 👈 clears the query param
+    };
+
     return (
-        <Form action="/instructor/students">
+        <Form action={actionPath} className={className}>
             <div className="flex items-center gap-2">
                 <Input
                     type="search"
                     name="search_query"
                     icon={<Search size={16} />}
-                    placeholder="Search student, group, etc."
-                    defaultValue={search}
+                    placeholder={placeholder}
+                    value={key}
+                    onChange={handleChange}
                 />
 
-                <Button variant="white">Search</Button>
+                <SubmitButton
+                    variant="white"
+                    disabled={!key}
+                    size="lg"
+                    icon={<Search size={18} />}
+                >
+                    <span className="hidden md:inline-block">Search</span>
+                </SubmitButton>
+                {search && (
+                    <Button
+                        type="button"
+                        onClick={handleReset}
+                        variant="secondary"
+                        size="lg"
+                    >
+                        <RotateCcw size={18} />
+                        <span className="hidden md:inline-block">Reset</span>
+                    </Button>
+                )}
             </div>
         </Form>
     );

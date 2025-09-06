@@ -1,10 +1,12 @@
 import AboutGroup from "@/components/blocks/AboutGroup";
 import GroupInviteLink from "@/components/blocks/GroupInviteLink";
+import SearchField from "@/components/forms/SearchStudent";
 import GroupMembersTable from "@/components/tables/GroupMembersTable";
 import BackButton from "@/components/ui/BackButton";
 import BorderBox from "@/components/ui/BorderBox";
 import BreadCrumbs from "@/components/ui/BreadCrumbs";
 import { Button } from "@/components/ui/button";
+import ErrorUi from "@/components/ui/ErrorUi";
 import { Input } from "@/components/ui/input";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -17,18 +19,19 @@ import {
     CircleAlert,
     Link,
     Pencil,
+    RotateCcw,
     Search,
     UserRoundX,
     Users2,
 } from "lucide-react";
+import { Suspense } from "react";
 
 const links = [
     { href: "", label: "Home" },
     { href: "/instructor/manage-groups", label: "Manage groups" },
     { href: "", label: "Group details" },
 ];
-export default async function Page({ params }) {
-    // await new Promise((res) => setTimeout(res, 10000));
+export default async function Page({ params, searchParams }) {
     const { groupId } = await params;
 
     const db = await createClient();
@@ -36,42 +39,31 @@ export default async function Page({ params }) {
         .from("groups")
         .select()
         .eq("id", groupId)
-        .single();
+        .maybeSingle();
 
     if (error) {
-        return (
-            <div className="flex items-center gap-4">
-                <div className="rounded-sm p-2 border border-destructive text-destructive bg-red-500/10">
-                    <CircleAlert />
-                </div>
-                <div>
-                    <TertiaryLabel>Opps..</TertiaryLabel>
-                    <p className="text-muted-foreground">
-                        Something went wrong while we fetch the data.
-                    </p>
-                </div>
-            </div>
+        return <ErrorUi />;
+    }
+
+    // ✅ pull search from query params
+    const search = searchParams?.search_query || "";
+
+    let memberQuery = db.from("students").select().eq("group_id", groupId);
+
+    // ✅ apply filter if search is provided, chain the additional condition
+    if (search) {
+        memberQuery = memberQuery.or(
+            `firstname.ilike.%${search}%, lastname.ilike.%${search}%, middlename.ilike.%${search}%, email.ilike.%${search}%, city.ilike.%${search}%`
         );
     }
 
-    const { data: members, error: memberError } = await db
-        .from("students")
-        .select()
-        .eq("group_id", groupId);
+    memberQuery = memberQuery.order("lastname", { ascending: true });
+
+    const { data: members, error: memberError } = await memberQuery;
 
     if (memberError) {
         return (
-            <div className="flex items-center gap-4">
-                <div className="rounded-sm p-2 border border-destructive text-destructive bg-red-500/10">
-                    <CircleAlert />
-                </div>
-                <div>
-                    <TertiaryLabel>Opps..</TertiaryLabel>
-                    <p className="text-muted-foreground">
-                        Something went wrong while we fetch members data.
-                    </p>
-                </div>
-            </div>
+            <ErrorUi message="Something went wrong while fetching member data." />
         );
     }
 
@@ -82,7 +74,6 @@ export default async function Page({ params }) {
                     <ChevronLeft />
                     <SecondaryLabel className="text-left">
                         {data?.group_name ?? "Unknown group"}
-                        sit amet.
                     </SecondaryLabel>
                 </BackButton>
                 <BreadCrumbs links={links} />
@@ -96,37 +87,45 @@ export default async function Page({ params }) {
                         is_shareable={data?.is_shareable}
                     />
                 </div>
-                {members.length > 0 && (
-                    <BorderBox className="border bg-card rounded-xl">
-                        <div className="flex items-center gap-2 mb-4">
-                            <Input
-                                type="search"
+                <BorderBox className="border bg-card rounded-xl">
+                    {/* there are members and user is searching  */}
+                    {(members.length > 0 || search) && (
+                        <Suspense fallback={null}>
+                            <SearchField
+                                className="mb-3"
+                                actionPath={`/instructor/manage-groups/${groupId}`}
                                 placeholder="Search student"
-                                icon={<Search size={16} />}
                             />
-                            <Button variant="white">
-                                <span className="hidden md:inline-block">
-                                    Search
-                                </span>{" "}
-                                <Search />
-                            </Button>
-                        </div>
-                        <GroupMembersTable members={members} />
-                    </BorderBox>
-                )}
+                        </Suspense>
+                    )}
 
-                {members.length === 0 && (
-                    <div className="py-14 flex flex-col items-center justify-center">
-                        <UserRoundX size={32} />
-                        <p className="mt-4 mb-2 font-medium text-center text-xl px-5">
-                            There are no members in this group yet
-                        </p>
-                        <p className="text-center text-muted-foreground px-8">
-                            Try sharing the invitation link to let your students
-                            join this group
-                        </p>
-                    </div>
-                )}
+                    {members.length > 0 && (
+                        <GroupMembersTable members={members} />
+                    )}
+
+                    {/* user is searching, empty result  */}
+                    {members.length === 0 && search && (
+                        <div className="py-8 flex flex-col items-center justify-center">
+                            <p className="text-center text-muted-foreground px-8">
+                                No result found for '{search}'
+                            </p>
+                        </div>
+                    )}
+
+                    {/* user is not searching and there is no member  */}
+                    {members.length === 0 && !search && (
+                        <div className="py-14 flex flex-col items-center justify-center">
+                            <UserRoundX size={32} />
+                            <p className="mt-4 mb-2 font-medium text-center text-xl px-5">
+                                There are no members in this group yet
+                            </p>
+                            <p className="text-center text-muted-foreground px-8">
+                                Try sharing the invitation link to let your
+                                students join this group
+                            </p>
+                        </div>
+                    )}
+                </BorderBox>
             </div>
         </div>
     );

@@ -1,4 +1,4 @@
-import SearchStudent from "@/components/forms/SearchStudent";
+import SearchField from "@/components/forms/SearchStudent";
 import StudentsTable from "@/components/tables/StudentsTable";
 import BorderBox from "@/components/ui/BorderBox";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
@@ -18,7 +18,10 @@ export default function Page() {
             <BorderBox className="border rounded-xl bg-card mb-3">
                 <div className="ms-auto grow">
                     <Suspense fallback={null}>
-                        <SearchStudent />
+                        <SearchField
+                            actionPath="/instructor/students"
+                            placeholder="Search student, group, etc."
+                        />
                     </Suspense>
                 </div>
             </BorderBox>

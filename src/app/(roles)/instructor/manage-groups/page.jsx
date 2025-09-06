@@ -2,6 +2,7 @@ import AddGroupModal from "@/components/forms/AddGroupModal";
 import SearchGroup from "@/components/forms/SearchGroup";
 import BorderBox from "@/components/ui/BorderBox";
 import { Button } from "@/components/ui/button";
+import ErrorUi from "@/components/ui/ErrorUi";
 import GroupCard from "@/components/ui/GroupCard";
 import IconWrapper from "@/components/ui/IconWrapper";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
@@ -39,6 +40,11 @@ export default async function Page({ searchParams }) {
 
     const { data, error } = await query;
 
+    if (error) {
+        console.error(error.message);
+        return <ErrorUi />;
+    }
+
     return (
         <div>
             <SecondaryLabel className="mb-4 md:mb-5 space-x-2">
@@ -53,18 +59,7 @@ export default async function Page({ searchParams }) {
                     <Suspense fallback={null}>
                         <SearchGroup />
                     </Suspense>
-                    {/* <SortData>
-                        <Button
-                            variant="secondary"
-                            className="bg-white dark:bg-secondary border border-input"
-                            asChild
-                            size="lg"
-                        >
-                            <span>
-                                <ArrowUpDown />
-                            </span>
-                        </Button>
-                    </SortData> */}
+                    {/* <SortData />  */}
                 </div>
 
                 <AddGroupModal />

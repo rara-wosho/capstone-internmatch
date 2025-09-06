@@ -68,11 +68,6 @@ export default function GroupMembersTable({ members }) {
                 </div>
             )}
             <div className="flex items-center mb-2">
-                <BackButton className="me-2">
-                    <div className="rounded-full p-1 hover:bg-secondary text-muted-foreground">
-                        <ChevronLeft size={20} />
-                    </div>
-                </BackButton>
                 <TertiaryLabel>Group members</TertiaryLabel>
             </div>
 
