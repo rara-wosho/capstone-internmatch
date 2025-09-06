@@ -11,7 +11,7 @@ import { ArrowUpDown, Users } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-export default async function Page() {
+export default async function Page({ searchParams }) {
     const supabase = await createClient();
 
     const {
@@ -19,15 +19,25 @@ export default async function Page() {
     } = await supabase.auth.getSession();
 
     if (!session?.user) {
-        // Either redirect to login or return empty state
         redirect("/sign-in");
     }
 
-    const { data, error } = await supabase
+    const search = searchParams?.search_query?.trim() || "";
+
+    let query = supabase
         .from("groups")
         .select()
         .eq("ojt_instructor_id", session.user.id)
         .order("created_at", { ascending: false });
+
+    // ✅ apply filter if search is provided, chain the additional condition
+    if (search) {
+        query = query.or(
+            `group_name.ilike.%${search}%,group_description.ilike.%${search}%`
+        );
+    }
+
+    const { data, error } = await query;
 
     return (
         <div>
@@ -43,7 +53,7 @@ export default async function Page() {
                     <Suspense fallback={null}>
                         <SearchGroup />
                     </Suspense>
-                    <SortData>
+                    {/* <SortData>
                         <Button
                             variant="secondary"
                             className="bg-white dark:bg-secondary border border-input"
@@ -54,16 +64,20 @@ export default async function Page() {
                                 <ArrowUpDown />
                             </span>
                         </Button>
-                    </SortData>
+                    </SortData> */}
                 </div>
 
                 <AddGroupModal />
             </BorderBox>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3">
-                {data.map((g) => (
-                    <GroupCard key={g.id} data={g} />
-                ))}
+                {data && data.length > 0 ? (
+                    data.map((g) => <GroupCard key={g.id} data={g} />)
+                ) : (
+                    <p className="col-span-full text-center text-muted-foreground py-6">
+                        No groups found.
+                    </p>
+                )}
             </div>
         </div>
     );

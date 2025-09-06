@@ -17,7 +17,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "./button";
-import { Loader, LogOut } from "lucide-react";
+import { Loader, LogOut, LogOutIcon } from "lucide-react";
 
 export default function SignOutModal({ children }) {
     const [open, setOpen] = useState(false);

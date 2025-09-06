@@ -37,7 +37,7 @@ import {
     SidebarTrigger,
     useSidebar,
 } from "@/components/ui/sidebar";
-import { usePathname, useRouter } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
@@ -229,6 +229,10 @@ export function AppSidebar() {
     const { user } = useSession();
 
     const role = user?.user_metadata?.role;
+
+    if (!role) {
+        redirect("/sign-in");
+    }
 
     const { setOpenMobile } = useSidebar();
 

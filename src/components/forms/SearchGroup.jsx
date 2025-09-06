@@ -2,21 +2,28 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { RotateCcw, Search, X } from "lucide-react";
 import Form from "next/form";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import SubmitButton from "../ui/SubmitButton";
 
 export default function SearchGroup() {
     const params = useSearchParams();
     const search = params.get("search_query") || "";
 
     const [key, setKey] = useState(search || "");
+    const router = useRouter();
 
     const handleChange = (e) => {
-        const { value } = e.currentTarget;
-        setKey(value);
+        setKey(e.currentTarget.value);
     };
+
+    const handleReset = () => {
+        setKey("");
+        router.push("/instructor/manage-groups"); // 👈 clears the query param
+    };
+
     return (
         <Form
             action="/instructor/manage-groups"
@@ -30,17 +37,27 @@ export default function SearchGroup() {
                 value={key}
                 onChange={handleChange}
             />
-            <Button
-                disabled={!key}
+
+            <SubmitButton
                 variant="secondary"
-                className="bg-white dark:bg-secondary border border-input"
+                disabled={!key}
                 size="lg"
+                icon={<Search size={18} />}
             >
-                <p className="flex items-center gap-1">
-                    <span className="hidden md:inline-block">Search</span>
-                    <Search size={18} />
-                </p>
-            </Button>
+                <span className="hidden md:inline-block">Search</span>
+            </SubmitButton>
+
+            {search && (
+                <Button
+                    type="button"
+                    onClick={handleReset}
+                    variant="secondary"
+                    size="lg"
+                >
+                    <RotateCcw size={18} />
+                    <span className="hidden md:inline-block">Reset</span>
+                </Button>
+            )}
         </Form>
     );
 }
