@@ -33,28 +33,45 @@ export async function updateSession(request) {
 
     // IMPORTANT: DO NOT REMOVE auth.getUser()
 
-    // const {
-    //     data: { user },
-    // } = await supabase.auth.getUser();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
 
-    // if (
-    //     !user &&
-    //     (request.nextUrl.pathname.startsWith("/student") ||
-    //         request.nextUrl.pathname.startsWith("/company") ||
-    //         request.nextUrl.pathname.startsWith("/instructor"))
-    // ) {
-    //     // Redirect to sign-in if no user.
-    //     const url = request.nextUrl.clone();
-    //     url.pathname = "/sign-in";
-    //     return NextResponse.redirect(url);
-    // }
+    // 🔒 Protect private routes
+    if (
+        !user &&
+        (request.nextUrl.pathname.startsWith("/student") ||
+            request.nextUrl.pathname.startsWith("/company") ||
+            request.nextUrl.pathname.startsWith("/instructor"))
+    ) {
+        const url = request.nextUrl.clone();
+        url.pathname = "/sign-in";
+        return NextResponse.redirect(url);
+    }
 
-    // if (user && request.nextUrl.pathname === "/sign-in") {
-    //     // Redirect away from auth page if there is a user.
-    //     const url = request.nextUrl.clone();
-    //     url.pathname = "/instructor";
-    //     return NextResponse.redirect(url);
-    // }
+    // 🔄 If user is logged in but visits /sign-in → redirect them based on role
+    if (user && request.nextUrl.pathname === "/sign-in") {
+        const url = request.nextUrl.clone();
+
+        //"role" is stored in user metadata
+        const role = user.user_metadata?.role;
+
+        switch (role) {
+            case "student":
+                url.pathname = "/student";
+                break;
+            case "company":
+                url.pathname = "/company";
+                break;
+            case "instructor":
+                url.pathname = "/instructor";
+                break;
+            default:
+                url.pathname = "/"; // fallback
+        }
+
+        return NextResponse.redirect(url);
+    }
 
     // IMPORTANT: You *must* return the supabaseResponse object as it is.
     // If you're creating a new response object with NextResponse.next() make sure to:

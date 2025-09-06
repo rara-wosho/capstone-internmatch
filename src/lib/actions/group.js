@@ -25,3 +25,18 @@ export async function createGroup(formData) {
     revalidatePath("/instructor/manage-groups");
     return { success: true, returnedData: { name, description } };
 }
+
+export async function toggleGroupShareable(groupId, value) {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+        .from("groups")
+        .update({ is_shareable: value })
+        .eq("id", groupId);
+
+    if (error) {
+        return { success: false };
+    }
+
+    return { success: true };
+}

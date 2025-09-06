@@ -1,6 +1,7 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
+import { Loader } from "lucide-react";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const SessionContext = createContext(undefined);
@@ -22,7 +23,14 @@ export function SessionProvider({ children }) {
 
     return (
         <SessionContext.Provider value={{ session, user, loading }}>
-            {loading ? <div>Loading...</div> : children}
+            {loading ? (
+                <div className="w-full min-h-screen flex flex-col items-center justify-center gap-2">
+                    <Loader className="animate-spin" />
+                    <p className="text-sm text-muted-foreground">Please wait</p>
+                </div>
+            ) : (
+                children
+            )}
         </SessionContext.Provider>
     );
 }

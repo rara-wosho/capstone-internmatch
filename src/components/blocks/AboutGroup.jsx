@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import BorderBox from "../ui/BorderBox";
 import { dateFormatter } from "@/utils/date-formatter";
 
-export default function AboutGroup({ data }) {
+export default function AboutGroup({ data, memberCount }) {
     return (
         <BorderBox className="border rounded-xl bg-card">
             <div className="flex items-center mb-3">
@@ -24,7 +24,8 @@ export default function AboutGroup({ data }) {
                     : "No description provided."}
             </p>
             <p className="text-sm text-muted-foreground mb-1 flex items-center gap-2">
-                <Users2 size={14} /> 8 Members
+                <Users2 size={14} /> {memberCount} Member
+                {memberCount > 1 && "s"}
             </p>
             <p className="text-sm text-muted-foreground mb-1 flex items-center gap-2">
                 <Calendar size={14} />

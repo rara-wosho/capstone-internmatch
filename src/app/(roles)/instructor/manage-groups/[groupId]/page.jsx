@@ -39,10 +39,10 @@ export default async function Page({ params, searchParams }) {
         .from("groups")
         .select()
         .eq("id", groupId)
-        .maybeSingle();
+        .single();
 
     if (error) {
-        return <ErrorUi />;
+        return <ErrorUi message="Group not found." />;
     }
 
     // ✅ pull search from query params
@@ -57,6 +57,7 @@ export default async function Page({ params, searchParams }) {
         );
     }
 
+    // additional chain, sort by lastname
     memberQuery = memberQuery.order("lastname", { ascending: true });
 
     const { data: members, error: memberError } = await memberQuery;
@@ -81,7 +82,7 @@ export default async function Page({ params, searchParams }) {
 
             <div className="grid grid-cols-1 gap-3 md:gap-4 mt-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                    <AboutGroup data={data} />
+                    <AboutGroup data={data} memberCount={members?.length} />
                     <GroupInviteLink
                         groupId={groupId}
                         is_shareable={data?.is_shareable}
