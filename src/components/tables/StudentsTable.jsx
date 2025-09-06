@@ -10,7 +10,7 @@ import {
 import BorderBox from "../ui/BorderBox";
 import Link from "next/link";
 
-export default function StudentsTable() {
+export default function StudentsTable({ students }) {
     return (
         <BorderBox className="border rounded-xl bg-card">
             <Table>
@@ -28,38 +28,27 @@ export default function StudentsTable() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow className="text-muted-foreground">
-                        <TableCell>1</TableCell>
-                        <TableCell className="font-medium text-secondary-foreground flex items-center">
-                            <Link
-                                href="/instructor/students/hasldhskdh"
-                                className="hover:underline underline-offset-2 w-full"
-                            >
-                                Israel De Vera
-                            </Link>
-                        </TableCell>
-                        <TableCell>raeldevprojects@gmail.com</TableCell>
-                        <TableCell>BSIT</TableCell>
-                        <TableCell>Male</TableCell>
-                        <TableCell>20</TableCell>
-                        <TableCell>Sir amin's group</TableCell>
-                    </TableRow>
-                    <TableRow className="text-muted-foreground">
-                        <TableCell>2</TableCell>
-                        <TableCell className="font-medium text-secondary-foreground flex items-center">
-                            <Link
-                                href="/instructor/students/hasldhskdh"
-                                className="hover:underline underline-offset-2 w-full"
-                            >
-                                Israel De Vera
-                            </Link>
-                        </TableCell>
-                        <TableCell>raeldevprojects@gmail.com</TableCell>
-                        <TableCell>BSIT</TableCell>
-                        <TableCell>Male</TableCell>
-                        <TableCell>20</TableCell>
-                        <TableCell>Sir amin's group</TableCell>
-                    </TableRow>
+                    {students?.map((student, index) => (
+                        <TableRow
+                            key={student?.id}
+                            className="text-muted-foreground"
+                        >
+                            <TableCell>{index + 1}</TableCell>
+                            <TableCell className="font-medium text-secondary-foreground flex items-center">
+                                <Link
+                                    href={`/instructor/students/${student?.id}`}
+                                    className="hover:underline underline-offset-2 w-full"
+                                >
+                                    {student?.lastname}, {student?.firstname}
+                                </Link>
+                            </TableCell>
+                            <TableCell>{student?.email}</TableCell>
+                            <TableCell>{student?.course}</TableCell>
+                            <TableCell>{student?.gender}</TableCell>
+                            <TableCell>{student?.age}</TableCell>
+                            <TableCell>{student?.groups?.group_name}</TableCell>
+                        </TableRow>
+                    ))}
                 </TableBody>
             </Table>
         </BorderBox>

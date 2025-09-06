@@ -19,10 +19,6 @@ export default async function Page({ searchParams }) {
         data: { session },
     } = await supabase.auth.getSession();
 
-    if (!session?.user) {
-        redirect("/sign-in");
-    }
-
     const search = (await searchParams)?.search_query?.trim() || "";
 
     let query = supabase

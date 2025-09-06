@@ -46,7 +46,7 @@ export default async function Page({ params, searchParams }) {
     }
 
     // ✅ pull search from query params
-    const search = searchParams?.search_query || "";
+    const search = (await searchParams)?.search_query || "";
 
     let memberQuery = db.from("students").select().eq("group_id", groupId);
 

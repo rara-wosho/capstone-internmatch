@@ -13,7 +13,6 @@ export default function ErrorUi({ message }) {
                         <span className="text-destructive"> Opps..</span>
                     </TertiaryLabel> */}
                     <p className="text-destructive">
-                        Oppss...{" "}
                         {message
                             ? message
                             : "Something went wrong while we fetch the data."}
