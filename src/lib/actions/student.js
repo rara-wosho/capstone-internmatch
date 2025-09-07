@@ -78,6 +78,7 @@ export async function revokeExamAccess(studentIds = []) {
     return { success: true };
 }
 
+// update or insert students' interests
 export async function updateStudentInterests(interestId, newArray) {
     const supabase = await createClient();
 

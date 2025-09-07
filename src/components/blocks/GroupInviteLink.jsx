@@ -77,7 +77,7 @@ export default function GroupInviteLink({ groupId, is_shareable }) {
                 </Button>
             </div>
 
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-y-2 mt-4 mb-1 p-2 border rounded-lg">
+            <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-y-2 mb-1 p-2 border rounded-lg">
                 <div className="text-sm text-muted-foreground flex items-center gap-1.5 sm:pl-1.5">
                     <p>Status: </p>
                     <p

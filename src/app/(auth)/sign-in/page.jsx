@@ -157,20 +157,10 @@ export default function Page() {
                                     asChild
                                     type="button"
                                 >
-                                    <Link href="/register">
+                                    <Link href="/create-account">
                                         Create an Account
                                     </Link>
                                 </Button>
-
-                                {/* <p className="mt-6 text-center text-sm text-muted-foreground">
-                                    Or register your company.{" "}
-                                    <Link
-                                        href="/register"
-                                        className="text-accent-foreground font-semibold"
-                                    >
-                                        Click here
-                                    </Link>
-                                </p> */}
                             </form>
                         </div>
                     </Card>

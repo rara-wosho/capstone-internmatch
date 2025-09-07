@@ -33,83 +33,87 @@ export async function updateSession(request) {
 
     // IMPORTANT: DO NOT REMOVE auth.getUser()
 
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
+    // const {
+    //     data: { user },
+    // } = await supabase.auth.getUser();
 
-    // 🔒 Protect private routes
-    if (
-        !user &&
-        (request.nextUrl.pathname.startsWith("/student") ||
-            request.nextUrl.pathname.startsWith("/company") ||
-            request.nextUrl.pathname.startsWith("/instructor") ||
-            request.nextUrl.pathname.startsWith("/interests") ||
-            request.nextUrl.pathname.startsWith("/assessment-test"))
-    ) {
-        const url = request.nextUrl.clone();
-        url.pathname = "/sign-in";
-        return NextResponse.redirect(url);
-    }
+    // // 🔒 Protect private routes
+    // if (
+    //     !user &&
+    //     (request.nextUrl.pathname.startsWith("/student") ||
+    //         request.nextUrl.pathname.startsWith("/company") ||
+    //         request.nextUrl.pathname.startsWith("/instructor") ||
+    //         request.nextUrl.pathname.startsWith("/interests") ||
+    //         request.nextUrl.pathname.startsWith("/assessment-test"))
+    // ) {
+    //     const url = request.nextUrl.clone();
+    //     url.pathname = "/sign-in";
+    //     return NextResponse.redirect(url);
+    // }
 
-    // 🔄 If user is logged in but visits /sign-in → redirect them based on role
-    if (user && request.nextUrl.pathname === "/sign-in") {
-        const url = request.nextUrl.clone();
+    // // 🔄 If user is logged in but visits /sign-in → redirect them based on role
+    // if (
+    //     user &&
+    //     (request.nextUrl.pathname === "/sign-in" ||
+    //         request.nextUrl.pathname === "/interests")
+    // ) {
+    //     const url = request.nextUrl.clone();
 
-        //"role" is stored in user metadata
-        const role = user.user_metadata?.role;
+    //     //"role" is stored in user metadata
+    //     const role = user.user_metadata?.role;
 
-        switch (role) {
-            case "student":
-                url.pathname = "/student";
-                break;
-            case "company":
-                url.pathname = "/company";
-                break;
-            case "instructor":
-                url.pathname = "/instructor";
-                break;
-            default:
-                url.pathname = "/"; // fallback
-        }
+    //     switch (role) {
+    //         case "student":
+    //             url.pathname = "/student";
+    //             break;
+    //         case "company":
+    //             url.pathname = "/company";
+    //             break;
+    //         case "instructor":
+    //             url.pathname = "/instructor";
+    //             break;
+    //         default:
+    //             url.pathname = "/"; // fallback
+    //     }
 
-        return NextResponse.redirect(url);
-    }
+    //     return NextResponse.redirect(url);
+    // }
 
-    // 🚫 Role-based route protection
-    if (user) {
-        const role = user.user_metadata?.role;
-        const path = request.nextUrl.pathname;
+    // // 🚫 Role-based route protection
+    // if (user) {
+    //     const role = user.user_metadata?.role;
+    //     const path = request.nextUrl.pathname;
 
-        const rolePaths = {
-            student: "/student",
-            company: "/company",
-            instructor: "/instructor",
-        };
+    //     const rolePaths = {
+    //         student: "/student",
+    //         company: "/company",
+    //         instructor: "/instructor",
+    //     };
 
-        // ✅ Special case: assessment is only for students
-        if (path.startsWith("/assessment-test") && role !== "student") {
-            const url = request.nextUrl.clone();
-            url.pathname = rolePaths[role] || "/"; // redirect them to their dashboard
-            return NextResponse.redirect(url);
-        }
-        if (path.startsWith("/interests") && role !== "student") {
-            const url = request.nextUrl.clone();
-            url.pathname = rolePaths[role] || "/"; // redirect them to their dashboard
-            return NextResponse.redirect(url);
-        }
+    //     // ✅ Special case: assessment is only for students
+    //     if (path.startsWith("/assessment-test") && role !== "student") {
+    //         const url = request.nextUrl.clone();
+    //         url.pathname = rolePaths[role] || "/"; // redirect them to their dashboard
+    //         return NextResponse.redirect(url);
+    //     }
+    //     if (path.startsWith("/interests") && role !== "student") {
+    //         const url = request.nextUrl.clone();
+    //         url.pathname = rolePaths[role] || "/"; // redirect them to their dashboard
+    //         return NextResponse.redirect(url);
+    //     }
 
-        // ✅ Standard role-based protection
-        if (
-            rolePaths[role] &&
-            !path.startsWith(rolePaths[role]) &&
-            !path.startsWith("/interests") &&
-            !path.startsWith("/assessment-test") // 👈 allow assessment-test for students
-        ) {
-            const url = request.nextUrl.clone();
-            url.pathname = rolePaths[role]; // redirect to their dashboard root
-            return NextResponse.redirect(url);
-        }
-    }
+    //     // ✅ Standard role-based protection
+    //     if (
+    //         rolePaths[role] &&
+    //         !path.startsWith(rolePaths[role]) &&
+    //         !path.startsWith("/interests") &&
+    //         !path.startsWith("/assessment-test") // 👈 allow assessment-test for students
+    //     ) {
+    //         const url = request.nextUrl.clone();
+    //         url.pathname = rolePaths[role]; // redirect to their dashboard root
+    //         return NextResponse.redirect(url);
+    //     }
+    // }
 
     // IMPORTANT: You *must* return the supabaseResponse object as it is.
     // If you're creating a new response object with NextResponse.next() make sure to:
