@@ -43,3 +43,37 @@ export async function createStudentAccount(formData, groupId) {
 
     return { success: true };
 }
+
+// ✅ Allow exam access for multiple students
+export async function allowExamAccess(studentIds = []) {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+        .from("students")
+        .update({ exam_access: true })
+        .in("id", studentIds);
+
+    if (error) {
+        console.error("Error allowing exam access:", error);
+        return { success: false };
+    }
+
+    return { success: true };
+}
+
+// ✅ Revoke exam access for multiple students
+export async function revokeExamAccess(studentIds = []) {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+        .from("students")
+        .update({ exam_access: false })
+        .in("id", studentIds);
+
+    if (error) {
+        console.error("Error revoking exam access:", error);
+        return { success: false };
+    }
+
+    return { success: true };
+}

@@ -42,7 +42,8 @@ export async function updateSession(request) {
         !user &&
         (request.nextUrl.pathname.startsWith("/student") ||
             request.nextUrl.pathname.startsWith("/company") ||
-            request.nextUrl.pathname.startsWith("/instructor"))
+            request.nextUrl.pathname.startsWith("/instructor") ||
+            request.nextUrl.pathname.startsWith("/assessment-test"))
     ) {
         const url = request.nextUrl.clone();
         url.pathname = "/sign-in";
@@ -71,6 +72,36 @@ export async function updateSession(request) {
         }
 
         return NextResponse.redirect(url);
+    }
+
+    // 🚫 Role-based route protection
+    if (user) {
+        const role = user.user_metadata?.role;
+        const path = request.nextUrl.pathname;
+
+        const rolePaths = {
+            student: "/student",
+            company: "/company",
+            instructor: "/instructor",
+        };
+
+        // ✅ Special case: assessment is only for students
+        if (path.startsWith("/assessment-test") && role !== "student") {
+            const url = request.nextUrl.clone();
+            url.pathname = rolePaths[role] || "/"; // redirect them to their dashboard
+            return NextResponse.redirect(url);
+        }
+
+        // ✅ Standard role-based protection
+        if (
+            rolePaths[role] &&
+            !path.startsWith(rolePaths[role]) &&
+            !path.startsWith("/assessment-test") // 👈 allow assessment-test for students
+        ) {
+            const url = request.nextUrl.clone();
+            url.pathname = rolePaths[role]; // redirect to their dashboard root
+            return NextResponse.redirect(url);
+        }
     }
 
     // IMPORTANT: You *must* return the supabaseResponse object as it is.

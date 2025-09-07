@@ -61,6 +61,16 @@ export default async function Page({ searchParams }) {
                 <AddGroupModal />
             </BorderBox>
 
+            <div className="mb-3 justify-end flex gap-3 flex-wrap">
+                <div className="flex items-center gap-1">
+                    <div className="size-2 rounded-full bg-green-500"></div>
+                    <p className="text-sm text-muted-foreground">Active</p>
+                </div>
+                <div className="flex items-center gap-1">
+                    <div className="size-2 rounded-full bg-muted-foreground"></div>
+                    <p className="text-sm text-muted-foreground">Inactive</p>
+                </div>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3">
                 {data && data.length > 0 ? (
                     data.map((g) => <GroupCard key={g.id} data={g} />)

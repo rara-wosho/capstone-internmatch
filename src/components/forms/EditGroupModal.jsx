@@ -55,7 +55,7 @@ export default function EditGroupModal({ group }) {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger className="cursor-pointer hover:text-accent-foreground transition-colors">
+            <DialogTrigger className="cursor-pointer hover:text-accent-foreground transition-colors outline-none">
                 <Pen size={16} />
             </DialogTrigger>
             <DialogContent>

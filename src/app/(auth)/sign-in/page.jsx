@@ -36,6 +36,15 @@ export default function Page() {
             if (role === "instructor") {
                 redirect("/instructor");
             }
+            if (role === "admin") {
+                redirect("/admin");
+            }
+            if (role === "student") {
+                redirect("/student");
+            }
+            if (role === "company") {
+                redirect("/company");
+            }
         }
     };
     return (

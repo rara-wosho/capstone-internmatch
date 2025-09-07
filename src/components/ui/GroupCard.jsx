@@ -11,14 +11,21 @@ export default function GroupCard({ data }) {
                 href={`/instructor/manage-groups/${data?.id}`}
                 className="flex items-center ps-3 pe-2 py-5 w-full"
             >
-                <AvatarInitial letter={initial} />
-                <div className="flex flex-col ms-2">
-                    <div className="flex items-center mb-1 gap-2">
+                <div className="relative">
+                    <div className="absolute top-0 left-0">
                         {data?.is_shareable && (
                             <div className="size-2 bg-green-500 rounded-full">
                                 <div className="animate-ping size-2 bg-green-500 rounded-full"></div>
                             </div>
                         )}
+                        {!data?.is_shareable && (
+                            <div className="size-2 bg-muted-foreground rounded-full"></div>
+                        )}
+                    </div>
+                    <AvatarInitial letter={initial} />
+                </div>
+                <div className="flex flex-col ms-2">
+                    <div className="flex items-center mb-1 gap-2">
                         <p className="font-semibold text-secondary-foreground group-hover:text-accent-foreground">
                             {data?.group_name}
                         </p>
