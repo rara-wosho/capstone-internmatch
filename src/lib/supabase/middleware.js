@@ -43,6 +43,7 @@ export async function updateSession(request) {
         (request.nextUrl.pathname.startsWith("/student") ||
             request.nextUrl.pathname.startsWith("/company") ||
             request.nextUrl.pathname.startsWith("/instructor") ||
+            request.nextUrl.pathname.startsWith("/interests") ||
             request.nextUrl.pathname.startsWith("/assessment-test"))
     ) {
         const url = request.nextUrl.clone();
@@ -91,11 +92,17 @@ export async function updateSession(request) {
             url.pathname = rolePaths[role] || "/"; // redirect them to their dashboard
             return NextResponse.redirect(url);
         }
+        if (path.startsWith("/interests") && role !== "student") {
+            const url = request.nextUrl.clone();
+            url.pathname = rolePaths[role] || "/"; // redirect them to their dashboard
+            return NextResponse.redirect(url);
+        }
 
         // ✅ Standard role-based protection
         if (
             rolePaths[role] &&
             !path.startsWith(rolePaths[role]) &&
+            !path.startsWith("/interests") &&
             !path.startsWith("/assessment-test") // 👈 allow assessment-test for students
         ) {
             const url = request.nextUrl.clone();

@@ -32,3 +32,24 @@ export async function signOut() {
     }
     return { success: true };
 }
+
+export async function getCurrentUser() {
+    const supabase = await createClient();
+
+    const {
+        data: { session },
+        error,
+    } = await supabase.auth.getSession();
+
+    if (!session || error) {
+        return { error: true, user: null };
+    }
+
+    return {
+        error: false,
+        user: {
+            id: session?.user?.id,
+            role: session?.user?.user_metadata?.role,
+        },
+    };
+}

@@ -94,11 +94,12 @@ export default async function Page({ params }) {
 
                 {!data?.is_shareable && (
                     <div className="flex flex-col gap-3 items-center justify-center max-w-md">
-                        <SecondaryLabel>Registration Closed</SecondaryLabel>
+                        <SecondaryLabel className="text-center">
+                            Group Closed
+                        </SecondaryLabel>
                         <p className="text-center text-muted-foreground">
-                            The instructor has closed student registrations for
-                            this group. If you believe this is a mistake or need
-                            assistance, kindly reach out to your instructor.
+                            This group is no longer open for joining. Please
+                            contact your instructor for details.
                         </p>
                     </div>
                 )}

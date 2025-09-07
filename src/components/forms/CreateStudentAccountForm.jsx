@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { createStudentAccount } from "@/lib/actions/student";
+import { useRouter } from "next/navigation";
 
 export default function CreateStudentAccountForm9({ groupId }) {
     const [formData, setFormData] = useState({
@@ -19,6 +20,8 @@ export default function CreateStudentAccountForm9({ groupId }) {
         password: "",
         confirmPassword: "",
     });
+
+    const router = useRouter();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -53,7 +56,8 @@ export default function CreateStudentAccountForm9({ groupId }) {
             return;
         }
 
-        toast.success("Account created successfully!");
+        // toast.success("Account created successfully!");
+        router.replace("/interests");
     };
 
     return (

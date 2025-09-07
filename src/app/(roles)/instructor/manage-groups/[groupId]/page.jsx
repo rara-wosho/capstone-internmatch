@@ -58,7 +58,7 @@ export default async function Page({ params, searchParams }) {
     }
 
     // additional chain, sort by lastname
-    memberQuery = memberQuery.order("lastname", { ascending: true });
+    memberQuery = memberQuery.order("created_at", { ascending: false });
 
     const { data: members, error: memberError } = await memberQuery;
 

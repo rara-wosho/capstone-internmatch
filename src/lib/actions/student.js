@@ -77,3 +77,17 @@ export async function revokeExamAccess(studentIds = []) {
 
     return { success: true };
 }
+
+export async function updateStudentInterests(interestId, newArray) {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("interests")
+        .upsert({ id: interestId, interest: newArray }) //intentionally leave interestId to undefined to perform insert, otherwise update
+        .select();
+
+    if (error) {
+        return { success: false, data: null };
+    }
+    return { success: true, data };
+}

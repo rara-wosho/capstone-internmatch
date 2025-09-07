@@ -167,7 +167,7 @@ export default function GroupMembersTable({ members }) {
                                     href={`/instructor/students/${member?.id}`}
                                     className="hover:underline underline-offset-2"
                                 >
-                                    {member?.lastname} {member?.firstname}
+                                    {member?.lastname}, {member?.firstname}
                                 </Link>
                             </TableCell>
                             <TableCell>{member?.email ?? "-"}</TableCell>
