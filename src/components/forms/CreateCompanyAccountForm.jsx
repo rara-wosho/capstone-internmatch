@@ -10,8 +10,10 @@ import TertiaryLabel from "../ui/TertiaryLabel";
 import { Textarea } from "../ui/textarea";
 
 import { createCompanyAccount } from "@/lib/actions/company";
+import { useRouter } from "next/navigation";
 
 export default function CreateCompanyAccountForm() {
+    const router = useRouter();
     const [form, setForm] = useState({
         companyName: "",
         description: "",
@@ -56,14 +58,14 @@ export default function CreateCompanyAccountForm() {
 
         // Call server action
         startTransition(async () => {
-            const { success } = await createCompanyAccount(form);
+            const { success, message } = await createCompanyAccount(form);
 
             if (!success) {
-                toast.error("Failed to create account.");
+                toast.error(message || "Failed to create account.");
                 return;
             }
 
-            toast.success("Company account created successfully!");
+            toast.success(message);
             setForm({
                 companyName: "",
                 description: "",
@@ -73,6 +75,10 @@ export default function CreateCompanyAccountForm() {
                 password: "",
                 confirmPassword: "",
             });
+
+            setTimeout(() => {
+                router.replace("/company");
+            }, 1000);
         });
     };
 

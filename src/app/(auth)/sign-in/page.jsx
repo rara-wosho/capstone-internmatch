@@ -14,9 +14,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { signIn } from "@/lib/actions/auth";
 import { toast } from "sonner";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 export default function Page() {
+    const router = useRouter();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -26,23 +28,26 @@ export default function Page() {
 
         if (!success) {
             toast.error("We couldn’t sign you in. " + error);
-
             return;
         }
 
         if (success) {
-            if (role === "instructor") {
-                redirect("/instructor");
-            }
-            if (role === "admin") {
-                redirect("/admin");
-            }
-            if (role === "student") {
-                redirect("/student");
-            }
-            if (role === "company") {
-                redirect("/company");
-            }
+            toast.success("Sign in successful!");
+
+            setTimeout(() => {
+                if (role === "instructor") {
+                    router.replace("/instructor");
+                }
+                if (role === "admin") {
+                    router.replace("/admin");
+                }
+                if (role === "student") {
+                    router.replace("/student");
+                }
+                if (role === "company") {
+                    router.replace("/company");
+                }
+            }, 1000);
         }
     };
     return (
