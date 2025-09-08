@@ -38,16 +38,12 @@ export default function EditGroupModal({ group }) {
             });
 
             if (!success) {
-                toast.error("Failed to update group", {
-                    position: "top-right",
-                });
+                toast.error("Failed to update group");
                 console.error(err);
                 return;
             }
 
-            toast.success("Group updated successfully", {
-                position: "top-right",
-            });
+            toast.success("Group updated successfully");
             setOpen(false);
             router.refresh();
         });

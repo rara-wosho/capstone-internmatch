@@ -34,9 +34,7 @@ export default function GroupInviteLink({ groupId, is_shareable }) {
             const { success } = await toggleGroupShareable(groupId, newValue);
 
             if (!success) {
-                toast.error("Failed to update shareable state", {
-                    position: "top-right",
-                });
+                toast.error("Failed to update shareable state");
                 return;
             }
 
@@ -44,8 +42,7 @@ export default function GroupInviteLink({ groupId, is_shareable }) {
             toast.success(
                 newValue
                     ? "Invitation link activated ✅"
-                    : "Invitation link deactivated 🚫",
-                { position: "top-right" }
+                    : "Invitation link deactivated 🚫"
             );
         });
     };

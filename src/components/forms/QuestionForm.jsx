@@ -33,9 +33,7 @@ export default function QuestionForm() {
             !formData.subject.trim() ||
             !formData.question.trim()
         ) {
-            toast.warning("All fields are required.", {
-                position: "bottom-right",
-            });
+            toast.warning("All fields are required.");
             return;
         }
 

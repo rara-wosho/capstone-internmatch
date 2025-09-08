@@ -25,9 +25,7 @@ export default function Page() {
         const { success, error, role } = await signIn(formData);
 
         if (!success) {
-            toast.error("We couldn’t sign you in. " + error, {
-                position: "top-right",
-            });
+            toast.error("We couldn’t sign you in. " + error);
 
             return;
         }

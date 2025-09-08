@@ -42,15 +42,11 @@ export default function GroupMembersTable({ members }) {
             const { success } = await allowExamAccess(markedIds);
 
             if (!success) {
-                toast.error("Unable to grant them exam access.", {
-                    position: "top-right",
-                });
+                toast.error("Unable to grant them exam access.");
                 return;
             }
 
-            toast.success("Exam access granted successfully.", {
-                position: "top-right",
-            });
+            toast.success("Exam access granted successfully.");
             setMarkedIds([]);
             router.refresh(); // ✅ refresh data
         });
@@ -61,15 +57,11 @@ export default function GroupMembersTable({ members }) {
             const { success } = await revokeExamAccess(markedIds);
 
             if (!success) {
-                toast.error("Unable to revoke exam access.", {
-                    position: "top-right",
-                });
+                toast.error("Unable to revoke exam access.");
                 return;
             }
 
-            toast.success("Exam access revoked successfully.", {
-                position: "top-right",
-            });
+            toast.success("Exam access revoked successfully.");
             setMarkedIds([]);
             router.refresh();
         });

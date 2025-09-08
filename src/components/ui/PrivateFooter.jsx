@@ -6,6 +6,7 @@ import {
 
 import IconWrapper from "./IconWrapper";
 import { ArrowUp, MessagesSquare } from "lucide-react";
+import { ThemeToggler } from "../theme-toggler";
 
 export default function PrivateFooter() {
     return (
@@ -15,6 +16,9 @@ export default function PrivateFooter() {
                     © 2025 InternMatch
                 </p>
                 <div className="flex gap-2">
+                    <div className="border rounded-sm bg-card">
+                        <ThemeToggler />
+                    </div>
                     <Tooltip delayDuration={800}>
                         <TooltipTrigger className="cursor-pointer">
                             <IconWrapper>
