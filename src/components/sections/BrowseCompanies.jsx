@@ -1,4 +1,4 @@
-import { Building, Building2, LayoutGrid, List, Search } from "lucide-react";
+import { Building2, LayoutGrid, List, Search } from "lucide-react";
 import { Button } from "../ui/button";
 import SecondaryLabel from "../ui/SecondaryLabel";
 import TertiaryLabel from "../ui/TertiaryLabel";

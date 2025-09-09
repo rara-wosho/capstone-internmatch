@@ -15,9 +15,6 @@ import {
     FileText,
     CircleUser,
     Dot,
-    Sun,
-    User2,
-    ChevronUp,
 } from "lucide-react";
 
 import {
@@ -34,12 +31,10 @@ import {
     SidebarMenuSub,
     SidebarMenuSubButton,
     SidebarMenuSubItem,
-    SidebarTrigger,
     useSidebar,
 } from "@/components/ui/sidebar";
-import { redirect, usePathname, useRouter } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 import {
     Collapsible,
     CollapsibleContent,
@@ -47,8 +42,6 @@ import {
 } from "@/components/ui/collapsible";
 import Logo from "./ui/Logo";
 import { useMemo } from "react";
-import { Switch } from "./ui/switch";
-import { signOut } from "@/lib/actions/auth";
 import { useSession } from "@/context/SessionContext";
 import SignOutModal from "./ui/SignOutModal";
 

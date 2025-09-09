@@ -14,7 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { signIn } from "@/lib/actions/auth";
 import { toast } from "sonner";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
     const router = useRouter();
@@ -150,8 +150,8 @@ export default function Page() {
                                     Sign In
                                 </SubmitButton>
 
-                                <p className="relative py-4 text-sm text-muted-foreground text-center after:absolute after:h-[1px] after:w-[42%] after:bg-secondary after:top-1/2 after:right-0 after:-translate-y-1/2 before:absolute before:h-[1px] before:w-[42%] before:bg-secondary before:top-1/2 before:left-0 before:-translate-y-1/2">
-                                    Or
+                                <p className="relative py-6 text-xs text-muted-foreground text-center after:absolute after:h-[1px] after:w-[28%] after:bg-secondary after:top-1/2 after:right-0 after:-translate-y-1/2 before:absolute before:h-[1px] before:w-[28%] before:bg-secondary before:top-1/2 before:left-0 before:-translate-y-1/2">
+                                    Don't have an account?
                                 </p>
 
                                 <Button

@@ -17,6 +17,9 @@ export default function CreateCompanyAccountForm() {
     const [form, setForm] = useState({
         companyName: "",
         description: "",
+        barangay: "",
+        city: "",
+        province: "",
         phone: "",
         website: "",
         email: "",
@@ -38,6 +41,9 @@ export default function CreateCompanyAccountForm() {
         if (
             !form.companyName ||
             !form.description ||
+            !form.barangay ||
+            !form.city ||
+            !form.province ||
             !form.email ||
             !form.password ||
             !form.confirmPassword
@@ -69,6 +75,9 @@ export default function CreateCompanyAccountForm() {
             setForm({
                 companyName: "",
                 description: "",
+                barangay: "",
+                city: "",
+                province: "",
                 phone: "",
                 website: "",
                 email: "",
@@ -130,11 +139,50 @@ export default function CreateCompanyAccountForm() {
                         </div>
                     </div>
                 </div>
+
+                <div className="mb-8">
+                    <TertiaryLabel className="mb-3">Address</TertiaryLabel>
+                    <div className="grid grid-cols-1 md:grid-cols-2 mb-3">
+                        <div>
+                            <FormLabel>Barangay/Street</FormLabel>
+                            <Input
+                                name="barangay"
+                                type="text"
+                                value={form.barangay}
+                                onChange={handleChange}
+                                placeholder="Zone 2, Tipanoy Landless"
+                            />
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                        <div>
+                            <FormLabel>Municipality/City</FormLabel>
+                            <Input
+                                name="city"
+                                type="text"
+                                value={form.city}
+                                onChange={handleChange}
+                                placeholder="Iligan City"
+                            />
+                        </div>
+                        <div>
+                            <FormLabel>Province</FormLabel>
+                            <Input
+                                name="province"
+                                type="text"
+                                value={form.province}
+                                onChange={handleChange}
+                                placeholder="Lanao Del Norte"
+                            />
+                        </div>
+                    </div>
+                </div>
+
                 <div className="mb-8">
                     <TertiaryLabel className="mb-3">
                         Account Credentials
                     </TertiaryLabel>
-                    <div className=" mb-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 mb-3">
                         <div>
                             <FormLabel>Email</FormLabel>
                             <Input

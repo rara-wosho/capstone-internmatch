@@ -68,3 +68,44 @@ export async function createCompanyAccount(form) {
 
     return { success: true, message: "Company account created successfully" };
 }
+
+// fetch all list of companies
+export async function getCompanies() {
+    const supabase = await createClient();
+
+    const { data, count, error } = await supabase
+        .from("companies")
+        .select("*", { count: "exact" })
+        .limit(2)
+        .order("created_at", { ascending: true });
+
+    if (error) {
+        return {
+            data: null,
+            count: 0,
+            error: error.message || "Unable to load companies.",
+        };
+    }
+
+    return { data, count, error: null };
+}
+
+// fetch a company data
+export async function getCompanyById(id) {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("companies")
+        .select()
+        .eq("id", id)
+        .single();
+
+    if (error) {
+        return {
+            data: null,
+            error: error.message || "Unable to load company data.",
+        };
+    }
+
+    return { data, error: null };
+}

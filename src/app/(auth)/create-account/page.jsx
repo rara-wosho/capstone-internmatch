@@ -3,6 +3,7 @@
 import CreateCompanyAccountForm from "@/components/forms/CreateCompanyAccountForm";
 import AvatarInitial from "@/components/ui/avatar-initial";
 import BackButton from "@/components/ui/BackButton";
+import { Button } from "@/components/ui/button";
 import PrivateFooter from "@/components/ui/PrivateFooter";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import Wrapper from "@/components/Wrapper";
@@ -21,7 +22,7 @@ export default function Page() {
     const [accountType, setAccountType] = useState("");
     return (
         <>
-            <div className="min-h-svh pt-5 pb-16 px-4 md:px-8 bg-[rgb(253,253,253)] dark:bg-background">
+            <div className="min-h-svh pt-5 pb-16 px-4 md:px-8 bg-linear-to-b  from-[rgb(253,253,253)] dark:from-transparent to-[rgb(253,253,253)] dark:to-blue-950/40 from-50%">
                 <Wrapper size="sm">
                     {accountType ? (
                         <button
@@ -159,14 +160,20 @@ export default function Page() {
                                     </div>
                                 </>
                             </div>
-                            <div className="flex items-center gap-2 justify-center mt-14">
+                            <div className="flex flex-col items-center gap-2 justify-center mt-14 gap-y-3 w-full">
                                 <p>Already have an account?</p>{" "}
-                                <Link
-                                    href="/sign-in"
-                                    className="text-accent-foreground"
+                                <Button
+                                    className="grow w-full sm:max-w-2xs"
+                                    asChild
+                                    variant="outline"
                                 >
-                                    Sign In
-                                </Link>
+                                    <Link
+                                        href="/sign-in"
+                                        className="hover:text-accent-foreground"
+                                    >
+                                        Sign In
+                                    </Link>
+                                </Button>
                             </div>
                         </>
                     )}

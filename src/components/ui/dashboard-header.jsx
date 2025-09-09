@@ -48,11 +48,13 @@ export default function DashboardHeader() {
                     <PopoverTrigger className="cursor-pointer">
                         <div className="flex items-center gap-2.5">
                             <div className="size-7 rounded-full border"></div>
-                            <p className="hidden md:inline-flex items-center gap-2.5">
-                                {user?.user_metadata?.firstname}{" "}
-                                {user?.user_metadata?.lastname}
+                            <div className="hidden md:inline-flex items-center gap-1.5">
+                                <p className="text-sm text-muted-foreground  hover:text-secondary-foreground transition-colors truncate max-w-[200px]">
+                                    {user?.user_metadata?.firstname}{" "}
+                                    {user?.user_metadata?.lastname}
+                                </p>
                                 <ChevronDown size={15} />
-                            </p>
+                            </div>
                         </div>
                     </PopoverTrigger>
                     <PopoverContent

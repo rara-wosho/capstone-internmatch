@@ -7,7 +7,7 @@ import Wrapper from "./Wrapper";
 import { ThemeToggler } from "./theme-toggler";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { MessageCircle, MessageSquare } from "lucide-react";
+import { LogIn, MessageCircle, MessageSquare } from "lucide-react";
 import Logo from "./ui/Logo";
 import MobileNavbar from "./MobileNavbar";
 
@@ -71,7 +71,9 @@ export default function Navbar() {
                         <ThemeToggler />
                     </div>
                     <Button size="sm" asChild>
-                        <Link href="/sign-in">Get Started </Link>
+                        <Link href="/sign-in">
+                            Sign In <LogIn />
+                        </Link>
                     </Button>
                 </div>
 

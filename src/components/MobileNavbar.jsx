@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Menu, MessageSquare, X } from "lucide-react";
+import { LogIn, Menu, MessageSquare, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -80,7 +80,9 @@ export default function MobileNavbar() {
                     asChild
                     className="mt-3"
                 >
-                    <Link href="/sign-in">Sign In</Link>
+                    <Link href="/sign-in">
+                        Sign In <LogIn />
+                    </Link>
                 </Button>
             </PopoverContent>
         </Popover>

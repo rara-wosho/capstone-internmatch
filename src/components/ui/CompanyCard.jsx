@@ -3,9 +3,9 @@ import { Button } from "./button";
 import { ArrowUpRight, BriefcaseBusiness, MapPin } from "lucide-react";
 import Link from "next/link";
 
-export default function CompanyCard() {
+export default function CompanyCard({ company }) {
     return (
-        <div className="bg-white border dark:border-neutral-900 dark:bg-card rounded-xl p-2 shadow-xs">
+        <div className="bg-white border dark:border-neutral-900 dark:bg-card rounded-xl p-2 shadow-xs flex flex-col">
             <div className="relative w-full aspect-[5/3.5] mb-3 rounded-sm overflow-hidden ">
                 <Image
                     src="https://i.pinimg.com/1200x/5f/33/c7/5f33c741560bb71ebedb831267603c1b.jpg"
@@ -19,26 +19,29 @@ export default function CompanyCard() {
                 </div>
             </div>
 
-            <div className="py-2 flex flex-col md:px-2">
+            <div className="py-2 flex flex-col md:px-2 grow">
                 <p className="text-secondary-foreground font-semibold mb-1 truncate">
-                    Card Title
+                    {company?.name}
                 </p>
                 <p className="text-sm mb-3 text-muted-foreground truncate">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Illum, ratione.
+                    {company?.details}
                 </p>
 
-                <div className="flex items-center text-muted-foreground gap-1.5 mb-2">
-                    <MapPin size={14} />{" "}
-                    <p className="text-xs truncate">Cagayan De Oro City</p>
-                </div>
+                {company?.province && (
+                    <div className="flex items-center text-muted-foreground gap-1.5 mb-2">
+                        <MapPin size={14} />
+                        <p className="text-xs truncate">
+                            {company?.city}, {company?.province}
+                        </p>
+                    </div>
+                )}
                 <div className="flex items-center text-muted-foreground gap-1.5 mb-4">
                     <BriefcaseBusiness size={14} />{" "}
                     <p className="text-xs">Frontend Development + more</p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 mt-auto">
                     <Button variant="white" size="sm" className="grow" asChild>
-                        <Link href="/student/companies/daklsdas">
+                        <Link href={`/student/companies/${company?.id}`}>
                             View Details
                         </Link>
                     </Button>
