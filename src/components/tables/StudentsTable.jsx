@@ -16,15 +16,13 @@ export default function StudentsTable({ students }) {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="font-bold">#</TableHead>
-                        <TableHead className="font-bold">
-                            Complete Name
-                        </TableHead>
-                        <TableHead className="font-bold">Email</TableHead>
-                        <TableHead className="font-bold">Course</TableHead>
-                        <TableHead className="font-bold">Gender</TableHead>
-                        <TableHead className="font-bold">Age</TableHead>
-                        <TableHead className="font-bold">Group</TableHead>
+                        <TableHead>#</TableHead>
+                        <TableHead>Complete Name</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Course</TableHead>
+                        <TableHead>Gender</TableHead>
+                        <TableHead>Age</TableHead>
+                        <TableHead>Group</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>

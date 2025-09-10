@@ -15,6 +15,8 @@ import {
     FileText,
     CircleUser,
     Dot,
+    User,
+    UserCircle,
 } from "lucide-react";
 
 import {
@@ -44,6 +46,7 @@ import Logo from "./ui/Logo";
 import { useMemo } from "react";
 import { useSession } from "@/context/SessionContext";
 import SignOutModal from "./ui/SignOutModal";
+import AvatarInitial from "./ui/avatar-initial";
 
 // Centralized navigation configurati on
 const navigationConfig = [
@@ -221,7 +224,7 @@ export function AppSidebar() {
     const pathName = usePathname();
     const { user } = useSession();
 
-    const role = user?.user_metadata?.role;
+    const { role, firstname, lastname, name } = user?.user_metadata;
 
     if (!role) {
         redirect("/sign-in");
@@ -379,6 +382,30 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
+
+            <SidebarFooter className="border-t">
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            asChild
+                            className="hover:bg-transparent"
+                        >
+                            <Link href={`/${role}/profile/${user?.id}`}>
+                                {/* <div className="rounded-full size-5 border"></div>  */}
+                                <UserCircle />
+                                <div className="flex flex-col w-full">
+                                    <p className="text-xs truncate max-w-[88%]">
+                                        {firstname} {lastname}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground truncate max-w-[88%]">
+                                        {user?.email}
+                                    </p>
+                                </div>
+                            </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarFooter>
         </Sidebar>
     );
 }

@@ -71,7 +71,9 @@ export default function DashboardHeader() {
                                     className="cursor-pointer"
                                     asChild
                                 >
-                                    <Link href="profile">
+                                    <Link
+                                        href={`/${user?.user_metadata?.role}/profile/${user?.id}`}
+                                    >
                                         <User />
                                         Your profile
                                     </Link>

@@ -76,7 +76,6 @@ export async function getCompanies() {
     const { data, count, error } = await supabase
         .from("companies")
         .select("*", { count: "exact" })
-        .limit(2)
         .order("created_at", { ascending: true });
 
     if (error) {

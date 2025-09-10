@@ -1,8 +1,9 @@
-import BrowseCompanies from "@/components/sections/BrowseCompanies";
 import CompanyCard from "@/components/ui/CompanyCard";
 import ErrorUi from "@/components/ui/ErrorUi";
+import IconWrapper from "@/components/ui/IconWrapper";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { getCompanies } from "@/lib/actions/company";
+import { Building2 } from "lucide-react";
 
 export default async function Page() {
     const { data, count, error } = await getCompanies();
@@ -13,18 +14,18 @@ export default async function Page() {
 
     return (
         <div>
-            <SecondaryLabel className="mb-4">Companies</SecondaryLabel>
+            <SecondaryLabel className="mb-4 gap-2">
+                <IconWrapper>
+                    <Building2 size={17} />
+                </IconWrapper>{" "}
+                Companies
+            </SecondaryLabel>
+
+            {/* Companies Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 {data.map((company) => (
                     <CompanyCard key={company?.id} company={company} />
                 ))}
-            </div>
-            {/* <BrowseCompanies companies={data} />  */}
-
-            <div className="flex items-center mt-4">
-                <p className="text-sm text-muted-foreground">
-                    Showing 1-2 of {count} Page 1 of {totalPages}
-                </p>
             </div>
         </div>
     );
