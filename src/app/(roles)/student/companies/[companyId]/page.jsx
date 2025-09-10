@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import BorderBox from "@/components/ui/BorderBox";
 import { getCompanyById } from "@/lib/actions/company";
 import ErrorUi from "@/components/ui/ErrorUi";
-import { Star } from "lucide-react";
+import { ArrowUpRight, ChevronLeft, Globe, Star } from "lucide-react";
+import BackButton from "@/components/ui/BackButton";
 
 const links = [
     { href: "", label: "Home" },
@@ -26,90 +27,102 @@ export default async function Page({ params }) {
 
     return (
         <div>
-            <BreadCrumbs links={links} className="mb-4" />
+            <BreadCrumbs className="mb-4" links={links} />
 
             <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-x-6 gap-y-8">
                 {/* main content  */}
                 <div className="left ">
-                    <BorderBox className="bg-white dark:bg-transparent border rounded-xl mb-3">
-                        <div className="flex gap-3 mb-3 border-b pb-5">
-                            <div className="relative size-24 shrink-0 overflow-hidden rounded-sm">
-                                <Image
-                                    src="https://i.pinimg.com/1200x/5f/33/c7/5f33c741560bb71ebedb831267603c1b.jpg"
-                                    alt="comapny img"
-                                    fill
-                                    className="object-cover"
-                                />
+                    <section className="bg-card border rounded-xl mb-3">
+                        <BorderBox className="border-b flex items-center justify-between">
+                            <BackButton className="flex items-center text-sm text-muted-foreground hover:text-secondary-foreground">
+                                <ChevronLeft size={17} />
+                                Back
+                            </BackButton>
+
+                            <div className="flex items-center text-muted-foreground">
+                                <Globe size={17} />
                             </div>
-                            <div className="w-full flex flex-col justify-center">
-                                <SecondaryLabel className="mb-1">
-                                    {data?.name}
-                                </SecondaryLabel>
-
-                                {data?.province ? (
-                                    <div className="text-sm text-muted-foreground mb-2">
-                                        {data?.city}, {data?.province}
-                                    </div>
-                                ) : (
-                                    <p className="text-sm text-muted-foreground font-light mb-2 tracking-wider">
-                                        No address provided
-                                    </p>
-                                )}
-
-                                <div className="flex items-center gap-2 text-yellow-500/30">
-                                    <Star size={15} fill="rgb(230,240,0)" />
-                                    <Star size={15} fill="rgb(230,240,0)" />
-                                    <Star size={15} fill="rgb(230,240,0)" />
+                        </BorderBox>
+                        <BorderBox className="flex gap-x-10 gap-y-4 border-b flex-wrap items-center">
+                            <div className="flex gap-3">
+                                {/* company picture  */}
+                                <div className="relative size-24 shrink-0 overflow-hidden rounded-sm">
+                                    <Image
+                                        src="https://i.pinimg.com/1200x/5f/33/c7/5f33c741560bb71ebedb831267603c1b.jpg"
+                                        alt="comapny img"
+                                        fill
+                                        className="object-cover"
+                                    />
                                 </div>
+                                {/* company name  */}
+                                <div className="w-full flex flex-col justify-center">
+                                    <SecondaryLabel className="mb-1">
+                                        {data?.name}
+                                    </SecondaryLabel>
 
-                                {/* <p className="text-muted-foreground text-sm font-thin">
+                                    {data?.province ? (
+                                        <div className="text-sm text-muted-foreground mb-2">
+                                            {data?.city}, {data?.province}
+                                        </div>
+                                    ) : (
+                                        <p className="text-sm text-muted-foreground font-light mb-2 tracking-wider">
+                                            No address provided
+                                        </p>
+                                    )}
+
+                                    <div className="flex items-center gap-2 text-yellow-500/30">
+                                        <Star size={15} fill="rgb(230,240,0)" />
+                                        <Star size={15} fill="rgb(230,240,0)" />
+                                        <Star size={15} fill="rgb(230,240,0)" />
+                                    </div>
+
+                                    {/* <p className="text-muted-foreground text-sm font-thin">
                                     No ratings yet 
                                 </p> */}
+                                </div>
                             </div>
-                        </div>
 
-                        {/* apply buttons  */}
-                        {/* <div className="border-b mb-5 pb-5 flex items-center gap-2">
-                            <Button variant="secondary">Send email</Button>
-                            <Button className="px-8" variant="white">
-                                Apply
+                            <Button
+                                variant="white"
+                                className="grow sm:grow-0 basis-[120px] ms-auto"
+                            >
+                                Visit <ArrowUpRight />
                             </Button>
-                        </div> */}
+                        </BorderBox>
 
-                        <TertiaryLabel className="mb-2">
-                            About Our Company
-                        </TertiaryLabel>
-                        <p className="text-muted-foreground">
-                            Work on cutting-edge machine learning models for
-                            computer vision applications. Experience with Python
-                            and deep learning frameworks is preferredWork on
-                            cutting-edge machine learning models for computer
-                            vision applications. Experience with Python and deep
-                            learning frameworks is preferred
-                        </p>
-                        <TertiaryLabel className="mb-2">
-                            About Our Company
-                        </TertiaryLabel>
-                        <p className="text-muted-foreground">
-                            Work on cutting-edge machine learning models for
-                            computer vision applications. Experience with Python
-                            and deep learning frameworks is preferredWork on
-                            cutting-edge machine learning models for computer
-                            vision applications. Experience with Python and deep
-                            learning frameworks is preferred
-                        </p>
-                        <TertiaryLabel className="mb-2">
-                            About Our Company
-                        </TertiaryLabel>
-                        <p className="text-muted-foreground">
-                            Work on cutting-edge machine learning models for
-                            computer vision applications. Experience with Python
-                            and deep learning frameworks is preferredWork on
-                            cutting-edge machine learning models for computer
-                            vision applications. Experience with Python and deep
-                            learning frameworks is preferred
-                        </p>
-                    </BorderBox>
+                        <BorderBox>
+                            <TertiaryLabel className="mb-2">
+                                Details
+                            </TertiaryLabel>
+                            <p className="text-muted-foreground">
+                                {data?.details}
+                            </p>
+                            <TertiaryLabel className="mb-2">
+                                About Our Company
+                            </TertiaryLabel>
+                            <p className="text-muted-foreground">
+                                Work on cutting-edge machine learning models for
+                                computer vision applications. Experience with
+                                Python and deep learning frameworks is
+                                preferredWork on cutting-edge machine learning
+                                models for computer vision applications.
+                                Experience with Python and deep learning
+                                frameworks is preferred
+                            </p>
+                            <TertiaryLabel className="mb-2">
+                                About Our Company
+                            </TertiaryLabel>
+                            <p className="text-muted-foreground">
+                                Work on cutting-edge machine learning models for
+                                computer vision applications. Experience with
+                                Python and deep learning frameworks is
+                                preferredWork on cutting-edge machine learning
+                                models for computer vision applications.
+                                Experience with Python and deep learning
+                                frameworks is preferred
+                            </p>
+                        </BorderBox>
+                    </section>
 
                     {/* examination section  */}
                     <BorderBox className="border bg-white dark:bg-transparent rounded-xl mb-3">
