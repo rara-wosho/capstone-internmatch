@@ -13,7 +13,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Info } from "lucide-react";
+import { Switch } from "../ui/switch";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { toast } from "sonner";
+import { createExam } from "@/lib/actions/exam";
+import SubmitButton from "../ui/SubmitButton";
 
 export default function ExamDetailsForm() {
     const [formData, setFormData] = useState({
@@ -22,21 +27,28 @@ export default function ExamDetailsForm() {
         instruction: "",
         duration: "60",
         mode: "classic",
+        is_published: true,
     });
 
     const handleChange = (field, value) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
         // Required fields
         if (!formData.title || !formData.duration || !formData.mode) {
+            toast.error("Fill in all required fields.");
             return;
         }
 
-        console.log("Form submitted:", formData);
-        // TODO: submit to server or next step
+        const { success } = await createExam(formData);
+
+        if (!success) {
+            toast.error("Unable to create exam. Please try again later.");
+            return;
+        }
     };
 
     return (
@@ -44,7 +56,7 @@ export default function ExamDetailsForm() {
             <div>
                 <FormLabel>Title</FormLabel>
                 <Input
-                    placeholder="Enter title"
+                    placeholder="Enter exam title"
                     value={formData.title}
                     onChange={(e) => handleChange("title", e.target.value)}
                     required
@@ -84,8 +96,38 @@ export default function ExamDetailsForm() {
                         <SelectItem value="60">1 hour</SelectItem>
                         <SelectItem value="90">1 hour, 30 minutes</SelectItem>
                         <SelectItem value="120">2 hours</SelectItem>
+                        <SelectItem value="150">2 hours, 30 minutes</SelectItem>
+                        <SelectItem value="180">3 hours</SelectItem>
+                        <SelectItem value="0">No time limit</SelectItem>
                     </SelectContent>
                 </Select>
+            </div>
+
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                    <FormLabel>
+                        <label htmlFor="publish">Publish</label>
+                    </FormLabel>
+                    <Switch
+                        checked={formData.is_published}
+                        onCheckedChange={(val) =>
+                            handleChange("is_published", val)
+                        }
+                        id="publish"
+                        className="cursor-pointer mb-1"
+                    />
+                </div>
+
+                <Popover>
+                    <PopoverTrigger className="cursor-pointer">
+                        <Info size={18} />
+                    </PopoverTrigger>
+                    <PopoverContent>
+                        <p className="text-muted-foreground text-sm">
+                            If on, this examination is accessible by anyone.
+                        </p>
+                    </PopoverContent>
+                </Popover>
             </div>
 
             <div className="py-2 mb-4">
@@ -139,11 +181,11 @@ export default function ExamDetailsForm() {
                 </div>
             </div>
 
-            <Button type="submit" variant="white" className="mb-3">
+            <SubmitButton type="submit" className="mb-3">
                 <p className="flex items-center gap-2">
                     Next step <ArrowRight />
                 </p>
-            </Button>
+            </SubmitButton>
         </form>
     );
 }

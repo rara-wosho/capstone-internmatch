@@ -30,7 +30,7 @@ export default function DashboardHeader() {
                     </p>
                 </div>
                 <p className="font-semibold hidden md:inline-block">
-                    Welcome back, {user?.user_metadata?.firstname} 👋
+                    Welcome back 👋
                 </p>
             </div>
 
@@ -52,6 +52,7 @@ export default function DashboardHeader() {
                                 <p className="text-sm text-muted-foreground  hover:text-secondary-foreground transition-colors truncate max-w-[200px]">
                                     {user?.user_metadata?.firstname}{" "}
                                     {user?.user_metadata?.lastname}
+                                    {user?.user_metadata?.name}
                                 </p>
                                 <ChevronDown size={15} />
                             </div>

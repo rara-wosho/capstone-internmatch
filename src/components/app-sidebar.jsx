@@ -224,6 +224,10 @@ export function AppSidebar() {
     const pathName = usePathname();
     const { user } = useSession();
 
+    if (!user) {
+        redirect("/sign-in");
+    }
+
     const { role, firstname, lastname, name } = user?.user_metadata;
 
     if (!role) {
@@ -394,9 +398,15 @@ export function AppSidebar() {
                                 {/* <div className="rounded-full size-5 border"></div>  */}
                                 <UserCircle />
                                 <div className="flex flex-col w-full">
-                                    <p className="text-xs truncate max-w-[88%]">
-                                        {firstname} {lastname}
-                                    </p>
+                                    {role === "company" ? (
+                                        <p className="text-xs truncate max-w-[88%]">
+                                            {name}
+                                        </p>
+                                    ) : (
+                                        <p className="text-xs truncate max-w-[88%]">
+                                            {firstname} {lastname}
+                                        </p>
+                                    )}
                                     <p className="text-xs text-muted-foreground truncate max-w-[88%]">
                                         {user?.email}
                                     </p>

@@ -32,7 +32,9 @@ export default function Page() {
         }
 
         if (success) {
-            toast.success("Sign in successful!");
+            toast.success("Sign in successful!", {
+                description: "Redirecting to dashboard...",
+            });
 
             setTimeout(() => {
                 if (role === "instructor") {
