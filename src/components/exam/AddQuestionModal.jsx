@@ -4,13 +4,14 @@ import {
     Dialog,
     DialogClose,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
+
 import { Button } from "../ui/button";
+
 import { FileText, PlusCircle, X, Check, Plus } from "lucide-react";
 import TertiaryLabel from "../ui/TertiaryLabel";
 import IconWrapper from "../ui/IconWrapper";
@@ -19,8 +20,9 @@ import { Input } from "../ui/input";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Textarea } from "../ui/textarea";
+import { ScrollArea } from "../ui/scroll-area";
 
-export default function AddQuestionModal({ onQuestionAdded }) {
+export default function AddQuestionModal() {
     const [question, setQuestion] = useState("");
     const [choices, setChoices] = useState([
         { text: "", isCorrect: true },
@@ -85,20 +87,7 @@ export default function AddQuestionModal({ onQuestionAdded }) {
             return;
         }
 
-        // Create the question object
-        const newQuestion = {
-            id: Date.now(), // Temporary ID
-            question: question.trim(),
-            choices: choices.map((choice) => ({
-                text: choice.text.trim(),
-                isCorrect: choice.isCorrect,
-            })),
-        };
-
-        // Pass the new question to the parent component
-        if (onQuestionAdded) {
-            onQuestionAdded(newQuestion);
-        }
+        //    Add question and choices to database
 
         // Reset form
         setQuestion("");
@@ -131,9 +120,8 @@ export default function AddQuestionModal({ onQuestionAdded }) {
                     Add question
                 </DialogTrigger>
             </Button>
-
-            <DialogContent className="p-3 sm:p-5 overflow-y-auto max-h-[90svh] md:max-w-3xl">
-                <div>
+            <DialogContent className="md:max-w-2xl">
+                <ScrollArea className="h-[85svh]">
                     <DialogHeader>
                         <DialogTitle className="py-2">
                             <TertiaryLabel className="space-x-2">
@@ -263,7 +251,7 @@ export default function AddQuestionModal({ onQuestionAdded }) {
                             </form>
                         </div>
                     </DialogHeader>
-                </div>
+                </ScrollArea>
             </DialogContent>
         </Dialog>
     );

@@ -52,9 +52,7 @@ export default function AboutExamModal() {
                                 <div className="flex flex-col mb-6 gap-y-2 items-start">
                                     <p className="mb-1">Settings</p>
                                     <div className="flex justify-between items-center w-full">
-                                        <FormLabel>
-                                            Open for examinees
-                                        </FormLabel>
+                                        <FormLabel>Publish</FormLabel>
                                         <Switch />
                                     </div>
                                     <div className="flex justify-between items-center w-full">

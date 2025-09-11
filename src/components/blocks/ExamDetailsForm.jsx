@@ -114,7 +114,7 @@ export default function ExamDetailsForm() {
                             handleChange("is_published", val)
                         }
                         id="publish"
-                        className="cursor-pointer mb-1"
+                        className="mb-1"
                     />
                 </div>
 
@@ -181,7 +181,11 @@ export default function ExamDetailsForm() {
                 </div>
             </div>
 
-            <SubmitButton type="submit" className="mb-3">
+            <SubmitButton
+                disabled={!formData.title}
+                type="submit"
+                className="mb-3"
+            >
                 <p className="flex items-center gap-2">
                     Next step <ArrowRight />
                 </p>

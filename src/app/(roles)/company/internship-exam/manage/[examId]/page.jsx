@@ -2,28 +2,45 @@ import AddQuestionAbout from "@/components/exam/AddQuestionAbout";
 import AddQuestionCard from "@/components/exam/AddQuestionCard";
 import BackButton from "@/components/ui/BackButton";
 import BorderBox from "@/components/ui/BorderBox";
-import { Button } from "@/components/ui/button";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import TertiaryLabel from "@/components/ui/TertiaryLabel";
-import { ChevronLeft, NotebookPen, PlusCircle } from "lucide-react";
+import { ChevronLeft, NotebookPen, Trash } from "lucide-react";
 
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
 import AddQuestionModal from "@/components/exam/AddQuestionModal";
-import IconWrapper from "@/components/ui/IconWrapper";
+import { createClient } from "@/lib/supabase/server";
+import ErrorUi from "@/components/ui/ErrorUi";
+import { notFound } from "next/navigation";
+import DeleteExamModal from "@/components/exam/DeleteExamModal";
+import { Button } from "@/components/ui/button";
 
-export default function Page() {
-    const questions = [
-        { id: 1, question: "this  is for qestin nuumber one" },
-        { id: 2, question: "two two two two" },
-        { id: 3, question: "three hsalsjd lskjda s" },
-    ];
+export default async function Page({ params }) {
+    const { examId } = await params;
+    const supabase = await createClient();
+
+    const { data: exam, error } = await supabase
+        .from("exams")
+        .select()
+        .eq("id", examId)
+        .maybeSingle();
+
+    if (error) {
+        return (
+            <ErrorUi
+                message="Something went wrong while fetching exam details."
+                secondaryMessage="Please check your internet connection and try again."
+            />
+        );
+    }
+
+    if (!exam) {
+        notFound();
+    }
+
+    const { data: questions, error: questionError } = await supabase
+        .from("questions")
+        .select("id, question_text, shuffle_choices")
+        .eq("exam_id", examId);
+
     return (
         <div>
             {/* header  */}
@@ -31,7 +48,7 @@ export default function Page() {
                 <BackButton className="hover:text-primary-text rounded-sm pe-2 transition-colors">
                     <SecondaryLabel className="gap-2 text-left">
                         <ChevronLeft />
-                        <span>Funcamentals of programming</span>
+                        <span>{exam?.title}</span>
                     </SecondaryLabel>
                 </BackButton>
 
@@ -43,47 +60,64 @@ export default function Page() {
             {/* content  */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
                 {/* list of questions  */}
+
                 <div className="lg:col-span-2 flex flex-col gap-1 order-2 lg:order-1">
-                    <BorderBox className="border rounded-t-xl bg-card shadow-xs">
-                        <TertiaryLabel>
-                            <NotebookPen size={18} className="text-amber-600" />{" "}
-                            <p>Manage Questions</p>
-                            <div className="ms-auto">
-                                <p className="text-sm px-2 border rounded-sm">
-                                    50
-                                </p>
-                            </div>
-                        </TertiaryLabel>
-                    </BorderBox>
-                    {questions.map((q) => (
-                        <AddQuestionCard
-                            key={q.id}
-                            id={q.id}
-                            initialQuestion={q.question}
-                        />
-                    ))}
+                    {questions.length === 0 && (
+                        <div className="flex items-center justify-center py-10 h-full">
+                            <p className="text-center max-w-sm">
+                                No questions yet. Add your first question now by
+                                clicking 'Add question' button.
+                            </p>
+                        </div>
+                    )}
+
+                    {questions.length > 0 && (
+                        <>
+                            <BorderBox className="border rounded-t-xl bg-card shadow-xs">
+                                <TertiaryLabel>
+                                    <NotebookPen
+                                        size={18}
+                                        className="text-amber-600"
+                                    />{" "}
+                                    <p>Manage Questions</p>
+                                    <div className="ms-auto">
+                                        <p className="text-sm px-2 border rounded-sm">
+                                            50
+                                        </p>
+                                    </div>
+                                </TertiaryLabel>
+                            </BorderBox>
+                            {questions.map((q) => (
+                                <AddQuestionCard
+                                    key={q.id}
+                                    id={q.id}
+                                    initialQuestion={q.question}
+                                />
+                            ))}
+                        </>
+                    )}
                 </div>
 
                 {/* right section  */}
                 {/* about and settings section  */}
                 <div className="flex flex-col gap-3 order-1 lg:order-2">
                     <AddQuestionAbout />
-                    <BorderBox className="border rounded-xl bg-card shadow-xs">
-                        <TertiaryLabel className="mb-3">
-                            Total questions
+
+                    <BorderBox className="border rounded-xl bg-card">
+                        <TertiaryLabel className="mb-1.5">
+                            Delete exam
                         </TertiaryLabel>
-                        <div className="flex gap-2 flex-wrap">
-                            {questions.map((q, index) => (
-                                <div
-                                    key={index}
-                                    className="size-8 rounded-sm border flex items-center justify-center bg-card"
-                                >
-                                    <p className="text-sm text-secondary-foreground">
-                                        {index + 1}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
+
+                        <p className="mb-4 text-sm text-muted-foreground">
+                            Deleting this exam will also delete all its
+                            questions
+                        </p>
+
+                        <DeleteExamModal>
+                            <Button variant="destructive">
+                                <Trash /> Delete exam
+                            </Button>
+                        </DeleteExamModal>
                     </BorderBox>
                 </div>
             </div>

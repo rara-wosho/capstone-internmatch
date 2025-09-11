@@ -4,8 +4,21 @@ import IconWrapper from "@/components/ui/IconWrapper";
 import { FileText, PlusCircle } from "lucide-react";
 import Link from "next/link";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
+import { createClient } from "@/lib/supabase/server";
+import ErrorUi from "@/components/ui/ErrorUi";
 
-export default function Page() {
+export default async function Page() {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("exams")
+        .select("id, title, created_at");
+
+    if (error) {
+        console.log("error", error.message);
+        return <ErrorUi />;
+    }
+
     return (
         <div>
             <div className="flex items-center pb-5 md:pb-7 border-b mb-5 md:mb-8">
@@ -29,9 +42,9 @@ export default function Page() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                <ManageExamCard />
-                <ManageExamCard />
-                <ManageExamCard />
+                {data?.map((exam) => (
+                    <ManageExamCard key={exam?.id} examData={exam} />
+                ))}
             </div>
         </div>
     );
