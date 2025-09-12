@@ -12,7 +12,7 @@ import {
 
 import { Button } from "../ui/button";
 
-import { FileText, PlusCircle, X, Check, Plus } from "lucide-react";
+import { FileText, PlusCircle, X, Check, Plus, Shuffle } from "lucide-react";
 import TertiaryLabel from "../ui/TertiaryLabel";
 import IconWrapper from "../ui/IconWrapper";
 import FormLabel from "../ui/FormLabel";
@@ -21,8 +21,10 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Textarea } from "../ui/textarea";
 import { ScrollArea } from "../ui/scroll-area";
+import { addQuestionAndChoices } from "@/lib/actions/question";
+import SubmitButton from "../ui/SubmitButton";
 
-export default function AddQuestionModal() {
+export default function AddQuestionModal({ examId }) {
     const [question, setQuestion] = useState("");
     const [choices, setChoices] = useState([
         { text: "", isCorrect: true },
@@ -30,6 +32,7 @@ export default function AddQuestionModal() {
         { text: "", isCorrect: false },
         { text: "", isCorrect: false },
     ]);
+    const [shuffleChoices, setShuffleChoices] = useState(false);
 
     function handleAddChoice() {
         setChoices([...choices, { text: "", isCorrect: false }]);
@@ -64,7 +67,7 @@ export default function AddQuestionModal() {
         }
     }
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
 
         // Check for empty question
@@ -87,7 +90,23 @@ export default function AddQuestionModal() {
             return;
         }
 
-        //    Add question and choices to database
+        // Add question and choices to database
+        // Call server action
+        const result = await addQuestionAndChoices(
+            {
+                question: question.trim(),
+                choices: choices.map((choice) => ({
+                    text: choice.text.trim(),
+                    isCorrect: choice.isCorrect,
+                })),
+            },
+            examId
+        );
+
+        if (!result.success) {
+            toast.error("Unable to add question", result.error);
+            return;
+        }
 
         // Reset form
         setQuestion("");
@@ -121,7 +140,7 @@ export default function AddQuestionModal() {
                 </DialogTrigger>
             </Button>
             <DialogContent className="md:max-w-2xl">
-                <ScrollArea className="h-[85svh]">
+                <ScrollArea className="max-h-[85svh]">
                     <DialogHeader>
                         <DialogTitle className="py-2">
                             <TertiaryLabel className="space-x-2">
@@ -150,9 +169,26 @@ export default function AddQuestionModal() {
                                         />
                                     </div>
                                     <div className="flex flex-col items-start">
-                                        <FormLabel className="mb-2">
-                                            Choices
-                                        </FormLabel>
+                                        <div className="flex items-center  justify-between w-full mb-4 mt-3">
+                                            <FormLabel>Choices</FormLabel>
+                                            <button
+                                                onClick={() =>
+                                                    setShuffleChoices(
+                                                        !shuffleChoices
+                                                    )
+                                                }
+                                                type="button"
+                                                className="mb-1 cursor-pointer text-muted-foreground/50 flex items-center gap-1"
+                                            >
+                                                <Shuffle
+                                                    size={22}
+                                                    className={
+                                                        shuffleChoices &&
+                                                        "text-primary"
+                                                    }
+                                                />
+                                            </button>
+                                        </div>
                                         <div className="w-full space-y-3">
                                             {choices.map((choice, index) => (
                                                 <div
@@ -246,7 +282,7 @@ export default function AddQuestionModal() {
                                             Cancel
                                         </Button>
                                     </DialogClose>
-                                    <Button type="submit">Save question</Button>
+                                    <SubmitButton>Save question</SubmitButton>
                                 </DialogFooter>
                             </form>
                         </div>

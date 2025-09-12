@@ -53,22 +53,21 @@ export default async function Page({ params }) {
                 </BackButton>
 
                 <div className="ms-auto grow md:grow-0 flex justify-end">
-                    <AddQuestionModal />
+                    <AddQuestionModal examId={exam?.id} />
                 </div>
             </div>
-
             {/* content  */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
                 {/* list of questions  */}
 
                 <div className="lg:col-span-2 flex flex-col gap-1 order-2 lg:order-1">
                     {questions.length === 0 && (
-                        <div className="flex items-center justify-center py-10 h-full">
+                        <BorderBox className="border rounded-xl bg-card flex justify-center items-center h-full">
                             <p className="text-center max-w-sm">
                                 No questions yet. Add your first question now by
                                 clicking 'Add question' button.
                             </p>
-                        </div>
+                        </BorderBox>
                     )}
 
                     {questions.length > 0 && (
