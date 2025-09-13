@@ -4,7 +4,18 @@ import BackButton from "@/components/ui/BackButton";
 import BorderBox from "@/components/ui/BorderBox";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import TertiaryLabel from "@/components/ui/TertiaryLabel";
-import { ChevronLeft, NotebookPen, Trash } from "lucide-react";
+import {
+    ChevronLeft,
+    Edit,
+    Globe,
+    Loader,
+    NotebookPen,
+    PlusCircle,
+    Settings,
+    Shuffle,
+    Trash,
+    UserCheck,
+} from "lucide-react";
 
 import AddQuestionModal from "@/components/exam/AddQuestionModal";
 import { createClient } from "@/lib/supabase/server";
@@ -12,6 +23,7 @@ import ErrorUi from "@/components/ui/ErrorUi";
 import { notFound } from "next/navigation";
 import DeleteExamModal from "@/components/exam/DeleteExamModal";
 import { Button } from "@/components/ui/button";
+import AboutExamModal from "@/components/exam/AboutExamModal";
 
 export default async function Page({ params }) {
     const { examId } = await params;
@@ -38,13 +50,23 @@ export default async function Page({ params }) {
 
     const { data: questions, error: questionError } = await supabase
         .from("questions")
-        .select("id, question_text, shuffle_choices")
+        .select(
+            `id, question_text, shuffle_choices,  question_choices (
+            id,
+            choice_text,
+            is_correct
+        )`
+        )
         .eq("exam_id", examId);
+
+    if (questionError) {
+        return <ErrorUi message="Unable to fetch questions." />;
+    }
 
     return (
         <div>
             {/* header  */}
-            <div className="flex items-center pb-5 md:pb-7 border-b mb-5 md:mb-8 flex-wrap md:flex-nowrap gap-x-10 gap-y-4">
+            <div className="flex items-center pb-5 md:pb-7 border-b mb-5 md:mb-8 flex-wrap md:flex-nowrap gap-x-10 gap-y-4 mt-2 md:mt-0">
                 <BackButton className="hover:text-primary-text rounded-sm pe-2 transition-colors">
                     <SecondaryLabel className="gap-2 text-left">
                         <ChevronLeft />
@@ -56,11 +78,46 @@ export default async function Page({ params }) {
                     <AddQuestionModal examId={exam?.id} />
                 </div>
             </div>
-            {/* content  */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-                {/* list of questions  */}
 
-                <div className="lg:col-span-2 flex flex-col gap-1 order-2 lg:order-1">
+            <div className="flex items-center mb-5 gap-3">
+                <AboutExamModal exam={exam}>
+                    <Button variant="primaryOutline" size="sm">
+                        <Edit /> Edit exam
+                    </Button>
+                </AboutExamModal>
+                {/* <Button variant="primaryOutline" size="sm">
+                    <Settings /> Settings
+                </Button> */}
+                <Button
+                    variant="primaryOutline"
+                    size="sm"
+                    disabled={!questions.length}
+                >
+                    <UserCheck /> Responses
+                </Button>
+            </div>
+
+            {/* <div className="mb-4 flex flex-col gap-2">
+                <p className="text-sm text-muted-foreground">
+                    Description:{" "}
+                    <span className="text-secondary-foreground">
+                        Lorem ipsum dolor, sit amet consectetur adipisicing
+                        elit.
+                    </span>
+                </p>
+                <p className="text-sm text-muted-foreground">
+                    Instruction:{" "}
+                    <span className="text-secondary-foreground">
+                        Lorem ipsum dolor, sit amet consectetur adipisicing
+                        elit.
+                    </span>
+                </p>
+            </div> */}
+
+            {/* content  */}
+            <div className="grid grid-cols-1 lg:grid-cols-[2.3fr_1fr] gap-10">
+                {/* list of questions  */}
+                <div className="flex flex-col gap-1 order-2 lg:order-1">
                     {questions.length === 0 && (
                         <BorderBox className="border rounded-xl bg-card flex justify-center items-center h-full">
                             <p className="text-center max-w-sm">
@@ -90,7 +147,8 @@ export default async function Page({ params }) {
                                 <AddQuestionCard
                                     key={q.id}
                                     id={q.id}
-                                    initialQuestion={q.question}
+                                    initialQuestion={q.question_text}
+                                    question_choices={q.question_choices}
                                 />
                             ))}
                         </>
@@ -99,25 +157,8 @@ export default async function Page({ params }) {
 
                 {/* right section  */}
                 {/* about and settings section  */}
-                <div className="flex flex-col gap-3 order-1 lg:order-2">
-                    <AddQuestionAbout />
-
-                    <BorderBox className="border rounded-xl bg-card">
-                        <TertiaryLabel className="mb-1.5">
-                            Delete exam
-                        </TertiaryLabel>
-
-                        <p className="mb-4 text-sm text-muted-foreground">
-                            Deleting this exam will also delete all its
-                            questions
-                        </p>
-
-                        <DeleteExamModal>
-                            <Button variant="destructive">
-                                <Trash /> Delete exam
-                            </Button>
-                        </DeleteExamModal>
-                    </BorderBox>
+                <div className="order-1 lg:order-2">
+                    <AddQuestionAbout exam={exam} />
                 </div>
             </div>
         </div>

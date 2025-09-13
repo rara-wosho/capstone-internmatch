@@ -17,12 +17,10 @@ import FormLabel from "../ui/FormLabel";
 import { Input } from "../ui/input";
 import { Switch } from "../ui/switch";
 
-export default function AboutExamModal() {
+export default function AboutExamModal({ children, exam }) {
     return (
         <Dialog>
-            <DialogTrigger className="ms-auto cursor-pointer">
-                <PenLine size={16} />
-            </DialogTrigger>
+            <DialogTrigger asChild>{children}</DialogTrigger>
             <DialogContent className="p-3 sm:p-5 overflow-y-auto max-h-[90svh]">
                 <div>
                     <DialogHeader>
@@ -37,15 +35,30 @@ export default function AboutExamModal() {
                                 <div className="flex flex-col gap-y-3.5 mb-6">
                                     <div className="flex flex-col items-start">
                                         <FormLabel className="text-left">
+                                            Title
+                                        </FormLabel>
+                                        <Input
+                                            defaultValue={exam?.title}
+                                            placeholder="Enter exam title?"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col items-start">
+                                        <FormLabel className="text-left">
                                             Description
                                         </FormLabel>
-                                        <Input placeholder="What is a software?" />
+                                        <Input
+                                            defaultValue={exam?.description}
+                                            placeholder="Enter description?"
+                                        />
                                     </div>
                                     <div className="flex flex-col items-start">
                                         <FormLabel className="text-left">
                                             Instruction
                                         </FormLabel>
-                                        <Input placeholder="What is a software?" />
+                                        <Input
+                                            defaultValue={exam?.instruction}
+                                            placeholder="Enter instruction?"
+                                        />
                                     </div>
                                 </div>
 
@@ -53,15 +66,17 @@ export default function AboutExamModal() {
                                     <p className="mb-1">Settings</p>
                                     <div className="flex justify-between items-center w-full">
                                         <FormLabel>Publish</FormLabel>
-                                        <Switch />
+                                        <Switch
+                                            defaultChecked={exam?.is_published}
+                                        />
                                     </div>
                                     <div className="flex justify-between items-center w-full">
                                         <FormLabel>Shuffle questions</FormLabel>
-                                        <Switch />
-                                    </div>
-                                    <div className="flex justify-between items-center w-full">
-                                        <FormLabel>Shuffle choices</FormLabel>
-                                        <Switch />
+                                        <Switch
+                                            defaultChecked={
+                                                exam?.shuffle_questions
+                                            }
+                                        />
                                     </div>
                                     <div className="mt-1 w-full flex flex-col items-start">
                                         <FormLabel>Exam duration</FormLabel>

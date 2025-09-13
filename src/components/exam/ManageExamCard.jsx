@@ -6,7 +6,7 @@ import { Skeleton } from "../ui/skeleton";
 
 export default function ManageExamCard({ examData }) {
     return (
-        <div className="bg-card rounded-xl border">
+        <div className="bg-card rounded-xl border shadow-xs">
             <Link href={`/company/internship-exam/manage/${examData?.id}`}>
                 <div className="p-3 md:p-4">
                     <div className="flex items-center gap-2 mb-1">

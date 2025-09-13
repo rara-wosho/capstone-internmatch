@@ -8,15 +8,16 @@ import { Input } from "../ui/input";
 import { toast } from "sonner";
 import { Textarea } from "../ui/textarea";
 
-export default function AddQuestionCard({ id, initialQuestion }) {
+export default function AddQuestionCard({
+    id,
+    initialQuestion,
+    question_choices,
+}) {
     const [isEditing, setIsEditing] = useState(false);
     const [question, setQuestion] = useState(initialQuestion);
-    const [choices, setChoices] = useState([
-        { text: "Choice A", isCorrect: true },
-        { text: "", isCorrect: false },
-        { text: "", isCorrect: false },
-        { text: "", isCorrect: false },
-    ]);
+    const [choices, setChoices] = useState(question_choices || []);
+
+    console.log("choices", question_choices);
 
     function handleAddChoice() {
         setChoices([...choices, { text: "", isCorrect: false }]);
@@ -30,22 +31,22 @@ export default function AddQuestionCard({ id, initialQuestion }) {
         );
     }
 
-    function handleMarkCorrect(index) {
+    function handleMarkCorrect(id) {
         setChoices((prev) =>
-            prev.map((choice, i) => ({
+            prev.map((choice) => ({
                 ...choice,
-                isCorrect: i === index ? true : false,
+                is_correct: choice.id === id ? true : false,
             }))
         );
     }
 
-    function handleDeleteChoice(index, isCorrect) {
+    function handleDeleteChoice(id, isCorrect) {
         if (isCorrect) {
             toast.warning("You cannot delete a correct answer");
             return;
         }
         if (choices.length > 2) {
-            setChoices((prev) => prev.filter((_, i) => i !== index));
+            setChoices((prev) => prev.filter((c) => c.id !== id));
         } else {
             toast.warning("Questions should have at least 2 choices.");
         }
@@ -62,24 +63,26 @@ export default function AddQuestionCard({ id, initialQuestion }) {
         }
 
         // Check if at least one correct answer is chosen
-        const hasCorrectAnswer = choices.some((c) => c.isCorrect === true);
+        const hasCorrectAnswer = choices.some((c) => c.is_correct === true);
         if (!hasCorrectAnswer) {
             toast.error("Please select a correct answer.");
             return;
         }
 
         // ✅ Passed validation
+        // Save changes to database
+
         setIsEditing(false);
     }
 
     function handleCancel() {
         setIsEditing(false);
+        setQuestion(initialQuestion);
+        setChoices(question_choices);
     }
 
     return (
         <BorderBox className="border last:rounded-b-xl bg-card shadow-xs">
-            <p className="text-sm text-muted-foreground mb-2">Question {id}</p>
-
             {/* Display Mode */}
             {!isEditing && (
                 <div className="flex flex-col">
@@ -94,7 +97,12 @@ export default function AddQuestionCard({ id, initialQuestion }) {
                         </button>
                     </div>
                     <p className="text-sm text-muted-foreground">
-                        Answer: Platypus
+                        Answer:{" "}
+                        {question_choices?.map((qc) => {
+                            if (qc.is_correct) {
+                                return qc.choice_text;
+                            }
+                        })}
                     </p>
                 </div>
             )}
@@ -117,7 +125,7 @@ export default function AddQuestionCard({ id, initialQuestion }) {
                             >
                                 <Input
                                     type="text"
-                                    value={choice.text}
+                                    value={choice.choice_text}
                                     onChange={(e) =>
                                         handleChoiceChange(
                                             index,
@@ -133,7 +141,7 @@ export default function AddQuestionCard({ id, initialQuestion }) {
                                     type="button"
                                     size="icon"
                                     className={
-                                        choice.isCorrect &&
+                                        choice.is_correct &&
                                         "bg-green-500/10 text-green-900 dark:text-green-300 dark:bg-green-700/10 border border-green-700"
                                     }
                                     asChild
@@ -145,9 +153,9 @@ export default function AddQuestionCard({ id, initialQuestion }) {
                                             type="radio"
                                             name={`is-correct-${id}`}
                                             id={`is-correct-${id}-${index}`}
-                                            checked={choice.isCorrect}
+                                            checked={choice.is_correct}
                                             onChange={() =>
-                                                handleMarkCorrect(index)
+                                                handleMarkCorrect(choice.id)
                                             }
                                             className="sr-only"
                                         />
@@ -160,8 +168,8 @@ export default function AddQuestionCard({ id, initialQuestion }) {
                                     type="button"
                                     onClick={() =>
                                         handleDeleteChoice(
-                                            index,
-                                            choice.isCorrect
+                                            choice.id,
+                                            choice.is_correct
                                         )
                                     }
                                     variant="dangerOutline"
