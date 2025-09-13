@@ -33,6 +33,7 @@ export default function AddQuestionModal({ examId }) {
     const [question, setQuestion] = useState("");
     const [choices, setChoices] = useState(DEFAULT_CHOICES);
     const [shuffleChoices, setShuffleChoices] = useState(false);
+    const [open, setOpen] = useState(false);
 
     const resetForm = useCallback(() => {
         setQuestion("");
@@ -107,12 +108,15 @@ export default function AddQuestionModal({ examId }) {
 
             toast.success("Question added!");
             resetForm();
+            setTimeout(() => {
+                setOpen(false);
+            }, 600);
         },
         [question, choices, examId, resetForm]
     );
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <Button asChild className="sm:grow-0 grow">
                 <DialogTrigger>
                     <PlusCircle /> Add question

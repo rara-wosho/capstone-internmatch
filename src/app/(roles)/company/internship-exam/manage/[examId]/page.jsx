@@ -5,34 +5,45 @@ import BorderBox from "@/components/ui/BorderBox";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import TertiaryLabel from "@/components/ui/TertiaryLabel";
 import {
+    ChartBar,
     ChevronLeft,
     Edit,
-    Globe,
-    Loader,
     NotebookPen,
-    PlusCircle,
-    Settings,
-    Shuffle,
-    Trash,
     UserCheck,
 } from "lucide-react";
 
 import AddQuestionModal from "@/components/exam/AddQuestionModal";
-import { createClient } from "@/lib/supabase/server";
 import ErrorUi from "@/components/ui/ErrorUi";
 import { notFound } from "next/navigation";
-import DeleteExamModal from "@/components/exam/DeleteExamModal";
 import { Button } from "@/components/ui/button";
 import AboutExamModal from "@/components/exam/AboutExamModal";
+import { createClient } from "@/lib/supabase/server";
+import QuestionReportsModal from "@/components/exam/QuestionReportsModal";
 
 export default async function Page({ params }) {
     const { examId } = await params;
+
     const supabase = await createClient();
 
-    const { data: exam, error } = await supabase
+    const { data: examData, error } = await supabase
         .from("exams")
-        .select()
+        .select(
+            `
+            *, 
+            questions (
+                id, 
+                question_text, 
+                shuffle_choices, 
+                question_choices (
+                    id, 
+                    choice_text, 
+                    is_correct
+                )
+            )
+            `
+        )
         .eq("id", examId)
+        .order("created_at", { referencedTable: "questions", ascending: false })
         .maybeSingle();
 
     if (error) {
@@ -44,101 +55,72 @@ export default async function Page({ params }) {
         );
     }
 
-    if (!exam) {
+    if (!examData) {
         notFound();
     }
 
-    const { data: questions, error: questionError } = await supabase
-        .from("questions")
-        .select(
-            `id, question_text, shuffle_choices,  question_choices (
-            id,
-            choice_text,
-            is_correct
-        )`
-        )
-        .eq("exam_id", examId);
-
-    if (questionError) {
-        return <ErrorUi message="Unable to fetch questions." />;
-    }
+    const exam = examData;
+    const questions = examData.questions || [];
 
     return (
         <div>
-            {/* header  */}
+            {/* header */}
             <div className="flex items-center pb-5 md:pb-7 border-b mb-5 md:mb-8 flex-wrap md:flex-nowrap gap-x-10 gap-y-4 mt-2 md:mt-0">
                 <BackButton className="hover:text-primary-text rounded-sm pe-2 transition-colors">
                     <SecondaryLabel className="gap-2 text-left">
                         <ChevronLeft />
-                        <span>{exam?.title}</span>
+                        <span>{exam.title}</span>
                     </SecondaryLabel>
                 </BackButton>
 
                 <div className="ms-auto grow md:grow-0 flex justify-end">
-                    <AddQuestionModal examId={exam?.id} />
+                    <AddQuestionModal examId={exam.id} />
                 </div>
             </div>
 
-            <div className="flex items-center mb-5 gap-3">
+            <div className="flex items-center flex-wrap mb-5 gap-3">
                 <AboutExamModal exam={exam}>
                     <Button variant="primaryOutline" size="sm">
                         <Edit /> Edit exam
                     </Button>
                 </AboutExamModal>
-                {/* <Button variant="primaryOutline" size="sm">
-                    <Settings /> Settings
-                </Button> */}
                 <Button
                     variant="primaryOutline"
                     size="sm"
                     disabled={!questions.length}
                 >
-                    <UserCheck /> Responses
+                    <UserCheck /> Examinees
                 </Button>
+                <QuestionReportsModal examId={exam?.id}>
+                    <Button variant="primaryOutline" size="sm">
+                        <ChartBar /> Reports
+                    </Button>
+                </QuestionReportsModal>
             </div>
 
-            {/* <div className="mb-4 flex flex-col gap-2">
-                <p className="text-sm text-muted-foreground">
-                    Description:{" "}
-                    <span className="text-secondary-foreground">
-                        Lorem ipsum dolor, sit amet consectetur adipisicing
-                        elit.
-                    </span>
-                </p>
-                <p className="text-sm text-muted-foreground">
-                    Instruction:{" "}
-                    <span className="text-secondary-foreground">
-                        Lorem ipsum dolor, sit amet consectetur adipisicing
-                        elit.
-                    </span>
-                </p>
-            </div> */}
-
-            {/* content  */}
+            {/* content */}
             <div className="grid grid-cols-1 lg:grid-cols-[2.3fr_1fr] gap-10">
-                {/* list of questions  */}
+                {/* list of questions */}
                 <div className="flex flex-col gap-1 order-2 lg:order-1">
-                    {questions.length === 0 && (
+                    {questions.length === 0 ? (
                         <BorderBox className="border rounded-xl bg-card flex justify-center items-center h-full">
-                            <p className="text-center max-w-sm">
+                            <p className="text-center max-w-sm py-14">
                                 No questions yet. Add your first question now by
                                 clicking 'Add question' button.
                             </p>
                         </BorderBox>
-                    )}
-
-                    {questions.length > 0 && (
+                    ) : (
                         <>
                             <BorderBox className="border rounded-t-xl bg-card shadow-xs">
                                 <TertiaryLabel>
                                     <NotebookPen
                                         size={18}
                                         className="text-amber-600"
-                                    />{" "}
+                                    />
                                     <p>Manage Questions</p>
                                     <div className="ms-auto">
                                         <p className="text-sm px-2 border rounded-sm">
-                                            50
+                                            {questions.length}
                                         </p>
                                     </div>
                                 </TertiaryLabel>
@@ -146,7 +128,7 @@ export default async function Page({ params }) {
                             {questions.map((q) => (
                                 <AddQuestionCard
                                     key={q.id}
-                                    id={q.id}
+                                    questionId={q.id}
                                     initialQuestion={q.question_text}
                                     question_choices={q.question_choices}
                                 />
@@ -155,10 +137,12 @@ export default async function Page({ params }) {
                     )}
                 </div>
 
-                {/* right section  */}
-                {/* about and settings section  */}
-                <div className="order-1 lg:order-2">
-                    <AddQuestionAbout exam={exam} />
+                {/* right section */}
+                {/* about and settings section */}
+                <div className="order-1 lg:order-2 relative">
+                    <div className="sticky top-20">
+                        <AddQuestionAbout exam={exam} />
+                    </div>
                 </div>
             </div>
         </div>

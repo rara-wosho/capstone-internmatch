@@ -10,9 +10,10 @@ import ErrorUi from "@/components/ui/ErrorUi";
 export default async function Page() {
     const supabase = await createClient();
 
-    const { data, error } = await supabase
+    const { data: exams, error } = await supabase
         .from("exams")
-        .select("id, title, created_at");
+        .select("id, title, created_at")
+        .order("created_at", { ascending: false });
 
     if (error) {
         console.log("error", error.message);
@@ -21,7 +22,7 @@ export default async function Page() {
 
     return (
         <>
-            <div className="flex items-center pb-5 md:pb-7 border-b mb-5 md:mb-8">
+            <div className="flex items-center pb-5 md:pb-7 border-b mb-5 md:mb-8 mt-2 md:mt-0">
                 <SecondaryLabel className="gap-2">
                     <IconWrapper className="hidden md:inline-block">
                         <FileText size={16} />
@@ -42,7 +43,7 @@ export default async function Page() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                {data?.map((exam) => (
+                {exams?.map((exam) => (
                     <ManageExamCard key={exam?.id} examData={exam} />
                 ))}
             </div>

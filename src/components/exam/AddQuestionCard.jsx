@@ -1,89 +1,164 @@
 "use client";
 
 import { PenLine, X, Plus, Check } from "lucide-react";
-import BorderBox from "../ui/BorderBox";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+import BorderBox from "../ui/BorderBox";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { toast } from "sonner";
 import { Textarea } from "../ui/textarea";
+import { createClient } from "@/lib/supabase/client";
 
 export default function AddQuestionCard({
-    id,
+    questionId,
     initialQuestion,
-    question_choices,
+    question_choices = [],
 }) {
+    const router = useRouter();
+
     const [isEditing, setIsEditing] = useState(false);
     const [question, setQuestion] = useState(initialQuestion);
-    const [choices, setChoices] = useState(question_choices || []);
+    const [choices, setChoices] = useState(
+        question_choices.map((c) => ({
+            id: c.id ?? null,
+            choice_text: c.choice_text,
+            is_correct: c.is_correct,
+        }))
+    );
+    const [loading, setLoading] = useState(false);
 
-    console.log("choices", question_choices);
-
+    console.log(choices);
+    // ---- Choice helpers ----
     function handleAddChoice() {
-        setChoices([...choices, { text: "", isCorrect: false }]);
+        setChoices((prev) => [
+            ...prev,
+            { id: undefined, choice_text: "", is_correct: false },
+        ]);
     }
 
-    function handleChoiceChange(index, field, value) {
+    function handleChoiceChange(index, value) {
         setChoices((prev) =>
-            prev.map((choice, i) =>
-                i === index ? { ...choice, [field]: value } : choice
-            )
+            prev.map((c, i) => (i === index ? { ...c, choice_text: value } : c))
         );
     }
 
-    function handleMarkCorrect(id) {
+    function handleMarkCorrect(index) {
         setChoices((prev) =>
-            prev.map((choice) => ({
-                ...choice,
-                is_correct: choice.id === id ? true : false,
-            }))
+            prev.map((c, i) => ({ ...c, is_correct: i === index }))
         );
     }
 
-    function handleDeleteChoice(id, isCorrect) {
-        if (isCorrect) {
-            toast.warning("You cannot delete a correct answer");
+    function handleDeleteChoice(index) {
+        if (choices[index].is_correct) {
+            toast.warning("You cannot delete the correct answer.");
             return;
         }
-        if (choices.length > 2) {
-            setChoices((prev) => prev.filter((c) => c.id !== id));
-        } else {
-            toast.warning("Questions should have at least 2 choices.");
+        if (choices.length <= 2) {
+            toast.warning("A question must have at least 2 choices.");
+            return;
         }
+        setChoices((prev) => prev.filter((_, i) => i !== index));
     }
 
-    function handleSubmit(e) {
+    // ---- Submit ----
+    async function handleSubmit(e) {
         e.preventDefault();
+        setLoading(true);
+        const supabase = createClient();
 
-        // Check for empty fields
-        const hasEmptyField = choices.some((c) => c.text.trim() === "");
-        if (hasEmptyField) {
-            toast.error("You have a choice with no value.");
+        // Validation
+        if (!question.trim()) {
+            toast.error("Question text cannot be empty.");
+            setLoading(false);
             return;
         }
 
-        // Check if at least one correct answer is chosen
-        const hasCorrectAnswer = choices.some((c) => c.is_correct === true);
-        if (!hasCorrectAnswer) {
+        const hasEmptyChoice = choices.some(
+            (c) => !c.choice_text || !c.choice_text.trim()
+        );
+        if (hasEmptyChoice) {
+            toast.error("Choices cannot be empty.");
+            setLoading(false);
+            return;
+        }
+
+        const hasCorrect = choices.some((c) => c.is_correct);
+        if (!hasCorrect) {
             toast.error("Please select a correct answer.");
+            setLoading(false);
             return;
         }
 
-        // ✅ Passed validation
-        // Save changes to database
+        try {
+            // 1. Update question
+            const { error: qError } = await supabase
+                .from("questions")
+                .update({ question_text: question })
+                .eq("id", questionId);
 
-        setIsEditing(false);
+            if (qError) throw new Error("Unable to update question");
+
+            // 2. Upsert choices
+            const toUpsert = choices.map((c) => ({
+                id: c.id || undefined,
+                choice_text: c.choice_text,
+                is_correct: c.is_correct,
+                question_id: questionId,
+            }));
+
+            const { error: upsertErr } = await supabase
+                .from("question_choices")
+                .upsert(toUpsert, { onConflict: "id" });
+
+            if (upsertErr) throw new Error(upsertErr.message);
+
+            // 3. Delete removed choices (compare by id)
+            const originalIds = new Set(
+                question_choices.map((c) => c.id).filter(Boolean)
+            );
+            const currentIds = new Set(
+                choices.map((c) => c.id).filter(Boolean)
+            );
+            const idsToDelete = [...originalIds].filter(
+                (id) => !currentIds.has(id)
+            );
+
+            if (idsToDelete.length > 0) {
+                const { error: delErr } = await supabase
+                    .from("question_choices")
+                    .delete()
+                    .in("id", idsToDelete);
+                if (delErr) throw new Error("Unable to delete old choices");
+            }
+
+            toast.success("Changes saved!");
+            router.refresh();
+            setIsEditing(false);
+        } catch (err) {
+            toast.error(err.message || "Something went wrong.");
+        } finally {
+            setLoading(false);
+        }
     }
 
     function handleCancel() {
         setIsEditing(false);
         setQuestion(initialQuestion);
-        setChoices(question_choices);
+        setChoices(
+            question_choices.map((c) => ({
+                id: c.id ?? null,
+                choice_text: c.choice_text,
+                is_correct: c.is_correct,
+            }))
+        );
     }
 
+    // ---- UI ----
     return (
         <BorderBox className="border last:rounded-b-xl bg-card shadow-xs">
-            {/* Display Mode */}
+            {/* ---------- Display Mode ---------- */}
             {!isEditing && (
                 <div className="flex flex-col">
                     <div className="flex items-center mb-1">
@@ -98,18 +173,17 @@ export default function AddQuestionCard({
                     </div>
                     <p className="text-sm text-muted-foreground">
                         Answer:{" "}
-                        {question_choices?.map((qc) => {
-                            if (qc.is_correct) {
-                                return qc.choice_text;
-                            }
-                        })}
+                        {choices
+                            .filter((c) => c.is_correct)
+                            .map((c) => c.choice_text)
+                            .join(", ")}
                     </p>
                 </div>
             )}
 
-            {/* Edit Mode */}
+            {/* ---------- Edit Mode ---------- */}
             {isEditing && (
-                <form className="space-y-3" onSubmit={handleSubmit}>
+                <form className="space-y-3 py-4" onSubmit={handleSubmit}>
                     <Textarea
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
@@ -120,16 +194,14 @@ export default function AddQuestionCard({
                     <div className="space-y-3">
                         {choices.map((choice, index) => (
                             <div
-                                key={index}
+                                key={choice.id ?? index}
                                 className="flex items-center gap-2"
                             >
                                 <Input
-                                    type="text"
                                     value={choice.choice_text}
                                     onChange={(e) =>
                                         handleChoiceChange(
                                             index,
-                                            "text",
                                             e.target.value
                                         )
                                     }
@@ -140,40 +212,24 @@ export default function AddQuestionCard({
                                     variant="secondary"
                                     type="button"
                                     size="icon"
+                                    aria-label="Mark as correct"
                                     className={
-                                        choice.is_correct &&
-                                        "bg-green-500/10 text-green-900 dark:text-green-300 dark:bg-green-700/10 border border-green-700"
+                                        choice.is_correct
+                                            ? "bg-green-500/10 text-green-900 dark:text-green-300 dark:bg-green-700/10 border border-green-700"
+                                            : ""
                                     }
-                                    asChild
+                                    onClick={() => handleMarkCorrect(index)}
                                 >
-                                    <label
-                                        htmlFor={`is-correct-${id}-${index}`}
-                                    >
-                                        <input
-                                            type="radio"
-                                            name={`is-correct-${id}`}
-                                            id={`is-correct-${id}-${index}`}
-                                            checked={choice.is_correct}
-                                            onChange={() =>
-                                                handleMarkCorrect(choice.id)
-                                            }
-                                            className="sr-only"
-                                        />
-                                        <Check size={16} />
-                                    </label>
+                                    <Check size={16} />
                                 </Button>
 
                                 <Button
                                     size="icon"
                                     type="button"
-                                    onClick={() =>
-                                        handleDeleteChoice(
-                                            choice.id,
-                                            choice.is_correct
-                                        )
-                                    }
                                     variant="dangerOutline"
                                     aria-label="Delete choice"
+                                    onClick={() => handleDeleteChoice(index)}
+                                    disabled={choices.length <= 2}
                                 >
                                     <X size={16} />
                                 </Button>
@@ -199,7 +255,9 @@ export default function AddQuestionCard({
                             >
                                 Cancel
                             </Button>
-                            <Button size="sm">Save changes</Button>
+                            <Button size="sm" disabled={loading}>
+                                {loading ? "Saving..." : "Save changes"}
+                            </Button>
                         </div>
                     </div>
                 </form>

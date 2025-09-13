@@ -19,3 +19,15 @@ export async function createExam(formData) {
 
     redirect(`/company/internship-exam/manage/${data?.id}`);
 }
+
+export async function deleteExam(examId) {
+    const supabase = await createClient();
+
+    const { error } = await supabase.from("exams").delete().eq("id", examId);
+
+    if (error) {
+        return { success: false, error: error.message };
+    }
+
+    return { success: true, error: null };
+}
