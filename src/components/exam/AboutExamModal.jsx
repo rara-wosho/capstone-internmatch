@@ -16,22 +16,24 @@ import IconWrapper from "../ui/IconWrapper";
 import FormLabel from "../ui/FormLabel";
 import { Input } from "../ui/input";
 import { Switch } from "../ui/switch";
+import { ScrollArea } from "../ui/scroll-area";
 
 export default function AboutExamModal({ children, exam }) {
     return (
         <Dialog>
             <DialogTrigger asChild>{children}</DialogTrigger>
-            <DialogContent className="p-3 sm:p-5 overflow-y-auto max-h-[90svh]">
+            <DialogContent className="p-3 sm:p-5 sm:max-w-2xl">
                 <div>
                     <DialogHeader>
-                        <DialogTitle className="py-1">
-                            <TertiaryLabel>
-                                <p>Edit exam details</p>
-                            </TertiaryLabel>
-                        </DialogTitle>
-
-                        <div className=" mt-2">
-                            <form action="">
+                        <div className="border-b pb-3">
+                            <DialogTitle className="py-1">
+                                <TertiaryLabel>
+                                    <p>Edit exam</p>
+                                </TertiaryLabel>
+                            </DialogTitle>
+                        </div>
+                        <form>
+                            <ScrollArea className="h-[65svh]">
                                 <div className="flex flex-col gap-y-3.5 mb-6">
                                     <div className="flex flex-col items-start">
                                         <FormLabel className="text-left">
@@ -87,15 +89,14 @@ export default function AboutExamModal({ children, exam }) {
                                         <Input placeholder="minutes" />
                                     </div>
                                 </div>
-
-                                <DialogFooter>
-                                    <DialogClose asChild>
-                                        <Button variant="ghost">Cancel</Button>
-                                    </DialogClose>
-                                    <Button type="submit">Save changes</Button>
-                                </DialogFooter>
-                            </form>
-                        </div>
+                            </ScrollArea>
+                            <DialogFooter className="pt-2.5">
+                                <DialogClose asChild>
+                                    <Button variant="ghost">Cancel</Button>
+                                </DialogClose>
+                                <Button type="submit">Save changes</Button>
+                            </DialogFooter>
+                        </form>
                     </DialogHeader>
                 </div>
             </DialogContent>

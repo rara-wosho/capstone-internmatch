@@ -140,154 +140,148 @@ export default function AddQuestionModal({ examId }) {
                 </DialogTrigger>
             </Button>
             <DialogContent className="md:max-w-2xl">
-                <ScrollArea className="max-h-[85svh]">
-                    <DialogHeader>
-                        <DialogTitle className="py-2">
-                            <TertiaryLabel className="space-x-2">
-                                <IconWrapper>
-                                    <FileText size={16} />
-                                </IconWrapper>
-                                <p>New Question</p>
-                            </TertiaryLabel>
-                        </DialogTitle>
-
-                        <div className="mt-2">
-                            <form onSubmit={handleSubmit}>
-                                <div className="flex flex-col gap-3 mb-6">
-                                    <div className="flex flex-col items-start">
-                                        <FormLabel className="text-left mb-2">
-                                            Question
-                                        </FormLabel>
-                                        <Textarea
-                                            value={question}
-                                            onChange={(e) =>
-                                                setQuestion(e.target.value)
+                <DialogHeader>
+                    <DialogTitle>
+                        <TertiaryLabel className="space-x-2">
+                            <IconWrapper>
+                                <FileText size={16} />
+                            </IconWrapper>
+                            <p>New Question</p>
+                        </TertiaryLabel>
+                    </DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSubmit}>
+                    <ScrollArea className="h-[70svh]">
+                        <div className="flex flex-col gap-3 mb-6">
+                            <div className="flex flex-col items-start">
+                                <FormLabel className="text-left mb-2">
+                                    Question
+                                </FormLabel>
+                                <Textarea
+                                    value={question}
+                                    onChange={(e) =>
+                                        setQuestion(e.target.value)
+                                    }
+                                    placeholder="Enter your question"
+                                    className="min-h-20"
+                                    required
+                                />
+                            </div>
+                            <div className="flex flex-col items-start">
+                                <div className="flex items-center  justify-between w-full mb-4 mt-3">
+                                    <FormLabel>Choices</FormLabel>
+                                    <button
+                                        onClick={() =>
+                                            setShuffleChoices(!shuffleChoices)
+                                        }
+                                        type="button"
+                                        className="mb-1 cursor-pointer text-muted-foreground/50 flex items-center gap-1"
+                                    >
+                                        <Shuffle
+                                            size={22}
+                                            className={
+                                                shuffleChoices && "text-primary"
                                             }
-                                            placeholder="Enter your question"
-                                            className="min-h-20"
-                                            required
                                         />
-                                    </div>
-                                    <div className="flex flex-col items-start">
-                                        <div className="flex items-center  justify-between w-full mb-4 mt-3">
-                                            <FormLabel>Choices</FormLabel>
-                                            <button
-                                                onClick={() =>
-                                                    setShuffleChoices(
-                                                        !shuffleChoices
+                                    </button>
+                                </div>
+                                <div className="w-full space-y-3">
+                                    {choices.map((choice, index) => (
+                                        <div
+                                            key={index}
+                                            className="flex items-center gap-2"
+                                        >
+                                            <Input
+                                                value={choice.text}
+                                                onChange={(e) =>
+                                                    handleChoiceChange(
+                                                        index,
+                                                        "text",
+                                                        e.target.value
                                                     )
                                                 }
+                                                placeholder={`Choice ${
+                                                    index + 1
+                                                }`}
+                                                className="flex-1"
+                                                required
+                                            />
+
+                                            <Button
+                                                variant="secondary"
                                                 type="button"
-                                                className="mb-1 cursor-pointer text-muted-foreground/50 flex items-center gap-1"
+                                                size="icon"
+                                                className={
+                                                    choice.isCorrect
+                                                        ? "bg-green-500/10 text-green-900 dark:text-green-300 dark:bg-green-700/10 border border-green-700"
+                                                        : ""
+                                                }
+                                                asChild
                                             >
-                                                <Shuffle
-                                                    size={22}
-                                                    className={
-                                                        shuffleChoices &&
-                                                        "text-primary"
-                                                    }
-                                                />
-                                            </button>
-                                        </div>
-                                        <div className="w-full space-y-3">
-                                            {choices.map((choice, index) => (
-                                                <div
-                                                    key={index}
-                                                    className="flex items-center gap-2"
+                                                <label
+                                                    htmlFor={`is-correct-${index}`}
                                                 >
-                                                    <Input
-                                                        value={choice.text}
-                                                        onChange={(e) =>
-                                                            handleChoiceChange(
-                                                                index,
-                                                                "text",
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        placeholder={`Choice ${
-                                                            index + 1
-                                                        }`}
-                                                        className="flex-1"
-                                                        required
-                                                    />
-
-                                                    <Button
-                                                        variant="secondary"
-                                                        type="button"
-                                                        size="icon"
-                                                        className={
+                                                    <input
+                                                        type="radio"
+                                                        name="is-correct"
+                                                        id={`is-correct-${index}`}
+                                                        checked={
                                                             choice.isCorrect
-                                                                ? "bg-green-500/10 text-green-900 dark:text-green-300 dark:bg-green-700/10 border border-green-700"
-                                                                : ""
                                                         }
-                                                        asChild
-                                                    >
-                                                        <label
-                                                            htmlFor={`is-correct-${index}`}
-                                                        >
-                                                            <input
-                                                                type="radio"
-                                                                name="is-correct"
-                                                                id={`is-correct-${index}`}
-                                                                checked={
-                                                                    choice.isCorrect
-                                                                }
-                                                                onChange={() =>
-                                                                    handleMarkCorrect(
-                                                                        index
-                                                                    )
-                                                                }
-                                                                className="sr-only"
-                                                            />
-                                                            <Check size={16} />
-                                                        </label>
-                                                    </Button>
-
-                                                    <Button
-                                                        size="icon"
-                                                        type="button"
-                                                        onClick={() =>
-                                                            handleDeleteChoice(
-                                                                index,
-                                                                choice.isCorrect
+                                                        onChange={() =>
+                                                            handleMarkCorrect(
+                                                                index
                                                             )
                                                         }
-                                                        variant="dangerOutline"
-                                                        aria-label="Delete choice"
-                                                    >
-                                                        <X size={16} />
-                                                    </Button>
-                                                </div>
-                                            ))}
-                                        </div>
+                                                        className="sr-only"
+                                                    />
+                                                    <Check size={16} />
+                                                </label>
+                                            </Button>
 
-                                        <button
-                                            type="button"
-                                            onClick={handleAddChoice}
-                                            className="mt-3 flex items-center gap-1 text-sm text-accent-foreground cursor-pointer"
-                                        >
-                                            <Plus size={14} className="mr-1" />
-                                            Add choice
-                                        </button>
-                                    </div>
+                                            <Button
+                                                size="icon"
+                                                type="button"
+                                                onClick={() =>
+                                                    handleDeleteChoice(
+                                                        index,
+                                                        choice.isCorrect
+                                                    )
+                                                }
+                                                variant="dangerOutline"
+                                                aria-label="Delete choice"
+                                            >
+                                                <X size={16} />
+                                            </Button>
+                                        </div>
+                                    ))}
                                 </div>
 
-                                <DialogFooter className="gap-2">
-                                    <DialogClose asChild>
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={handleCancel}
-                                        >
-                                            Cancel
-                                        </Button>
-                                    </DialogClose>
-                                    <SubmitButton>Save question</SubmitButton>
-                                </DialogFooter>
-                            </form>
+                                <button
+                                    type="button"
+                                    onClick={handleAddChoice}
+                                    className="mt-3 flex items-center gap-1 text-sm text-accent-foreground cursor-pointer"
+                                >
+                                    <Plus size={14} className="mr-1" />
+                                    Add choice
+                                </button>
+                            </div>
                         </div>
-                    </DialogHeader>
-                </ScrollArea>
+                    </ScrollArea>
+
+                    <DialogFooter className="gap-2 pt-2">
+                        <DialogClose asChild>
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                onClick={handleCancel}
+                            >
+                                Cancel
+                            </Button>
+                        </DialogClose>
+                        <SubmitButton>Save question</SubmitButton>
+                    </DialogFooter>
+                </form>
             </DialogContent>
         </Dialog>
     );
