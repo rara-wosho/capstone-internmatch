@@ -27,8 +27,10 @@ import {
 
 import { updateExamDetails } from "@/lib/actions/exam";
 import { useState, useTransition } from "react";
-import { Edit, Loader } from "lucide-react";
+import { Edit, FileText, Info, Loader } from "lucide-react";
 import { toast } from "sonner";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import IconWrapper from "../ui/IconWrapper";
 
 export default function AboutExamModal({ exam }) {
     const [isPending, startTransition] = useTransition();
@@ -45,7 +47,7 @@ export default function AboutExamModal({ exam }) {
                 toast.success("Exam details updated");
                 setTimeout(() => {
                     setOpen(false);
-                }, 600);
+                }, 800);
             } else {
                 toast.error(result?.error || "Failed to update exam");
             }
@@ -63,7 +65,10 @@ export default function AboutExamModal({ exam }) {
             <DialogContent className="p-3 sm:p-5 sm:max-w-2xl">
                 <DialogHeader>
                     <div className="border-b pb-3">
-                        <DialogTitle className="py-1">
+                        <DialogTitle className="py-1 flex items-center gap-2">
+                            <IconWrapper>
+                                <FileText size={17} />
+                            </IconWrapper>
                             <TertiaryLabel>Edit exam</TertiaryLabel>
                         </DialogTitle>
                     </div>
@@ -112,61 +117,76 @@ export default function AboutExamModal({ exam }) {
                             </div>
 
                             <div className="flex flex-col mb-6 gap-y-2 items-start">
-                                <p className="mb-1">Settings</p>
+                                <p className="mb-1 text-sm font-bold tracking-wider text-muted-foreground">
+                                    Settings
+                                </p>
 
                                 <div className="flex justify-between items-center w-full">
-                                    <FormLabel>Publish</FormLabel>
+                                    <FormLabel>
+                                        <label htmlFor="publish">Publish</label>
+                                    </FormLabel>
                                     <Switch
+                                        id="publish"
+                                        className="mb-1"
                                         name="is_published"
                                         defaultChecked={exam?.is_published}
                                     />
                                 </div>
 
                                 <div className="flex justify-between items-center w-full">
-                                    <FormLabel>Shuffle questions</FormLabel>
+                                    <FormLabel>
+                                        <label htmlFor="shuffle">
+                                            Shuffle questions
+                                        </label>
+                                    </FormLabel>
                                     <Switch
+                                        className="mb-1"
+                                        id="shuffle"
                                         name="shuffle_questions"
                                         defaultChecked={exam?.shuffle_questions}
                                     />
                                 </div>
 
-                                <div className="mt-1 w-full flex flex-col items-start">
-                                    <FormLabel>Exam duration</FormLabel>
-                                    <Select
+                                <div className=" mt-3 flex flex-col items-start w-full">
+                                    <FormLabel className="text-left">
+                                        Exam Duration (minutes)
+                                    </FormLabel>
+                                    <Input
                                         name="duration"
+                                        type="number"
+                                        placeholder="Enter exam duration"
                                         defaultValue={exam?.duration}
-                                    >
-                                        <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Exam duration" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="30">
-                                                30 minutes
-                                            </SelectItem>
-                                            <SelectItem value="60">
-                                                1 hour
-                                            </SelectItem>
-                                            <SelectItem value="90">
-                                                1 hour, 30 minutes
-                                            </SelectItem>
-                                            <SelectItem value="120">
-                                                2 hours
-                                            </SelectItem>
-                                            <SelectItem value="150">
-                                                2 hours, 30 minutes
-                                            </SelectItem>
-                                            <SelectItem value="180">
-                                                3 hours
-                                            </SelectItem>
-                                            <SelectItem value="0">
-                                                No time limit
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
+                                    />
                                 </div>
 
-                                <div className="w-full flex flex-col items-start">
-                                    <FormLabel>Mode</FormLabel>
+                                <div className="mt-2 w-full flex flex-col items-start">
+                                    <div className="flex items-center gap-2">
+                                        <Popover>
+                                            <PopoverTrigger className="flex items-center gap-1.5">
+                                                <FormLabel>Mode</FormLabel>
+                                                <Info
+                                                    className="mb-1"
+                                                    size={14}
+                                                />
+                                            </PopoverTrigger>
+                                            <PopoverContent>
+                                                <p className="text-xs text-muted-foreground mb-2">
+                                                    <span className="text-secondary-foreground font-semibold">
+                                                        Classic mode
+                                                    </span>{" "}
+                                                    : students will see 5
+                                                    questions at a time.
+                                                </p>
+                                                <p className="text-xs text-muted-foreground">
+                                                    <span className="text-secondary-foreground font-semibold">
+                                                        Focus mode
+                                                    </span>{" "}
+                                                    : students will see 1
+                                                    question at a time.
+                                                </p>
+                                            </PopoverContent>
+                                        </Popover>
+                                    </div>
                                     <Select
                                         name="mode"
                                         defaultValue={exam?.mode || "classic"}

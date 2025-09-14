@@ -3,10 +3,7 @@ import { dateFormatter } from "@/utils/date-formatter";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Skeleton } from "../ui/skeleton";
-import AlertModal from "../ui/AlertModal";
-import { Trash } from "lucide-react";
 import DeleteExamModal from "./DeleteExamModal";
-import { Button } from "../ui/button";
 
 export default function ManageExamCard({ examData }) {
     return (
@@ -26,11 +23,7 @@ export default function ManageExamCard({ examData }) {
                     <GetQuestionCount id={examData?.id} />
                 </Suspense>
                 <div>
-                    <DeleteExamModal examId={examData?.id}>
-                        <button className="cursor-pointer">
-                            <Trash size={16} className="text-destructive" />
-                        </button>
-                    </DeleteExamModal>
+                    <DeleteExamModal examId={examData?.id} type="icon" />
                 </div>
             </div>
         </div>

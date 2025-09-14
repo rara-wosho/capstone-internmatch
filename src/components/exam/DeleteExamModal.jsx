@@ -16,8 +16,9 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { deleteExam } from "@/lib/actions/exam";
+import { Trash } from "lucide-react";
 
-export default function DeleteExamModal({ examId, children }) {
+export default function DeleteExamModal({ examId, type = "button" }) {
     const [open, setOpen] = useState(false);
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
@@ -41,9 +42,19 @@ export default function DeleteExamModal({ examId, children }) {
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogTrigger asChild className="w-full">
-                {children}
+                {type === "button" ? (
+                    <Button variant="destructive" type="button">
+                        <Trash /> Delete exam
+                    </Button>
+                ) : (
+                    <button
+                        type="button"
+                        className="text-destructive cursor-pointer"
+                    >
+                        <Trash size={16} />
+                    </button>
+                )}
             </AlertDialogTrigger>
-
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Delete this exam?</AlertDialogTitle>

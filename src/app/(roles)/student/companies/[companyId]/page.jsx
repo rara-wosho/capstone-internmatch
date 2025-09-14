@@ -62,7 +62,8 @@ export default async function Page({ params }) {
 
                                     {data?.province ? (
                                         <div className="text-sm text-muted-foreground mb-2">
-                                            {data?.city}, {data?.province}
+                                            {data?.barangay}, {data?.city},{" "}
+                                            {data?.province}
                                         </div>
                                     ) : (
                                         <p className="text-sm text-muted-foreground font-light mb-2 tracking-wider">

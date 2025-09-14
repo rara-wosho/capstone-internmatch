@@ -25,7 +25,7 @@ export default function ExamDetailsForm() {
         title: "",
         description: "",
         instruction: "",
-        duration: "60",
+        duration: 60,
         mode: "classic",
         is_published: true,
     });
@@ -83,24 +83,15 @@ export default function ExamDetailsForm() {
                 />
             </div>
             <div className="flex flex-col mb-3">
-                <FormLabel>Exam duration</FormLabel>
-                <Select
+                <FormLabel className="text-left">
+                    Exam Duration (minutes)
+                </FormLabel>
+                <Input
                     value={formData.duration}
-                    onValueChange={(val) => handleChange("duration", val)}
-                >
-                    <SelectTrigger>
-                        <SelectValue placeholder="Exam duration" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="30">30 minutes</SelectItem>
-                        <SelectItem value="60">1 hour</SelectItem>
-                        <SelectItem value="90">1 hour, 30 minutes</SelectItem>
-                        <SelectItem value="120">2 hours</SelectItem>
-                        <SelectItem value="150">2 hours, 30 minutes</SelectItem>
-                        <SelectItem value="180">3 hours</SelectItem>
-                        <SelectItem value="0">No time limit</SelectItem>
-                    </SelectContent>
-                </Select>
+                    onChange={(e) => handleChange("duration", e.target.value)}
+                    type="number"
+                    placeholder="Enter exam duration"
+                />
             </div>
 
             <div className="flex items-center justify-between">

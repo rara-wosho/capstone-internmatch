@@ -1,3 +1,10 @@
+import SpinLoader from "@/components/ui/SpinLoader";
+
 export default function Page() {
-    return <div>company dashboard</div>;
+    return (
+        <div>
+            <SpinLoader />
+            company dashboard
+        </div>
+    );
 }

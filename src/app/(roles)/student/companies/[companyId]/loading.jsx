@@ -1,6 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChevronLeft, Globe, ArrowUpRight, Star } from "lucide-react";
-import SecondaryLabel from "@/components/ui/SecondaryLabel";
+import { ChevronLeft, Globe, ArrowUpRight, Star, Info } from "lucide-react";
 import TertiaryLabel from "@/components/ui/TertiaryLabel";
 import BackButton from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/button";
@@ -85,6 +84,16 @@ export default function LoadingCompanyProfile() {
                         <Skeleton className="h-4 w-full mb-2" />
                         <Skeleton className="h-4 w-4/6 mb-6" />
                     </BorderBox>
+                </section>
+
+                <section className="px-2">
+                    <div className="border-b mb-6 pb-3 flex items-center  justify-between">
+                        <TertiaryLabel>Examination</TertiaryLabel>
+                        <Info size={18} />
+                    </div>
+
+                    <Skeleton className="h-4 mb-3.5 w-36" />
+                    <Skeleton className="h-3 w-56" />
                 </section>
             </div>
         </>

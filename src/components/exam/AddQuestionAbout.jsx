@@ -79,11 +79,7 @@ export default function AddQuestionAbout({ exam }) {
                 </div>
             </div>
 
-            <DeleteExamModal examId={exam?.id}>
-                <Button variant="destructive">
-                    <Trash /> Delete exam
-                </Button>
-            </DeleteExamModal>
+            <DeleteExamModal examId={exam.id} type="button" />
         </>
     );
 }

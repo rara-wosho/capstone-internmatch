@@ -1,5 +1,6 @@
 "use client";
 
+import SpinLoader from "@/components/ui/SpinLoader";
 import { createClient } from "@/lib/supabase/client";
 import { Loader } from "lucide-react";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -24,8 +25,8 @@ export function SessionProvider({ children }) {
     return (
         <SessionContext.Provider value={{ session, user, loading }}>
             {loading ? (
-                <div className="w-full min-h-screen flex flex-col items-center justify-center gap-2">
-                    <Loader className="animate-spin" />
+                <div className="w-full min-h-screen flex flex-col items-center justify-center gap-3">
+                    <SpinLoader />
                     <p className="text-sm text-muted-foreground">Please wait</p>
                 </div>
             ) : (

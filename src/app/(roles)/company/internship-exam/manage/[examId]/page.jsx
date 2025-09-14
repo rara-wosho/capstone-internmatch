@@ -115,8 +115,8 @@ export default async function Page({ params }) {
                                     />
                                     <p>Manage Questions</p>
                                     <div className="ms-auto">
-                                        <p className="text-sm px-2 border rounded-sm">
-                                            {questions.length}
+                                        <p className="text-sm px-3 py-1 border border-accent-foreground rounded-full bg-accent text-accent-foreground font-light tracking-wider">
+                                            {questions.length} questions
                                         </p>
                                     </div>
                                 </TertiaryLabel>
