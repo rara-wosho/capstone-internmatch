@@ -6,6 +6,8 @@ import TertiaryLabel from "../ui/TertiaryLabel";
 import AboutExamModal from "./AboutExamModal";
 import DeleteExamModal from "./DeleteExamModal";
 import { Button } from "../ui/button";
+import { formatDuration } from "@/utils/format-duration";
+import { dateFormatter } from "@/utils/date-formatter";
 
 export default function AddQuestionAbout({ exam }) {
     return (
@@ -33,6 +35,22 @@ export default function AddQuestionAbout({ exam }) {
                             : "No instruction provided"}
                     </p>
                 </div>
+
+                <div className="mb-4">
+                    <h3 className="mb-1 text-sm">Date created</h3>
+                    <p className="text-sm text-muted-foreground">
+                        {dateFormatter(exam?.created_at)}
+                    </p>
+                </div>
+
+                {exam?.updated_at !== exam?.created_at && (
+                    <div className="mb-4">
+                        <h3 className="mb-1 text-sm">Updated at</h3>
+                        <p className="text-sm text-muted-foreground">
+                            {dateFormatter(exam?.updated_at, true)}
+                        </p>
+                    </div>
+                )}
             </div>
 
             <div className="border-t mt-4 pt-5 mb-4">
@@ -49,7 +67,9 @@ export default function AddQuestionAbout({ exam }) {
                 </div>
                 <div className="flex justify-between items-center mb-2">
                     <FormLabel>Exam duration</FormLabel>
-                    <p className="text-sm text-muted-foreground">1hr</p>
+                    <p className="text-sm text-muted-foreground">
+                        {formatDuration(exam?.duration)}
+                    </p>
                 </div>
                 <div className="flex justify-between items-center mb-2">
                     <FormLabel>Mode</FormLabel>

@@ -18,7 +18,6 @@ export default function AddQuestionCard({
     question_choices = [],
 }) {
     const router = useRouter();
-    const supabase = createClient();
 
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -78,6 +77,8 @@ export default function AddQuestionCard({
             setLoading(false);
             return;
         }
+
+        const supabase = createClient();
 
         // 1️⃣ Update question
         const { error: qError } = await supabase
@@ -145,6 +146,8 @@ export default function AddQuestionCard({
 
     const handleDeleteQuestion = async () => {
         try {
+            const supabase = createClient();
+
             const { error } = await supabase
                 .from("questions")
                 .delete()

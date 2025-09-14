@@ -79,11 +79,7 @@ export default async function Page({ params }) {
             </div>
 
             <div className="flex items-center flex-wrap mb-5 gap-3">
-                <AboutExamModal exam={exam}>
-                    <Button variant="primaryOutline" size="sm">
-                        <Edit /> Edit exam
-                    </Button>
-                </AboutExamModal>
+                <AboutExamModal exam={exam} />
                 <Button
                     variant="primaryOutline"
                     size="sm"
