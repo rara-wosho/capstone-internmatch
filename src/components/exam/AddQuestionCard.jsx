@@ -1,6 +1,6 @@
 "use client";
 
-import { PenLine, X, Plus, Check } from "lucide-react";
+import { PenLine, X, Plus, Check, Trash } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -10,6 +10,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { createClient } from "@/lib/supabase/client";
+import AlertModal from "../ui/AlertModal";
 
 export default function AddQuestionCard({
     questionId,
@@ -17,40 +18,34 @@ export default function AddQuestionCard({
     question_choices = [],
 }) {
     const router = useRouter();
+    const supabase = createClient();
 
     const [isEditing, setIsEditing] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     const [question, setQuestion] = useState(initialQuestion);
     const [choices, setChoices] = useState(
         question_choices.map((c) => ({
-            id: c.id ?? null,
             choice_text: c.choice_text,
             is_correct: c.is_correct,
         }))
     );
-    const [loading, setLoading] = useState(false);
 
-    console.log(choices);
-    // ---- Choice helpers ----
-    function handleAddChoice() {
-        setChoices((prev) => [
-            ...prev,
-            { id: undefined, choice_text: "", is_correct: false },
-        ]);
-    }
+    // ---------- Choice helpers ----------
+    const handleAddChoice = () =>
+        setChoices((prev) => [...prev, { choice_text: "", is_correct: false }]);
 
-    function handleChoiceChange(index, value) {
+    const handleChoiceChange = (index, value) =>
         setChoices((prev) =>
             prev.map((c, i) => (i === index ? { ...c, choice_text: value } : c))
         );
-    }
 
-    function handleMarkCorrect(index) {
+    const handleMarkCorrect = (index) =>
         setChoices((prev) =>
             prev.map((c, i) => ({ ...c, is_correct: i === index }))
         );
-    }
 
-    function handleDeleteChoice(index) {
+    const handleDeleteChoice = (index) => {
         if (choices[index].is_correct) {
             toast.warning("You cannot delete the correct answer.");
             return;
@@ -60,13 +55,12 @@ export default function AddQuestionCard({
             return;
         }
         setChoices((prev) => prev.filter((_, i) => i !== index));
-    }
+    };
 
-    // ---- Submit ----
-    async function handleSubmit(e) {
+    // ---------- Submit ----------
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        const supabase = createClient();
 
         // Validation
         if (!question.trim()) {
@@ -74,114 +68,150 @@ export default function AddQuestionCard({
             setLoading(false);
             return;
         }
-
-        const hasEmptyChoice = choices.some(
-            (c) => !c.choice_text || !c.choice_text.trim()
-        );
-        if (hasEmptyChoice) {
+        if (choices.some((c) => !c.choice_text.trim())) {
             toast.error("Choices cannot be empty.");
             setLoading(false);
             return;
         }
-
-        const hasCorrect = choices.some((c) => c.is_correct);
-        if (!hasCorrect) {
+        if (!choices.some((c) => c.is_correct)) {
             toast.error("Please select a correct answer.");
             setLoading(false);
             return;
         }
 
-        try {
-            // 1. Update question
-            const { error: qError } = await supabase
-                .from("questions")
-                .update({ question_text: question })
-                .eq("id", questionId);
+        // 1️⃣ Update question
+        const { error: qError } = await supabase
+            .from("questions")
+            .update({ question_text: question })
+            .eq("id", questionId);
 
-            if (qError) throw new Error("Unable to update question");
-
-            // 2. Upsert choices
-            const toUpsert = choices.map((c) => ({
-                id: c.id || undefined,
-                choice_text: c.choice_text,
-                is_correct: c.is_correct,
-                question_id: questionId,
-            }));
-
-            const { error: upsertErr } = await supabase
-                .from("question_choices")
-                .upsert(toUpsert, { onConflict: "id" });
-
-            if (upsertErr) throw new Error(upsertErr.message);
-
-            // 3. Delete removed choices (compare by id)
-            const originalIds = new Set(
-                question_choices.map((c) => c.id).filter(Boolean)
-            );
-            const currentIds = new Set(
-                choices.map((c) => c.id).filter(Boolean)
-            );
-            const idsToDelete = [...originalIds].filter(
-                (id) => !currentIds.has(id)
-            );
-
-            if (idsToDelete.length > 0) {
-                const { error: delErr } = await supabase
-                    .from("question_choices")
-                    .delete()
-                    .in("id", idsToDelete);
-                if (delErr) throw new Error("Unable to delete old choices");
-            }
-
-            toast.success("Changes saved!");
-            router.refresh();
-            setIsEditing(false);
-        } catch (err) {
-            toast.error(err.message || "Something went wrong.");
-        } finally {
+        if (qError) {
+            toast.error("Unable to update question", {
+                description: qError.message,
+            });
             setLoading(false);
+            return;
         }
-    }
 
-    function handleCancel() {
+        // 2️⃣ Delete all old choices
+        const { error: delErr } = await supabase
+            .from("question_choices")
+            .delete()
+            .eq("question_id", questionId);
+
+        if (delErr) {
+            toast.error("Unable to delete old question choices", {
+                description: delErr.message,
+            });
+            setLoading(false);
+            return;
+        }
+
+        // 3️⃣ Insert new ones
+        const rows = choices.map((c) => ({
+            question_id: questionId,
+            choice_text: c.choice_text,
+            is_correct: c.is_correct,
+        }));
+
+        const { error: insErr } = await supabase
+            .from("question_choices")
+            .insert(rows);
+
+        if (insErr) {
+            toast.error("Unable to update question choices", {
+                description: insErr.message,
+            });
+            setLoading(false);
+            return;
+        }
+
+        toast.success("Changes saved!");
+        setIsEditing(false);
+        setLoading(false);
+        router.refresh();
+    };
+
+    const handleCancel = () => {
         setIsEditing(false);
         setQuestion(initialQuestion);
         setChoices(
             question_choices.map((c) => ({
-                id: c.id ?? null,
                 choice_text: c.choice_text,
                 is_correct: c.is_correct,
             }))
         );
-    }
+    };
 
-    // ---- UI ----
+    const handleDeleteQuestion = async () => {
+        try {
+            const { error } = await supabase
+                .from("questions")
+                .delete()
+                .eq("id", questionId);
+
+            if (error) {
+                toast.error("Unable to delete this question", {
+                    description: error.message,
+                });
+                return;
+            }
+
+            toast.success("Question deleted.");
+            router.refresh();
+        } catch (err) {
+            toast.error("Unexpected error deleting question", {
+                description: err.message,
+            });
+        }
+    };
+
+    // ---------- UI ----------
     return (
         <BorderBox className="border last:rounded-b-xl bg-card shadow-xs">
-            {/* ---------- Display Mode ---------- */}
+            {/* -------- Display Mode -------- */}
             {!isEditing && (
                 <div className="flex flex-col">
-                    <div className="flex items-center mb-1">
-                        <h1 className="w-full">{question}</h1>
-                        <button
-                            onClick={() => setIsEditing(true)}
-                            className="p-1 hover:text-accent-foreground cursor-pointer"
-                            aria-label="Edit question"
-                        >
-                            <PenLine size={16} />
-                        </button>
+                    <div className="mb-2 flex gap-2 items-start">
+                        <h1 className="w-full text-sm">{question}</h1>
+                        <div className="flex items-center">
+                            <button
+                                onClick={() => setIsEditing(true)}
+                                className="px-2 py-1 hover:text-accent-foreground cursor-pointer"
+                                aria-label="Edit question"
+                            >
+                                <PenLine size={16} />
+                            </button>
+                            <AlertModal
+                                alertTitle="Delete this question?"
+                                alertMessage="This action cannot be undone."
+                                cancelLabel="Cancel"
+                                actionLabel="Yes, Delete question"
+                                type="danger"
+                                alertAction={() =>
+                                    handleDeleteQuestion(questionId)
+                                }
+                            >
+                                <button
+                                    className="ps-2 py-1 text-destructive cursor-pointer"
+                                    aria-label="delete question"
+                                >
+                                    <Trash size={17} />
+                                </button>
+                            </AlertModal>
+                        </div>
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                        Answer:{" "}
-                        {choices
-                            .filter((c) => c.is_correct)
-                            .map((c) => c.choice_text)
-                            .join(", ")}
+                    <p className="text-sm text-accent-foreground mb-1">
+                        <span className="text-muted-foreground">Answer:</span>{" "}
+                        {choices.find((c) => c.is_correct)?.choice_text || "—"}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                        {choices.length} choices
                     </p>
                 </div>
             )}
 
-            {/* ---------- Edit Mode ---------- */}
+            {/* -------- Edit Mode -------- */}
             {isEditing && (
                 <form className="space-y-3 py-4" onSubmit={handleSubmit}>
                     <Textarea
@@ -194,7 +224,7 @@ export default function AddQuestionCard({
                     <div className="space-y-3">
                         {choices.map((choice, index) => (
                             <div
-                                key={choice.id ?? index}
+                                key={index}
                                 className="flex items-center gap-2"
                             >
                                 <Input
@@ -206,16 +236,21 @@ export default function AddQuestionCard({
                                         )
                                     }
                                     placeholder={`Choice ${index + 1}`}
+                                    className={
+                                        choice.is_correct
+                                            ? "bg-green-500/10 text-green-900 dark:text-green-200 dark:bg-green-700/10 border border-green-700/50"
+                                            : ""
+                                    }
                                 />
 
                                 <Button
-                                    variant="secondary"
                                     type="button"
                                     size="icon"
+                                    variant="secondary"
                                     aria-label="Mark as correct"
                                     className={
                                         choice.is_correct
-                                            ? "bg-green-500/10 text-green-900 dark:text-green-300 dark:bg-green-700/10 border border-green-700"
+                                            ? "bg-green-500/10 text-green-900 dark:text-green-300 dark:bg-green-700/10 border border-green-700/80"
                                             : ""
                                     }
                                     onClick={() => handleMarkCorrect(index)}
@@ -224,8 +259,8 @@ export default function AddQuestionCard({
                                 </Button>
 
                                 <Button
-                                    size="icon"
                                     type="button"
+                                    size="icon"
                                     variant="dangerOutline"
                                     aria-label="Delete choice"
                                     onClick={() => handleDeleteChoice(index)}
@@ -241,7 +276,7 @@ export default function AddQuestionCard({
                         <button
                             type="button"
                             onClick={handleAddChoice}
-                            className="flex items-center gap-1 text-sm text-accent-foreground cursor-pointer"
+                            className="flex items-center gap-1 text-sm text-accent-foreground"
                         >
                             <Plus size={14} /> Add choice
                         </button>

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import IconWrapper from "@/components/ui/IconWrapper";
-import { FileText, PlusCircle } from "lucide-react";
+import { FileText, PlusCircle, Trash } from "lucide-react";
 import Link from "next/link";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -35,8 +35,11 @@ export default function Loading() {
                             </div>
                             <Skeleton className="h-2.5 w-20 mt-1" />
                         </div>
-                        <div className="p-3 md:p-4 border-t">
-                            <Skeleton className="h-3 w-20 my-[2px]" />
+                        <div className="p-3 md:p-4 border-t flex items-center justify-between">
+                            <Skeleton className="h-3 w-20 my-[5px]" />
+                            <div className="ms-auto text-destructive">
+                                <Trash size={16} />
+                            </div>
                         </div>
                     </div>
                 ))}

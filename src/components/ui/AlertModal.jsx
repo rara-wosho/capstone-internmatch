@@ -2,7 +2,6 @@
 
 import {
     AlertDialog,
-    AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
@@ -12,6 +11,8 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "./button";
+import { useState, useTransition } from "react";
+import { Loader } from "lucide-react";
 
 export default function AlertModal({
     children,
@@ -22,6 +23,14 @@ export default function AlertModal({
     actionLabel,
     type = "danger",
 }) {
+    const [isPending, startTransition] = useTransition();
+
+    const handleClickAction = () => {
+        startTransition(async () => {
+            await alertAction();
+        });
+    };
+
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -35,9 +44,11 @@ export default function AlertModal({
                 <AlertDialogFooter>
                     <AlertDialogCancel>{cancelLabel}</AlertDialogCancel>
                     <Button
-                        onClick={alertAction}
+                        disabled={isPending}
+                        onClick={handleClickAction}
                         variant={type === "danger" ? "destructive" : "default"}
                     >
+                        {isPending && <Loader className="animate-spin" />}
                         {actionLabel}
                     </Button>
                 </AlertDialogFooter>

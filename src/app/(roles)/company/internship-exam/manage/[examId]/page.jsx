@@ -99,7 +99,7 @@ export default async function Page({ params }) {
             </div>
 
             {/* content */}
-            <div className="grid grid-cols-1 lg:grid-cols-[2.3fr_1fr] gap-10">
+            <div className="grid grid-cols-1 lg:grid-cols-[2.3fr_1fr] gap-x-8 gap-y-10">
                 {/* list of questions */}
                 <div className="flex flex-col gap-1 order-2 lg:order-1">
                     {questions.length === 0 ? (
