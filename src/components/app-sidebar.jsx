@@ -16,7 +16,6 @@ import {
     CircleUser,
     Dot,
     User,
-    UserCircle,
 } from "lucide-react";
 
 import {
@@ -46,7 +45,6 @@ import Logo from "./ui/Logo";
 import { useMemo } from "react";
 import { useSession } from "@/context/SessionContext";
 import SignOutModal from "./ui/SignOutModal";
-import AvatarInitial from "./ui/avatar-initial";
 
 // Centralized navigation configurati on
 const navigationConfig = [
@@ -396,7 +394,7 @@ export function AppSidebar() {
                         >
                             <Link href={`/${role}/profile/${user?.id}`}>
                                 {/* <div className="rounded-full size-5 border"></div>  */}
-                                <UserCircle />
+                                <User />
                                 <div className="flex flex-col w-full">
                                     {role === "company" ? (
                                         <p className="text-xs truncate max-w-[88%]">
