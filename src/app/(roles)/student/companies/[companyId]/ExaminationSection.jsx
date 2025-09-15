@@ -1,13 +1,6 @@
 import { Button } from "@/components/ui/button";
 import TertiaryLabel from "@/components/ui/TertiaryLabel";
-import {
-    ArrowUpRight,
-    Calendar,
-    Clock,
-    Hash,
-    Info,
-    LayoutList,
-} from "lucide-react";
+import { ArrowUpRight, Calendar, Clock, Info, LayoutList } from "lucide-react";
 
 import {
     Popover,
@@ -17,13 +10,11 @@ import {
 import { formatDuration } from "@/utils/format-duration";
 import { dateFormatter } from "@/utils/date-formatter";
 import Link from "next/link";
-import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ExaminationSection({ companyExams }) {
     return (
         <>
             {/* header  */}
-
             <div className="flex items-center justify-between mb-3 pb-3 border-b">
                 <TertiaryLabel>Examination</TertiaryLabel>
                 <Popover>
@@ -68,13 +59,6 @@ export default function ExaminationSection({ companyExams }) {
                             Time limit :{" "}
                             <span className="text-secondary-foreground ">
                                 {formatDuration(exam?.duration)}
-                            </span>
-                        </p>
-                        <p className="text-muted-foreground flex items-center gap-2 text-sm mb-1.5">
-                            <Hash size={13} />
-                            Number of questions :{" "}
-                            <span className="text-secondary-foreground ">
-                                {exam?.questions[0]?.count}
                             </span>
                         </p>
                         <p className="text-muted-foreground flex items-center gap-2 text-sm mb-1.5">
