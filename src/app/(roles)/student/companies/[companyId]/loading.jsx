@@ -87,13 +87,18 @@ export default function LoadingCompanyProfile() {
                 </section>
 
                 <section className="px-2">
-                    <div className="border-b mb-6 pb-3 flex items-center  justify-between">
+                    <div className="border-b mb-4 pb-3 flex items-center justify-between">
                         <TertiaryLabel>Examination</TertiaryLabel>
                         <Info size={18} />
                     </div>
 
                     <Skeleton className="h-4 mb-3.5 w-36" />
-                    <Skeleton className="h-3 w-56" />
+                    <Skeleton className="h-3 w-56 mb-5" />
+                    <Skeleton className="h-3 w-56 mb-3" />
+                    <Skeleton className="h-3 w-56 mb-3" />
+                    <Skeleton className="h-3 w-56 mb-3" />
+                    <Skeleton className="h-3 w-56 mb-6" />
+                    <Skeleton className="h-10 w-full" />
                 </section>
             </div>
         </>

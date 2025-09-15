@@ -17,11 +17,13 @@ import {
 import { formatDuration } from "@/utils/format-duration";
 import { dateFormatter } from "@/utils/date-formatter";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ExaminationSection({ companyExams }) {
     return (
         <>
             {/* header  */}
+
             <div className="flex items-center justify-between mb-3 pb-3 border-b">
                 <TertiaryLabel>Examination</TertiaryLabel>
                 <Popover>
@@ -44,10 +46,11 @@ export default function ExaminationSection({ companyExams }) {
             </div>
 
             {/* exams contents  */}
-
             {companyExams.length === 0 ? (
                 <div>
-                    <p>No examinations posted yet.</p>
+                    <p className="text-sm text-muted-foreground italic">
+                        No examinations posted.
+                    </p>
                 </div>
             ) : (
                 companyExams?.map((exam) => (
