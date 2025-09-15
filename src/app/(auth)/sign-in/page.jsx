@@ -5,76 +5,51 @@ import Card from "@/components/ui/card";
 import FormLabel from "@/components/ui/FormLabel";
 import { Input } from "@/components/ui/input";
 import Logo from "@/components/ui/Logo";
-import SubmitButton from "@/components/ui/SubmitButton";
-import { Lock, Mail, Star } from "lucide-react";
+import { Loader, Lock, Mail, Star } from "lucide-react";
 import Link from "next/link";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { signIn } from "@/lib/actions/auth";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useActionState, useEffect } from "react";
+import Form from "next/form";
 
 export default function Page() {
-    const router = useRouter();
+    const [state, formAction, isPending] = useActionState(signIn, {
+        error: null,
+        email: "",
+    });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const formData = new FormData(e.target);
-
-        const { success, error, role } = await signIn(formData);
-
-        if (!success) {
-            toast.error("We couldn’t sign you in. " + error);
-            return;
+    // Show error toast when there's an error
+    useEffect(() => {
+        if (state?.error) {
+            toast.error("We couldn't sign you in. " + state.error);
         }
+        console.log("render..");
+    }, [state]);
 
-        if (success) {
-            toast.success("Sign in successful!", {
-                description: "Redirecting to dashboard...",
-            });
-
-            setTimeout(() => {
-                if (role === "instructor") {
-                    router.replace("/instructor");
-                }
-                if (role === "admin") {
-                    router.replace("/admin");
-                }
-                if (role === "student") {
-                    router.replace("/student");
-                }
-                if (role === "company") {
-                    router.replace("/company");
-                }
-            }, 1000);
-        }
-    };
     return (
         <>
             <div className="flex items-center justify-between px-4 h-[65px]">
                 <Link href="/" className="flex items-center font-bold">
                     <Logo className="w-5 h-5 me-3" /> InternMatch
                 </Link>
-
                 <ThemeToggler className="border rounded-sm bg-card p-2" />
             </div>
+
             <div className="p-0 md:p-5 flex flex-col items-center justify-center min-h-[calc(100vh-65px)] bg-linear-to-b from-transparent to-blue-200/50 dark:to-blue-950/40 from-50% relative md:pb-14">
-                {/* wrapper  */}
+                {/* wrapper */}
                 <div className="p-2 lg:p-5 gap-8 lg:border rounded-3xl flex items-center w-full max-w-[1100px] lg:bg-[rgb(253,253,253)] lg:dark:bg-background relative isolate overflow-hidden">
                     <div className="hidden lg:block rounded-[100%] border-4 border-neutral-100 dark:border-neutral-900 h-[200px] w-[500px] absolute -left-20 -top-32 -z-10"></div>
                     <div className="hidden lg:block rounded-[100%] border-4 border-neutral-100 dark:border-neutral-900 h-[400px] w-[1000px] absolute -right-[200px] -bottom-[300px] -z-10"></div>
 
-                    {/* left section  */}
+                    {/* left section */}
                     <div className="flex-col hidden lg:flex w-3xl p-16 items-start justify-between bg-dots">
                         <div className="flex items-center gap-2 mb-6 text-yellow-500">
-                            <Star fill="yellow" size={15} />
-                            <Star fill="yellow" size={15} />
-                            <Star fill="yellow" size={15} />
-                            <Star fill="yellow" size={15} />
-                            <Star fill="yellow" size={15} />
+                            {[...Array(5)].map((_, i) => (
+                                <Star key={i} fill="yellow" size={15} />
+                            ))}
                         </div>
                         <div>
                             <p className="text-xl font-semibold text-secondary-foreground">
@@ -99,7 +74,7 @@ export default function Page() {
                         </div>
                     </div>
 
-                    {/* left section  */}
+                    {/* sign in form */}
                     <Card className="max-w-md p-5 w-full mx-auto">
                         <div className="flex flex-col items-center justify-center mb-3 mt-5">
                             <h1 className="text-secondary-foreground font-bold text-3xl mb-1 text-center">
@@ -109,19 +84,22 @@ export default function Page() {
                                 Please enter your credentials
                             </p>
 
-                            <form
-                                onSubmit={handleSubmit}
+                            <Form
+                                action={formAction}
                                 className="w-full mt-4 md:mt-8"
                             >
                                 <div className="mb-3">
                                     <FormLabel>Email</FormLabel>
                                     <Input
+                                        defaultValue={state?.email || ""}
                                         icon={<Mail size={16} />}
                                         name="email"
-                                        required
+                                        type="email"
+                                        // required
                                         placeholder="zhand@gmail.com"
                                     />
                                 </div>
+
                                 <div className="mb-2">
                                     <FormLabel>Password</FormLabel>
                                     <Input
@@ -132,12 +110,16 @@ export default function Page() {
                                         placeholder="Enter your password"
                                     />
                                 </div>
+
                                 <div className="pt-4 flex items-center justify-between">
                                     <label
                                         htmlFor="remember-me"
                                         className="flex items-center gap-2 text-sm font-light text-muted-foreground"
                                     >
-                                        <Checkbox id="remember-me" />
+                                        <Checkbox
+                                            id="remember-me"
+                                            name="rememberMe"
+                                        />
                                         Remember me
                                     </label>
                                     <Link
@@ -148,9 +130,15 @@ export default function Page() {
                                     </Link>
                                 </div>
 
-                                <SubmitButton className="w-full mt-7">
-                                    Sign In
-                                </SubmitButton>
+                                <Button
+                                    className="w-full mt-7"
+                                    disabled={isPending}
+                                >
+                                    {isPending && (
+                                        <Loader className="animate-spin" />
+                                    )}
+                                    <span>Sign In</span>
+                                </Button>
 
                                 <p className="relative py-6 text-xs text-muted-foreground text-center after:absolute after:h-[1px] after:w-[28%] after:bg-secondary after:top-1/2 after:right-0 after:-translate-y-1/2 before:absolute before:h-[1px] before:w-[28%] before:bg-secondary before:top-1/2 before:left-0 before:-translate-y-1/2">
                                     Don't have an account?
@@ -166,7 +154,7 @@ export default function Page() {
                                         Create an Account
                                     </Link>
                                 </Button>
-                            </form>
+                            </Form>
                         </div>
                     </Card>
                 </div>

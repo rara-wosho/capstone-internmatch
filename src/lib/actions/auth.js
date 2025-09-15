@@ -3,9 +3,40 @@
 import { redirect } from "next/navigation";
 import { createClient } from "../supabase/server";
 
-export async function signIn(formData) {
+// export async function signIn(formData) {
+//     const email = formData.get("email");
+//     const password = formData.get("password");
+
+//     const supabase = await createClient();
+
+//     const {
+//         error,
+//         data: { user },
+//     } = await supabase.auth.signInWithPassword({
+//         email,
+//         password,
+//     });
+
+//     if (error) {
+//         console.log(error.message);
+//         return { success: false, error: error.message };
+//     }
+
+//     return { success: true, role: user?.user_metadata.role };
+// }
+
+export async function signIn(prevState, formData) {
     const email = formData.get("email");
     const password = formData.get("password");
+    const rememberMe = formData.get("rememberMe") === "on";
+
+    // Basic validation
+    if (!email || !password) {
+        return {
+            error: "Email and password are required",
+            email: email || "",
+        };
+    }
 
     const supabase = await createClient();
 
@@ -18,11 +49,30 @@ export async function signIn(formData) {
     });
 
     if (error) {
-        console.log(error.message);
-        return { success: false, error: error.message };
+        console.log("Sign in error:", error.message);
+        return {
+            error: error.message,
+            email: email || "",
+        };
     }
 
-    return { success: true, role: user?.user_metadata.role };
+    // Optional: Handle "remember me" functionality
+    if (rememberMe) {
+        // You can set cookies or handle session persistence here
+        // This depends on your Supabase configuration
+    }
+
+    // Success! Redirect immediately based on role
+    const role = user?.user_metadata.role || "student";
+
+    const roleRoutes = {
+        instructor: "/instructor",
+        admin: "/admin",
+        student: "/student",
+        company: "/company",
+    };
+
+    redirect(roleRoutes[role]);
 }
 
 export async function signOut() {
