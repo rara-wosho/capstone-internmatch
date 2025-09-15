@@ -2,7 +2,6 @@
 
 import {
     AlertDialog,
-    AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
@@ -14,29 +13,23 @@ import {
 
 import { signOut } from "@/lib/actions/auth";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "./button";
-import { Loader, LogOut, LogOutIcon } from "lucide-react";
+import { Loader, LogOut } from "lucide-react";
 
 export default function SignOutModal({ children }) {
     const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const router = useRouter();
 
-    const handleSignOut = async () => {
-        setLoading(true);
+    const [isPending, startTransition] = useTransition();
 
-        const { success } = await signOut();
+    const handleSignOut = () => {
+        startTransition(async () => {
+            const res = await signOut();
 
-        if (!success) {
-            toast.error("Unable to sign you out");
-            setLoading(false);
-            return;
-        }
-
-        setLoading(false);
-        router.push("/sign-in");
+            if (res?.success === false) {
+                toast.error(res.message ?? "Unable to sign you out");
+            }
+        });
     };
 
     return (
@@ -51,9 +44,9 @@ export default function SignOutModal({ children }) {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <Button onClick={handleSignOut} disabled={loading}>
+                    <Button onClick={handleSignOut} disabled={isPending}>
                         Sign Out
-                        {loading ? (
+                        {isPending ? (
                             <Loader className="animate-spin" />
                         ) : (
                             <LogOut />
