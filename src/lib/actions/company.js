@@ -3,6 +3,7 @@
 import { supabaseAdmin } from "../supabase/admin";
 import { createClient } from "../supabase/server";
 
+// create a company account using anon auth
 export async function createCompanyAccount(form) {
     const supabase = await createClient();
 
@@ -89,7 +90,7 @@ export async function getCompanies() {
     return { data, count, error: null };
 }
 
-// fetch a company data
+// fetch company data for company profile
 export async function getCompanyById(id) {
     const supabase = await createClient();
 
@@ -98,6 +99,29 @@ export async function getCompanyById(id) {
         .select()
         .eq("id", id)
         .single();
+
+    if (error) {
+        return {
+            data: null,
+            error: error.message || "Unable to load company data.",
+        };
+    }
+
+    return { data, error: null };
+}
+
+// fetch company data and exams
+export async function getCompanyDataAndExams(companyId) {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("companies")
+        .select(
+            `*, exams(id, created_at, title, description, instruction, duration, mode, updated_at, questions(count))`
+        )
+        .eq("id", companyId)
+        .eq("exams.is_published", true)
+        .maybeSingle();
 
     if (error) {
         return {

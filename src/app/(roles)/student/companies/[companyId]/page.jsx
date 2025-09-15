@@ -5,7 +5,7 @@ import Image from "next/image";
 import ExaminationSection from "./ExaminationSection";
 import { Button } from "@/components/ui/button";
 import BorderBox from "@/components/ui/BorderBox";
-import { getCompanyById } from "@/lib/actions/company";
+import { getCompanyById, getCompanyDataAndExams } from "@/lib/actions/company";
 import ErrorUi from "@/components/ui/ErrorUi";
 import { ArrowUpRight, ChevronLeft, Globe, Star } from "lucide-react";
 import BackButton from "@/components/ui/BackButton";
@@ -19,7 +19,7 @@ const links = [
 export default async function Page({ params }) {
     const { companyId } = await params;
 
-    const { data, error } = await getCompanyById(companyId);
+    const { data, error } = await getCompanyDataAndExams(companyId);
 
     if (error) {
         return <ErrorUi />;
@@ -98,30 +98,6 @@ export default async function Page({ params }) {
                             <p className="text-muted-foreground">
                                 {data?.details}
                             </p>
-                            <TertiaryLabel className="mb-2">
-                                About Our Company
-                            </TertiaryLabel>
-                            <p className="text-muted-foreground">
-                                Work on cutting-edge machine learning models for
-                                computer vision applications. Experience with
-                                Python and deep learning frameworks is
-                                preferredWork on cutting-edge machine learning
-                                models for computer vision applications.
-                                Experience with Python and deep learning
-                                frameworks is preferred
-                            </p>
-                            <TertiaryLabel className="mb-2">
-                                About Our Company
-                            </TertiaryLabel>
-                            <p className="text-muted-foreground">
-                                Work on cutting-edge machine learning models for
-                                computer vision applications. Experience with
-                                Python and deep learning frameworks is
-                                preferredWork on cutting-edge machine learning
-                                models for computer vision applications.
-                                Experience with Python and deep learning
-                                frameworks is preferred
-                            </p>
                         </BorderBox>
                     </section>
 
@@ -143,7 +119,7 @@ export default async function Page({ params }) {
 
                 {/* contact information  */}
                 <div className="right px-2">
-                    <ExaminationSection />
+                    <ExaminationSection companyExams={data?.exams || []} />
                 </div>
             </div>
         </div>

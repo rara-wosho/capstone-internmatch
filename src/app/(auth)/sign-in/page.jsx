@@ -26,7 +26,6 @@ export default function Page() {
         if (state?.error) {
             toast.error("We couldn't sign you in. " + state.error);
         }
-        console.log("render..");
     }, [state]);
 
     return (
@@ -95,7 +94,7 @@ export default function Page() {
                                         icon={<Mail size={16} />}
                                         name="email"
                                         type="email"
-                                        // required
+                                        required
                                         placeholder="zhand@gmail.com"
                                     />
                                 </div>

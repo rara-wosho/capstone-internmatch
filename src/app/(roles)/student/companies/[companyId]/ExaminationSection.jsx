@@ -1,17 +1,28 @@
 import { Button } from "@/components/ui/button";
 import TertiaryLabel from "@/components/ui/TertiaryLabel";
-import { ArrowUpRight, Clock, Hash, Info, LayoutList } from "lucide-react";
+import {
+    ArrowUpRight,
+    Calendar,
+    Clock,
+    Hash,
+    Info,
+    LayoutList,
+} from "lucide-react";
 
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import { formatDuration } from "@/utils/format-duration";
+import { dateFormatter } from "@/utils/date-formatter";
+import Link from "next/link";
 
-export default function ExaminationSection() {
+export default function ExaminationSection({ companyExams }) {
     return (
         <>
-            <div className="flex items-center justify-between mb-3">
+            {/* header  */}
+            <div className="flex items-center justify-between mb-3 pb-3 border-b">
                 <TertiaryLabel>Examination</TertiaryLabel>
                 <Popover>
                     <PopoverTrigger className="cursor-pointer">
@@ -31,68 +42,62 @@ export default function ExaminationSection() {
                     </PopoverContent>
                 </Popover>
             </div>
-            <div className="mb-7 border-t pt-5">
-                <div className="mb-3">
-                    <h1 className="mb-1">Programming Fundamentals</h1>
-                    <p className="text-sm text-muted-foreground mb-4">
-                        Lorem ipsum dolor sit amet consectetur.
-                    </p>
+
+            {/* exams contents  */}
+
+            {companyExams.length === 0 ? (
+                <div>
+                    <p>No examinations posted yet.</p>
                 </div>
-                <p className="text-muted-foreground flex items-center gap-2 text-sm mb-1">
-                    <Clock size={12} />
-                    Time limit :{" "}
-                    <span className="text-secondary-foreground ">1hour</span>
-                </p>
-                <p className="text-muted-foreground flex items-center gap-2 text-sm mb-1">
-                    <Hash size={13} />
-                    Number of questions :{" "}
-                    <span className="text-secondary-foreground ">50</span>
-                </p>
-                <p className="text-muted-foreground flex items-center gap-2 text-sm">
-                    <LayoutList size={12} />
-                    Question type :{" "}
-                    <span className="text-secondary-foreground ">
-                        Multiple choice
-                    </span>
-                </p>
-                <div className="mt-8 flex items-center mb-1">
-                    <Button className="w-full">
-                        Start examination <ArrowUpRight />
-                    </Button>
-                </div>
-            </div>
-            <div className="mb-7 border-t pt-5">
-                <div className="mb-3">
-                    <h1 className="mb-1">Networking guru</h1>
-                    <p className="text-sm text-muted-foreground mb-4">
-                        Lorem ipsum dolor sit amet consectetur.
-                    </p>
-                </div>
-                <p className="text-muted-foreground flex items-center gap-2 text-sm mb-1">
-                    <Clock size={12} />
-                    Time limit :{" "}
-                    <span className="text-secondary-foreground ">
-                        1 1/2 hour
-                    </span>
-                </p>
-                <p className="text-muted-foreground flex items-center gap-2 text-sm mb-1">
-                    <Hash size={13} />
-                    Number of questions :{" "}
-                    <span className="text-secondary-foreground ">50</span>
-                </p>
-                <p className="text-muted-foreground flex items-center gap-2 text-sm">
-                    <LayoutList size={12} />
-                    Question type :{" "}
-                    <span className="text-secondary-foreground ">
-                        Multiple choice
-                    </span>
-                </p>
-                <div className="mt-8 flex items-center mb-1">
-                    <Button className="w-full">
-                        Start examination <ArrowUpRight />
-                    </Button>
-                </div>
-            </div>
+            ) : (
+                companyExams?.map((exam) => (
+                    <div key={exam?.id} className="mb-7">
+                        <div className="mb-3">
+                            <h1 className="mb-1 font-semibold">
+                                {exam?.title}
+                            </h1>
+                            <p className="text-sm text-muted-foreground mb-4">
+                                {exam?.description}
+                            </p>
+                        </div>
+                        <p className="text-muted-foreground flex items-center gap-2 text-sm mb-1.5">
+                            <Clock size={12} />
+                            Time limit :{" "}
+                            <span className="text-secondary-foreground ">
+                                {formatDuration(exam?.duration)}
+                            </span>
+                        </p>
+                        <p className="text-muted-foreground flex items-center gap-2 text-sm mb-1.5">
+                            <Hash size={13} />
+                            Number of questions :{" "}
+                            <span className="text-secondary-foreground ">
+                                {exam?.questions[0]?.count}
+                            </span>
+                        </p>
+                        <p className="text-muted-foreground flex items-center gap-2 text-sm mb-1.5">
+                            <LayoutList size={12} />
+                            Question type :{" "}
+                            <span className="text-secondary-foreground ">
+                                Multiple choice
+                            </span>
+                        </p>
+                        <p className="text-muted-foreground flex items-center gap-2 text-sm">
+                            <Calendar size={12} />
+                            Created at :{" "}
+                            <span className="text-secondary-foreground ">
+                                {dateFormatter(exam?.created_at)}
+                            </span>
+                        </p>
+                        <div className="mt-6 flex items-center mb-1">
+                            <Button className="w-full" asChild>
+                                <Link href="/">
+                                    Start examination <ArrowUpRight />
+                                </Link>
+                            </Button>
+                        </div>
+                    </div>
+                ))
+            )}
         </>
     );
 }
