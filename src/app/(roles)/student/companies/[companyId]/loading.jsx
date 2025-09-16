@@ -1,5 +1,15 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChevronLeft, Globe, ArrowUpRight, Star, Info } from "lucide-react";
+import {
+    ChevronLeft,
+    Globe,
+    ArrowUpRight,
+    Star,
+    Info,
+    Clock,
+    Hash,
+    LayoutList,
+    Calendar,
+} from "lucide-react";
 import TertiaryLabel from "@/components/ui/TertiaryLabel";
 import BackButton from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/button";
@@ -93,12 +103,26 @@ export default function LoadingCompanyProfile() {
                     </div>
 
                     <Skeleton className="h-4 mb-3.5 w-36" />
-                    <Skeleton className="h-3 w-56 mb-5" />
-                    <Skeleton className="h-3 w-56 mb-3" />
-                    <Skeleton className="h-3 w-56 mb-3" />
-                    <Skeleton className="h-3 w-56 mb-3" />
-                    <Skeleton className="h-3 w-56 mb-6" />
-                    <Skeleton className="h-10 w-full" />
+                    <Skeleton className="h-3 w-56 mb-4" />
+                    <div className="text-muted-foreground flex items-center gap-2 text-sm mb-1.5">
+                        <Clock size={12} />
+                        Time limit : <Skeleton className="h-3 w-32" />
+                    </div>
+                    <div className="text-muted-foreground flex items-center gap-2 text-sm mb-1.5">
+                        <Hash size={12} />
+                        Total questions : <Skeleton className="h-3 w-7" />
+                    </div>
+                    <div className="text-muted-foreground flex items-center gap-2 text-sm mb-1.5">
+                        <LayoutList size={12} />
+                        Question type : <Skeleton className="h-3 w-28" />
+                    </div>
+                    <div className="text-muted-foreground flex items-center gap-2 text-sm mb-6">
+                        <Calendar size={12} />
+                        Created at : <Skeleton className="h-3 w-32" />
+                    </div>
+                    <Button className="w-full" disabled>
+                        Start examination <ArrowUpRight />
+                    </Button>
                 </section>
             </div>
         </>

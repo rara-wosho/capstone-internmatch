@@ -1,6 +1,14 @@
 import { Button } from "@/components/ui/button";
 import TertiaryLabel from "@/components/ui/TertiaryLabel";
-import { ArrowUpRight, Calendar, Clock, Info, LayoutList } from "lucide-react";
+import {
+    ArrowUpRight,
+    Calendar,
+    Clock,
+    Hash,
+    Info,
+    LayoutList,
+    ListOrdered,
+} from "lucide-react";
 
 import {
     Popover,
@@ -10,6 +18,7 @@ import {
 import { formatDuration } from "@/utils/format-duration";
 import { dateFormatter } from "@/utils/date-formatter";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ExaminationSection({ companyExams }) {
     return (
@@ -62,6 +71,13 @@ export default function ExaminationSection({ companyExams }) {
                             </span>
                         </p>
                         <p className="text-muted-foreground flex items-center gap-2 text-sm mb-1.5">
+                            <Hash size={12} />
+                            Total questions :{" "}
+                            <span className="text-secondary-foreground ">
+                                {exam?.questions[0]?.count}
+                            </span>
+                        </p>
+                        <p className="text-muted-foreground flex items-center gap-2 text-sm mb-1.5">
                             <LayoutList size={12} />
                             Question type :{" "}
                             <span className="text-secondary-foreground ">
@@ -77,7 +93,7 @@ export default function ExaminationSection({ companyExams }) {
                         </p>
                         <div className="mt-6 flex items-center mb-1">
                             <Button className="w-full" asChild>
-                                <Link href="/">
+                                <Link href="/student/e">
                                     Start examination <ArrowUpRight />
                                 </Link>
                             </Button>

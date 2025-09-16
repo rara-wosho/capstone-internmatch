@@ -117,7 +117,7 @@ export async function getCompanyDataAndExams(companyId) {
     const { data, error } = await supabase
         .from("companies")
         .select(
-            `*, exams(id, created_at, title, description, instruction, duration, mode, updated_at)`
+            `*, exams(id, created_at, title, description, instruction, duration, mode, updated_at, questions(count))`
         )
         .eq("id", companyId)
         .eq("exams.is_published", true)

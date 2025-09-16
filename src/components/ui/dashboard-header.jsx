@@ -14,9 +14,13 @@ import IconWrapper from "./IconWrapper";
 import { useSession } from "@/context/SessionContext";
 import Link from "next/link";
 import SignOutModal from "./SignOutModal";
+import { usePathname } from "next/navigation";
 
 export default function DashboardHeader() {
     const { user } = useSession();
+    const pathname = usePathname();
+
+    if (pathname.startsWith("/student/e")) return null;
 
     return (
         <div className="sticky top-0 left-0 px-3 md:px-5 lg:px-8 py-3 flex items-center w-full bg-white border-b z-30 backdrop-blur-2xl dark:bg-background/70">

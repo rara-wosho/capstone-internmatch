@@ -9,6 +9,7 @@ import { getCompanyById, getCompanyDataAndExams } from "@/lib/actions/company";
 import ErrorUi from "@/components/ui/ErrorUi";
 import { ArrowUpRight, ChevronLeft, Globe, Star } from "lucide-react";
 import BackButton from "@/components/ui/BackButton";
+import { Separator } from "@/components/ui/separator";
 
 const links = [
     { href: "", label: "Home" },
