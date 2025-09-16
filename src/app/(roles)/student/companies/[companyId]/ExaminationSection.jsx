@@ -7,7 +7,6 @@ import {
     Hash,
     Info,
     LayoutList,
-    ListOrdered,
 } from "lucide-react";
 
 import {
@@ -18,7 +17,6 @@ import {
 import { formatDuration } from "@/utils/format-duration";
 import { dateFormatter } from "@/utils/date-formatter";
 import Link from "next/link";
-import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ExaminationSection({ companyExams }) {
     return (
@@ -93,7 +91,7 @@ export default function ExaminationSection({ companyExams }) {
                         </p>
                         <div className="mt-6 flex items-center mb-1">
                             <Button className="w-full" asChild>
-                                <Link href="/student/e">
+                                <Link href={`/student/e/${exam?.id}`}>
                                     Start examination <ArrowUpRight />
                                 </Link>
                             </Button>
