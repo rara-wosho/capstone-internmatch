@@ -13,6 +13,7 @@ import BorderBox from "../ui/BorderBox";
 import { Button } from "../ui/button";
 import { useState, useEffect } from "react";
 import TimeRemaining from "../exam/TimeRemaining";
+import { formatDuration } from "@/utils/format-duration";
 
 export default function ExamQuestionForm({ examinationData }) {
     const [focus, setFocus] = useState(false);
@@ -206,8 +207,9 @@ export default function ExamQuestionForm({ examinationData }) {
                                 Time Limit
                             </p>
                             <p className="text-xs text-muted-foreground">
-                                {examinationData.duration} minutes to complete
-                                all questions. Auto submit when time expires.
+                                {formatDuration(examinationData.duration)} to
+                                complete all questions. Auto submit when time
+                                expires.
                             </p>
                         </div>
                     </section>
@@ -256,7 +258,7 @@ export default function ExamQuestionForm({ examinationData }) {
                                             className={`w-9 rounded-lg aspect-square flex items-center justify-center cursor-pointer relative transition-all
                                                 ${
                                                     isActive
-                                                        ? "border-2 border-primary bg-primary/10"
+                                                        ? "border-2 border-primary bg-violet-500/10"
                                                         : isAnswered
                                                         ? "bg-green-100 border border-green-300 dark:bg-green-900/30 dark:border-green-700"
                                                         : "bg-muted hover:bg-muted/80"
@@ -342,7 +344,7 @@ export default function ExamQuestionForm({ examinationData }) {
                                         className={`rounded-lg p-3.5 text-muted-foreground transition-all cursor-pointer
                                             ${
                                                 isSelected
-                                                    ? "ring-2 ring-primary bg-primary/5 text-primary-text"
+                                                    ? "ring-2 ring-primary bg-violet-500/5 text-primary-text"
                                                     : "ring-1 ring-neutral-300 hover:ring-primary dark:hover:ring-primary dark:ring-neutral-800 hover:bg-muted/50"
                                             }
                                         `}

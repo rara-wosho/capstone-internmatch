@@ -117,10 +117,11 @@ export async function getCompanyDataAndExams(companyId) {
     const { data, error } = await supabase
         .from("companies")
         .select(
-            `*, exams(id, created_at, title, description, instruction, duration, mode, updated_at, questions(count))`
+            `*, exams(id, created_at, title, description, instruction, duration, mode, updated_at, questions(id))`
         )
         .eq("id", companyId)
         .eq("exams.is_published", true)
+        .order("created_at", { referencedTable: "exams", ascending: true })
         .maybeSingle();
 
     if (error) {
@@ -130,5 +131,18 @@ export async function getCompanyDataAndExams(companyId) {
         };
     }
 
-    return { data, error: null };
+    // Add question_count to each exam
+    const examsWithCount =
+        data?.exams?.map((exam) => ({
+            ...exam,
+            question_count: exam.questions?.length ?? 0,
+        })) ?? [];
+
+    return {
+        data: {
+            ...data,
+            exams: examsWithCount,
+        },
+        error: null,
+    };
 }

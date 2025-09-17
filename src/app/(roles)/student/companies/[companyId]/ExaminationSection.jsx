@@ -14,9 +14,22 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+
 import { formatDuration } from "@/utils/format-duration";
 import { dateFormatter } from "@/utils/date-formatter";
 import Link from "next/link";
+
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import ExamReminders from "@/components/exam/ExamReminders";
 
 export default function ExaminationSection({ companyExams }) {
     return (
@@ -35,9 +48,9 @@ export default function ExaminationSection({ companyExams }) {
                         sideOffset={10}
                     >
                         <p className="text-xs">
-                            Companies may require you to take an examination as
-                            part of their selection process before accepting you
-                            as an intern.
+                            Companies may or may not require you to take an
+                            examination as part of their selection process
+                            before accepting you as an intern.
                         </p>
                     </PopoverContent>
                 </Popover>
@@ -74,7 +87,7 @@ export default function ExaminationSection({ companyExams }) {
                             <Hash size={12} />
                             Total questions :{" "}
                             <span className="text-secondary-foreground ">
-                                {exam?.questions[0]?.count}
+                                {exam?.question_count}
                             </span>
                         </p>
                         <p className="text-muted-foreground flex items-center gap-2 text-sm mb-1.5">
@@ -92,11 +105,41 @@ export default function ExaminationSection({ companyExams }) {
                             </span>
                         </p>
                         <div className="mt-6 flex items-center mb-1">
-                            <Button className="w-full" asChild>
-                                <Link href={`/student/e/${exam?.id}`}>
-                                    Start examination <ArrowUpRight />
-                                </Link>
-                            </Button>
+                            <Dialog>
+                                <DialogTrigger asChild className="w-full">
+                                    <Button>Start examination</Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>Reminders</DialogTitle>
+                                        <DialogDescription>
+                                            Before starting the exam, make sure
+                                            that you read these reminders.
+                                        </DialogDescription>
+                                    </DialogHeader>
+
+                                    <ExamReminders
+                                        passing={exam?.passing}
+                                        duration={exam?.duration}
+                                    />
+
+                                    <DialogFooter>
+                                        <DialogClose asChild>
+                                            <Button variant="secondary">
+                                                Cancel
+                                            </Button>
+                                        </DialogClose>
+                                        <Button asChild>
+                                            <Link
+                                                href={`/student/e/${exam?.id}`}
+                                            >
+                                                Start examination{" "}
+                                                <ArrowUpRight />
+                                            </Link>
+                                        </Button>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
                         </div>
                     </div>
                 ))
