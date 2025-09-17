@@ -36,8 +36,8 @@ export default function TimeRemaining({ timeLimit }) {
             : `${minutes}:${seconds}`;
 
     return (
-        <div className="rounded-xl border">
-            <div className="bg-card shadow-xs rounded-x-xl rounded-t-xl flex items-center justify-center flex-col">
+        <div className="rounded-xl shadow-xs border">
+            <div className="bg-card rounded-x-xl rounded-t-xl flex items-center justify-center flex-col">
                 <p className="text-sm mb-2 py-4">Time Remaining</p>
                 <div className="w-20 rounded-full aspect-square border-2 border-primary mb-5 flex flex-col items-center justify-center">
                     <p className="text-primary-text font-semibold w-20 text-center">

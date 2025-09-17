@@ -28,7 +28,11 @@ export default async function Page({ params }) {
             <SecondaryLabel className="mb-2 mt-3 md:mt-4">
                 {exam.title}
             </SecondaryLabel>
-            <p className="text-muted-foreground">{exam.description}</p>
+            <p className="text-muted-foreground">
+                {exam?.description
+                    ? exam?.description
+                    : "No description provided."}
+            </p>
             {exam?.instruction && (
                 <p className="text-sm text-muted-foreground mt-3">
                     <span className="text-primary-text">Instruction</span> :{" "}

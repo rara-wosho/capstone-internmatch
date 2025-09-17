@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import Card from "../ui/card";
 import GradientText from "../ui/GradientText";
 import Wrapper from "../Wrapper";
+import { ArrowUpRight } from "lucide-react";
 
 export default function HowItWorks() {
     return (
@@ -69,8 +70,10 @@ export default function HowItWorks() {
                 </Card>
             </Wrapper>
 
-            <Button asChild className="mt-8">
-                <Link href="/about">Learn More</Link>
+            <Button asChild className="mt-8" size="lg">
+                <Link href="/about">
+                    Learn More <ArrowUpRight />
+                </Link>
             </Button>
         </div>
     );

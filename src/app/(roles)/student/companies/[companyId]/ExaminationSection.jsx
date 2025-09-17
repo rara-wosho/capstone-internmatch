@@ -58,7 +58,9 @@ export default function ExaminationSection({ companyExams }) {
                                 {exam?.title}
                             </h1>
                             <p className="text-sm text-muted-foreground mb-4">
-                                {exam?.description}
+                                {exam?.description
+                                    ? exam?.description
+                                    : "No description provided."}
                             </p>
                         </div>
                         <p className="text-muted-foreground flex items-center gap-2 text-sm mb-1.5">
