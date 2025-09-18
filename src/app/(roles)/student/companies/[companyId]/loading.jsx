@@ -81,18 +81,6 @@ export default function LoadingCompanyProfile() {
                         <TertiaryLabel className="mb-2">Details</TertiaryLabel>
                         <Skeleton className="h-4 w-full mb-2" />
                         <Skeleton className="h-4 w-5/6 mb-6" />
-
-                        <TertiaryLabel className="mb-2">
-                            About Our Company
-                        </TertiaryLabel>
-                        <Skeleton className="h-4 w-full mb-2" />
-                        <Skeleton className="h-4 w-5/6 mb-6" />
-
-                        <TertiaryLabel className="mb-2">
-                            About Our Company
-                        </TertiaryLabel>
-                        <Skeleton className="h-4 w-full mb-2" />
-                        <Skeleton className="h-4 w-4/6 mb-6" />
                     </BorderBox>
                 </section>
 
@@ -104,25 +92,23 @@ export default function LoadingCompanyProfile() {
 
                     <Skeleton className="h-4 mb-3.5 w-36" />
                     <Skeleton className="h-3 w-56 mb-4" />
-                    <div className="text-muted-foreground flex items-center gap-2 text-sm mb-1.5">
+                    <div className="text-muted-foreground flex items-center gap-2 text-sm mb-3">
                         <Clock size={12} />
-                        Time limit : <Skeleton className="h-3 w-32" />
+                        <Skeleton className="h-3 w-44" />
                     </div>
-                    <div className="text-muted-foreground flex items-center gap-2 text-sm mb-1.5">
+                    <div className="text-muted-foreground flex items-center gap-2 text-sm mb-3">
                         <Hash size={12} />
-                        Total questions : <Skeleton className="h-3 w-7" />
+                        <Skeleton className="h-3 w-40" />
                     </div>
-                    <div className="text-muted-foreground flex items-center gap-2 text-sm mb-1.5">
+                    <div className="text-muted-foreground flex items-center gap-2 text-sm mb-3">
                         <LayoutList size={12} />
-                        Question type : <Skeleton className="h-3 w-28" />
+                        <Skeleton className="h-3 w-48" />
                     </div>
                     <div className="text-muted-foreground flex items-center gap-2 text-sm mb-6">
                         <Calendar size={12} />
-                        Created at : <Skeleton className="h-3 w-32" />
+                        <Skeleton className="h-3 w-32" />
                     </div>
-                    <Button className="w-full" disabled>
-                        Start examination <ArrowUpRight />
-                    </Button>
+                    <Skeleton className="h-9 w-full" />
                 </section>
             </div>
         </>

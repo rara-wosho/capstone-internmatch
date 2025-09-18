@@ -1,22 +1,20 @@
 "use client";
-import {
-    ArrowLeft,
-    ArrowRight,
-    Clock,
-    Maximize,
-    Minimize,
-    Target,
-    TriangleAlert,
-    Check,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Loader } from "lucide-react";
 import BorderBox from "../ui/BorderBox";
 import { Button } from "../ui/button";
 import { useState, useEffect } from "react";
 import TimeRemaining from "../exam/TimeRemaining";
-import { formatDuration } from "@/utils/format-duration";
+import { useSession } from "@/context/SessionContext";
+import { saveExamsAnswer } from "@/lib/actions/exam";
+import { useRouter } from "next/navigation";
 
 export default function ExamQuestionForm({ examinationData }) {
-    const [focus, setFocus] = useState(false);
+    const [isExpired, setIsExpired] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const router = useRouter();
+
+    // get the id of the current user
+    const { user } = useSession();
 
     // array of questions in the exam
     const questions = examinationData?.questions || [];
@@ -37,7 +35,12 @@ export default function ExamQuestionForm({ examinationData }) {
     // count total answered questions
     const totalAnsweredQuestions = Object.keys(selectedChoices).length;
 
-    const handleSelectChoice = (questionId, choiceId, choiceText) => {
+    const handleSelectChoice = (
+        questionId,
+        choiceId,
+        choiceText,
+        isCorrect
+    ) => {
         setSelectedChoices((prev) => ({
             ...prev,
             [questionId]: {
@@ -45,7 +48,7 @@ export default function ExamQuestionForm({ examinationData }) {
                 choice_id: choiceId,
                 choice_text: choiceText,
                 question_text: currentQuestion.question_text,
-                timestamp: new Date().toISOString(),
+                answer_is_correct: isCorrect,
             },
         }));
     };
@@ -70,7 +73,7 @@ export default function ExamQuestionForm({ examinationData }) {
         // Convert selectedChoices object to array for submission
         const answersArray = Object.values(selectedChoices);
 
-        if (answersArray.length < questions.length) {
+        if (answersArray.length < questions.length && !isExpired) {
             const unansweredCount = questions.length - answersArray.length;
             const confirmSubmit = window.confirm(
                 `You have ${unansweredCount} unanswered question${
@@ -80,68 +83,41 @@ export default function ExamQuestionForm({ examinationData }) {
             if (!confirmSubmit) return;
         }
 
-        try {
-            // Here you would make your API call to submit the exam
-            // Example API call structure:
-            /*
-            const response = await fetch('/api/exam/submit', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    exam_id: examinationData.id,
-                    student_id: examinationData.student_id, // You'll need to pass this
-                    attempt_id: examinationData.attempt_id, // If you create attempts
-                    answers: answersArray,
-                    completed_at: new Date().toISOString()
-                }),
-            });
+        setIsSubmitting(true);
 
-            if (!response.ok) throw new Error('Failed to submit exam');
-            
-            const result = await response.json();
-            */
+        const { data, success, error } = await saveExamsAnswer(
+            user?.id,
+            examinationData?.id,
+            answersArray
+        );
 
-            console.log("Submitting exam with answers:", answersArray);
-
-            // Handle successful submission - redirect or show results
-            alert("Exam submitted successfully!");
-            // window.location.href = '/exam-results'; // or use router.push()
-        } catch (error) {
-            console.error("Error submitting exam:", error);
-            alert("Failed to submit exam. Please try again.");
+        if (!success) {
+            alert(`Something went wrong while submitting the exam. ${error}`);
+            setIsSubmitting(false);
         }
+
+        if (success) {
+            console.log(data);
+            router.replace(
+                "/student/e/ae7244c3-5904-4bbb-a87e-798724039866/result"
+            );
+        }
+
+        // ✅ clear the stored start time so a retake gets a new timer
+        // clear the stored time even if it fails to let students retake again
+        const key = `exam_${examinationData.id}_${user.id}_start`;
+        localStorage.removeItem(key);
     };
 
     const progressWidth = ((activeQuestionIndex + 1) / questions.length) * 100;
 
-    // Auto-save answers periodically (optional)
+    // handle time limit expire
+
     useEffect(() => {
-        const autoSave = setInterval(() => {
-            if (Object.keys(selectedChoices).length > 0) {
-                // Auto-save logic here if needed
-                console.log(
-                    "Auto-saving answers...",
-                    Object.values(selectedChoices)
-                );
-
-                // Example auto-save API call:
-                /*
-                fetch('/api/exam/auto-save', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        attempt_id: examinationData.attempt_id,
-                        answers: Object.values(selectedChoices)
-                    })
-                }).catch(err => console.error('Auto-save failed:', err));
-                */
-            }
-        }, 30000); // Auto-save every 30 seconds
-
-        return () => clearInterval(autoSave);
-    }, [selectedChoices]);
+        if (isExpired) {
+            handleSubmitExam();
+        }
+    }, [isExpired]);
 
     // Handle browser refresh warning
     useEffect(() => {
@@ -156,7 +132,7 @@ export default function ExamQuestionForm({ examinationData }) {
         window.addEventListener("beforeunload", handleBeforeUnload);
         return () =>
             window.removeEventListener("beforeunload", handleBeforeUnload);
-    }, [selectedChoices]);
+    }, []);
 
     const isLastQuestion = activeQuestionIndex === questions.length - 1;
 
@@ -166,152 +142,79 @@ export default function ExamQuestionForm({ examinationData }) {
 
     return (
         <div>
-            {!focus && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-7">
-                    <section className="flex items-start p-3 sm:p-4 rounded-xl border bg-card gap-2">
-                        <Target
-                            className="mt-1 text-accent-foreground"
-                            size={20}
-                        />
-                        <div>
-                            <p className="mb-1 text-sm font-medium">
-                                Passing Score
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                                A minimum score of 80% is required.
-                            </p>
-                        </div>
-                    </section>
-                    <section className="flex items-start p-3 sm:p-4 bg-card rounded-xl border gap-2">
-                        <TriangleAlert
-                            className="mt-1 text-accent-foreground"
-                            size={20}
-                        />
-                        <div>
-                            <p className="mb-1 text-sm font-medium">
-                                Browser Focus
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                                Switching tabs or leaving the window will result
-                                in immediate forfeit.
-                            </p>
-                        </div>
-                    </section>
-                    <section className="flex items-start p-3 sm:p-4 bg-card rounded-xl border gap-2">
-                        <Clock
-                            className="mt-1 text-accent-foreground"
-                            size={20}
-                        />
-                        <div>
-                            <p className="mb-1 text-sm font-medium">
-                                Time Limit
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                                {formatDuration(examinationData.duration)} to
-                                complete all questions. Auto submit when time
-                                expires.
-                            </p>
-                        </div>
-                    </section>
-                    <section className="flex items-start p-3 sm:p-4 bg-card rounded-xl border gap-2">
-                        <TriangleAlert
-                            className="mt-1 text-accent-foreground"
-                            size={20}
-                        />
-                        <div>
-                            <p className="mb-1 text-sm font-medium">Note</p>
-                            <p className="text-xs text-muted-foreground">
-                                Avoid refreshing the page or you will lose your
-                                progress.
-                            </p>
-                        </div>
-                    </section>
-                </div>
-            )}
+            <div className="grid grid-cols-1 gap-3 md:gap-4 mt-7 lg:grid-cols-[1fr_2.7fr]">
+                <div className="left-section flex flex-col gap-3 md:gap-4">
+                    <TimeRemaining
+                        examId={examinationData.id}
+                        userId={user.id}
+                        durationMinutes={0.1}
+                        onExpire={() => setIsExpired(true)}
+                    />
 
-            <div
-                className={`grid grid-cols-1 gap-3 md:gap-4 mt-7 ${
-                    focus ? "lg:grid-cols-1" : "lg:grid-cols-[1fr_2.7fr]"
-                }`}
-            >
-                {!focus && (
-                    <div className="left-section flex flex-col gap-3 md:gap-4">
-                        <TimeRemaining timeLimit={examinationData.duration} />
-                        <div className="p-3 bg-card shadow-xs rounded-xl border">
-                            <p className="text-sm font-medium text-center mb-5">
-                                Progress: {totalAnsweredQuestions}/
-                                {questions.length}
-                            </p>
-                            <div className="flex flex-wrap gap-2 justify-center">
-                                {questions.map((question, index) => {
-                                    const isAnswered =
-                                        selectedChoices[question.id] !==
-                                        undefined;
-                                    const isActive =
-                                        activeQuestionIndex === index;
+                    <div className="p-3 bg-card shadow-xs rounded-xl border grow">
+                        <p className="text-sm font-medium text-center mb-5">
+                            Progress: {totalAnsweredQuestions}/
+                            {questions.length}
+                        </p>
+                        <div className="flex flex-wrap gap-2 justify-center">
+                            {questions.map((question, index) => {
+                                const isAnswered =
+                                    selectedChoices[question.id] !== undefined;
+                                const isActive = activeQuestionIndex === index;
 
-                                    return (
-                                        <button
-                                            onClick={() =>
-                                                handleQuestionNavigation(index)
-                                            }
-                                            className={`w-9 rounded-lg aspect-square flex items-center justify-center cursor-pointer relative transition-all
+                                return (
+                                    <button
+                                        disabled={isExpired || isSubmitting}
+                                        onClick={() =>
+                                            handleQuestionNavigation(index)
+                                        }
+                                        className={`${
+                                            isExpired || isSubmitting
+                                                ? "opacity-40"
+                                                : "cursor-pointer"
+                                        } w-9 rounded-lg aspect-square flex items-center justify-center relative transition-all
                                                 ${
                                                     isActive
                                                         ? "border-2 border-primary bg-violet-500/10"
                                                         : isAnswered
-                                                        ? "bg-green-100 border border-green-300 dark:bg-green-900/30 dark:border-green-700"
+                                                        ? "bg-emerald-100 border border-emerald-400 dark:bg-green-900/30 dark:border-green-700"
                                                         : "bg-muted hover:bg-muted/80"
                                                 }
                                             `}
-                                            key={index}
+                                        key={index}
+                                    >
+                                        {isAnswered && (
+                                            <div className="absolute -top-1 -right-1 text-green-600 bg-card rounded-full p-[2px]">
+                                                <Check size={12} />
+                                            </div>
+                                        )}
+                                        <p
+                                            className={`text-sm ${
+                                                isActive ? "font-semibold" : ""
+                                            }`}
                                         >
-                                            {isAnswered && (
-                                                <div className="absolute -top-1 -right-1 text-green-600 bg-card rounded-full p-[2px]">
-                                                    <Check size={12} />
-                                                </div>
-                                            )}
-                                            <p
-                                                className={`text-sm ${
-                                                    isActive
-                                                        ? "font-semibold"
-                                                        : ""
-                                                }`}
-                                            >
-                                                {index + 1}
-                                            </p>
-                                        </button>
-                                    );
-                                })}
-                            </div>
+                                            {index + 1}
+                                        </p>
+                                    </button>
+                                );
+                            })}
                         </div>
                     </div>
-                )}
+                </div>
+
                 <div className="rounded-xl border bg-card shadow-xs grow">
                     <BorderBox>
-                        <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                                <h1 className="text-secondary-foreground/90 text-sm">
-                                    Question {activeQuestionIndex + 1} of{" "}
-                                    {questions?.length}
-                                </h1>
-                                {isCurrentQuestionAnswered && (
-                                    <p className="text-xs text-green-600 flex items-center gap-1 mt-1">
-                                        Answered
-                                        <Check size={12} />
-                                    </p>
-                                )}
-                            </div>
-                            <button
-                                onClick={() => setFocus(!focus)}
-                                className="cursor-pointer hover:bg-muted p-2 rounded-lg transition-colors"
-                            >
-                                {focus ? (
-                                    <Minimize size={20} />
-                                ) : (
-                                    <Maximize size={20} />
-                                )}
-                            </button>
+                        <div className="flex items-center gap-2 mb-2">
+                            <h1 className="text-secondary-foreground/90 text-sm">
+                                Question {activeQuestionIndex + 1} of{" "}
+                                {questions?.length}
+                            </h1>
+                            {isCurrentQuestionAnswered && (
+                                <p className="text-xs text-green-600 flex items-center gap-1 mt-1">
+                                    Answered
+                                    <Check size={12} />
+                                </p>
+                            )}
                         </div>
                         <div className="h-1 rounded-full overflow-hidden w-full bg-muted">
                             <div
@@ -337,7 +240,8 @@ export default function ExamQuestionForm({ examinationData }) {
                                             handleSelectChoice(
                                                 currentQuestion.id,
                                                 choice.id,
-                                                choice.choice_text
+                                                choice.choice_text,
+                                                choice.is_correct
                                             )
                                         }
                                         key={choice.id}
@@ -375,7 +279,11 @@ export default function ExamQuestionForm({ examinationData }) {
                             <Button
                                 onClick={handlePrev}
                                 variant="secondary"
-                                disabled={activeQuestionIndex === 0}
+                                disabled={
+                                    activeQuestionIndex === 0 ||
+                                    isExpired ||
+                                    isSubmitting
+                                }
                             >
                                 <ArrowLeft size={16} />
                                 Prev
@@ -389,14 +297,23 @@ export default function ExamQuestionForm({ examinationData }) {
 
                             {isLastQuestion ? (
                                 <Button
+                                    disabled={isExpired || isSubmitting}
                                     onClick={handleSubmitExam}
                                     className="bg-green-600 hover:bg-green-700"
                                 >
-                                    Submit Exam
+                                    {isSubmitting && (
+                                        <Loader className="animate-spin" />
+                                    )}
+                                    {isSubmitting
+                                        ? "Submitting Exam..."
+                                        : "Submit Exam"}
                                 </Button>
                             ) : (
-                                <Button onClick={handleNext}>
-                                    Next
+                                <Button
+                                    disabled={isExpired || isSubmitting}
+                                    onClick={handleNext}
+                                >
+                                    {isSubmitting ? "Submitting..." : "Next"}
                                     <ArrowRight size={16} />
                                 </Button>
                             )}

@@ -6,10 +6,12 @@ import { getCompanies } from "@/lib/actions/company";
 import { Building2 } from "lucide-react";
 
 export default async function Page() {
-    const { data, count, error } = await getCompanies();
+    const { data, error } = await getCompanies();
 
     if (error) {
-        return <ErrorUi />;
+        return (
+            <ErrorUi secondaryMessage="Please check your internet connection and try again." />
+        );
     }
 
     return (

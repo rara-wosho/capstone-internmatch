@@ -40,7 +40,12 @@ export default function CompanyCard({ company }) {
                     <p className="text-xs">Frontend Development + more</p>
                 </div>
                 <div className="flex items-center gap-2 mt-auto">
-                    <Button variant="white" size="sm" className="grow" asChild>
+                    <Button
+                        size="sm"
+                        variant="outlineWhite"
+                        className="grow"
+                        asChild
+                    >
                         <Link href={`/student/companies/${company?.id}`}>
                             View Details
                         </Link>

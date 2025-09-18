@@ -3,7 +3,7 @@ import { Clock, Target, TriangleAlert } from "lucide-react";
 
 export default function ExamReminders({ passing, duration }) {
     return (
-        <div className="flex flex-col gap-2 py-3">
+        <div className="flex flex-col gap-2 sm:py-3">
             <section className="flex items-start mb-3 rounded-xl bg-card gap-2">
                 <Target className="mt-1 text-accent-foreground" size={14} />
                 <div>

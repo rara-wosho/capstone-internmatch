@@ -18,6 +18,7 @@ const links = [
 ];
 
 export default async function Page({ params }) {
+    await new Promise((res) => setTimeout(res, 9000));
     const { companyId } = await params;
 
     const { data, error } = await getCompanyDataAndExams(companyId);

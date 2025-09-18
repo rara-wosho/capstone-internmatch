@@ -74,20 +74,19 @@ export async function createCompanyAccount(form) {
 export async function getCompanies() {
     const supabase = await createClient();
 
-    const { data, count, error } = await supabase
+    const { data, error } = await supabase
         .from("companies")
-        .select("*", { count: "exact" })
+        .select()
         .order("created_at", { ascending: true });
 
     if (error) {
         return {
             data: null,
-            count: 0,
             error: error.message || "Unable to load companies.",
         };
     }
 
-    return { data, count, error: null };
+    return { data, error: null };
 }
 
 // fetch company data for company profile

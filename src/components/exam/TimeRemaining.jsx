@@ -1,52 +1,74 @@
 "use client";
-
+import { useEffect, useState } from "react";
 import { formatDuration } from "@/utils/format-duration";
-import { useState, useEffect } from "react";
 
-export default function TimeRemaining({ timeLimit }) {
-    // Convert minutes → ms
-    const [time, setTime] = useState(timeLimit * 60 * 1000);
+export default function TimeRemaining({
+    examId,
+    userId,
+    durationMinutes,
+    onExpire,
+}) {
+    const [deadline, setDeadline] = useState(null);
+    const [remainingMs, setRemainingMs] = useState(null);
 
-    // Reset time if prop changes
+    // Initialize start time & deadline
     useEffect(() => {
-        setTime(timeLimit * 60 * 1000);
-    }, [timeLimit]);
+        if (!examId || !userId) return;
 
-    // Countdown interval
+        const key = `exam_${examId}_${userId}_start`;
+        const stored = localStorage.getItem(key);
+
+        const startedAt = stored ? new Date(stored) : new Date();
+        if (!stored) localStorage.setItem(key, startedAt.toISOString());
+
+        const end = new Date(startedAt.getTime() + durationMinutes * 60 * 1000);
+        setDeadline(end);
+    }, [examId, userId, durationMinutes]);
+
+    // Countdown only
     useEffect(() => {
-        if (time <= 0) return;
+        if (!deadline) return;
 
-        const interval = setInterval(() => {
-            setTime((prev) => (prev > 0 ? prev - 1000 : 0));
-        }, 1000);
+        const tick = () => {
+            const diff = deadline - new Date();
+            setRemainingMs(diff);
+            if (diff <= 0) {
+                clearInterval(timer);
+                onExpire?.();
+            }
+        };
 
-        return () => clearInterval(interval);
-    }, []); // run once
+        const timer = setInterval(tick, 1000);
+        tick();
+        return () => clearInterval(timer);
+    }, [deadline, onExpire]);
 
-    // Convert ms → h:mm:ss
-    const hours = Math.floor(time / 3600000);
-    const minutes = Math.floor((time % 3600000) / 60000);
-    const seconds = Math.floor((time % 60000) / 1000)
-        .toString()
-        .padStart(2, "0");
+    if (!deadline) return null;
 
-    const display =
+    const totalSeconds = Math.max(Math.floor((remainingMs ?? 0) / 1000), 0);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    const formattedTime =
         hours > 0
-            ? `${hours}:${minutes.toString().padStart(2, "0")}:${seconds}`
-            : `${minutes}:${seconds}`;
+            ? `${hours.toString().padStart(2, "0")}:${minutes
+                  .toString()
+                  .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
+            : `${minutes.toString().padStart(2, "0")}:${seconds
+                  .toString()
+                  .padStart(2, "0")}`;
 
     return (
-        <div className="rounded-xl shadow-xs border">
-            <div className="bg-card rounded-x-xl rounded-t-xl flex items-center justify-center flex-col">
-                <p className="text-sm mb-2 py-4">Time Remaining</p>
-                <div className="w-20 rounded-full aspect-square border-2 border-primary mb-5 flex flex-col items-center justify-center">
-                    <p className="text-primary-text font-semibold w-20 text-center">
-                        {display}
-                    </p>
+        <div className="rounded-xl border shadow-xs">
+            <div className="bg-card flex items-center py-5 px-4 rounded-t-xl flex-col justify-center">
+                <p className="mb-4 text-sm">Remaining time</p>
+                <div className="p-3 text-center flex items-center justify-center rounded-full border-2 border-primary w-[100px] aspect-square">
+                    <p className="text-primary-text">{formattedTime}</p>
                 </div>
             </div>
-            <div className="p-3 border-t rounded-b-xl text-sm text-muted-foreground text-center">
-                Time limit : {formatDuration(timeLimit)}
+            <div className="p-3 text-center text-sm text-muted-foreground">
+                Time Limit: {formatDuration(durationMinutes)}
             </div>
         </div>
     );

@@ -1,9 +1,17 @@
 import ExamQuestionForm from "@/components/forms/ExamQuestionForm";
 import ErrorUi from "@/components/ui/ErrorUi";
+import IconWrapper from "@/components/ui/IconWrapper";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { getExamById } from "@/lib/actions/exam";
 import { notFound } from "next/navigation";
+
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
+import { Info } from "lucide-react";
 
 export default async function Page({ params }) {
     const { examId } = await params;
@@ -15,7 +23,12 @@ export default async function Page({ params }) {
     const { data: exam, error } = await getExamById(examId);
 
     if (error) {
-        return <ErrorUi message={error} />;
+        return (
+            <ErrorUi
+                message="Something went wrong while starting the exam."
+                secondaryMessage={error}
+            />
+        );
     }
 
     if (!exam || exam.length === 0) {
@@ -24,10 +37,42 @@ export default async function Page({ params }) {
 
     return (
         <div>
-            <SidebarTrigger />
+            <div className="flex items-center justify-between">
+                <SidebarTrigger />
+                <Popover>
+                    <PopoverTrigger>
+                        <IconWrapper className="cursor-pointer ms-auto">
+                            <Info size={20} />
+                        </IconWrapper>
+                    </PopoverTrigger>
+                    <PopoverContent align="end">
+                        <div className="flex flex-col gap-3">
+                            <p>Reminders</p>
+                            {exam.passing && (
+                                <p className="text-xs text-muted-foreground">
+                                    Passing score: {exam.passing}
+                                </p>
+                            )}
+                            <p className="text-xs text-muted-foreground">
+                                Auto submit when time expires.
+                            </p>
+                            <p className="text-xs text-amber-600 dark:text-amber-400/90">
+                                Switching tabs or leaving the window will result
+                                in immediate forfeit.
+                            </p>
+
+                            <p className="text-xs text-amber-600 dark:text-amber-400/90">
+                                Avoid refreshing the page or you will lose your
+                                progress.
+                            </p>
+                        </div>
+                    </PopoverContent>
+                </Popover>
+            </div>
             <SecondaryLabel className="mb-2 mt-3 md:mt-4">
                 {exam.title}
             </SecondaryLabel>
+
             <p className="text-muted-foreground">
                 {exam?.description
                     ? exam?.description

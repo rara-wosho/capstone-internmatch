@@ -97,13 +97,23 @@ export default function ExaminationSection({ companyExams }) {
                                 Multiple choice
                             </span>
                         </p>
-                        <p className="text-muted-foreground flex items-center gap-2 text-sm">
-                            <Calendar size={12} />
-                            Created at :{" "}
-                            <span className="text-secondary-foreground ">
-                                {dateFormatter(exam?.created_at)}
-                            </span>
-                        </p>
+                        {exam?.created_at !== exam?.updated_at ? (
+                            <p className="text-muted-foreground flex items-center gap-2 text-sm mb-1.5">
+                                <Calendar size={12} />
+                                Updated at :{" "}
+                                <span className="text-secondary-foreground ">
+                                    {dateFormatter(exam?.updated_at)}
+                                </span>
+                            </p>
+                        ) : (
+                            <p className="text-muted-foreground flex items-center gap-2 text-sm mb-1.5">
+                                <Calendar size={12} />
+                                Created at :{" "}
+                                <span className="text-secondary-foreground ">
+                                    {dateFormatter(exam?.created_at)}
+                                </span>
+                            </p>
+                        )}
                         <div className="mt-6 flex items-center mb-1">
                             <Dialog>
                                 <DialogTrigger asChild className="w-full">
@@ -125,12 +135,16 @@ export default function ExaminationSection({ companyExams }) {
 
                                     <DialogFooter>
                                         <DialogClose asChild>
-                                            <Button variant="secondary">
+                                            <Button
+                                                variant="secondary"
+                                                className="sm:w-1/2"
+                                            >
                                                 Cancel
                                             </Button>
                                         </DialogClose>
                                         <Button asChild>
                                             <Link
+                                                className="sm:w-1/2"
                                                 href={`/student/e/${exam?.id}`}
                                             >
                                                 Start examination{" "}

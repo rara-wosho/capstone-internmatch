@@ -14,7 +14,7 @@ export default function Loading() {
             </SecondaryLabel>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 {/* card skeletons  */}
-                <div className="border rounded-xl p-2 shadow-xs">
+                <div className="border rounded-xl p-2">
                     <Skeleton className="w-full aspect-[5/3.5] mb-4" />
 
                     <div className="py-2 md:px-2">
@@ -29,7 +29,7 @@ export default function Loading() {
                         </div>
                     </div>
                 </div>
-                <div className="border rounded-xl p-2 shadow-xs">
+                <div className="border rounded-xl p-2">
                     <Skeleton className="w-full aspect-[5/3.5] mb-4" />
 
                     <div className="py-2 md:px-2">
