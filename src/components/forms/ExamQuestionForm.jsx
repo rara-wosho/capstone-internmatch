@@ -7,6 +7,7 @@ import TimeRemaining from "../exam/TimeRemaining";
 import { useSession } from "@/context/SessionContext";
 import { saveExamsAnswer } from "@/lib/actions/exam";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function ExamQuestionForm({ examinationData }) {
     const [isExpired, setIsExpired] = useState(false);
@@ -85,36 +86,46 @@ export default function ExamQuestionForm({ examinationData }) {
 
         setIsSubmitting(true);
 
-        const { data, success, error } = await saveExamsAnswer(
-            user?.id,
-            examinationData?.id,
-            answersArray
-        );
+        const key = `exam_${examinationData.id}_${user.id}_start`;
+        const rawStart = localStorage.getItem(key);
 
-        if (!success) {
-            alert(`Something went wrong while submitting the exam. ${error}`);
-            setIsSubmitting(false);
-        }
+        const started_at = rawStart
+            ? new Date(rawStart).toISOString()
+            : new Date().toISOString();
 
-        if (success) {
+        try {
+            const { data, success, error } = await saveExamsAnswer(
+                user?.id,
+                examinationData?.id,
+                started_at,
+                answersArray
+            );
+
+            if (!success) {
+                toast.error("Something went wrong while submitting the exam.", {
+                    description: error,
+                });
+                return;
+            }
+
             console.log(data);
             router.replace(
                 "/student/e/ae7244c3-5904-4bbb-a87e-798724039866/result"
             );
+        } catch (err) {
+            alert("Something went wrong submitting the exam.");
+        } finally {
+            localStorage.removeItem(key);
+            setIsSubmitting(false);
         }
-
-        // ✅ clear the stored start time so a retake gets a new timer
-        // clear the stored time even if it fails to let students retake again
-        const key = `exam_${examinationData.id}_${user.id}_start`;
-        localStorage.removeItem(key);
     };
 
     const progressWidth = ((activeQuestionIndex + 1) / questions.length) * 100;
 
     // handle time limit expire
-
     useEffect(() => {
         if (isExpired) {
+            setIsSubmitting(true);
             handleSubmitExam();
         }
     }, [isExpired]);
@@ -147,7 +158,7 @@ export default function ExamQuestionForm({ examinationData }) {
                     <TimeRemaining
                         examId={examinationData.id}
                         userId={user.id}
-                        durationMinutes={0.1}
+                        durationMinutes={examinationData.duration}
                         onExpire={() => setIsExpired(true)}
                     />
 

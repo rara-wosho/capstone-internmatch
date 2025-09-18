@@ -12,12 +12,37 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import { Info } from "lucide-react";
+import { getCurrentUser } from "@/lib/actions/auth";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function Page({ params }) {
     const { examId } = await params;
 
     if (!examId) {
         notFound();
+    }
+
+    const { user } = await getCurrentUser();
+
+    const supabase = await createClient();
+
+    const { data: attempts, error: attemptsError } = await supabase
+        .from("exam_attempt")
+        .select("id")
+        .eq("student_id", user.id)
+        .eq("exam_id", examId);
+
+    if (attemptsError) {
+        return (
+            <ErrorUi
+                message="Failed to check exam attempts."
+                secondaryMessage={attemptsError.message}
+            />
+        );
+    }
+
+    if (attempts && attempts.length > 0) {
+        return <p>You already answered the exam.</p>;
     }
 
     const { data: exam, error } = await getExamById(examId);

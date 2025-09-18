@@ -308,7 +308,12 @@ export async function getExamById(examId) {
 //     }
 // }
 
-export async function saveExamsAnswer(student_id, exam_id, answersArray) {
+export async function saveExamsAnswer(
+    student_id,
+    exam_id,
+    started_at,
+    answersArray
+) {
     const supabase = await createClient();
 
     // Validate input
@@ -324,9 +329,50 @@ export async function saveExamsAnswer(student_id, exam_id, answersArray) {
         return { success: false, error: "Missing student_id or exam_id" };
     }
 
+    const correctAnswers = answersArray.filter(
+        (answer) => answer.answer_is_correct
+    );
+
+    // insert to exam attempts
+    const { data: attemptData, error: attemptErr } = await supabase
+        .from("exam_attempt")
+        .insert({
+            student_id,
+            exam_id,
+            score: correctAnswers.length,
+            started_at: started_at ?? new Date().toISOString(),
+        })
+        .select("id")
+        .single();
+
+    if (attemptErr) {
+        return { success: false, error: "Failed to submit the exam." };
+    }
+
+    // Prepare answers
+    const rows = answersArray.map((a) => ({
+        attempt_id: attemptData.id,
+        original_question_id: a.question_id,
+        original_question_text: a.question_text,
+        selected_choice_id: a.choice_id,
+        selected_choice_text: a.choice_text,
+        is_answer_correct: a.answer_is_correct,
+    }));
+
+    // insert the array
+    const { error: attemptQuestionErr } = await supabase
+        .from("attempt_questions")
+        .insert(rows);
+
+    // if error, delete the exam attempt
+    if (attemptQuestionErr) {
+        await supabase.from("exam_attempt").delete().eq("id", attemptData.id);
+        return { success: false, error: "Failed to submit the exam." };
+    }
+
     return {
         success: true,
-        data: { answersArray, student_id, exam_id },
+        data: { answersArray, student_id, exam_id, started_at },
         error: null,
     };
 }
