@@ -18,7 +18,6 @@ export async function createGroup(formData) {
     });
 
     if (error) {
-        console.log(error);
         return { success: false, returnedData: { name, description } };
     }
 

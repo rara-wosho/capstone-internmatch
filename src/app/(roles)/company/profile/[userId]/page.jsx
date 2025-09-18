@@ -32,7 +32,6 @@ export default async function Page({ params }) {
 
     if (!companyData) notFound();
 
-    console.log("Company Data", companyData);
     return (
         <div>
             <SecondaryLabel className="mb-3 gap-2.5">

@@ -32,8 +32,6 @@ export default function AddGroupModal() {
         description: "",
     });
 
-    console.log("add group modal render");
-
     async function handleCreateGroup(formData) {
         // formData.append("instructor-id", user?.id ?? null);
         const {

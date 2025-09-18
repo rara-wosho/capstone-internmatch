@@ -98,6 +98,7 @@ export default function ExamQuestionForm({ examinationData }) {
                 user?.id,
                 examinationData?.id,
                 started_at,
+                examinationData.title,
                 answersArray
             );
 
@@ -108,7 +109,6 @@ export default function ExamQuestionForm({ examinationData }) {
                 return;
             }
 
-            console.log(data);
             router.replace(
                 "/student/e/ae7244c3-5904-4bbb-a87e-798724039866/result"
             );

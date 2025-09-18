@@ -14,7 +14,6 @@ export async function createExam(formData) {
         .single();
 
     if (error) {
-        console.log("create exam error: ", error.message);
         return { success: false };
     }
 
@@ -312,6 +311,7 @@ export async function saveExamsAnswer(
     student_id,
     exam_id,
     started_at,
+    exam_title,
     answersArray
 ) {
     const supabase = await createClient();
@@ -339,6 +339,7 @@ export async function saveExamsAnswer(
         .insert({
             student_id,
             exam_id,
+            exam_title,
             score: correctAnswers.length,
             started_at: started_at ?? new Date().toISOString(),
         })

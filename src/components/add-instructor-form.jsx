@@ -22,7 +22,6 @@ export default function AddInstructorForm() {
 
         if (data) {
             toast.success("Instructor added successfully");
-            console.log(data);
         }
     };
 

@@ -1,32 +1,37 @@
+import ErrorUi from "@/components/ui/ErrorUi";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
-import TertiaryLabel from "@/components/ui/TertiaryLabel";
+import { getCurrentUser } from "@/lib/actions/auth";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
-export default function Page() {
+export default async function Page() {
+    const supabase = await createClient();
+    const { user } = await getCurrentUser();
+
+    if (!user) {
+        redirect("/sign-in");
+    }
+
+    const { data, error } = await supabase
+        .from("exam_attempt")
+        .select()
+        .eq("student_id", user.id)
+        .order("started_at", { ascending: false });
+
+    if (error) {
+        return <ErrorUi />;
+    }
+
     return (
         <div>
-            <SecondaryLabel>Recent Exams</SecondaryLabel>
+            <SecondaryLabel className="mb-3">Recent Exams</SecondaryLabel>
 
-            <div className="flex flex-col gap-4 mt-4 max-w-2xl">
-                <div className="border bg-white dark:bg-transparent rounded-xl">
-                    <h1 className="font-semibold text-base text-secondary-foreground/90 rounded-t-xl p-2.5 md:p-3 bg-slate-200/80 dark:bg-card/30">
-                        Nov 23, 2025
-                    </h1>
-                    <div className="p-2.5 md:p-3 text-muted-foreground">
-                        <p>Google.com company</p>
-                        <p>Google.com company</p>
-                        <p>Google.com company</p>
-                    </div>
+            {data.map((d) => (
+                <div key={d.id}>
+                    <p>{d.exam_title}</p>
+                    <p>{d.score}</p>
                 </div>
-                <div className="border bg-white dark:bg-transparent rounded-xl">
-                    <h1 className="font-semibold text-base text-secondary-foreground/90 rounded-t-xl p-2.5 md:p-3 bg-slate-200/80 dark:bg-card/30">
-                        Nov 23, 2025
-                    </h1>
-                    <div className="p-2.5 md:p-3 text-muted-foreground">
-                        <p>Google.com company</p>
-                        <p>Google.com company</p>
-                    </div>
-                </div>
-            </div>
+            ))}
         </div>
     );
 }

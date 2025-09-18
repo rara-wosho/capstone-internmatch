@@ -3,28 +3,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "../supabase/server";
 
-// export async function signIn(formData) {
-//     const email = formData.get("email");
-//     const password = formData.get("password");
-
-//     const supabase = await createClient();
-
-//     const {
-//         error,
-//         data: { user },
-//     } = await supabase.auth.signInWithPassword({
-//         email,
-//         password,
-//     });
-
-//     if (error) {
-//         console.log(error.message);
-//         return { success: false, error: error.message };
-//     }
-
-//     return { success: true, role: user?.user_metadata.role };
-// }
-
 export async function signIn(prevState, formData) {
     const email = formData.get("email");
     const password = formData.get("password");
@@ -49,7 +27,6 @@ export async function signIn(prevState, formData) {
     });
 
     if (error) {
-        console.log("Sign in error:", error.message);
         return {
             error: error.message,
             email: email || "",
