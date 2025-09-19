@@ -1,5 +1,12 @@
 "use client";
-import { ArrowLeft, ArrowRight, Check, Loader } from "lucide-react";
+import {
+    ArrowLeft,
+    ArrowRight,
+    Check,
+    ChevronLeft,
+    ChevronRight,
+    Loader,
+} from "lucide-react";
 import BorderBox from "../ui/BorderBox";
 import { Button } from "../ui/button";
 import { useState, useEffect } from "react";
@@ -215,27 +222,30 @@ export default function ExamQuestionForm({ examinationData }) {
 
                 <div className="rounded-xl border bg-card shadow-xs grow">
                     <BorderBox>
-                        <div className="flex items-center gap-2 mb-2">
-                            <h1 className="text-secondary-foreground/90 text-sm">
+                        <div className="flex items-end gap-2 mb-2">
+                            <h1 className="text-muted-foreground text-sm">
                                 Question {activeQuestionIndex + 1} of{" "}
                                 {questions?.length}
                             </h1>
                             {isCurrentQuestionAnswered && (
-                                <p className="text-xs text-green-600 flex items-center gap-1 mt-1">
+                                <p className="text-sm text-green-600 flex items-center gap-1">
                                     Answered
                                     <Check size={12} />
                                 </p>
                             )}
+                            <p className="ms-auto text-xs text-primary-text">
+                                {Math.trunc(progressWidth)}% Completed
+                            </p>
                         </div>
-                        <div className="h-1 rounded-full overflow-hidden w-full bg-muted">
+                        <div className="h-[6px] rounded-full overflow-hidden w-full bg-muted">
                             <div
                                 style={{ width: `${progressWidth}%` }}
-                                className="bg-primary/60 duration-300 h-1"
+                                className="bg-primary/60 duration-300 rounded-full h-[6px]"
                             ></div>
                         </div>
                     </BorderBox>
                     <BorderBox className="right-section">
-                        <p className="md:text-lg mb-6 text-secondary-foreground leading-relaxed">
+                        <p className="md:text-lg mb-6 text-secondary-foreground leading-relaxed font-medium">
                             {currentQuestion.question_text}
                         </p>
 
@@ -296,7 +306,7 @@ export default function ExamQuestionForm({ examinationData }) {
                                     isSubmitting
                                 }
                             >
-                                <ArrowLeft size={16} />
+                                <ChevronLeft size={16} />
                                 Prev
                             </Button>
 
@@ -321,11 +331,16 @@ export default function ExamQuestionForm({ examinationData }) {
                                 </Button>
                             ) : (
                                 <Button
-                                    disabled={isExpired || isSubmitting}
+                                    disabled={
+                                        isExpired ||
+                                        isSubmitting ||
+                                        selectedChoices[currentQuestion.id] ===
+                                            undefined
+                                    }
                                     onClick={handleNext}
                                 >
                                     {isSubmitting ? "Submitting..." : "Next"}
-                                    <ArrowRight size={16} />
+                                    <ChevronRight size={16} />
                                 </Button>
                             )}
                         </div>

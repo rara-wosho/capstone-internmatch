@@ -39,7 +39,7 @@ export default function Page() {
 
             <div className="p-0 md:p-5 flex flex-col items-center justify-center min-h-[calc(100vh-65px)] bg-linear-to-b from-transparent to-blue-200/50 dark:to-blue-950/40 from-50% relative md:pb-14">
                 {/* wrapper */}
-                <div className="p-2 lg:p-5 gap-8 lg:border rounded-3xl flex items-center w-full max-w-[1100px] lg:bg-[rgb(253,253,253)] lg:dark:bg-background relative isolate overflow-hidden">
+                <div className="p-2 lg:p-5 gap-8 lg:border rounded-3xl flex items-center w-full max-w-[1000px] lg:bg-[rgb(253,253,253)] lg:dark:bg-background relative isolate overflow-hidden">
                     <div className="hidden lg:block rounded-[100%] border-4 border-neutral-100 dark:border-neutral-900 h-[200px] w-[500px] absolute -left-20 -top-32 -z-10"></div>
                     <div className="hidden lg:block rounded-[100%] border-4 border-neutral-100 dark:border-neutral-900 h-[400px] w-[1000px] absolute -right-[200px] -bottom-[300px] -z-10"></div>
 
@@ -74,7 +74,7 @@ export default function Page() {
                     </div>
 
                     {/* sign in form */}
-                    <Card className="max-w-md p-5 w-full mx-auto">
+                    <Card className="max-w-[450px] p-5 w-full mx-auto">
                         <div className="flex flex-col items-center justify-center mb-3 mt-5">
                             <h1 className="text-secondary-foreground font-bold text-3xl mb-1 text-center">
                                 Welcome Back!
@@ -157,10 +157,6 @@ export default function Page() {
                         </div>
                     </Card>
                 </div>
-            </div>
-
-            <div className="p-8">
-                <p className="text-sm text-muted-foreground">InternMatch</p>
             </div>
         </>
     );

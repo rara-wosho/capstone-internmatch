@@ -22,21 +22,29 @@ export default function Page() {
     const [accountType, setAccountType] = useState("");
     return (
         <>
-            <div className="min-h-svh pt-5 pb-16 px-4 md:px-8 bg-linear-to-b  from-[rgb(253,253,253)] dark:from-transparent to-[rgb(253,253,253)] dark:to-blue-950/40 from-50%">
+            <div className="min-h-svh pt-4 pb-16 px-4 md:px-8 bg-linear-to-b  from-[rgb(253,253,253)] dark:from-transparent to-[rgb(253,253,253)] dark:to-blue-950/40 from-50%">
                 <Wrapper size="sm">
-                    {accountType ? (
-                        <button
-                            onClick={() => setAccountType("")}
-                            className="mb-4 text-muted-foreground flex items-center gap-1 cursor-pointer"
-                        >
-                            <ChevronLeft size={20} />
-                            Prev
-                        </button>
-                    ) : (
-                        <BackButton className="flex items-center gap-1 mb-4 text-muted-foreground">
-                            <ChevronLeft size={20} /> Back to sign in
-                        </BackButton>
-                    )}
+                    <div className="flex items-center mb-4">
+                        {accountType ? (
+                            <button
+                                onClick={() => setAccountType("")}
+                                className="text-muted-foreground flex items-center gap-1 cursor-pointer"
+                            >
+                                <ChevronLeft size={20} />
+                                Prev
+                            </button>
+                        ) : (
+                            <BackButton className="flex items-center gap-1 text-muted-foreground">
+                                <ChevronLeft size={20} /> Back
+                            </BackButton>
+                        )}
+
+                        <div className="ms-auto">
+                            <Button asChild variant="outline" size="sm">
+                                <Link href="/sign-in">Sign In Instead</Link>
+                            </Button>
+                        </div>
+                    </div>
 
                     {/* did not choose account type yet  */}
                     {!accountType && (
@@ -213,7 +221,6 @@ export default function Page() {
                     )}
                 </Wrapper>
             </div>
-            <PrivateFooter />
         </>
     );
 }

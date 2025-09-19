@@ -1,13 +1,10 @@
-import Navbar from "@/components/Navbar";
 import PublicFooter from "@/components/ui/PublicFooter";
-import Wrapper from "@/components/Wrapper";
 
 export default function Layout({ children }) {
     return (
-        <div className="h-screen">
-            <Navbar />
+        <>
             {children}
             <PublicFooter />
-        </div>
+        </>
     );
 }
