@@ -44,7 +44,7 @@ export default function HeroSection() {
 
             <div className="grid grid-cols-3 mt-8 py-12">
                 <div className="px-2 sm:px-6 md:px-12 text-center gap-1.5 flex flex-col">
-                    <p className="tracking-widest font-bold text-xl sm:text-2xl md:text-4xl bg-linear-to-b from-neutral-900 dark:from-50% dark:from-neutral-50 to-neutral-600 dark:to-neutral-600 bg-clip-text text-transparent">
+                    <p className="tracking-widest font-bold text-xl sm:text-2xl md:text-4xl bg-linear-to-b from-neutral-900 dark:from-50% dark:from-neutral-200 to-neutral-600 dark:to-neutral-600 bg-clip-text text-transparent">
                         30+
                     </p>
                     <p className="text-sm sm:text-base font-medium text-muted-foreground">
@@ -52,7 +52,7 @@ export default function HeroSection() {
                     </p>
                 </div>
                 <div className="px-2 sm:px-6 md:px-12 text-center gap-1.5 flex flex-col border-l border-r">
-                    <p className="tracking-widest font-bold text-xl sm:text-2xl md:text-4xl bg-linear-to-b from-neutral-900 dark:from-50% dark:from-neutral-50 to-neutral-600 dark:to-neutral-600 bg-clip-text text-transparent">
+                    <p className="tracking-widest font-bold text-xl sm:text-2xl md:text-4xl bg-linear-to-b from-neutral-900 dark:from-50% dark:from-neutral-200 to-neutral-600 dark:to-neutral-600 bg-clip-text text-transparent">
                         150+
                     </p>
                     <p className="text-sm sm:text-base font-medium text-muted-foreground">
@@ -60,7 +60,7 @@ export default function HeroSection() {
                     </p>
                 </div>
                 <div className="px-2 sm:px-6 md:px-12 text-center gap-1.5 flex flex-col">
-                    <p className="tracking-widest font-bold text-xl sm:text-2xl md:text-4xl bg-linear-to-b from-neutral-900 dark:from-50% dark:from-neutral-50 to-neutral-600 dark:to-neutral-600 bg-clip-text text-transparent">
+                    <p className="tracking-widest font-bold text-xl sm:text-2xl md:text-4xl bg-linear-to-b from-neutral-900 dark:from-50% dark:from-neutral-200 to-neutral-600 dark:to-neutral-600 bg-clip-text text-transparent">
                         50+
                     </p>
                     <p className="text-sm sm:text-base font-medium text-muted-foreground">

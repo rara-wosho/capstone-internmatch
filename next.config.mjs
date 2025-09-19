@@ -4,7 +4,11 @@ const nextConfig = {
         remotePatterns: [
             {
                 protocol: "https",
-                hostname: "i.pinimg.com", // Replace with the actual hostname of your image source
+                hostname: "i.pinimg.com",
+            },
+            {
+                protocol: "https",
+                hostname: "idxksgsjllytgrbkmdys.supabase.co",
             },
             // Add more patterns for other external image sources if needed
         ],
