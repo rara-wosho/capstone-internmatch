@@ -5,6 +5,7 @@ import IconWrapper from "@/components/ui/IconWrapper";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import TertiaryLabel from "@/components/ui/TertiaryLabel";
 import UploadAvatar from "@/components/UploadAvatar";
+import { getCurrentUser } from "@/lib/actions/auth";
 import { getStudentProfileData } from "@/lib/actions/student";
 import { Mail, MapPin, User } from "lucide-react";
 import Link from "next/link";
@@ -13,14 +14,24 @@ import { notFound } from "next/navigation";
 export default async function Page({ params }) {
     const { userId } = await params;
 
+    const { user, error } = await getCurrentUser();
+
+    if (error) {
+        return <ErrorUi />;
+    }
+
+    if (!user || user?.id !== userId) {
+        notFound();
+    }
+
     const {
         success,
         data: studentData,
-        error,
+        error: studentErr,
     } = await getStudentProfileData(userId);
 
     if (!success) {
-        <ErrorUi secondaryMessage={error} />;
+        return <ErrorUi secondaryMessage={studentErr} />;
     }
 
     if (!studentData) {
@@ -37,12 +48,13 @@ export default async function Page({ params }) {
             </SecondaryLabel>
 
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_2.5fr] gap-3 md:gap-4">
-                <div className="rounded-t-xl border bg-card shadow-xs">
+                <div className="rounded-xl border bg-card shadow-xs">
                     <BorderBox>
                         <div className="border-b mb-5 pb-5 flex flex-col items-center justify-center gap-y-5">
                             <Link
                                 href={studentData?.avatar_url}
                                 target="_blank"
+                                className="pt-4"
                             >
                                 <Avatar className="w-[150px] aspect-square">
                                     <AvatarImage
@@ -50,12 +62,14 @@ export default async function Page({ params }) {
                                             studentData.avatar_url ||
                                             "/images/default-avatar.jpg"
                                         }
+                                        alt={`${studentData.firstname}'s avatar`}
                                     />
                                     <AvatarFallback>
                                         {studentData.firstname?.charAt(0)}
                                     </AvatarFallback>
                                 </Avatar>
                             </Link>
+                            <p className="text-xs">Change your avatar</p>
                             <UploadAvatar />
                         </div>
                         <TertiaryLabel>

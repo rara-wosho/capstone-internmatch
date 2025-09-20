@@ -34,17 +34,20 @@ import {
     SidebarMenuSubItem,
     useSidebar,
 } from "@/components/ui/sidebar";
-import { redirect, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
+
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+
 import Logo from "./ui/Logo";
 import { useMemo } from "react";
 import { useSession } from "@/context/SessionContext";
 import SignOutModal from "./ui/SignOutModal";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 // Centralized navigation configurati on
 const navigationConfig = [
@@ -218,11 +221,10 @@ const isAnySubItemActive = (subItems, currentPath) => {
     return subItems.some((subItem) => isPathActive(subItem.href, currentPath));
 };
 
-export function AppSidebar() {
+export function AppSidebar({ profileData }) {
     const pathName = usePathname();
-    const { user } = useSession();
 
-    const { role, firstname, lastname, name } = user?.user_metadata;
+    const { role } = profileData;
 
     const { setOpenMobile } = useSidebar();
 
@@ -384,21 +386,31 @@ export function AppSidebar() {
                             asChild
                             className="hover:bg-transparent"
                         >
-                            <Link href={`/${role}/profile/${user?.id}`}>
-                                {/* <div className="rounded-full size-5 border"></div>  */}
-                                <User />
+                            <Link href={`/${role}/profile/${profileData?.id}`}>
+                                <Avatar>
+                                    <AvatarImage
+                                        src={
+                                            profileData?.avatar_url ||
+                                            "/images/default-avatar.jpg"
+                                        }
+                                        alt="avatar"
+                                        className="size-4"
+                                    />
+                                    <AvatarFallback>A</AvatarFallback>
+                                </Avatar>
                                 <div className="flex flex-col w-full">
                                     {role === "company" ? (
                                         <p className="text-xs truncate max-w-[88%]">
-                                            {name}
+                                            {profileData?.name}
                                         </p>
                                     ) : (
                                         <p className="text-xs truncate max-w-[88%]">
-                                            {firstname} {lastname}
+                                            {profileData?.firstname}{" "}
+                                            {profileData?.lastname}
                                         </p>
                                     )}
                                     <p className="text-xs text-muted-foreground truncate max-w-[88%]">
-                                        {user?.email}
+                                        {profileData?.email}
                                     </p>
                                 </div>
                             </Link>

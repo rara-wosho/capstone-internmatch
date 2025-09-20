@@ -1,18 +1,20 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Input } from "./ui/input";
 import { toast } from "sonner";
 import { useSession } from "@/context/SessionContext";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import { X } from "lucide-react";
 
 export default function UploadAvatar() {
     const { user } = useSession();
     const supabase = createClient();
     const router = useRouter();
 
+    const inputRef = useRef(null);
     const [avatar, setAvatar] = useState(null);
     const [error, setError] = useState("");
     const [isUploading, setIsUploading] = useState(false);
@@ -20,6 +22,9 @@ export default function UploadAvatar() {
     const handleFileChange = (e) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
+
+            console.log(file);
+            console.log(inputRef.current);
 
             // filesize in kilobyte
             const fileSize = file.size / 1000;
@@ -30,7 +35,7 @@ export default function UploadAvatar() {
             }
 
             if (file.type !== "image/png" && file.type !== "image/jpeg") {
-                setError("File type is not allowed.");
+                setError("File type is not allowed");
                 return;
             }
 
@@ -49,7 +54,8 @@ export default function UploadAvatar() {
     const table = tablePicker();
 
     // upload the new avatar to storage then update to specific table
-    const handleUploadAvatar = async () => {
+    const handleUploadAvatar = async (e) => {
+        e.stopPropagation();
         if (!avatar || !user?.id) return;
         setIsUploading(true);
 
@@ -74,10 +80,10 @@ export default function UploadAvatar() {
             .from("avatars")
             .getPublicUrl(uploadData.path);
 
-        // 3. FIXED: Update database with correct syntax
+        // 3. Update database
         const { error: updateError } = await supabase
             .from(table)
-            .update({ avatar_url: urlData.publicUrl }) // ← This is now correct
+            .update({ avatar_url: urlData.publicUrl })
             .eq("id", user.id);
 
         if (updateError) {
@@ -95,16 +101,66 @@ export default function UploadAvatar() {
     };
 
     return (
-        <div>
-            <Input type="file" onChange={handleFileChange} />
-            {error && <p className="text-destructive text-xs mt-1">{error}</p>}
+        <div className="w-full relative">
+            {/* remove the current file  */}
+            {avatar && (
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setAvatar(null);
+                    }}
+                    className="cursor-pointer absolute bg-muted -top-2 -right-2 p-1 rounded-full z-20"
+                >
+                    <X size={15} />
+                </button>
+            )}
+            <div className="relative isolate p-[1px] rounded-lg overflow-hidden">
+                {isUploading && (
+                    <div className="absolute top-1/2  left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[300px] bg-linear-to-r from-transparent from-25% to-primary [animation-duration:1.5s] animate-spin -z-10"></div>
+                )}
+
+                {/* the visible clickable part  */}
+                <div
+                    onClick={() => {
+                        if (inputRef.current) {
+                            inputRef.current.click();
+                        }
+                    }}
+                    className="cursor-pointer bg-card border-2 border-dashed rounded-lg flex flex-col justify-center items-center p-3"
+                >
+                    <p className="text-sm text-muted-foreground mb-2 truncate max-w-[200px]">
+                        {avatar?.name ? (
+                            <span className="text-accent-foreground">
+                                {avatar?.name}
+                            </span>
+                        ) : (
+                            "No file chosen"
+                        )}
+                    </p>
+
+                    <div className="text-xs text-muted-foreground text-center">
+                        Max file size 3 MB
+                    </div>
+
+                    {error && (
+                        <p className="text-destructive text-xs mt-1">{error}</p>
+                    )}
+                </div>
+            </div>
+
+            <Input
+                className="sr-only"
+                ref={inputRef}
+                type="file"
+                onChange={handleFileChange}
+            />
 
             <Button
                 onClick={handleUploadAvatar}
-                disabled={isUploading || !avatar}
-                className="mt-3 w-full"
+                disabled={isUploading || !avatar || error}
+                className="mt-2 w-full"
             >
-                {isUploading ? "Please wait..." : "Update Avatar"}
+                {isUploading ? "Updating..." : "Update Avatar"}
             </Button>
         </div>
     );

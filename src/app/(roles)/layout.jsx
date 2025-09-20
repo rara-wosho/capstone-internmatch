@@ -29,19 +29,21 @@ export default async function DashboardLayout({ children }) {
         const { data: userData, error: userError } = await supabase
             .from("students")
             .select("email, id, role, avatar_url, firstname, lastname")
-            .eq("id", session?.user.id)
+            .eq("id", user?.id)
             .single();
 
         if (userError) {
+            console.error("Student profile fetch error:", userError);
             return <ErrorUi />;
         }
+
         profileData = userData;
     }
     if (user?.role === "instructor") {
         const { data: instructorData, error: instructorError } = await supabase
             .from("ojt_instructors")
             .select("email, id, role, avatar_url, firstname, lastname")
-            .eq("id", session?.user.id)
+            .eq("id", user?.id)
             .single();
 
         if (instructorError) {
@@ -53,7 +55,7 @@ export default async function DashboardLayout({ children }) {
         const { data: companyData, error: companyError } = await supabase
             .from("companies")
             .select("email, id, role, avatar_url, name")
-            .eq("id", session?.user.id)
+            .eq("id", user?.id)
             .single();
 
         if (companyError) {
@@ -62,10 +64,15 @@ export default async function DashboardLayout({ children }) {
         profileData = companyData;
     }
 
+    if (!profileData) {
+        console.error("No profile data found for user:", user.id);
+        return <ErrorUi />;
+    }
+
     return (
         <SessionProvider initialSession={session}>
             <SidebarProvider>
-                <AppSidebar />
+                <AppSidebar profileData={profileData} />
                 <main className="w-full">
                     <div className="min-h-screen">
                         <DashboardHeader profileData={profileData} />
