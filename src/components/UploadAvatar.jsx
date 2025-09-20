@@ -8,9 +8,9 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { Image as Gallery, Trash, X } from "lucide-react";
-import { deleteAvatar } from "@/lib/actions/storage";
+import { deleteAvatar } from "@/lib/actions/student";
 
-export default function UploadAvatar({ currentAvatarUrl }) {
+export default function UploadAvatar() {
     const { user } = useSession();
     const supabase = createClient();
     const router = useRouter();
@@ -19,13 +19,11 @@ export default function UploadAvatar({ currentAvatarUrl }) {
     const [avatar, setAvatar] = useState(null);
     const [error, setError] = useState("");
     const [isUploading, setIsUploading] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const handleFileChange = (e) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
-
-            console.log(file);
-            console.log(inputRef.current);
 
             // filesize in kilobyte
             const fileSize = file.size / 1000;
@@ -47,9 +45,10 @@ export default function UploadAvatar({ currentAvatarUrl }) {
 
     function tablePicker() {
         if (user?.user_metadata?.role === "student") return "students";
-        if (user?.user_metadata?.role === "company") return "companyies";
+        if (user?.user_metadata?.role === "company") return "companies"; // Fixed typo
         if (user?.user_metadata?.role === "instructor")
             return "ojt_instructors";
+        return "students"; // Default fallback
     }
 
     const table = tablePicker();
@@ -62,43 +61,68 @@ export default function UploadAvatar({ currentAvatarUrl }) {
 
         const filePath = `avatars/${user.id}/${new Date().getTime()}.png`;
 
-        // 1. Upload to storage
-        const { data: uploadData, error: uploadError } = await supabase.storage
-            .from("avatars")
-            .upload(filePath, avatar, {
-                upsert: true,
-            });
+        try {
+            // 1. Upload to storage
+            const { data: uploadData, error: uploadError } =
+                await supabase.storage
+                    .from("avatars")
+                    .upload(filePath, avatar, {
+                        upsert: true,
+                    });
 
-        if (uploadError) {
-            console.error(uploadError.message);
-            toast.error("Unable to upload avatar.");
+            if (uploadError) {
+                throw new Error(
+                    "Something went wrong while updating your avatar"
+                );
+            }
+
+            // 2. Get public URL
+            const { data: urlData } = supabase.storage
+                .from("avatars")
+                .getPublicUrl(uploadData.path);
+
+            // 3. Update database
+            const { error: updateError } = await supabase
+                .from(table)
+                .update({ avatar_url: urlData.publicUrl })
+                .eq("id", user.id);
+
+            if (updateError) {
+                throw new Error("Unable to update a new avatar");
+            }
+
+            toast.success("Successfully updated avatar.");
+            setAvatar(null);
+            router.refresh();
+        } catch (error) {
+            console.error(error.message);
+            toast.error(error.message || "Unable to upload avatar.");
+        } finally {
             setIsUploading(false);
-            return;
         }
+    };
 
-        // 2. Get public URL
-        const { data: urlData } = supabase.storage
-            .from("avatars")
-            .getPublicUrl(uploadData.path);
+    const handleDeleteAvatar = async () => {
+        setIsDeleting(true);
+        try {
+            const result = await deleteAvatar(
+                table,
+                user?.id,
+                `/student/profile/${user?.id}`
+            );
 
-        // 3. Update database
-        const { error: updateError } = await supabase
-            .from(table)
-            .update({ avatar_url: urlData.publicUrl })
-            .eq("id", user.id);
-
-        if (updateError) {
-            console.error(updateError.message);
-            toast.error("Avatar uploaded but profile couldn't be updated.");
-            setIsUploading(false);
-            return;
+            if (result.success) {
+                toast.success("Avatar deleted successfully.");
+                router.refresh();
+            } else {
+                throw new Error("Failed to delete avatar");
+            }
+        } catch (error) {
+            console.error(error.message);
+            toast.error(error.message || "Unable to delete avatar.");
+        } finally {
+            setIsDeleting(false);
         }
-
-        toast.success("Successfully updated avatar.");
-        setIsUploading(false);
-        setAvatar(null);
-
-        router.refresh();
     };
 
     return (
@@ -106,6 +130,7 @@ export default function UploadAvatar({ currentAvatarUrl }) {
             {/* remove the current file  */}
             {avatar && (
                 <button
+                    disabled={isUploading}
                     onClick={(e) => {
                         e.stopPropagation();
                         setAvatar(null);
@@ -127,7 +152,9 @@ export default function UploadAvatar({ currentAvatarUrl }) {
                             inputRef.current.click();
                         }
                     }}
-                    className="cursor-pointer bg-card border-2 border-dashed rounded-lg flex flex-col justify-center items-center p-3"
+                    className={`${
+                        isUploading && "pointer-events-none"
+                    } cursor-pointer bg-card border-2 border-dashed rounded-lg flex flex-col justify-center items-center p-3`}
                 >
                     <p className="text-sm text-muted-foreground mb-2 truncate max-w-[200px]">
                         {avatar?.name ? (
@@ -154,6 +181,7 @@ export default function UploadAvatar({ currentAvatarUrl }) {
                 ref={inputRef}
                 type="file"
                 onChange={handleFileChange}
+                accept="image/png, image/jpeg"
             />
 
             {avatar ? (
@@ -178,11 +206,12 @@ export default function UploadAvatar({ currentAvatarUrl }) {
             )}
 
             <Button
-                onClick={() => {}}
+                onClick={handleDeleteAvatar}
+                disabled={isDeleting}
                 variant="dangerOutline"
                 className="mt-2 w-full"
             >
-                <Trash /> Delete Avatar
+                <Trash /> {isDeleting ? "Removing..." : "Remove Avatar"}
             </Button>
         </div>
     );

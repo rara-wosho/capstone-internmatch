@@ -25,30 +25,3 @@ export async function uploadAvatar(avatar, userId) {
 
     return { success: true, error: null };
 }
-
-// delete an avatar
-export async function deleteAvatar(bucketName, filePath, userId) {
-    const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    );
-
-    const { error: storageErr } = await supabase.storage
-        .from(bucketName)
-        .remove([filePath]);
-
-    if (error) {
-        return { success: false, error: storageErr?.message };
-    }
-
-    const { error: tableErr } = await supabase
-        .from("students")
-        .update({ avatar_url: null })
-        .eq("id", userId);
-
-    if (tableErr) {
-        return { success: false, error: tableErr.message };
-    }
-
-    return { success: true, error: null };
-}

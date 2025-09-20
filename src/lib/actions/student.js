@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "../supabase/admin";
 import { createClient } from "../supabase/server";
 
@@ -110,4 +111,22 @@ export async function getStudentProfileData(studentId) {
     }
 
     return { success: true, data };
+}
+
+// delete avatar in table only
+export async function deleteAvatar(table, userId, pathToRevalidate) {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+        .from(table)
+        .update({ avatar_url: null })
+        .eq("id", userId);
+
+    if (error) {
+        console.error(error.message);
+        return { success: false };
+    }
+
+    revalidatePath(pathToRevalidate, "page");
+    return { success: true };
 }

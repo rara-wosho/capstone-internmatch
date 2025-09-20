@@ -53,8 +53,10 @@ export default async function Page({ params }) {
                     <BorderBox>
                         <div className="border-b mb-5 pb-5 flex flex-col items-center justify-center gap-y-5">
                             <Link
-                                href={studentData?.avatar_url}
-                                target="_blank"
+                                href={studentData?.avatar_url || "#"}
+                                target={
+                                    studentData?.avatar_url ? "_blank" : "_self"
+                                }
                                 className="pt-4"
                             >
                                 <Avatar className="w-[150px] aspect-square">
@@ -71,9 +73,7 @@ export default async function Page({ params }) {
                                 </Avatar>
                             </Link>
                             <p className="text-xs">Change your avatar</p>
-                            <UploadAvatar
-                                currentAvatarUrl={studentData.avatar_url}
-                            />
+                            <UploadAvatar />
                         </div>
                         <TertiaryLabel>
                             {studentData?.firstname} {studentData?.lastname}
