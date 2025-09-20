@@ -3,16 +3,72 @@ import { AppSidebar } from "@/components/app-sidebar";
 import DashboardHeader from "@/components/ui/dashboard-header";
 import PrivateFooter from "@/components/ui/PrivateFooter";
 import { SessionProvider } from "@/context/SessionContext";
+import { getCurrentUser } from "@/lib/actions/auth";
+import ErrorUi from "@/components/ui/ErrorUi";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 
-export default function Layout({ children }) {
+export default async function DashboardLayout({ children }) {
+    const supabase = await createClient();
+    // 1. Get the session ONCE on the server
+    // returns the current session and a user object {id, role from user_metadata }
+    const { session, user, error } = await getCurrentUser();
+
+    if (error) {
+        return <ErrorUi />;
+    }
+
+    if (!user || !user?.role) {
+        redirect("/sign-in");
+    }
+
+    // 2. Get the full user profile
+    let profileData = null;
+
+    if (user?.role === "student") {
+        const { data: userData, error: userError } = await supabase
+            .from("students")
+            .select("email, id, role, avatar_url, firstname, lastname")
+            .eq("id", session?.user.id)
+            .single();
+
+        if (userError) {
+            return <ErrorUi />;
+        }
+        profileData = userData;
+    }
+    if (user?.role === "instructor") {
+        const { data: instructorData, error: instructorError } = await supabase
+            .from("ojt_instructors")
+            .select("email, id, role, avatar_url, firstname, lastname")
+            .eq("id", session?.user.id)
+            .single();
+
+        if (instructorError) {
+            return <ErrorUi />;
+        }
+        profileData = instructorData;
+    }
+    if (user?.role === "company") {
+        const { data: companyData, error: companyError } = await supabase
+            .from("companies")
+            .select("email, id, role, avatar_url, name")
+            .eq("id", session?.user.id)
+            .single();
+
+        if (companyError) {
+            return <ErrorUi />;
+        }
+        profileData = companyData;
+    }
+
     return (
-        <SessionProvider>
+        <SessionProvider initialSession={session}>
             <SidebarProvider>
                 <AppSidebar />
                 <main className="w-full">
                     <div className="min-h-screen">
-                        <DashboardHeader />
-
+                        <DashboardHeader profileData={profileData} />
                         <div className="p-3 md:p-5 lg:p-8 mb-5">{children}</div>
                     </div>
                     <PrivateFooter />

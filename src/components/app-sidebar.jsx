@@ -222,15 +222,7 @@ export function AppSidebar() {
     const pathName = usePathname();
     const { user } = useSession();
 
-    if (!user) {
-        redirect("/sign-in");
-    }
-
     const { role, firstname, lastname, name } = user?.user_metadata;
-
-    if (!role) {
-        redirect("/sign-in");
-    }
 
     const { setOpenMobile } = useSidebar();
 

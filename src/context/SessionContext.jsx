@@ -1,37 +1,21 @@
 "use client";
 
-import SpinLoader from "@/components/ui/SpinLoader";
-import { createClient } from "@/lib/supabase/client";
-import { Loader } from "lucide-react";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react"; // Removed useEffect
 
-const SessionContext = createContext(undefined);
+export const SessionContext = createContext(undefined);
 
-export function SessionProvider({ children }) {
-    const [session, setSession] = useState(null);
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+export function SessionProvider({ children, initialSession = null }) {
+    const [session, setSession] = useState(initialSession);
+    const [user, setUser] = useState(initialSession?.user || null);
 
-    const supabase = createClient();
-
-    useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session);
-            setUser(session?.user ?? null);
-            setLoading(false);
-        });
-    }, []);
+    const value = {
+        session,
+        user,
+    };
 
     return (
-        <SessionContext.Provider value={{ session, user, loading }}>
-            {loading ? (
-                <div className="w-full min-h-screen flex flex-col items-center justify-center gap-3">
-                    <SpinLoader />
-                    <p className="text-sm text-muted-foreground">Please wait</p>
-                </div>
-            ) : (
-                children
-            )}
+        <SessionContext.Provider value={value}>
+            {children}
         </SessionContext.Provider>
     );
 }

@@ -73,11 +73,13 @@ export async function getCurrentUser() {
     } = await supabase.auth.getSession();
 
     if (!session || error) {
+        console.error(error.message);
         return { error: true, user: null };
     }
 
     return {
         error: false,
+        session,
         user: {
             id: session?.user?.id,
             role: session?.user?.user_metadata?.role,

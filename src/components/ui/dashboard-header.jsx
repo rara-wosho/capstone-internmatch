@@ -15,10 +15,13 @@ import { useSession } from "@/context/SessionContext";
 import Link from "next/link";
 import SignOutModal from "./SignOutModal";
 import { usePathname } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+import { Skeleton } from "./skeleton";
 
-export default function DashboardHeader() {
-    const { user } = useSession();
+export default function DashboardHeader({ profileData }) {
     const pathname = usePathname();
+
+    console.log(profileData);
 
     if (pathname.startsWith("/student/e")) return null;
 
@@ -51,12 +54,24 @@ export default function DashboardHeader() {
                 <Popover>
                     <PopoverTrigger className="cursor-pointer">
                         <div className="flex items-center gap-2.5">
-                            <div className="size-7 rounded-full border"></div>
+                            <Avatar>
+                                <AvatarImage
+                                    src={
+                                        profileData?.avatar_url ||
+                                        "/images/default-avatar.jpg"
+                                    }
+                                    alt="avatar"
+                                />
+                                <AvatarFallback>
+                                    {profileData?.firstname?.charAt(0)}
+                                    {profileData?.name?.charAt(0)}
+                                </AvatarFallback>
+                            </Avatar>
                             <div className="hidden md:inline-flex items-center gap-1.5">
                                 <p className="text-sm text-muted-foreground  hover:text-secondary-foreground transition-colors truncate max-w-[200px]">
-                                    {user?.user_metadata?.firstname}{" "}
-                                    {user?.user_metadata?.lastname}
-                                    {user?.user_metadata?.name}
+                                    {profileData?.firstname}{" "}
+                                    {profileData?.lastname}
+                                    {profileData?.name}
                                 </p>
                                 <ChevronDown size={15} />
                             </div>
@@ -68,7 +83,7 @@ export default function DashboardHeader() {
                         className="w-fit p-2 rounded-sm"
                     >
                         <p className="px-3 pb-2 text-sm text-muted-foreground  pt-1 mb-1 border-b dark:border-neutral-700 md:hidden">
-                            {user?.user_metadata?.firstname}
+                            {profileData?.firstname}
                         </p>
                         <SidebarMenu className="text-secondary-foreground/80">
                             <SidebarMenuItem>
@@ -77,7 +92,7 @@ export default function DashboardHeader() {
                                     asChild
                                 >
                                     <Link
-                                        href={`/${user?.user_metadata?.role}/profile/${user?.id}`}
+                                        href={`/${profileData?.role}/profile/${profileData?.id}`}
                                     >
                                         <User />
                                         Your profile
@@ -92,7 +107,7 @@ export default function DashboardHeader() {
                             </SidebarMenuItem>
                             <SidebarMenuItem className="border-t dark:border-neutral-700">
                                 <SignOutModal>
-                                    <SidebarMenuButton className="cursor-pointer">
+                                    <SidebarMenuButton className="cursor-pointer mt-1.5">
                                         <LogOut />
                                         Sign Out
                                     </SidebarMenuButton>
