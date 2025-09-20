@@ -7,9 +7,10 @@ import { useSession } from "@/context/SessionContext";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-import { X } from "lucide-react";
+import { Image as Gallery, Trash, X } from "lucide-react";
+import { deleteAvatar } from "@/lib/actions/storage";
 
-export default function UploadAvatar() {
+export default function UploadAvatar({ currentAvatarUrl }) {
     const { user } = useSession();
     const supabase = createClient();
     const router = useRouter();
@@ -155,12 +156,33 @@ export default function UploadAvatar() {
                 onChange={handleFileChange}
             />
 
+            {avatar ? (
+                <Button
+                    onClick={handleUploadAvatar}
+                    disabled={isUploading || !avatar || error}
+                    className="mt-2 w-full"
+                >
+                    {isUploading ? "Updating..." : "Update Avatar Now"}
+                </Button>
+            ) : (
+                <Button
+                    onClick={() => {
+                        if (inputRef.current) {
+                            inputRef.current.click();
+                        }
+                    }}
+                    className="mt-2 w-full"
+                >
+                    <Gallery /> Upload New
+                </Button>
+            )}
+
             <Button
-                onClick={handleUploadAvatar}
-                disabled={isUploading || !avatar || error}
+                onClick={() => {}}
+                variant="dangerOutline"
                 className="mt-2 w-full"
             >
-                {isUploading ? "Updating..." : "Update Avatar"}
+                <Trash /> Delete Avatar
             </Button>
         </div>
     );

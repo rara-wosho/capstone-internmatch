@@ -28,7 +28,9 @@ export default async function DashboardLayout({ children }) {
     if (user?.role === "student") {
         const { data: userData, error: userError } = await supabase
             .from("students")
-            .select("email, id, role, avatar_url, firstname, lastname")
+            .select(
+                "email, id, role, avatar_url, firstname, lastname,exam_access"
+            )
             .eq("id", user?.id)
             .single();
 
@@ -70,7 +72,7 @@ export default async function DashboardLayout({ children }) {
     }
 
     return (
-        <SessionProvider initialSession={session}>
+        <SessionProvider initialSession={session} profileData={profileData}>
             <SidebarProvider>
                 <AppSidebar profileData={profileData} />
                 <main className="w-full">

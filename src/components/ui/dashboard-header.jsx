@@ -52,7 +52,7 @@ export default function DashboardHeader({ profileData }) {
                 <Popover>
                     <PopoverTrigger className="cursor-pointer">
                         <div className="flex items-center gap-2.5">
-                            <Avatar className="size-6">
+                            <Avatar className="size-[29px]">
                                 <AvatarImage
                                     src={
                                         profileData?.avatar_url ||

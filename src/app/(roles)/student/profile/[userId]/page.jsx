@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import BorderBox from "@/components/ui/BorderBox";
+import { Button } from "@/components/ui/button";
 import ErrorUi from "@/components/ui/ErrorUi";
 import IconWrapper from "@/components/ui/IconWrapper";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
@@ -7,7 +8,7 @@ import TertiaryLabel from "@/components/ui/TertiaryLabel";
 import UploadAvatar from "@/components/UploadAvatar";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { getStudentProfileData } from "@/lib/actions/student";
-import { Mail, MapPin, User } from "lucide-react";
+import { Mail, MapPin, SquareArrowOutUpRight, User } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -70,7 +71,9 @@ export default async function Page({ params }) {
                                 </Avatar>
                             </Link>
                             <p className="text-xs">Change your avatar</p>
-                            <UploadAvatar />
+                            <UploadAvatar
+                                currentAvatarUrl={studentData.avatar_url}
+                            />
                         </div>
                         <TertiaryLabel>
                             {studentData?.firstname} {studentData?.lastname}

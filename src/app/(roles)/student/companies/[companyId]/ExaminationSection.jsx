@@ -1,9 +1,12 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import TertiaryLabel from "@/components/ui/TertiaryLabel";
 import {
     ArrowUpRight,
     Calendar,
     Clock,
+    Handshake,
     Hash,
     Info,
     LayoutList,
@@ -30,8 +33,12 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import ExamReminders from "@/components/exam/ExamReminders";
+import { useSession } from "@/context/SessionContext";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function ExaminationSection({ companyExams }) {
+    const { userData } = useSession();
+
     return (
         <>
             {/* header  */}
@@ -116,22 +123,63 @@ export default function ExaminationSection({ companyExams }) {
                         )}
                         <div className="mt-6 flex items-center mb-1">
                             <Dialog>
-                                <DialogTrigger asChild className="w-full">
-                                    <Button>Start examination</Button>
-                                </DialogTrigger>
-                                <DialogContent>
+                                {userData.exam_access && (
+                                    <DialogTrigger asChild className="w-full">
+                                        <Button>Start examination</Button>
+                                    </DialogTrigger>
+                                )}
+                                <DialogContent className="sm:max-w-2xl">
                                     <DialogHeader>
-                                        <DialogTitle>Reminders</DialogTitle>
+                                        <DialogTitle>
+                                            Start Examination?
+                                        </DialogTitle>
                                         <DialogDescription>
                                             Before starting the exam, make sure
-                                            that you read these reminders.
+                                            that you read exam rules.
                                         </DialogDescription>
                                     </DialogHeader>
+                                    <ScrollArea className="max-h-[55svh] sm:max-h-[60svh] border-t">
+                                        <ExamReminders
+                                            passing={exam?.passing}
+                                            duration={exam?.duration}
+                                            items={exam?.question_count}
+                                        />
 
-                                    <ExamReminders
-                                        passing={exam?.passing}
-                                        duration={exam?.duration}
-                                    />
+                                        <div className="p-3 rounded-xl border border-blue-500/15 bg-blue-500/5 mb-3 text-accent-foreground">
+                                            <p className="font-medium text-sm mb-2 flex items-center gap-2">
+                                                <Handshake size={16} /> Honor
+                                                Code Agreement
+                                            </p>
+
+                                            <p className="text-xs tracking-wider">
+                                                By starting this exam, you agree
+                                                to uphold academic integrity and
+                                                certify that:
+                                            </p>
+
+                                            <ul className="list-disc pl-3 mt-3 text-xs text-accent-foreground space-y-1 tracking-wide">
+                                                <li>
+                                                    You will complete this exam
+                                                    independently without
+                                                    assistance
+                                                </li>
+                                                <li>
+                                                    You will not use
+                                                    unauthorized resources or
+                                                    references
+                                                </li>
+                                                <li>
+                                                    You will not share exam
+                                                    questions or answers
+                                                </li>
+                                                <li>
+                                                    You understand that cheating
+                                                    will result in
+                                                    disqualification
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </ScrollArea>
 
                                     <DialogFooter>
                                         <DialogClose asChild>
@@ -147,7 +195,7 @@ export default function ExaminationSection({ companyExams }) {
                                                 className="sm:w-1/2"
                                                 href={`/student/e/${exam?.id}`}
                                             >
-                                                Start examination{" "}
+                                                I aggree and start
                                                 <ArrowUpRight />
                                             </Link>
                                         </Button>

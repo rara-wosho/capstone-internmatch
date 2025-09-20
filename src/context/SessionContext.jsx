@@ -4,13 +4,19 @@ import { createContext, useContext, useState } from "react"; // Removed useEffec
 
 export const SessionContext = createContext(undefined);
 
-export function SessionProvider({ children, initialSession = null }) {
+export function SessionProvider({
+    children,
+    initialSession = null,
+    profileData,
+}) {
     const [session, setSession] = useState(initialSession);
     const [user, setUser] = useState(initialSession?.user || null);
+    const [userData, setUserData] = useState(profileData || null);
 
     const value = {
         session,
         user,
+        userData,
     };
 
     return (
