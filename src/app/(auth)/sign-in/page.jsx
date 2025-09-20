@@ -58,7 +58,7 @@ export default function Page() {
                             </p>
                         </div>
                         <div className="flex items-center mt-6 gap-3">
-                            <Avatar>
+                            <Avatar className="size-9">
                                 <AvatarImage src="/images/profile.JPG" />
                                 <AvatarFallback>ID</AvatarFallback>
                             </Avatar>

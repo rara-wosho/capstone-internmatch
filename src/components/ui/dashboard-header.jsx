@@ -21,8 +21,6 @@ import { Skeleton } from "./skeleton";
 export default function DashboardHeader({ profileData }) {
     const pathname = usePathname();
 
-    console.log(profileData);
-
     if (pathname.startsWith("/student/e")) return null;
 
     return (
@@ -54,7 +52,7 @@ export default function DashboardHeader({ profileData }) {
                 <Popover>
                     <PopoverTrigger className="cursor-pointer">
                         <div className="flex items-center gap-2.5">
-                            <Avatar>
+                            <Avatar className="size-6">
                                 <AvatarImage
                                     src={
                                         profileData?.avatar_url ||

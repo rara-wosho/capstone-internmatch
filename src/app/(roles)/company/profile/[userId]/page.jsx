@@ -1,6 +1,5 @@
 import ProfileTabSection from "@/components/sections/ProfileTabSection";
 import BorderBox from "@/components/ui/BorderBox";
-import { Button } from "@/components/ui/button";
 import ErrorUi from "@/components/ui/ErrorUi";
 import IconWrapper from "@/components/ui/IconWrapper";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";

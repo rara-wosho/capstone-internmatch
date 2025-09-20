@@ -1,26 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Input } from "./ui/input";
 import { toast } from "sonner";
 import { useSession } from "@/context/SessionContext";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 export default function UploadAvatar() {
     const { user } = useSession();
     const supabase = createClient();
+    const router = useRouter();
 
     const [avatar, setAvatar] = useState(null);
-    const [avatarUrl, setAvatarUrl] = useState(null);
     const [error, setError] = useState("");
     const [isUploading, setIsUploading] = useState(false);
 
     const handleFileChange = (e) => {
-        // ... (your existing validation code is perfect) ...
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
-            console.log(file);
-            console.log(file.type);
 
             // filesize in kilobyte
             const fileSize = file.size / 1000;
@@ -40,13 +39,23 @@ export default function UploadAvatar() {
         }
     };
 
+    function tablePicker() {
+        if (user?.user_metadata?.role === "student") return "students";
+        if (user?.user_metadata?.role === "company") return "companyies";
+        if (user?.user_metadata?.role === "instructor")
+            return "ojt_instructors";
+    }
+
+    const table = tablePicker();
+
+    // upload the new avatar to storage then update to specific table
     const handleUploadAvatar = async () => {
         if (!avatar || !user?.id) return;
-        setIsUploading(true); // Start loading
+        setIsUploading(true);
 
-        const filePath = `avatars/${user.id}/avatar4.png`;
+        const filePath = `avatars/${user.id}/${new Date().getTime()}.png`;
 
-        // 1. Upload the image directly from the client to Supabase Storage
+        // 1. Upload to storage
         const { data: uploadData, error: uploadError } = await supabase.storage
             .from("avatars")
             .upload(filePath, avatar, {
@@ -60,23 +69,29 @@ export default function UploadAvatar() {
             return;
         }
 
-        // 2. (Optional) Get the public URL
+        // 2. Get public URL
         const { data: urlData } = supabase.storage
             .from("avatars")
             .getPublicUrl(uploadData.path);
 
-        setAvatarUrl(urlData.publicUrl);
+        // 3. FIXED: Update database with correct syntax
+        const { error: updateError } = await supabase
+            .from(table)
+            .update({ avatar_url: urlData.publicUrl }) // ← This is now correct
+            .eq("id", user.id);
 
-        // 3. (Optional) If you need to save this URL to a database table,
-        // you can call a separate Server Action here.
-        // This payload is just a string, so it's tiny.
-        // await saveAvatarUrlToDb(urlData.publicUrl);
+        if (updateError) {
+            console.error(updateError.message);
+            toast.error("Avatar uploaded but profile couldn't be updated.");
+            setIsUploading(false);
+            return;
+        }
 
         toast.success("Successfully updated avatar.");
-        setIsUploading(false); // End loading
-        setAvatar(null); // Reset the file input
-        // Optional: Clear the file input
-        // document.querySelector('[type="file"]').value = "";
+        setIsUploading(false);
+        setAvatar(null);
+
+        router.refresh();
     };
 
     return (
@@ -84,12 +99,13 @@ export default function UploadAvatar() {
             <Input type="file" onChange={handleFileChange} />
             {error && <p className="text-destructive text-xs mt-1">{error}</p>}
 
-            <button
+            <Button
                 onClick={handleUploadAvatar}
-                disabled={isUploading || !avatar} // Disable while uploading or no file selected
+                disabled={isUploading || !avatar}
+                className="mt-3 w-full"
             >
-                {isUploading ? "Uploading..." : "Upload"}
-            </button>
+                {isUploading ? "Please wait..." : "Update Avatar"}
+            </Button>
         </div>
     );
 }

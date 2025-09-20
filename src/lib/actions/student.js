@@ -92,3 +92,22 @@ export async function updateStudentInterests(interestId, newArray) {
     }
     return { success: true, data };
 }
+
+export async function getStudentProfileData(studentId) {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("students")
+        .select()
+        .eq("id", studentId)
+        .single();
+
+    if (error) {
+        return {
+            success: false,
+            error: "Unable to fetch student profile data.",
+        };
+    }
+
+    return { success: true, data };
+}
