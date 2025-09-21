@@ -22,7 +22,7 @@ export default async function Page() {
 
     const { data: exams, error: tableErr } = await supabase
         .from("exams")
-        .select("id, title, created_at")
+        .select("id, title, created_at, questions(id)")
         .eq("company_id", companyId)
         .order("created_at", { ascending: false });
 
@@ -44,7 +44,7 @@ export default async function Page() {
 
                 <div className="ms-auto">
                     <Button asChild>
-                        <Link href="/company/internship-exam/create">
+                        <Link href="/company/create-exam">
                             <span className="flex gap-1.5 items-center">
                                 <PlusCircle />
                                 New Exam
@@ -58,7 +58,14 @@ export default async function Page() {
             {exams && exams.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                     {exams.map((exam) => (
-                        <ManageExamCard key={exam.id} examData={exam} />
+                        <div key={exam.id} className="rounded-xl border">
+                            <ManageExamCard examData={exam} />
+                            <div className="p-2">
+                                <Button className="w-full" variant="outline">
+                                    View examinees
+                                </Button>
+                            </div>
+                        </div>
                     ))}
                 </div>
             ) : (

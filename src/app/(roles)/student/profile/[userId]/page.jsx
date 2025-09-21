@@ -73,7 +73,9 @@ export default async function Page({ params }) {
                                 </Avatar>
                             </Link>
                             <p className="text-xs">Change your avatar</p>
-                            <UploadAvatar />
+                            <UploadAvatar
+                                currentAvatarUrl={studentData.avatar_url}
+                            />
                         </div>
                         <TertiaryLabel>
                             {studentData?.firstname} {studentData?.lastname}

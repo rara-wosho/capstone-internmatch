@@ -1,3 +1,4 @@
+import RecentExamsTable from "@/components/tables/RecentExamsTable";
 import ErrorUi from "@/components/ui/ErrorUi";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { getCurrentUser } from "@/lib/actions/auth";
@@ -8,13 +9,15 @@ export default async function Page() {
     const supabase = await createClient();
     const { user } = await getCurrentUser();
 
-    if (!user) {
+    if (!user || !user?.id) {
         redirect("/sign-in");
     }
 
     const { data, error } = await supabase
         .from("exam_attempt")
-        .select()
+        .select(
+            "id, completed_at,started_at, status,exam_id, exam_title, score"
+        )
         .eq("student_id", user.id)
         .order("started_at", { ascending: false });
 
@@ -22,16 +25,19 @@ export default async function Page() {
         return <ErrorUi />;
     }
 
+    console.log(data);
+
     return (
         <div>
             <SecondaryLabel className="mb-3">Recent Exams</SecondaryLabel>
 
-            {data.map((d) => (
-                <div key={d.id}>
-                    <p>{d.exam_title}</p>
-                    <p>{d.score}</p>
+            {data.length > 0 ? (
+                <RecentExamsTable data={data} />
+            ) : (
+                <div>
+                    <p>No results found</p>
                 </div>
-            ))}
+            )}
         </div>
     );
 }

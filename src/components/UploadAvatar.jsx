@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { Image as Gallery, Trash, X } from "lucide-react";
 import { deleteAvatar } from "@/lib/actions/student";
 
-export default function UploadAvatar() {
+export default function UploadAvatar({ currentAvatarUrl }) {
     const { user } = useSession();
     const supabase = createClient();
     const router = useRouter();
@@ -207,7 +207,7 @@ export default function UploadAvatar() {
 
             <Button
                 onClick={handleDeleteAvatar}
-                disabled={isDeleting}
+                disabled={isDeleting || !currentAvatarUrl}
                 variant="dangerOutline"
                 className="mt-2 w-full"
             >
