@@ -15,7 +15,11 @@ export default async function DashboardLayout({ children }) {
     const { session, user, error } = await getCurrentUser();
 
     if (error) {
-        return <ErrorUi />;
+        return (
+            <div className="p-3">
+                <ErrorUi />
+            </div>
+        );
     }
 
     if (!user || !user?.role) {

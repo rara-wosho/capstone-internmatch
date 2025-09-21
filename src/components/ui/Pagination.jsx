@@ -36,7 +36,7 @@ export default function Pagination({
 
     // Generate page numbers to display
     const getVisiblePages = () => {
-        const maxVisible = 5;
+        const maxVisible = 3;
         const pages = [];
 
         let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
@@ -61,7 +61,12 @@ export default function Pagination({
     const hasNext = currentPage < totalPages;
 
     return (
-        <div className={cn("flex items-center justify-between", className)}>
+        <div
+            className={cn(
+                "flex items-center justify-between flex-wrap gap-y-3",
+                className
+            )}
+        >
             <p className="text-sm text-muted-foreground">
                 Showing {startItem}-{endItem} of {totalCount} results
             </p>
@@ -81,7 +86,8 @@ export default function Pagination({
                             hasPrevious ? createPageUrl(currentPage - 1) : "#"
                         }
                     >
-                        <ChevronLeft /> Prev
+                        <ChevronLeft />{" "}
+                        <span className="hidden sm:inline-flex">Prev</span>
                     </Link>
                 </Button>
 
@@ -132,7 +138,8 @@ export default function Pagination({
                     className={!hasNext ? "pointer-events-none opacity-50" : ""}
                 >
                     <Link href={hasNext ? createPageUrl(currentPage + 1) : "#"}>
-                        Next <ChevronRight />
+                        <span className="hidden sm:inline-flex">Next</span>{" "}
+                        <ChevronRight />
                     </Link>
                 </Button>
             </div>

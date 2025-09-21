@@ -5,25 +5,10 @@ import GroupMembersTable from "@/components/tables/GroupMembersTable";
 import BackButton from "@/components/ui/BackButton";
 import BorderBox from "@/components/ui/BorderBox";
 import BreadCrumbs from "@/components/ui/BreadCrumbs";
-import { Button } from "@/components/ui/button";
 import ErrorUi from "@/components/ui/ErrorUi";
-import { Input } from "@/components/ui/input";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
-import { Skeleton } from "@/components/ui/skeleton";
-import TertiaryLabel from "@/components/ui/TertiaryLabel";
 import { createClient } from "@/lib/supabase/server";
-import {
-    BookOpen,
-    Calendar,
-    ChevronLeft,
-    CircleAlert,
-    Link,
-    Pencil,
-    RotateCcw,
-    Search,
-    UserRoundX,
-    Users2,
-} from "lucide-react";
+import { ChevronLeft, UserRoundX } from "lucide-react";
 import { Suspense } from "react";
 
 const links = [

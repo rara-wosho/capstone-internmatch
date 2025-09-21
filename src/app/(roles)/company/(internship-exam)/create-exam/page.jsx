@@ -1,11 +1,8 @@
 import ExamDetailsForm from "@/components/blocks/ExamDetailsForm";
 import BorderBox from "@/components/ui/BorderBox";
-import { Button } from "@/components/ui/button";
 import IconWrapper from "@/components/ui/IconWrapper";
 import TertiaryLabel from "@/components/ui/TertiaryLabel";
-import { ArrowRight, FileText } from "lucide-react";
-import Link from "next/link";
-
+import { FileText } from "lucide-react";
 export default function Page() {
     return (
         <div className="mx-auto max-w-xl">

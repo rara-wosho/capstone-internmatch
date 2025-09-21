@@ -1,13 +1,20 @@
 import ExamineesTable from "@/components/tables/ExamineesTable";
 import BackButton from "@/components/ui/BackButton";
+import { Button } from "@/components/ui/button";
 import ErrorUi from "@/components/ui/ErrorUi";
+import Pagination from "@/components/ui/Pagination";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { createClient } from "@/lib/supabase/server";
 import { ChevronLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 
-export default async function Page({ params }) {
-    const { examId } = await params;
+// Constants
+const ITEMS_PER_PAGE = 10;
+
+export default async function Page({ params, searchParams }) {
+    const examId = (await params)?.examId;
+    const page = Number((await searchParams)?.page) || 1;
+    const offset = (page - 1) * ITEMS_PER_PAGE;
 
     if (!examId) {
         notFound();
@@ -15,18 +22,67 @@ export default async function Page({ params }) {
 
     const supabase = await createClient();
 
-    const { data: examinees, error } = await supabase
+    // const { data: examinees, error } = await supabase
+    //     .from("exam_attempt")
+    //     .select(
+    //         "id, completed_at, exam_id, exam_title, score, started_at, status, student_id, students(firstname, lastname)"
+    //     )
+    //     .eq("exam_id", examId)
+    //     .order("score", { ascending: false });
+
+    // Fetch paginated examinees with total count
+    const {
+        data: examinees,
+        error,
+        count,
+    } = await supabase
         .from("exam_attempt")
         .select(
-            "id, completed_at, exam_id, exam_title, score, started_at, status, student_id, students(firstname, lastname)"
+            "id, completed_at, exam_id, exam_title, score, started_at, status, student_id, students(firstname, lastname)",
+            { count: "exact" }
         )
         .eq("exam_id", examId)
-        .order("score", { ascending: false });
+        .order("score", { ascending: false })
+        .range(offset, offset + ITEMS_PER_PAGE - 1);
 
     if (error) {
         return (
             <ErrorUi
-                secondaryMessage={error.message}
+                secondaryMessage={error?.message}
+                message="Something went wrong while trying to fetch examination records."
+            />
+        );
+    }
+
+    // Build the base query
+    // let query = supabase
+    //     .from("exam_attempt")
+    //     .select(
+    //         "id, completed_at, exam_id, exam_title, score, started_at, status, student_id, students(firstname, lastname)",
+    //         { count: "exact" }
+    //     )
+    //     .eq("exam_id", examId);
+
+    // // Add search filter if search query exists
+    // if (searchQuery.trim()) {
+    //     query = query.or(
+    //         `students.firstname.ilike.%${searchQuery}%,students.lastname.ilike.%${searchQuery}%`
+    //     );
+    // }
+
+    // // Execute the query with ordering and pagination
+    // const {
+    //     data: examinees,
+    //     error,
+    //     count,
+    // } = await query
+    //     .order("score", { ascending: false })
+    //     .range(offset, offset + ITEMS_PER_PAGE - 1);
+
+    if (error) {
+        return (
+            <ErrorUi
+                secondaryMessage={error?.message}
                 message="Something went wrong while trying to fetch examination records."
             />
         );
@@ -34,22 +90,35 @@ export default async function Page({ params }) {
 
     return (
         <div>
-            {/* header */}
-            <div className="flex items-center pb-5 md:pb-7 border-b mb-5 md:mb-8 flex-wrap md:flex-nowrap gap-x-10 gap-y-4 mt-2 md:mt-1.5">
-                <BackButton className="hover:text-primary-text rounded-sm pe-2 transition-colors">
-                    <SecondaryLabel className="gap-2 text-left">
-                        <ChevronLeft />
-                        <span>{examinees[0].exam_title}</span>
-                    </SecondaryLabel>
-                </BackButton>
-            </div>
-
             {examinees.length === 0 ? (
-                <div>
-                    <p>No attempts made.</p>
+                <div className="min-h-[60svh] flex flex-col items-center justify-center">
+                    <p className="mb-3">No examinees yet.</p>
+                    <Button asChild variant="ghost">
+                        <BackButton className="flex items-center gap-2">
+                            <ChevronLeft /> <p>Go back</p>
+                        </BackButton>
+                    </Button>
                 </div>
             ) : (
-                <ExamineesTable examinees={examinees} />
+                <>
+                    {/* header */}
+                    <div className="flex items-center pb-5 md:pb-7 border-b mb-5 md:mb-8 mt-2 md:mt-1.5">
+                        <BackButton className="hover:text-primary-text rounded-sm pe-2 transition-colors">
+                            <ChevronLeft />
+                        </BackButton>
+                        <SecondaryLabel>
+                            <span>{examinees[0]?.exam_title}</span>
+                        </SecondaryLabel>
+                    </div>
+
+                    <ExamineesTable examId={examId} examinees={examinees} />
+                    <Pagination
+                        currentPage={page}
+                        totalCount={count}
+                        baseUrl={`/company/examinees/${examId}`}
+                        pageSize={ITEMS_PER_PAGE}
+                    />
+                </>
             )}
         </div>
     );

@@ -28,24 +28,9 @@ export default function Loading() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                 {[...Array(3)].map((_, index) => (
-                    <div key={index} className="border rounded-xl">
-                        <div className="bg-card rounded-xl border-b">
-                            <div className="p-3 md:p-4">
-                                <div className="mb-2 mt-1.5">
-                                    <Skeleton className="h-4 w-32" />
-                                </div>
-                                <Skeleton className="h-2.5 w-20 mt-1" />
-                            </div>
-                            <div className="p-3 md:p-4 border-t flex items-center justify-between">
-                                <Skeleton className="h-3 w-20 my-[5px]" />
-                                <div className="ms-auto text-destructive">
-                                    <Trash size={16} />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="p-2">
-                            <Skeleton className="w-full h-9" />
-                        </div>
+                    <div key={index} className="border p-3 rounded-xl bg-card">
+                        <Skeleton className="w-[80%] h-4 mb-3.5" />
+                        <Skeleton className="w-24 h-3" />
                     </div>
                 ))}
             </div>

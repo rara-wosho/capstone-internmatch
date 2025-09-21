@@ -17,7 +17,7 @@ export async function createExam(formData) {
         return { success: false };
     }
 
-    redirect(`/company/internship-exam/manage/${data?.id}`);
+    redirect(`/company/manage-exam/${data?.id}`);
 }
 
 // Update exam details
