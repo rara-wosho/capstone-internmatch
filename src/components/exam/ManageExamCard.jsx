@@ -1,8 +1,5 @@
-import { createClient } from "@/lib/supabase/server";
 import { dateFormatter } from "@/utils/date-formatter";
 import Link from "next/link";
-import { Suspense } from "react";
-import { Skeleton } from "../ui/skeleton";
 import DeleteExamModal from "./DeleteExamModal";
 
 export default function ManageExamCard({ examData }) {

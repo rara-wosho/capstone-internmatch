@@ -89,6 +89,7 @@ export async function getExamById(examId) {
             .select(
                 `
           id,
+          company_id,
           is_published,
           shuffle_questions,
           title,
@@ -309,6 +310,7 @@ export async function getExamById(examId) {
 
 export async function saveExamsAnswer(
     student_id,
+    company_id,
     exam_id,
     started_at,
     exam_title,
@@ -338,6 +340,7 @@ export async function saveExamsAnswer(
         .from("exam_attempt")
         .insert({
             student_id,
+            company_id,
             exam_id,
             exam_title,
             score: correctAnswers.length,
@@ -373,7 +376,7 @@ export async function saveExamsAnswer(
 
     return {
         success: true,
-        data: { answersArray, student_id, exam_id, started_at },
+        // data: { answersArray, student_id, exam_id, started_at },
         error: null,
     };
 }

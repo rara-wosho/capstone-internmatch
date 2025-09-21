@@ -26,6 +26,7 @@ export default async function Page({ params }) {
 
     const supabase = await createClient();
 
+    // check from exam attempt table if student already took the exam
     const { data: attempts, error: attemptsError } = await supabase
         .from("exam_attempt")
         .select("id")

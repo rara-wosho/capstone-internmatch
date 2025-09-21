@@ -14,7 +14,7 @@ export default async function Page() {
     const { user, error: userError } = await getCurrentUser();
 
     if (userError) {
-        return <ErrorUi />;
+        return <ErrorUi secondaryMessage={userError} />;
     }
 
     if (!user) {

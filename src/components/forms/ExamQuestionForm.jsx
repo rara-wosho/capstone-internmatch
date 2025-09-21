@@ -24,6 +24,8 @@ export default function ExamQuestionForm({ examinationData }) {
     // get the id of the current user
     const { user } = useSession();
 
+    const companyId = examinationData.company_id;
+
     // array of questions in the exam
     const questions = examinationData?.questions || [];
 
@@ -101,8 +103,9 @@ export default function ExamQuestionForm({ examinationData }) {
             : new Date().toISOString();
 
         try {
-            const { data, success, error } = await saveExamsAnswer(
+            const { success, error } = await saveExamsAnswer(
                 user?.id,
+                companyId,
                 examinationData?.id,
                 started_at,
                 examinationData.title,

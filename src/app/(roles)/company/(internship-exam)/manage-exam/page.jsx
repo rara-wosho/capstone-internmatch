@@ -58,11 +58,22 @@ export default async function Page() {
             {exams && exams.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                     {exams.map((exam) => (
-                        <div key={exam.id} className="rounded-xl border">
+                        <div
+                            key={exam.id}
+                            className="rounded-xl border shadow-xs"
+                        >
                             <ManageExamCard examData={exam} />
                             <div className="p-2">
-                                <Button className="w-full" variant="outline">
-                                    View examinees
+                                <Button
+                                    className="w-full"
+                                    variant="outline"
+                                    asChild
+                                >
+                                    <Link
+                                        href={`/company/examinees/${exam.id}`}
+                                    >
+                                        View examinees
+                                    </Link>
                                 </Button>
                             </div>
                         </div>
