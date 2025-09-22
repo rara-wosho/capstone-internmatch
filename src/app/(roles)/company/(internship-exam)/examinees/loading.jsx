@@ -28,9 +28,21 @@ export default function Loading() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                 {[...Array(3)].map((_, index) => (
-                    <div key={index} className="border p-3 rounded-xl bg-card">
-                        <Skeleton className="w-[80%] h-4 mb-3.5" />
-                        <Skeleton className="w-24 h-3" />
+                    <div key={index} className="bg-card rounded-xl border">
+                        <div className="p-3 md:p-4">
+                            {/* Title */}
+                            <div className="flex items-center gap-2 mb-[15px] mt-1">
+                                <Skeleton className="h-4 w-40 rounded-full" />
+                            </div>
+
+                            {/* Published badge */}
+                            <Skeleton className="h-4 w-24 rounded-full" />
+                        </div>
+
+                        {/* Footer */}
+                        <div className="p-3  md:p-4 border-t flex items-center justify-between">
+                            <Skeleton className="h-4 w-24 rounded-full" />
+                        </div>
                     </div>
                 ))}
             </div>

@@ -105,7 +105,7 @@ export default async function Page({ params }) {
                 {/* list of questions */}
                 <div className="flex flex-col gap-1 order-2 lg:order-1">
                     {questions.length === 0 ? (
-                        <BorderBox className="border rounded-xl bg-card flex justify-center items-center h-full">
+                        <BorderBox className="border rounded-t-xl bg-card flex justify-center items-center h-full">
                             <p className="text-center max-w-sm py-14">
                                 No questions yet. Add your first question now by
                                 clicking 'Add question' button.

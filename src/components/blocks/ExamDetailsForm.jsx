@@ -26,7 +26,7 @@ export default function ExamDetailsForm() {
         description: "",
         instruction: "",
         duration: 60,
-        is_published: true,
+        is_published: false,
     });
 
     const handleChange = (field, value) => {

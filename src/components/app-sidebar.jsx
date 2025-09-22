@@ -16,6 +16,7 @@ import {
     CircleUser,
     Dot,
     User,
+    NotepadText,
 } from "lucide-react";
 
 import {
@@ -89,6 +90,12 @@ const navigationConfig = [
                 icon: <CircleUser />,
                 label: "Students",
                 roles: ["instructor"],
+            },
+            {
+                href: "/student/exams",
+                icon: <NotepadText />,
+                label: "Browse Exams",
+                roles: ["student"],
             },
 
             {

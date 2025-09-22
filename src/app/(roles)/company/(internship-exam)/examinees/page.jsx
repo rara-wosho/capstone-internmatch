@@ -2,8 +2,10 @@ import { Button } from "@/components/ui/button";
 import ErrorUi from "@/components/ui/ErrorUi";
 import IconWrapper from "@/components/ui/IconWrapper";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
+import { Skeleton } from "@/components/ui/skeleton";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/server";
+import { cn } from "@/lib/utils";
 import { dateFormatter } from "@/utils/date-formatter";
 import { PlusCircle, Users } from "lucide-react";
 import Link from "next/link";
@@ -26,13 +28,19 @@ export default async function Page() {
 
     const { data: exams, error: tableErr } = await supabase
         .from("exams")
-        .select("id, title, created_at, questions(id)")
+        .select("id, title, is_published, exam_attempt(id)")
         .eq("company_id", companyId)
         .order("created_at", { ascending: false });
 
+    console.log(exams);
     if (tableErr) {
         console.error("Error fetching exams:", tableErr.message);
-        return <ErrorUi message="Unable to load exams." />;
+        return (
+            <ErrorUi
+                message="Unable to load exams."
+                secondaryMessage="Something went wrong while we try to load exams."
+            />
+        );
     }
 
     return (
@@ -60,18 +68,37 @@ export default async function Page() {
 
             {/* body content  */}
             {exams?.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                     {exams?.map((exam) => (
-                        <Link
-                            href={`/company/examinees/${exam.id}`}
-                            className="border p-3 rounded-xl bg-card shadow-xs"
-                            key={exam.id}
+                        <div
+                            key={exam?.id}
+                            className="bg-card rounded-xl border"
                         >
-                            <p className="mb-1">{exam.title}</p>
-                            <p className="text-sm text-muted-foreground">
-                                {dateFormatter(exam.created_at)}
-                            </p>
-                        </Link>
+                            <Link href={`/company/examinees/${exam?.id}`}>
+                                <div className="p-3 md:p-4">
+                                    <div className="flex items-center gap-2 mb-1.5">
+                                        <p>{exam?.title}</p>
+                                    </div>
+                                    <p
+                                        className={cn(
+                                            "text-xs border rounded-full px-2.5 py-0.5 inline-flex",
+                                            exam?.is_published &&
+                                                "bg-accent text-accent-foreground border-accent"
+                                        )}
+                                    >
+                                        {exam?.is_published
+                                            ? "Published"
+                                            : "Not Published"}
+                                    </p>
+                                </div>
+                            </Link>
+                            <div className="p-3 md:p-4 border-t flex items-center justify-between">
+                                <p className="text-sm text-muted-foreground">
+                                    {exam?.exam_attempt?.length} Examinee
+                                    {exam?.exam_attempt?.length > 1 && "s"}
+                                </p>
+                            </div>
+                        </div>
                     ))}
                 </div>
             ) : (
