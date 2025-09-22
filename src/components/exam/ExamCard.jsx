@@ -1,4 +1,4 @@
-import { Building, Building2, Clock, Hash } from "lucide-react";
+import { ArrowUpRight, Building, Building2, Clock, Hash } from "lucide-react";
 import BorderBox from "../ui/BorderBox";
 import { Button } from "../ui/button";
 import Link from "next/link";
@@ -33,7 +33,7 @@ export default function ExamCard({ exam }) {
                     asChild
                 >
                     <Link href={`/student/companies/${exam?.company_id}`}>
-                        View Details
+                        View Details <ArrowUpRight />
                     </Link>
                 </Button>
             </div>

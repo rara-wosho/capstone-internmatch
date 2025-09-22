@@ -14,6 +14,8 @@ import {
 import { Info } from "lucide-react";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/server";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default async function Page({ params }) {
     const { examId } = await params;
@@ -43,7 +45,18 @@ export default async function Page({ params }) {
     }
 
     if (attempts && attempts.length > 0) {
-        return <p>You already answered the exam.</p>;
+        return (
+            <div className="py-10 px-3 flex flex-col items-center justify-center">
+                <p className="text-center mb-5">
+                    You already answered the exam.
+                </p>
+                <Button variant="secondary" asChild>
+                    <Link href="/student/my-exams/recent">
+                        View Recent Exams
+                    </Link>
+                </Button>
+            </div>
+        );
     }
 
     const { data: exam, error } = await getExamById(examId);

@@ -11,10 +11,11 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "./button";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { Loader } from "lucide-react";
 
 export default function AlertModal({
+    open,
     children,
     alertTitle,
     alertMessage,
@@ -32,7 +33,7 @@ export default function AlertModal({
     };
 
     return (
-        <AlertDialog>
+        <AlertDialog open={open}>
             <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
@@ -42,7 +43,9 @@ export default function AlertModal({
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel>{cancelLabel}</AlertDialogCancel>
+                    {cancelLabel && (
+                        <AlertDialogCancel>{cancelLabel}</AlertDialogCancel>
+                    )}
                     <Button
                         disabled={isPending}
                         onClick={handleClickAction}

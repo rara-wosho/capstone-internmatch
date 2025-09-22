@@ -16,9 +16,22 @@ import { saveExamsAnswer } from "@/lib/actions/exam";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 export default function ExamQuestionForm({ examinationData }) {
     const [isExpired, setIsExpired] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isRecorded, setIsRecorded] = useState(false);
     const router = useRouter();
 
     // get the id of the current user
@@ -119,9 +132,8 @@ export default function ExamQuestionForm({ examinationData }) {
                 return;
             }
 
-            router.replace(
-                "/student/e/ae7244c3-5904-4bbb-a87e-798724039866/result"
-            );
+            // if exam submission is successful, open modal
+            setIsRecorded(true);
         } catch (err) {
             alert("Something went wrong submitting the exam.");
         } finally {
@@ -163,6 +175,30 @@ export default function ExamQuestionForm({ examinationData }) {
 
     return (
         <div>
+            <AlertDialog open={isRecorded}>
+                <AlertDialogTrigger className="sr-only">
+                    Open
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle className="text-green-500">
+                            Exam Submitted Successfully!
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Thank you for completing the exam. Your answers have
+                            been recorded successfully.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <button
+                            className="text-white bg-green-600/80 px-3 py-2 rounded-sm"
+                            onClick={() => router.replace("/student/exams")}
+                        >
+                            Back to Exams
+                        </button>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             <div className="grid grid-cols-1 gap-3 md:gap-4 mt-7 lg:grid-cols-[1fr_2.7fr]">
                 <div className="left-section flex flex-col gap-3 md:gap-4">
                     <TimeRemaining
