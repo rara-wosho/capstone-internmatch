@@ -55,7 +55,7 @@ export async function updateExamDetails(formData) {
         return { success: false, error: error.message };
     }
 
-    revalidatePath(`/company/internship-exam/manage/${examId}`);
+    revalidatePath(`/company/manage-exam/${examId}`);
     return { success: true };
 }
 
@@ -65,6 +65,7 @@ export async function deleteExam(examId) {
     const { error } = await supabase.from("exams").delete().eq("id", examId);
 
     if (error) {
+        console.error(error.message);
         return { success: false, error: error.message };
     }
 

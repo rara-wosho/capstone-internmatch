@@ -58,6 +58,6 @@ export async function addQuestionAndChoices(questionData, exam_id) {
         return { success: false, error: "Failed to create question choices" };
     }
 
-    revalidatePath(`/company/internship-exam/manage/${exam_id}`, "page");
+    revalidatePath(`/company/manage-exam/${exam_id}`, "page");
     return { success: true, error: null };
 }

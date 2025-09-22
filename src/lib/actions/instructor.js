@@ -28,7 +28,7 @@ export async function createInstructor(formData) {
     //   2. insert into instructor table
     const { error: tableError } = await supabaseAdmin
         .from("ojt_instructors")
-        .insert({ id: userId, firstname, lastname, email });
+        .insert({ id: userId, firstname, lastname, email, role });
 
     if (tableError) {
         // rollback: delete auth user to keep things consistent

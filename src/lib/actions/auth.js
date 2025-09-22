@@ -77,6 +77,7 @@ export async function getCurrentUser() {
         return { error: true, user: null };
     }
 
+    console.log("from auth ", session?.user?.user_metadata?.role);
     return {
         error: false,
         session,

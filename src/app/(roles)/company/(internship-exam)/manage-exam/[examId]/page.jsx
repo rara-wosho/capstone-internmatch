@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import AboutExamModal from "@/components/exam/AboutExamModal";
 import { createClient } from "@/lib/supabase/server";
 import QuestionReportsModal from "@/components/exam/QuestionReportsModal";
+import Link from "next/link";
 
 export default async function Page({ params }) {
     const { examId } = await params;
@@ -43,7 +44,7 @@ export default async function Page({ params }) {
             `
         )
         .eq("id", examId)
-        .order("created_at", { referencedTable: "questions", ascending: false })
+        .order("created_at", { referencedTable: "questions", ascending: true })
         .maybeSingle();
 
     if (error) {
@@ -65,7 +66,7 @@ export default async function Page({ params }) {
     return (
         <div>
             {/* header */}
-            <div className="flex items-center pb-5 md:pb-7 border-b mb-5 md:mb-8 flex-wrap md:flex-nowrap gap-x-10 gap-y-4 mt-2 md:mt-0">
+            <div className="bg-background flex items-center pb-5 md:pb-7 border-b mb-5 md:mb-8 flex-wrap md:flex-nowrap gap-x-10 gap-y-4 mt-2 md:mt-0">
                 <BackButton className="hover:text-primary-text rounded-sm pe-2 transition-colors">
                     <SecondaryLabel className="gap-2 text-left">
                         <ChevronLeft />
@@ -81,11 +82,17 @@ export default async function Page({ params }) {
             <div className="flex items-center flex-wrap mb-5 gap-3">
                 <AboutExamModal exam={exam} />
                 <Button
+                    asChild
                     variant="primaryOutline"
                     size="sm"
                     disabled={!questions.length}
                 >
-                    <UserCheck /> Examinees
+                    <Link
+                        href={`/company/examinees/${exam?.id}`}
+                        className="flex items-center"
+                    >
+                        <UserCheck /> Examinees
+                    </Link>
                 </Button>
                 <QuestionReportsModal examId={exam?.id}>
                     <Button variant="primaryOutline" size="sm">
@@ -121,8 +128,9 @@ export default async function Page({ params }) {
                                     </div>
                                 </TertiaryLabel>
                             </BorderBox>
-                            {questions.map((q) => (
+                            {questions.map((q, index) => (
                                 <AddQuestionCard
+                                    index={index}
                                     key={q.id}
                                     questionId={q.id}
                                     initialQuestion={q.question_text}
@@ -131,6 +139,10 @@ export default async function Page({ params }) {
                             ))}
                         </>
                     )}
+
+                    <BorderBox className="bg-card border rounded-b-xl">
+                        <AddQuestionModal examId={exam?.id} />
+                    </BorderBox>
                 </div>
 
                 {/* right section */}

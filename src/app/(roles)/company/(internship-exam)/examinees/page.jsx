@@ -75,7 +75,9 @@ export default async function Page() {
                     ))}
                 </div>
             ) : (
-                <div>No exams created yet.</div>
+                <div className="flex flex-col items-center justify-center py-6 text-muted-foreground">
+                    No exams yet. Create your first exam to get started.
+                </div>
             )}
         </>
     );

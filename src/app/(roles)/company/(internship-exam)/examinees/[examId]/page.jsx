@@ -22,14 +22,6 @@ export default async function Page({ params, searchParams }) {
 
     const supabase = await createClient();
 
-    // const { data: examinees, error } = await supabase
-    //     .from("exam_attempt")
-    //     .select(
-    //         "id, completed_at, exam_id, exam_title, score, started_at, status, student_id, students(firstname, lastname)"
-    //     )
-    //     .eq("exam_id", examId)
-    //     .order("score", { ascending: false });
-
     // Fetch paginated examinees with total count
     const {
         data: examinees,
@@ -93,9 +85,9 @@ export default async function Page({ params, searchParams }) {
             {examinees.length === 0 ? (
                 <div className="min-h-[60svh] flex flex-col items-center justify-center">
                     <p className="mb-3">No examinees yet.</p>
-                    <Button asChild variant="ghost">
+                    <Button asChild variant="outline" className="px-6">
                         <BackButton className="flex items-center gap-2">
-                            <ChevronLeft /> <p>Go back</p>
+                            <p>Go back</p>
                         </BackButton>
                     </Button>
                 </div>

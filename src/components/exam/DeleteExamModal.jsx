@@ -34,7 +34,7 @@ export default function DeleteExamModal({ examId, type = "button" }) {
 
             toast.success("Exam deleted successfully.");
             setOpen(false);
-            router.push("/company/internship-exam/manage");
+            router.push("/company/manage-exam");
             router.refresh();
         });
     };

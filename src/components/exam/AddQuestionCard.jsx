@@ -13,6 +13,7 @@ import { createClient } from "@/lib/supabase/client";
 import AlertModal from "../ui/AlertModal";
 
 export default function AddQuestionCard({
+    index,
     questionId,
     initialQuestion,
     question_choices = [],
@@ -176,7 +177,9 @@ export default function AddQuestionCard({
             {!isEditing && (
                 <div className="flex flex-col">
                     <div className="mb-2 flex gap-2 items-start">
-                        <h1 className="w-full text-sm">{question}</h1>
+                        <h1 className="w-full text-sm">
+                            {index + 1}. {question}
+                        </h1>
                         <div className="flex items-center">
                             <button
                                 onClick={() => setIsEditing(true)}

@@ -31,7 +31,7 @@ export default function Loading() {
                     <Edit /> Edit exam
                 </Button>
                 <Button variant="primaryOutline" size="sm" disabled>
-                    <UserCheck /> Responses
+                    <UserCheck /> Examinees
                 </Button>
                 <Button disabled variant="primaryOutline" size="sm">
                     <ChartBar /> Reports
