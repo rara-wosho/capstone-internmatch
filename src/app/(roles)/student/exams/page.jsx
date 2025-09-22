@@ -11,7 +11,7 @@ export default async function ExamsPage() {
     const { data: exams, error } = await supabase
         .from("exams")
         .select(
-            "company_id, updated_at, title, description, duration, questions(id)"
+            "company_id, updated_at, title, description, duration, questions(id), companies(name)"
         )
         .eq("is_published", true);
 

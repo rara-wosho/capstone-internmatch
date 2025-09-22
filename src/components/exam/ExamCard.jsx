@@ -1,4 +1,4 @@
-import { Clock, Hash } from "lucide-react";
+import { Building, Building2, Clock, Hash } from "lucide-react";
 import BorderBox from "../ui/BorderBox";
 import { Button } from "../ui/button";
 import Link from "next/link";
@@ -6,7 +6,11 @@ import Link from "next/link";
 export default function ExamCard({ exam }) {
     return (
         <BorderBox className="border rounded-xl bg-card shadow-xs flex flex-col">
-            <h1 className="font-semibold mb-2">{exam?.title}</h1>
+            <h1 className="font-semibold mb-[2px]">{exam?.title}</h1>
+            <p className="text-accent-foreground mb-3 text-sm flex items-center gap-1">
+                <Building2 size={12} />
+                {exam?.companies?.name}
+            </p>
             <p className="text-muted-foreground text-sm line-clamp-2 mb-3">
                 {exam?.description
                     ? exam?.description
