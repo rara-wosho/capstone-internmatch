@@ -158,52 +158,6 @@ export default function AboutExamModal({ exam }) {
                                         defaultValue={exam?.duration}
                                     />
                                 </div>
-
-                                <div className="mt-2 w-full flex flex-col items-start">
-                                    <div className="flex items-center gap-2">
-                                        <Popover>
-                                            <PopoverTrigger className="flex items-center gap-1.5">
-                                                <FormLabel>Mode</FormLabel>
-                                                <Info
-                                                    className="mb-1"
-                                                    size={14}
-                                                />
-                                            </PopoverTrigger>
-                                            <PopoverContent>
-                                                <p className="text-xs text-muted-foreground mb-2">
-                                                    <span className="text-secondary-foreground font-semibold">
-                                                        Classic mode
-                                                    </span>{" "}
-                                                    : students will see 5
-                                                    questions at a time.
-                                                </p>
-                                                <p className="text-xs text-muted-foreground">
-                                                    <span className="text-secondary-foreground font-semibold">
-                                                        Focus mode
-                                                    </span>{" "}
-                                                    : students will see 1
-                                                    question at a time.
-                                                </p>
-                                            </PopoverContent>
-                                        </Popover>
-                                    </div>
-                                    <Select
-                                        name="mode"
-                                        defaultValue={exam?.mode || "classic"}
-                                    >
-                                        <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Mode" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="classic">
-                                                Classic
-                                            </SelectItem>
-                                            <SelectItem value="focus">
-                                                Focus
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
                             </div>
                         </ScrollArea>
 

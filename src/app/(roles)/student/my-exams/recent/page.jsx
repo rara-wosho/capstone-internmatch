@@ -25,8 +25,6 @@ export default async function Page() {
         return <ErrorUi />;
     }
 
-    console.log(data);
-
     return (
         <div>
             <SecondaryLabel className="mb-3">Recent Exams</SecondaryLabel>

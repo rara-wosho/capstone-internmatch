@@ -1,7 +1,12 @@
 import { cn } from "@/lib/utils";
 
 // utils/dateFormatter.ts
-export function dateFormatter(rawDate, includeTime = false, vertical = false) {
+export function dateFormatter(
+    rawDate,
+    includeTime = false,
+    vertical = false,
+    timeOnly = false
+) {
     if (!rawDate) return "";
 
     const date = new Date(rawDate);
@@ -22,7 +27,7 @@ export function dateFormatter(rawDate, includeTime = false, vertical = false) {
 
     return (
         <span className={cn("flex", vertical ? "flex-col" : "items-end gap-1")}>
-            <span>{datePart}</span>
+            {!timeOnly && <span>{datePart}</span>}
             {!vertical && "-"}
             <span className="text-xs">{timePart}</span>
         </span>

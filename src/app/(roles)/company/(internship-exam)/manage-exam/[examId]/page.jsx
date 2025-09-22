@@ -34,7 +34,6 @@ export default async function Page({ params }) {
             questions (
                 id, 
                 question_text, 
-                shuffle_choices, 
                 question_choices (
                     id, 
                     choice_text, 

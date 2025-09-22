@@ -26,7 +26,6 @@ export default function ExamDetailsForm() {
         description: "",
         instruction: "",
         duration: 60,
-        mode: "classic",
         is_published: true,
     });
 
@@ -38,7 +37,7 @@ export default function ExamDetailsForm() {
         e.preventDefault();
 
         // Required fields
-        if (!formData.title || !formData.duration || !formData.mode) {
+        if (!formData.title || !formData.duration) {
             toast.error("Fill in all required fields.");
             return;
         }
@@ -119,57 +118,6 @@ export default function ExamDetailsForm() {
                         </p>
                     </PopoverContent>
                 </Popover>
-            </div>
-
-            <div className="py-2 mb-4">
-                <div className="flex items-center justify-between mb-2">
-                    <p className="font-medium">Mode</p>
-                </div>
-
-                <div className="grid gap-2 grid-cols-1 sm:grid-cols-2">
-                    <label
-                        htmlFor="classic"
-                        className={`border rounded-lg p-3 cursor-pointer ${
-                            formData.mode === "classic" &&
-                            "border-accent-foreground bg-accent"
-                        }`}
-                    >
-                        <input
-                            type="radio"
-                            name="mode"
-                            id="classic"
-                            className="sr-only"
-                            checked={formData.mode === "classic"}
-                            onChange={() => handleChange("mode", "classic")}
-                        />
-                        <p>Classic</p>
-                        <p className="text-muted-foreground text-sm mt-1">
-                            In classic mode, students will see 5 questions at a
-                            time.
-                        </p>
-                    </label>
-                    <label
-                        htmlFor="focus"
-                        className={`border rounded-lg p-3 cursor-pointer ${
-                            formData.mode === "focus" &&
-                            "border-accent-foreground bg-accent"
-                        }`}
-                    >
-                        <input
-                            type="radio"
-                            name="mode"
-                            id="focus"
-                            className="sr-only"
-                            checked={formData.mode === "focus"}
-                            onChange={() => handleChange("mode", "focus")}
-                        />
-                        <p>Focus</p>
-                        <p className="text-muted-foreground text-sm mt-1">
-                            In focus mode, students will see 1 question at a
-                            time.
-                        </p>
-                    </label>
-                </div>
             </div>
 
             <SubmitButton

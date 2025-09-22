@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import { Search, X } from "lucide-react";
 import { Input } from "../ui/input";
+import { formatTimespan } from "@/utils/format-timespan";
 
 // Sort options configuration
 const SORT_OPTIONS = {
@@ -267,11 +268,22 @@ export default function ExamineesTable({ examinees, examId }) {
                                         </TableCell>
                                         <TableCell>
                                             {examinee?.completed_at ? (
-                                                dateFormatter(
-                                                    examinee.completed_at,
-                                                    true,
-                                                    true
-                                                )
+                                                <>
+                                                    <span className="text-accent-foreground">
+                                                        {formatTimespan(
+                                                            examinee.started_at,
+                                                            examinee.completed_at
+                                                        )}
+                                                    </span>
+                                                    <span>
+                                                        {dateFormatter(
+                                                            examinee.completed_at,
+                                                            true,
+                                                            true,
+                                                            true
+                                                        )}
+                                                    </span>
+                                                </>
                                             ) : (
                                                 <p className="text-xs text-muted-foreground">
                                                     -

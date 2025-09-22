@@ -29,7 +29,6 @@ export async function updateExamDetails(formData) {
     const description = formData.get("description")?.trim();
     const instruction = formData.get("instruction")?.trim();
     const duration = Number(formData.get("duration") || 0);
-    const mode = formData.get("mode") || "classic";
 
     // Switch values come as "on" or null
     const is_published = formData.get("is_published") === "on";
@@ -40,7 +39,6 @@ export async function updateExamDetails(formData) {
         description,
         instruction,
         duration,
-        mode,
         is_published,
         shuffle_questions,
         updated_at: new Date().toISOString(),

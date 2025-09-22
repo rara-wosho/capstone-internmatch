@@ -32,13 +32,11 @@ const DEFAULT_CHOICES = [
 export default function AddQuestionModal({ examId }) {
     const [question, setQuestion] = useState("");
     const [choices, setChoices] = useState(DEFAULT_CHOICES);
-    const [shuffleChoices, setShuffleChoices] = useState(false);
     const [open, setOpen] = useState(false);
 
     const resetForm = useCallback(() => {
         setQuestion("");
         setChoices(DEFAULT_CHOICES);
-        setShuffleChoices(false);
     }, []);
 
     const handleAddChoice = useCallback(() => {
@@ -154,17 +152,6 @@ export default function AddQuestionModal({ examId }) {
                             <div>
                                 <div className="flex items-center justify-between mb-4 mt-3">
                                     <FormLabel>Choices</FormLabel>
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            setShuffleChoices((s) => !s)
-                                        }
-                                        className={`mb-1 flex items-center gap-1 text-muted-foreground/50 ${
-                                            shuffleChoices ? "text-primary" : ""
-                                        }`}
-                                    >
-                                        <Shuffle size={22} />
-                                    </button>
                                 </div>
 
                                 <div className="space-y-3">

@@ -71,12 +71,6 @@ export default function AddQuestionAbout({ exam }) {
                         {formatDuration(exam?.duration)}
                     </p>
                 </div>
-                <div className="flex justify-between items-center mb-2">
-                    <FormLabel>Mode</FormLabel>
-                    <p className="text-sm text-muted-foreground">
-                        {exam?.mode}
-                    </p>
-                </div>
             </div>
 
             <DeleteExamModal examId={exam.id} type="button" />
