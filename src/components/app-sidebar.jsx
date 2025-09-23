@@ -17,6 +17,7 @@ import {
     Dot,
     User,
     NotepadText,
+    FileUser,
 } from "lucide-react";
 
 import {
@@ -165,10 +166,16 @@ const navigationConfig = [
                 ],
             },
             {
-                href: "/company/applications",
-                icon: <BookOpen />,
-                label: "Applications",
+                href: "/company/applicants",
+                icon: <FileUser />,
+                label: "Applicants",
                 roles: ["company"],
+            },
+            {
+                href: "/student/applications",
+                icon: <FileUser />,
+                label: "Applications",
+                roles: ["student"],
             },
         ],
     },

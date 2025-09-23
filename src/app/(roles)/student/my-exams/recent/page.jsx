@@ -16,14 +16,16 @@ export default async function Page() {
     const { data, error } = await supabase
         .from("exam_attempt")
         .select(
-            "id, completed_at,started_at, status,exam_id, exam_title, score"
+            "id, completed_at,started_at, status,exam_id, exam_title, score, company_id, companies(name)"
         )
         .eq("student_id", user.id)
         .order("started_at", { ascending: false });
 
     if (error) {
-        return <ErrorUi />;
+        return <ErrorUi secondaryMessage={error.message} />;
     }
+
+    console.log(data);
 
     return (
         <div>

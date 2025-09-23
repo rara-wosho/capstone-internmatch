@@ -16,6 +16,7 @@ import { getCurrentUser } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import TertiaryLabel from "@/components/ui/TertiaryLabel";
 
 export default async function Page({ params }) {
     const { examId } = await params;
@@ -47,14 +48,21 @@ export default async function Page({ params }) {
     if (attempts && attempts.length > 0) {
         return (
             <div className="py-10 px-3 flex flex-col items-center justify-center">
-                <p className="text-center mb-5">
-                    You already answered the exam.
+                <TertiaryLabel>You already answered the exam.</TertiaryLabel>
+                <p className="text-center mb-6 mt-2">
+                    You can check your examination results now or browse other
+                    exams.
                 </p>
-                <Button variant="secondary" asChild>
-                    <Link href="/student/my-exams/recent">
-                        View Recent Exams
-                    </Link>
-                </Button>
+                <div className="flex flex-col gap-2">
+                    <Button variant="secondary" asChild>
+                        <Link href="/student/my-exams/recent">
+                            View Recent Exams
+                        </Link>
+                    </Button>
+                    <Button variant="ghost" asChild>
+                        <Link href="/student/exams">Browse Exams</Link>
+                    </Button>
+                </div>
             </div>
         );
     }

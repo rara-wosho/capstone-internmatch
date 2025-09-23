@@ -1,3 +1,9 @@
+import ErrorUi from "@/components/ui/ErrorUi";
+
 export default function Page() {
-    return <div></div>;
+    return (
+        <div>
+            <ErrorUi />
+        </div>
+    );
 }

@@ -18,8 +18,6 @@ import { toast } from "sonner";
 
 import {
     AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
     AlertDialogFooter,
@@ -169,8 +167,18 @@ export default function ExamQuestionForm({ examinationData }) {
 
     const isLastQuestion = activeQuestionIndex === questions.length - 1;
 
-    if (!currentQuestion) {
-        return <div>Loading questions...</div>;
+    if (!currentQuestion || questions.length === 0) {
+        return (
+            <div className="mt-8 text-muted-foreground  space-y-3">
+                <p> There are no questions yet.</p>
+                <Button
+                    variant="outline"
+                    onClick={() => router.replace("/student/exams")}
+                >
+                    Back to Exams
+                </Button>
+            </div>
+        );
     }
 
     return (

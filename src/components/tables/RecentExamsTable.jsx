@@ -9,6 +9,9 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { dateFormatter } from "@/utils/date-formatter";
+import { formatTimespan } from "@/utils/format-timespan";
+import Link from "next/link";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export default function RecentExamsTable({ data }) {
     return (
@@ -17,7 +20,8 @@ export default function RecentExamsTable({ data }) {
                 {/* <TableCaption>A list of your recent invoices.</TableCaption>  */}
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Title</TableHead>
+                        <TableHead>Exam Title</TableHead>
+                        <TableHead>Company</TableHead>
                         <TableHead>Started at</TableHead>
                         <TableHead>Completed at</TableHead>
                         <TableHead>Score</TableHead>
@@ -32,11 +36,40 @@ export default function RecentExamsTable({ data }) {
                                     {exam.exam_title}
                                 </p>
                             </TableCell>
-                            <TableCell className="text-sm">
-                                {dateFormatter(exam.started_at, true)}
+                            <TableCell>
+                                <Link
+                                    href={`/student/companies/${exam.company_id}`}
+                                >
+                                    <p className="truncate max-w-[250px] hover:underline underline-offset-2">
+                                        {exam.companies.name}
+                                    </p>
+                                </Link>
                             </TableCell>
                             <TableCell className="text-sm">
-                                {dateFormatter(exam.completed_at, true)}
+                                {dateFormatter(exam.started_at, true, true)}
+                            </TableCell>
+                            <TableCell className="text-sm">
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        <span className="text-accent-foreground">
+                                            {formatTimespan(
+                                                exam.started_at,
+                                                exam.completed_at
+                                            )}
+                                        </span>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p className="text-sm text-muted-foreground">
+                                            Duration
+                                        </p>
+                                    </TooltipContent>
+                                </Tooltip>
+                                {dateFormatter(
+                                    exam.completed_at,
+                                    true,
+                                    true,
+                                    true
+                                )}
                             </TableCell>
                             <TableCell>{exam.score}</TableCell>
                             <TableCell>
