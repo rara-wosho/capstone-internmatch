@@ -52,11 +52,7 @@ export async function updateSession(request) {
     }
 
     // 🔄 If user is logged in but visits /sign-in → redirect them based on role
-    if (
-        user &&
-        (request.nextUrl.pathname === "/sign-in" ||
-            request.nextUrl.pathname === "/interests")
-    ) {
+    if (user && request.nextUrl.pathname === "/sign-in") {
         const url = request.nextUrl.clone();
 
         //"role" is stored in user metadata
@@ -96,6 +92,8 @@ export async function updateSession(request) {
             url.pathname = rolePaths[role] || "/"; // redirect them to their dashboard
             return NextResponse.redirect(url);
         }
+
+        // if non student visits interests page, redirect back to their route
         if (path.startsWith("/interests") && role !== "student") {
             const url = request.nextUrl.clone();
             url.pathname = rolePaths[role] || "/"; // redirect them to their dashboard

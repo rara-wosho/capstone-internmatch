@@ -17,8 +17,10 @@ import { BanIcon, Loader, Trash, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { allowExamAccess, revokeExamAccess } from "@/lib/actions/student";
 import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { dateFormatter } from "@/utils/date-formatter";
 
-export default function GroupMembersTable({ members }) {
+export default function GroupMembersTable({ members, search }) {
     const [markedIds, setMarkedIds] = useState([]);
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
@@ -69,6 +71,7 @@ export default function GroupMembersTable({ members }) {
 
     return (
         <>
+            {/* action modal if mark is  clicked  */}
             {markedIds.length > 0 && (
                 <div className="border border-t sm:border sm:rounded-xl fixed bottom-0 sm:bottom-3 md:bottom-5 left-1/2 -translate-x-1/2 w-full sm:max-w-max z-50 sm:shadow-md bg-card flex flex-col">
                     <div className="flex items-center justify-between sm:rounded-t-xl border-b p-3">
@@ -115,7 +118,11 @@ export default function GroupMembersTable({ members }) {
             )}
 
             <div className="flex items-center mb-2">
-                <TertiaryLabel>Group members</TertiaryLabel>
+                <TertiaryLabel>
+                    {search
+                        ? `Showing results for '${search}'`
+                        : "Group members"}{" "}
+                </TertiaryLabel>
             </div>
 
             <Table>
@@ -131,9 +138,9 @@ export default function GroupMembersTable({ members }) {
                             Complete Name
                         </TableHead>
                         <TableHead className="font-bold">Email</TableHead>
-                        <TableHead className="font-bold">Course</TableHead>
                         <TableHead className="font-bold">Gender</TableHead>
                         <TableHead className="font-bold">Age</TableHead>
+                        <TableHead className="font-bold">Joined On</TableHead>
                         <TableHead className="font-bold text-center">
                             Exam Access
                         </TableHead>
@@ -157,15 +164,26 @@ export default function GroupMembersTable({ members }) {
                             <TableCell className="font-medium text-secondary-foreground">
                                 <Link
                                     href={`/instructor/students/${member?.id}`}
-                                    className="hover:underline underline-offset-2"
+                                    className="hover:underline underline-offset-2 flex items-center gap-2"
                                 >
+                                    <Avatar className="size-6">
+                                        <AvatarImage
+                                            src={member?.avatar_url}
+                                            alt="student-image"
+                                        />
+                                        <AvatarFallback>
+                                            {member?.lastname.charAt(0)}
+                                        </AvatarFallback>
+                                    </Avatar>
                                     {member?.lastname}, {member?.firstname}
                                 </Link>
                             </TableCell>
                             <TableCell>{member?.email ?? "-"}</TableCell>
-                            <TableCell>{member?.course ?? "-"}</TableCell>
                             <TableCell>{member?.gender ?? "-"}</TableCell>
                             <TableCell>{member?.age ?? "-"}</TableCell>
+                            <TableCell>
+                                {dateFormatter(member?.created_at, true, true)}
+                            </TableCell>
                             <TableCell className="text-center">
                                 {member?.exam_access ? (
                                     <div className="border rounded-full inline-flex items-center px-2 py-[1px] border-green-500 text-green-600">

@@ -57,7 +57,10 @@ export default function CreateStudentAccountForm9({ groupId }) {
         }
 
         // toast.success("Account created successfully!");
-        router.replace("/interests");
+        toast.success("Account created successfully.", {
+            description: "Please wait for redirection...",
+        });
+        router.replace("/student/interests");
     };
 
     return (

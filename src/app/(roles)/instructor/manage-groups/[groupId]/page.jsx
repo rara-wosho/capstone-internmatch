@@ -27,7 +27,7 @@ export default async function Page({ params, searchParams }) {
         .single();
 
     if (error) {
-        return <ErrorUi message="Group not found." />;
+        return <ErrorUi secondaryMessage={error.message} />;
     }
 
     // ✅ pull search from query params
@@ -86,7 +86,7 @@ export default async function Page({ params, searchParams }) {
                     )}
 
                     {members.length > 0 && (
-                        <GroupMembersTable members={members} />
+                        <GroupMembersTable search={search} members={members} />
                     )}
 
                     {/* user is searching, empty result  */}
