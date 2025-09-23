@@ -5,11 +5,10 @@ import Image from "next/image";
 import ExaminationSection from "./ExaminationSection";
 import { Button } from "@/components/ui/button";
 import BorderBox from "@/components/ui/BorderBox";
-import { getCompanyById, getCompanyDataAndExams } from "@/lib/actions/company";
+import { getCompanyDataAndExams } from "@/lib/actions/company";
 import ErrorUi from "@/components/ui/ErrorUi";
 import { ArrowUpRight, ChevronLeft, Globe, Star } from "lucide-react";
 import BackButton from "@/components/ui/BackButton";
-import { Separator } from "@/components/ui/separator";
 
 const links = [
     { href: "", label: "Home" },
@@ -18,6 +17,7 @@ const links = [
 ];
 
 export default async function Page({ params }) {
+    await new Promise((res) => setTimeout(res, 9000));
     const { companyId } = await params;
 
     const { data, error } = await getCompanyDataAndExams(companyId);
@@ -27,10 +27,10 @@ export default async function Page({ params }) {
     }
 
     return (
-        <div>
+        <div className="mx-auto max-w-[900px]">
             <BreadCrumbs className="mb-4" links={links} />
 
-            <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-x-6 gap-y-8">
+            <div className="grid grid-cols-1 gap-x-6 gap-y-8">
                 {/* main content  */}
                 <div className="left ">
                     <section className="bg-card border rounded-xl mb-3">
@@ -101,21 +101,6 @@ export default async function Page({ params }) {
                             </p>
                         </BorderBox>
                     </section>
-
-                    {/* examination section  */}
-                    <BorderBox className="border bg-white dark:bg-transparent rounded-xl mb-3">
-                        <TertiaryLabel className="mb-2">
-                            Contact Information
-                        </TertiaryLabel>
-                        <div className="flex flex-col gap-1.5 text-muted-foreground">
-                            <p>support@accenture.com</p>
-                            <p>support@accenture.com</p>
-                        </div>
-                    </BorderBox>
-
-                    <BorderBox className="border bg-white dark:bg-transparent rounded-xl">
-                        Rate company
-                    </BorderBox>
                 </div>
 
                 {/* contact information  */}

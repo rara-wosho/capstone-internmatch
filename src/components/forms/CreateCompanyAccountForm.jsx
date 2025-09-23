@@ -218,7 +218,7 @@ export default function CreateCompanyAccountForm() {
                     </div>
                 </div>
 
-                <div className="mt-4 border-t pt-8 flex justify-end">
+                <div className="mt-4 pt-8 flex justify-end">
                     <SubmitButton
                         className="grow sm:grow-0"
                         disabled={isPending}

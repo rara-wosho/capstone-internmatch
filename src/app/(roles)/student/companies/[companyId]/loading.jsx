@@ -17,14 +17,14 @@ import BorderBox from "@/components/ui/BorderBox";
 
 export default function LoadingCompanyProfile() {
     return (
-        <>
+        <div className="w-full mx-auto max-w-[900px]">
             <div className="mb-5 mt-2 flex items-center gap-3">
                 <Skeleton className="h-3.5 w-16" />
                 <Skeleton className="h-3.5 w-20" />
                 <Skeleton className="h-3.5 w-20" />
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-x-6 gap-y-8">
-                <section className="bg-card border rounded-xl mb-3 animate-in fade-in">
+            <div className="grid grid-cols-1 gap-x-6 gap-y-8">
+                <section className="bg-card border rounded-xl mb-3">
                     {/* Header */}
                     <BorderBox className="border-b flex items-center justify-between">
                         <BackButton className="flex items-center text-sm text-muted-foreground hover:text-secondary-foreground">
@@ -85,32 +85,36 @@ export default function LoadingCompanyProfile() {
                 </section>
 
                 <section className="px-2">
-                    <div className="border-b mb-4 pb-3 flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-6 pb-3 border-b">
                         <TertiaryLabel>Examination</TertiaryLabel>
                         <Info size={18} />
                     </div>
 
-                    <Skeleton className="h-4 mb-3.5 w-36" />
-                    <Skeleton className="h-3 w-56 mb-4" />
-                    <div className="text-muted-foreground flex items-center gap-2 text-sm mb-3">
-                        <Clock size={12} />
-                        <Skeleton className="h-3 w-44" />
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div className="mb-7 flex flex-col">
+                            <Skeleton className="h-4 mb-3.5 w-36" />
+                            <Skeleton className="h-3 w-56 mb-4" />
+                            <div className="text-muted-foreground flex items-center gap-2 text-sm mb-3">
+                                <Clock size={12} />
+                                <Skeleton className="h-3 w-44" />
+                            </div>
+                            <div className="text-muted-foreground flex items-center gap-2 text-sm mb-3">
+                                <Hash size={12} />
+                                <Skeleton className="h-3 w-40" />
+                            </div>
+                            <div className="text-muted-foreground flex items-center gap-2 text-sm mb-3">
+                                <LayoutList size={12} />
+                                <Skeleton className="h-3 w-48" />
+                            </div>
+                            <div className="text-muted-foreground flex items-center gap-2 text-sm mb-6">
+                                <Calendar size={12} />
+                                <Skeleton className="h-3 w-32" />
+                            </div>
+                            <Skeleton className="h-9 w-full" />
+                        </div>
                     </div>
-                    <div className="text-muted-foreground flex items-center gap-2 text-sm mb-3">
-                        <Hash size={12} />
-                        <Skeleton className="h-3 w-40" />
-                    </div>
-                    <div className="text-muted-foreground flex items-center gap-2 text-sm mb-3">
-                        <LayoutList size={12} />
-                        <Skeleton className="h-3 w-48" />
-                    </div>
-                    <div className="text-muted-foreground flex items-center gap-2 text-sm mb-6">
-                        <Calendar size={12} />
-                        <Skeleton className="h-3 w-32" />
-                    </div>
-                    <Skeleton className="h-9 w-full" />
                 </section>
             </div>
-        </>
+        </div>
     );
 }

@@ -38,12 +38,6 @@ export default function Page() {
                                 <ChevronLeft size={20} /> Back
                             </BackButton>
                         )}
-
-                        <div className="ms-auto">
-                            <Button asChild variant="outline" size="sm">
-                                <Link href="/sign-in">Sign In Instead</Link>
-                            </Button>
-                        </div>
                     </div>
 
                     {/* did not choose account type yet  */}

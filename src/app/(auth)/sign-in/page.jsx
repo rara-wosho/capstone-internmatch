@@ -5,7 +5,7 @@ import Card from "@/components/ui/card";
 import FormLabel from "@/components/ui/FormLabel";
 import { Input } from "@/components/ui/input";
 import Logo from "@/components/ui/Logo";
-import { Loader, Lock, Mail, Star } from "lucide-react";
+import { Home, Loader, Lock, Mail, Star } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -14,6 +14,7 @@ import { signIn } from "@/lib/actions/auth";
 import { toast } from "sonner";
 import { useActionState, useEffect } from "react";
 import Form from "next/form";
+import IconWrapper from "@/components/ui/IconWrapper";
 
 export default function Page() {
     const [state, formAction, isPending] = useActionState(signIn, {
@@ -31,9 +32,18 @@ export default function Page() {
     return (
         <>
             <div className="flex items-center justify-between px-4 h-[65px]">
-                <Link href="/" className="flex items-center font-bold">
-                    <Logo className="w-5 h-5 me-3" /> InternMatch
-                </Link>
+                <div className="flex items-center">
+                    <div className="border-r me-2 pe-3">
+                        <IconWrapper>
+                            <Link href="/" className="flex gap-1 items-center">
+                                <Home size={16} />
+                            </Link>
+                        </IconWrapper>
+                    </div>
+                    <Link href="/" className="flex items-center font-bold">
+                        <Logo className="w-5 h-5 me-3" /> InternMatch
+                    </Link>
+                </div>
                 <ThemeToggler className="border rounded-sm bg-card p-2" />
             </div>
 
@@ -74,8 +84,9 @@ export default function Page() {
                     </div>
 
                     {/* sign in form */}
-                    <Card className="max-w-[450px] p-5 w-full mx-auto">
-                        <div className="flex flex-col items-center justify-center mb-3 mt-5">
+
+                    <Card className="p-5 w-full max-w-[450px] mx-auto">
+                        <div className="flex flex-col items-center justify-center mb-3 mt-8">
                             <h1 className="text-secondary-foreground font-bold text-3xl mb-1 text-center">
                                 Welcome Back!
                             </h1>
