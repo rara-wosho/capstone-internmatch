@@ -17,8 +17,11 @@ import SignOutModal from "./SignOutModal";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { Skeleton } from "./skeleton";
+import { useState } from "react";
 
 export default function DashboardHeader({ profileData }) {
+    // for profile popover
+    const [open, setOpen] = useState(false);
     const pathname = usePathname();
 
     if (pathname.startsWith("/student/e/")) return null;
@@ -49,7 +52,7 @@ export default function DashboardHeader({ profileData }) {
                     </div>
                 </div>
 
-                <Popover>
+                <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger className="cursor-pointer">
                         <div className="flex items-center gap-2.5">
                             <Avatar className="size-[29px]">
@@ -90,6 +93,7 @@ export default function DashboardHeader({ profileData }) {
                                     asChild
                                 >
                                     <Link
+                                        onNavigate={() => setOpen(false)}
                                         href={`/${profileData?.role}/profile/${profileData?.id}`}
                                     >
                                         <User />

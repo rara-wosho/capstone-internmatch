@@ -19,7 +19,7 @@ export default async function Page({ searchParams }) {
     let studentQuery = db
         .from("students")
         .select(
-            `id, firstname,lastname, email,course, gender, age, groups(ojt_instructor_id, group_name, id)`
+            `id, firstname,lastname,avatar_url, email,course, gender, age, groups(ojt_instructor_id, group_name, id)`
         )
         .order("created_at", { ascending: false });
 

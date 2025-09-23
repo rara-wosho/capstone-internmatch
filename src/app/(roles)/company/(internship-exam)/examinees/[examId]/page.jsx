@@ -30,7 +30,7 @@ export default async function Page({ params, searchParams }) {
     } = await supabase
         .from("exam_attempt")
         .select(
-            "id, completed_at, exam_id, exam_title, score, started_at, status, student_id, students(firstname, lastname)",
+            "id, completed_at, exam_id, exam_title, score, started_at, status, student_id, students(firstname, lastname, avatar_url)",
             { count: "exact" }
         )
         .eq("exam_id", examId)

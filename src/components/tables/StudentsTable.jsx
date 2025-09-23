@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/table";
 import BorderBox from "../ui/BorderBox";
 import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default function StudentsTable({ students }) {
     return (
@@ -19,7 +20,6 @@ export default function StudentsTable({ students }) {
                         <TableHead>#</TableHead>
                         <TableHead>Complete Name</TableHead>
                         <TableHead>Email</TableHead>
-                        <TableHead>Course</TableHead>
                         <TableHead>Gender</TableHead>
                         <TableHead>Age</TableHead>
                         <TableHead>Group</TableHead>
@@ -35,19 +35,21 @@ export default function StudentsTable({ students }) {
                             <TableCell className="font-medium text-secondary-foreground flex items-center">
                                 <Link
                                     href={`/instructor/students/${student?.id}`}
-                                    className="hover:underline underline-offset-2 w-full"
+                                    className="hover:underline underline-offset-2 w-full flex items-center gap-2"
                                 >
+                                    <Avatar className="size-6">
+                                        <AvatarImage
+                                            src={student?.avatar_url}
+                                        />
+                                        <AvatarFallback>
+                                            {student?.lastname?.charAt(0)}
+                                        </AvatarFallback>
+                                    </Avatar>
                                     {student?.lastname}, {student?.firstname}
                                 </Link>
                             </TableCell>
                             <TableCell>{student?.email}</TableCell>
-                            <TableCell>
-                                {student?.course ?? (
-                                    <p className="text-sm text-muted-foreground opacity-60 pointer-events-none">
-                                        -
-                                    </p>
-                                )}
-                            </TableCell>
+
                             <TableCell>
                                 {student?.gender ?? (
                                     <p className="text-sm text-muted-foreground opacity-60 pointer-events-none">

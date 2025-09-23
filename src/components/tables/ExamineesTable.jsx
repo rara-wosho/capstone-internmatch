@@ -25,6 +25,7 @@ import {
 import { Search, X } from "lucide-react";
 import { Input } from "../ui/input";
 import { formatTimespan } from "@/utils/format-timespan";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 // Sort options configuration
 const SORT_OPTIONS = {
@@ -231,8 +232,22 @@ export default function ExamineesTable({ examinees, examId }) {
                                         <TableCell className="font-medium">
                                             <Link
                                                 href={`/company/examinees/${examinee.exam_id}/${examinee.student_id}`}
-                                                className="hover:underline underline-offset-2 hover:text-accent-foreground transition-colors"
+                                                className="hover:underline underline-offset-2 hover:text-accent-foreground transition-colors flex items-center gap-2"
                                             >
+                                                <Avatar className="size-6">
+                                                    <AvatarImage
+                                                        src={
+                                                            examinee?.students
+                                                                ?.avatar_url
+                                                        }
+                                                        alt="student-img"
+                                                    />
+                                                    <AvatarFallback>
+                                                        {examinee?.students?.lastname?.charAt(
+                                                            0
+                                                        )}
+                                                    </AvatarFallback>
+                                                </Avatar>
                                                 <p className="flex items-center truncate max-w-[220px]">
                                                     {
                                                         examinee?.students

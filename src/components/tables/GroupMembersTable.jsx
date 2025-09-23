@@ -13,7 +13,7 @@ import Link from "next/link";
 import { useState, useTransition } from "react";
 import { Checkbox } from "../ui/checkbox";
 import { Button } from "../ui/button";
-import { BanIcon, Loader, Trash, X } from "lucide-react";
+import { BanIcon, Check, Loader, Trash, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { allowExamAccess, revokeExamAccess } from "@/lib/actions/student";
 import { toast } from "sonner";
@@ -117,12 +117,24 @@ export default function GroupMembersTable({ members, search }) {
                 </div>
             )}
 
-            <div className="flex items-center mb-2">
+            <div className="flex items-center mb-2 justify-between py-2">
                 <TertiaryLabel>
                     {search
                         ? `Showing results for '${search}'`
                         : "Group members"}{" "}
                 </TertiaryLabel>
+                <div
+                    onClick={handleMarkAll}
+                    className="text-sm hover:text-accent-foreground flex items-center gap-2 cursor-pointer"
+                >
+                    <Checkbox
+                        onCheckedChange={handleMarkAll}
+                        checked={markedIds.length === members.length}
+                    />
+                    {markedIds.length === members.length
+                        ? "Deselect all"
+                        : "Select all"}
+                </div>
             </div>
 
             <Table>
