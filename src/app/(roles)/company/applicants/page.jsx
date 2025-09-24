@@ -1,8 +1,10 @@
+import ApplicantsSettingsModal from "@/components/modals/ApplicantsSettingsModal";
 import { Button } from "@/components/ui/button";
 import EmptyUi from "@/components/ui/EmptyUi";
 import ErrorUi from "@/components/ui/ErrorUi";
 import IconWrapper from "@/components/ui/IconWrapper";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
+import { Skeleton } from "@/components/ui/skeleton";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/server";
 import { FileUser, Settings } from "lucide-react";
@@ -23,7 +25,7 @@ export default async function ApplicantsPage() {
 
     const { data: applicantsData, error } = await supabase
         .from("applicants")
-        .select()
+        .select("id, applied_at, student_id, resume_link,status, message")
         .eq("company_id", user?.id)
         .order("applied_at", { ascending: false });
 
@@ -31,7 +33,6 @@ export default async function ApplicantsPage() {
         return <ErrorUi secondaryMessage="Unable to fetch applicants data" />;
     }
 
-    console.log(applicantsData);
     return (
         <div>
             {/* Header */}
@@ -44,12 +45,14 @@ export default async function ApplicantsPage() {
                 </SecondaryLabel>
 
                 <div className="ms-auto">
-                    <Button variant="white">
-                        <span className="flex gap-1.5 items-center">
-                            <Settings />
-                            Settings
-                        </span>
-                    </Button>
+                    <ApplicantsSettingsModal />
+                </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+                <p className="text-muted-foreground">Status: </p>
+                <div className="border rounded-full border-green-500/50 text-green-600 bg-green-600/10 px-2 py-0.5 text-sm">
+                    <span>Currently accepting</span>
                 </div>
             </div>
 

@@ -7,8 +7,8 @@ export default function EmptyUi({ message, secondaryMessage }) {
             <div className="mb-2 opacity-80  dark:opacity-75">
                 <Image
                     src="/Empty-pana.svg"
-                    width={200}
-                    height={200}
+                    width={180}
+                    height={180}
                     alt="empty-image"
                 />
             </div>

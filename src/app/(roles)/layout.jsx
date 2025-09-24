@@ -60,7 +60,9 @@ export default async function DashboardLayout({ children }) {
     if (user?.role === "company") {
         const { data: companyData, error: companyError } = await supabase
             .from("companies")
-            .select("email, id, role, avatar_url, name")
+            .select(
+                "email, id, role, avatar_url, name, accept_applicants, accept_applicants_term"
+            )
             .eq("id", user?.id)
             .single();
 

@@ -10,8 +10,8 @@ export default function ErrorUi({ message, secondaryMessage }) {
                 <Image
                     alt="error"
                     src="/error-icon.svg"
-                    width={200}
-                    height={200}
+                    width={180}
+                    height={180}
                 />
             </div>
 
