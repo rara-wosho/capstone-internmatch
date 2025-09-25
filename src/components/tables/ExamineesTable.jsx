@@ -26,6 +26,7 @@ import { Search, X } from "lucide-react";
 import { Input } from "../ui/input";
 import { formatTimespan } from "@/utils/format-timespan";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import useDebounce from "@/hooks/useDebounce";
 
 // Sort options configuration
 const SORT_OPTIONS = {
@@ -46,14 +47,15 @@ export default function ExamineesTable({ examinees, examId }) {
     const [searchQuery, setSearchQuery] = useState("");
     const [sortBy, setSortBy] = useState("score_desc");
     const [isSorted, setIsSorted] = useState(false);
+    const debouncedValue = useDebounce(searchQuery, 700);
 
     // Filter and sort examinees based on search query and sort option
     const filteredAndSortedExaminees = useMemo(() => {
         let result = [...examinees];
 
         // Apply search filter
-        if (searchQuery.trim()) {
-            const query = searchQuery.toLowerCase();
+        if (debouncedValue.trim()) {
+            const query = debouncedValue.toLowerCase();
             result = result.filter(
                 (examinee) =>
                     examinee.students?.firstname
@@ -106,7 +108,7 @@ export default function ExamineesTable({ examinees, examId }) {
         }
 
         return result;
-    }, [examinees, searchQuery, sortBy]);
+    }, [examinees, debouncedValue, sortBy]);
 
     const handleSearch = (query) => {
         setSearchQuery(query);
@@ -149,9 +151,12 @@ export default function ExamineesTable({ examinees, examId }) {
                         {searchQuery && (
                             <button
                                 onClick={clearSearch}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                className="flex items-center gap-0.5 absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
                             >
-                                <X size={16} />
+                                <X size={17} />{" "}
+                                <span className="mb-[4px] hidden sm:inline-block">
+                                    clear
+                                </span>
                             </button>
                         )}
                     </div>
