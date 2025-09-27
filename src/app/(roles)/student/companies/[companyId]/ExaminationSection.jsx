@@ -42,8 +42,11 @@ export default function ExaminationSection({ companyExams }) {
     return (
         <>
             {/* header  */}
-            <div className="flex items-center justify-between mb-6 pb-3 border-b">
-                <TertiaryLabel>Examination</TertiaryLabel>
+            <div
+                id="exams"
+                className="flex items-center justify-between mb-6 pb-3 border-b"
+            >
+                <TertiaryLabel>Examinations</TertiaryLabel>
                 <Popover>
                     <PopoverTrigger className="cursor-pointer">
                         <Info size={18} />

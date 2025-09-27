@@ -13,6 +13,8 @@ const buttonVariants = cva(
                     "bg-linear-to-b from-violet-400 to-violet-700 text-primary-foreground shadow-xs hover:opacity-90",
                 success:
                     "bg-green-600 text-white shadow-xs transition-all hover:opacity-90 focus-visible:ring-green-500/20 dark:focus-visible:ring-green-500/40 dark:bg-green-700",
+                successOutline:
+                    "bg-green-500/10 text-green-500 shadow-xs transition-all hover:opacity-90 focus-visible:ring-green-500/20 dark:focus-visible:ring-green-500/40",
                 destructive:
                     "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
                 dangerOutline:

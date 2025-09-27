@@ -7,8 +7,17 @@ import { Button } from "@/components/ui/button";
 import BorderBox from "@/components/ui/BorderBox";
 import { getCompanyDataAndExams } from "@/lib/actions/company";
 import ErrorUi from "@/components/ui/ErrorUi";
-import { ArrowUpRight, ChevronLeft, Globe, Star } from "lucide-react";
+import {
+    ArrowUpRight,
+    ChevronLeft,
+    CircleQuestionMark,
+    FileText,
+    FileUser,
+    Globe,
+    Star,
+} from "lucide-react";
 import BackButton from "@/components/ui/BackButton";
+import { Separator } from "@/components/ui/separator";
 
 const links = [
     { href: "", label: "Home" },
@@ -17,13 +26,16 @@ const links = [
 ];
 
 export default async function Page({ params }) {
-    await new Promise((res) => setTimeout(res, 9000));
     const { companyId } = await params;
 
     const { data, error } = await getCompanyDataAndExams(companyId);
 
+    console.log(data);
+
     if (error) {
-        return <ErrorUi />;
+        return (
+            <ErrorUi secondaryMessage="We're not able to fetch the data that you need." />
+        );
     }
 
     return (
@@ -44,7 +56,8 @@ export default async function Page({ params }) {
                                 <Globe size={17} />
                             </div>
                         </BorderBox>
-                        <BorderBox className="flex gap-x-10 gap-y-4 border-b flex-wrap items-center">
+                        <BorderBox className="flex gap-x-5 gap-y-4 border-b flex-wrap items-center justify-between">
+                            {/* mini hero section | left section  */}
                             <div className="flex gap-3">
                                 {/* company picture  */}
                                 <div className="relative size-24 shrink-0 overflow-hidden rounded-sm">
@@ -84,12 +97,24 @@ export default async function Page({ params }) {
                                 </div>
                             </div>
 
-                            <Button
-                                variant="white"
-                                className="grow sm:grow-0 basis-[120px] ms-auto"
-                            >
-                                Visit <ArrowUpRight />
-                            </Button>
+                            <div className="grid grid-cols-2 gap-2">
+                                <Button variant="outline" asChild>
+                                    <a href="#exams">View Exams</a>
+                                </Button>
+
+                                <div className="flex items-center bg-primary rounded-sm grow h-9">
+                                    <button className="px-8 border-white grow">
+                                        Apply
+                                    </button>
+                                    <Separator
+                                        orientation="vertical"
+                                        className="bg-neutral-100/30"
+                                    />
+                                    <button className="px-3">
+                                        <CircleQuestionMark size={16} />
+                                    </button>
+                                </div>
+                            </div>
                         </BorderBox>
 
                         <BorderBox>

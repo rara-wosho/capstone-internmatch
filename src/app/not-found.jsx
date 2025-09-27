@@ -11,11 +11,11 @@ export default function NotFound() {
                 height={200}
             />
 
-            <SecondaryLabel className=" mt-2 mb-2 md:mb-3">
-                Page not Found
+            <SecondaryLabel className="px-4 mt-2 mb-2 md:mb-3">
+                Sorry, we can't find that page!
             </SecondaryLabel>
-            <p className="text-sm text-center text-muted-foreground px-12">
-                We cannot find the page you were looking for.
+            <p className="text-sm text-center text-muted-foreground px-5 max-w-[300px]">
+                Don't worry though, everything is STILL AWESOME! 😎
             </p>
         </div>
     );
