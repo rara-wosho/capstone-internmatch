@@ -1,3 +1,4 @@
+import BorderBox from "@/components/ui/BorderBox";
 import { Button } from "@/components/ui/button";
 import IconWrapper from "@/components/ui/IconWrapper";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
@@ -23,10 +24,26 @@ export default function Loading() {
                 </div>
             </div>
 
-            {/* status section  */}
-            <div className="flex items-center gap-2">
-                <p className="text-muted-foreground">Status: </p>
-                <Skeleton className="h-6   rounded-full  w-36" />
+            <div className="rounded-xl border shadow-xs bg-card">
+                <BorderBox className="border-b">Applicants Data</BorderBox>
+
+                <BorderBox className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                    {[...Array(3)].map((_, index) => (
+                        <div
+                            key={index}
+                            className="rounded-lg shadow-xs bg-card p-3 md:p-4 lg:p-5 border flex flex-col items-center justify-center"
+                        >
+                            <div className="mb-3">
+                                <Skeleton className="w-24 aspect-square rounded-full" />
+                            </div>
+
+                            <div className="flex items-center flex-wrap gap-2 w-full mt-6">
+                                <Skeleton className="grow h-8" />
+                                <Skeleton className="grow h-8" />
+                            </div>
+                        </div>
+                    ))}
+                </BorderBox>
             </div>
         </div>
     );

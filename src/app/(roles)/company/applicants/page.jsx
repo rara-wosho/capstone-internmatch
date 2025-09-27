@@ -1,4 +1,5 @@
 import ApplicantsSettingsModal from "@/components/modals/ApplicantsSettingsModal";
+import ApplicantsSection from "@/components/sections/ApplicantsSection";
 import { Button } from "@/components/ui/button";
 import EmptyUi from "@/components/ui/EmptyUi";
 import ErrorUi from "@/components/ui/ErrorUi";
@@ -49,13 +50,7 @@ export default async function ApplicantsPage() {
                 </div>
             </div>
 
-            <div className="flex items-center gap-2">
-                <p className="text-muted-foreground">Status: </p>
-                <div className="border rounded-full border-green-500/50 text-green-600 bg-green-600/10 px-2 py-0.5 text-sm">
-                    <span>Currently accepting</span>
-                </div>
-            </div>
-
+            <ApplicantsSection applicants={applicantsData} />
             {/* body  */}
             {applicantsData.length === 0 ? (
                 <div>
@@ -65,7 +60,7 @@ export default async function ApplicantsPage() {
                     />
                 </div>
             ) : (
-                <div></div>
+                <ApplicantsSection applicants={applicantsData} />
             )}
         </div>
     );

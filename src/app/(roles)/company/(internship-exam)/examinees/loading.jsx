@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function Loading() {
     return (
         <div>
-            <div className="flex items-center pb-5 md:pb-7 border-b mb-5 md:mb-8">
+            <div className="flex items-center pb-5 md:pb-7 border-b mb-5 md:mb-8 mt-2 md:mt-0">
                 <SecondaryLabel className="gap-2">
                     <IconWrapper className="hidden md:inline-block">
                         <Users size={16} />

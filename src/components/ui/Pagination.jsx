@@ -54,7 +54,7 @@ export default function Pagination({
         return pages;
     };
 
-    if (totalPages <= 1) return null;
+    // if (totalPages <= 1) return null;
 
     const visiblePages = getVisiblePages();
     const hasPrevious = currentPage > 1;
@@ -74,6 +74,7 @@ export default function Pagination({
             <div className="flex items-center gap-1 grow sm:grow-0 justify-center text-muted-foreground">
                 {/* Previous Button */}
                 <Button
+                    size="smallest"
                     variant="ghost"
                     asChild
                     disabled={!hasPrevious}
@@ -94,7 +95,7 @@ export default function Pagination({
                 {/* First page if not visible */}
                 {visiblePages[0] > 1 && (
                     <>
-                        <Button size="icon" variant="outline" asChild>
+                        <Button size="smallIcon" variant="outline" asChild>
                             <Link href={createPageUrl(1)}>1</Link>
                         </Button>
                         {visiblePages[0] > 2 && (
@@ -107,7 +108,7 @@ export default function Pagination({
                 {visiblePages.map((page) => (
                     <Button
                         key={page}
-                        size="icon"
+                        size="smallIcon"
                         variant={page === currentPage ? "default" : "outline"}
                         asChild
                     >
@@ -122,7 +123,7 @@ export default function Pagination({
                             totalPages - 1 && (
                             <span className="px-2 text-sm">...</span>
                         )}
-                        <Button size="icon" variant="outline" asChild>
+                        <Button size="smallIcon" variant="outline" asChild>
                             <Link href={createPageUrl(totalPages)}>
                                 {totalPages}
                             </Link>
@@ -134,6 +135,7 @@ export default function Pagination({
                 <Button
                     variant="ghost"
                     asChild
+                    size="smallest"
                     disabled={!hasNext}
                     className={!hasNext ? "pointer-events-none opacity-50" : ""}
                 >

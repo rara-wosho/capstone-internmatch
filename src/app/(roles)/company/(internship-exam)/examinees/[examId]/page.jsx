@@ -1,3 +1,4 @@
+import AboutExamModal from "@/components/exam/AboutExamModal";
 import ExamineesTable from "@/components/tables/ExamineesTable";
 import BackButton from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/button";
@@ -5,7 +6,8 @@ import ErrorUi from "@/components/ui/ErrorUi";
 import Pagination from "@/components/ui/Pagination";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { createClient } from "@/lib/supabase/server";
-import { ChevronLeft } from "lucide-react";
+import { ArrowRight, ChevronLeft } from "lucide-react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 // Constants
@@ -94,13 +96,23 @@ export default async function Page({ params, searchParams }) {
             ) : (
                 <>
                     {/* header */}
-                    <div className="flex items-center pb-5 md:pb-7 border-b mb-5 md:mb-8 mt-2 md:mt-1.5">
-                        <BackButton className="hover:text-primary-text rounded-sm pe-2 transition-colors">
-                            <ChevronLeft />
-                        </BackButton>
-                        <SecondaryLabel>
-                            <span>{examinees[0]?.exam_title}</span>
-                        </SecondaryLabel>
+                    <div className="flex items-center flex-wrap md:flex-nowrap gap-x-7 gap-y-3 pb-5 md:pb-7 border-b mb-5 md:mb-8 mt-2 md:mt-1.5">
+                        <div className="flex items-center gap-1">
+                            <BackButton className="hover:text-primary-text rounded-sm transition-colors">
+                                <ChevronLeft />
+                            </BackButton>
+                            <SecondaryLabel>
+                                <span>{examinees[0]?.exam_title}</span>
+                            </SecondaryLabel>
+                        </div>
+
+                        <div className="ms-auto grow sm:grow-0">
+                            <Button variant="white" className="w-full" asChild>
+                                <Link href={`/company/manage-exam/${examId}`}>
+                                    Change exam details <ArrowRight />
+                                </Link>
+                            </Button>
+                        </div>
                     </div>
 
                     <ExamineesTable examId={examId} examinees={examinees} />
