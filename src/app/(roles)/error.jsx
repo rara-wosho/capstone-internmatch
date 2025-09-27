@@ -9,7 +9,7 @@ export default function Error({ error, reset }) {
     }, [error]);
 
     return (
-        <div className="w-full flex flex-col justify-center items-center">
+        <div className="w-full flex flex-col justify-center items-center p-4">
             <ErrorUi />
             <Button variant="outline" onClick={reset}>
                 Try again

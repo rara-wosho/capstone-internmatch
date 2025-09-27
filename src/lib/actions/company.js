@@ -145,3 +145,27 @@ export async function getCompanyDataAndExams(companyId) {
         error: null,
     };
 }
+
+// update application status and terms
+
+export async function updateApplicationSettings(
+    companyId,
+    acceptApplicants,
+    acceptTerm
+) {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+        .from("companies")
+        .update({
+            accept_applicants: acceptApplicants,
+            accept_applicants_term: acceptTerm,
+        })
+        .eq("id", companyId);
+
+    if (error) {
+        return { success: false, error: "Unable to save changes." };
+    }
+
+    return { success: true, error: null };
+}

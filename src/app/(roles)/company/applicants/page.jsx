@@ -5,10 +5,9 @@ import EmptyUi from "@/components/ui/EmptyUi";
 import ErrorUi from "@/components/ui/ErrorUi";
 import IconWrapper from "@/components/ui/IconWrapper";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
-import { Skeleton } from "@/components/ui/skeleton";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/server";
-import { FileUser, Settings } from "lucide-react";
+import { FileUser } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export default async function ApplicantsPage() {
@@ -26,7 +25,9 @@ export default async function ApplicantsPage() {
 
     const { data: applicantsData, error } = await supabase
         .from("applicants")
-        .select("id, applied_at, student_id, resume_link,status, message")
+        .select(
+            "id, applied_at, student_id, resume_link,status, message, students(firstname, lastname, avatar_url, id, email)"
+        )
         .eq("company_id", user?.id)
         .order("applied_at", { ascending: false });
 
@@ -37,7 +38,7 @@ export default async function ApplicantsPage() {
     return (
         <div>
             {/* Header */}
-            <div className="flex items-center pb-5 md:pb-7 border-b mb-5 md:mb-8 mt-2 md:mt-0">
+            <div className="flex items-center pb-5 md:pb-7 border-b mb-5 md:mb-8 mt-2 md:mt-0 flex-wrap gap-x-10 gap-y-2">
                 <SecondaryLabel className="gap-2">
                     <IconWrapper className="hidden md:inline-block">
                         <FileUser size={16} />
@@ -45,12 +46,12 @@ export default async function ApplicantsPage() {
                     <span>Applicants</span>
                 </SecondaryLabel>
 
-                <div className="ms-auto">
+                <div className="ms-auto flex items-center gap-2">
                     <ApplicantsSettingsModal />
                 </div>
             </div>
 
-            <ApplicantsSection applicants={applicantsData} />
+            {/* <ApplicantsSection applicants={applicantsData} />  */}
             {/* body  */}
             {applicantsData.length === 0 ? (
                 <div>

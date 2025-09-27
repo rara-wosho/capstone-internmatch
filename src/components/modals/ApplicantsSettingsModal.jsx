@@ -20,110 +20,166 @@ import {
 } from "@/components/ui/select";
 
 import { Button } from "../ui/button";
-import { Settings } from "lucide-react";
-import FormLabel from "../ui/FormLabel";
+import { Loader, Settings } from "lucide-react";
 import { Switch } from "../ui/switch";
-import { useState } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { useSession } from "@/context/SessionContext";
 import { notFound } from "next/navigation";
+import { updateApplicationSettings } from "@/lib/actions/company";
+import { toast } from "sonner";
+import { createClient } from "@/lib/supabase/client";
 
 export default function ApplicantsSettingsModal() {
     const { userData } = useSession();
+    const [open, setOpen] = useState(false);
+    const [isFetching, setIsFetching] = useState(false);
+    const [isPending, startTransition] = useTransition();
 
-    // get the inital states from companies table
-    const [acceptApplicants, setAcceptApplicants] = useState(
-        userData?.accept_applicants
-    );
-    const [acceptCondition, setAcceptCondition] = useState(
-        userData?.accept_applicants_term
-    );
+    // Form states
+    const [acceptApplicants, setAcceptApplicants] = useState(false);
+    const [acceptCondition, setAcceptCondition] = useState("");
 
+    // Ensure we have a valid user
     if (!userData) {
         notFound();
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    // Fetch settings from Supabase
+    const fetchStatus = async () => {
+        if (!userData?.id) return;
 
-        // Example: log settings
-        console.log("Accept applicants:", acceptApplicants);
-        console.log("Condition:", acceptCondition);
+        setIsFetching(true);
+        try {
+            const supabase = createClient();
+            const { data, error } = await supabase
+                .from("companies")
+                .select("accept_applicants, accept_applicants_term")
+                .eq("id", userData.id)
+                .single();
 
-        // TODO: Save to Supabase or API
+            if (error) {
+                toast.error("Unable to fetch current settings.");
+            } else {
+                setAcceptApplicants(data.accept_applicants ?? false);
+                setAcceptCondition(data.accept_applicants_term ?? "");
+            }
+        } catch (err) {
+            toast.error("An unexpected error occurred.");
+        } finally {
+            setIsFetching(false);
+        }
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (isPending) return;
+
+        startTransition(async () => {
+            const { success, error } = await updateApplicationSettings(
+                userData.id,
+                acceptApplicants,
+                acceptCondition
+            );
+
+            if (!success) {
+                toast.error(error || "Failed to update settings.");
+                return;
+            }
+
+            toast.success("Settings updated successfully!");
+            setTimeout(() => setOpen(false), 900);
+        });
+    };
+
+    // When modal opens, fetch current settings
+    useEffect(() => {
+        if (open) fetchStatus();
+    }, [open]);
+
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button>
-                    <Settings /> Settings
+                    <Settings className="mr-2" /> Settings
                 </Button>
             </DialogTrigger>
 
             <DialogContent>
                 <DialogHeader className="border-b pb-3 mb-3">
-                    <DialogTitle className="text-left">
-                        Applicant Acceptance Settings
-                    </DialogTitle>
-                    <DialogDescription className="sr-only">
+                    <DialogTitle>Applicant Acceptance Settings</DialogTitle>
+                    <DialogDescription>
                         Decide when students are allowed to apply.
                     </DialogDescription>
                 </DialogHeader>
 
-                <form onSubmit={handleSubmit}>
-                    {/* Switch */}
-                    <div className="mb-4 flex items-center justify-between">
-                        <label
-                            htmlFor="applicant-status"
-                            className="flex items-center gap-2 cursor-pointer"
-                        >
-                            <span>Accept applicants?</span>
-                        </label>
-                        <Switch
-                            id="applicant-status"
-                            checked={acceptApplicants}
-                            onCheckedChange={setAcceptApplicants}
-                        />
+                {isFetching ? (
+                    <div className="py-4 text-sm text-muted-foreground flex items-center gap-2">
+                        <Loader className="animate-spin" size={16} />
+                        <p> Loading current settings...</p>
                     </div>
-
-                    {/* Select */}
-                    {/* Only show if accepting applicant is  true  */}
-                    {acceptApplicants && (
-                        <div className="mb-3">
-                            <p className="text-sm text-muted-foreground">
-                                When should students be allowed to apply?
-                            </p>
-                            <Select
-                                value={acceptCondition}
-                                onValueChange={setAcceptCondition}
+                ) : (
+                    <form onSubmit={handleSubmit}>
+                        {/* Switch */}
+                        <div className="mb-4 flex items-center justify-between">
+                            <label
+                                htmlFor="applicant-status"
+                                className="flex items-center gap-2 text-sm font-medium"
                             >
-                                <SelectTrigger className="w-full mt-1">
-                                    <SelectValue placeholder="Choose settings" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="all">
-                                        After completing all exams
-                                    </SelectItem>
-                                    <SelectItem value="some">
-                                        After completing at least one exam
-                                    </SelectItem>
-                                    <SelectItem value="anytime">
-                                        Anytime
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
+                                Accept applicants?
+                            </label>
+                            <Switch
+                                id="applicant-status"
+                                checked={acceptApplicants}
+                                onCheckedChange={setAcceptApplicants}
+                            />
                         </div>
-                    )}
 
-                    <DialogFooter className="mt-6">
-                        <DialogClose asChild>
-                            <Button variant="outline" type="button">
-                                Cancel
+                        {/* Conditional select */}
+                        {acceptApplicants && (
+                            <div className="mb-3">
+                                <p className="text-sm text-muted-foreground">
+                                    When should students be allowed to apply?
+                                </p>
+                                <Select
+                                    value={acceptCondition}
+                                    onValueChange={setAcceptCondition}
+                                >
+                                    <SelectTrigger className="w-full mt-1">
+                                        <SelectValue placeholder="Choose settings" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="all">
+                                            After completing all exams
+                                        </SelectItem>
+                                        <SelectItem value="some">
+                                            After completing at least one exam
+                                        </SelectItem>
+                                        <SelectItem value="anytime">
+                                            Anytime
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        )}
+
+                        <DialogFooter className="mt-6">
+                            <DialogClose asChild>
+                                <Button variant="outline" type="button">
+                                    Cancel
+                                </Button>
+                            </DialogClose>
+                            <Button type="submit" disabled={isPending}>
+                                {isPending && (
+                                    <Loader
+                                        className="animate-spin mr-2"
+                                        size={18}
+                                    />
+                                )}
+                                Save changes
                             </Button>
-                        </DialogClose>
-                        <Button type="submit">Save changes</Button>
-                    </DialogFooter>
-                </form>
+                        </DialogFooter>
+                    </form>
+                )}
             </DialogContent>
         </Dialog>
     );
