@@ -5,22 +5,12 @@ import Image from "next/image";
 import ExaminationSection from "./ExaminationSection";
 import { Button } from "@/components/ui/button";
 import BorderBox from "@/components/ui/BorderBox";
-import {
-    checkStudentEligibility,
-    getCompanyDataAndExams,
-} from "@/lib/actions/company";
+
+import { getCompanyDataAndExams } from "@/lib/actions/company";
+
 import ErrorUi from "@/components/ui/ErrorUi";
-import {
-    ArrowUpRight,
-    ChevronLeft,
-    CircleQuestionMark,
-    FileText,
-    FileUser,
-    Globe,
-    Star,
-} from "lucide-react";
+import { ChevronLeft, Globe, Star } from "lucide-react";
 import BackButton from "@/components/ui/BackButton";
-import { Separator } from "@/components/ui/separator";
 import ApplyModal from "@/components/modals/ApplyModal";
 
 const links = [
@@ -28,6 +18,17 @@ const links = [
     { href: "/student/companies", label: "Companies" },
     { href: "", label: "Company details" },
 ];
+
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/drawer";
 
 export default async function Page({ params }) {
     const { companyId } = await params;
@@ -42,6 +43,24 @@ export default async function Page({ params }) {
 
     return (
         <div className="mx-auto max-w-[900px]">
+            <Drawer>
+                <DrawerTrigger>Open</DrawerTrigger>
+                <DrawerContent>
+                    <DrawerHeader>
+                        <DrawerTitle>Are you absolutely sure?</DrawerTitle>
+                        <DrawerDescription>
+                            This action cannot be undone.
+                        </DrawerDescription>
+                    </DrawerHeader>
+                    <DrawerFooter>
+                        <Button>Submit</Button>
+                        <DrawerClose>
+                            <Button variant="outline">Cancel</Button>
+                        </DrawerClose>
+                    </DrawerFooter>
+                </DrawerContent>
+            </Drawer>
+
             <BreadCrumbs className="mb-4" links={links} />
 
             <div className="grid grid-cols-1 gap-x-6 gap-y-8">

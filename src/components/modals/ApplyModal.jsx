@@ -15,6 +15,24 @@ import {
 import ErrorUi from "../ui/ErrorUi";
 import { Button } from "../ui/button";
 
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/drawer";
+import SecondaryLabel from "../ui/SecondaryLabel";
+import { ScrollArea } from "../ui/scroll-area";
+import FormLabel from "../ui/FormLabel";
+import { Input } from "../ui/input";
+import { Loader } from "lucide-react";
+import { Separator } from "../ui/separator";
+import Link from "next/link";
+
 export default function ApplyModal({ companyId, accept_applicants, term }) {
     const { userData } = useSession();
     const [open, setOpen] = useState(false);
@@ -43,10 +61,6 @@ export default function ApplyModal({ companyId, accept_applicants, term }) {
 
         setIsEligible(eligible);
 
-        console.log("eligibility", eligible);
-        console.log("accept applicants", accept_applicants);
-        console.log("term ", term);
-
         setLoading(false);
     };
 
@@ -57,35 +71,81 @@ export default function ApplyModal({ companyId, accept_applicants, term }) {
     }, [open]);
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild className="w-full">
+        <Drawer open={open} onOpenChange={setOpen}>
+            <DrawerTrigger asChild className="w-full">
                 <Button>Apply</Button>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Apply for Internship</DialogTitle>
-                    <DialogDescription className="sr-only">
-                        You’re about to apply for an internship.
-                    </DialogDescription>
-                </DialogHeader>
-
-                <div className="body">
+            </DrawerTrigger>
+            <DrawerContent>
+                <DrawerHeader className="max-w-[600px] mx-auto w-full">
+                    <DrawerTitle className="text-left">
+                        <SecondaryLabel>Apply for Internship</SecondaryLabel>
+                    </DrawerTitle>
+                    <DrawerDescription className="text-left">
+                        Please provide your details and required materials so
+                        the company can review your application.
+                    </DrawerDescription>
+                </DrawerHeader>
+                <div className="max-w-[600px] mx-auto w-full px-4">
                     {loading ? (
-                        <div>Checking status</div>
-                    ) : (
+                        <div className="flex items-center gap-1">
+                            <Loader size={16} className="animate-spin" />{" "}
+                            Checking status
+                        </div>
+                    ) : isEligible ? (
                         <div className="flex flex-col">
-                            <h1>
-                                {isEligible ? "Congratulations!" : "Uh oh..."}
-                            </h1>
-                            <p>
-                                {isEligible
-                                    ? "You are eligible to apply for this company."
-                                    : "You are not eligible to apply for this company."}
+                            <div className="border-sky-600/50 border rounded-sm p-3 bg-accent mb-7">
+                                <p className="text-sm text-accent-foreground mb-2">
+                                    We’ll use the information from your profile
+                                    for this application. Make sure your account
+                                    profile is up to date.
+                                </p>
+                                <p className="text-sm text-accent-foreground">
+                                    Need to edit?{" "}
+                                    <Link
+                                        href={`/student/profile/${userData?.id}`}
+                                        className="underline"
+                                    >
+                                        Click here
+                                    </Link>
+                                </p>
+                            </div>
+                            <Separator className="mb-5" />
+
+                            <div className="mb-3">
+                                <FormLabel>Resume link</FormLabel>
+                                <Input placeholder="Enter a google drive link to your resume" />
+                            </div>
+                            <div className="mb-3">
+                                <FormLabel>Portfolio link (Optional)</FormLabel>
+                                <Input placeholder="e.g. https://yourportfolio.com" />
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="p-4 rounded-md border border-amber-500/30 bg-amber-500/5 text-amber-500 flex flex-col items-center justify-center">
+                            <p className="text-sm text-center">
+                                You’re not eligible to apply yet. Please
+                                complete the required company exam to unlock the
+                                application form.
                             </p>
                         </div>
                     )}
                 </div>
-            </DialogContent>
-        </Dialog>
+
+                <DrawerFooter className="max-w-[600px] mx-auto w-full grid grid-cols-1 sm:grid-cols-2">
+                    <Button
+                        size="sm"
+                        className="order-1 sm:order-2"
+                        disabled={!isEligible}
+                    >
+                        Submit Application
+                    </Button>
+                    <DrawerClose asChild className="order-2 sm:order-1">
+                        <Button size="sm" variant="outline">
+                            Cancel
+                        </Button>
+                    </DrawerClose>
+                </DrawerFooter>
+            </DrawerContent>
+        </Drawer>
     );
 }
