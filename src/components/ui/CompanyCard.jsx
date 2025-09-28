@@ -47,17 +47,17 @@ export default function CompanyCard({ company }) {
                         asChild
                     >
                         <Link href={`/student/companies/${company?.id}`}>
-                            View Details
+                            View Details <ArrowUpRight />
                         </Link>
                     </Button>
-                    <Button variant="secondary" size="sm" asChild>
+                    {/* <Button variant="secondary" size="sm" asChild>
                         <Link
                             target="_blank"
                             href="https://www.google.com/search?q=hellow+there"
                         >
                             <ArrowUpRight size={16} />
                         </Link>
-                    </Button>
+                    </Button> */}
                 </div>
             </div>
         </div>

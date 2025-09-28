@@ -38,7 +38,7 @@ export default function LoadingCompanyProfile() {
                     </BorderBox>
 
                     {/* Company Info */}
-                    <BorderBox className="flex gap-x-10 gap-y-4 border-b flex-wrap items-center">
+                    <BorderBox className="flex gap-x-10 gap-y-4 border-b flex-wrap items-center justify-between">
                         <div className="flex gap-3">
                             {/* Company picture */}
                             <Skeleton className="size-24 shrink-0 rounded-sm" />
@@ -66,21 +66,25 @@ export default function LoadingCompanyProfile() {
                             </div>
                         </div>
 
-                        {/* Visit button */}
-                        <Button
-                            variant="white"
-                            disabled
-                            className="grow sm:grow-0 basis-[120px] ms-auto opacity-50"
-                        >
-                            Visit <ArrowUpRight />
-                        </Button>
+                        <div className="grid grid-cols-2 gap-2">
+                            <Button
+                                className="order-2 sm:order-1"
+                                variant="outline"
+                                disabled
+                            >
+                                View Exams
+                            </Button>
+                            <Button className="order-1 sm:order-2" disabled>
+                                Apply
+                            </Button>
+                        </div>
                     </BorderBox>
 
                     {/* Details Section */}
                     <BorderBox>
-                        <TertiaryLabel className="mb-2">Details</TertiaryLabel>
+                        <TertiaryLabel className="mb-3">Details</TertiaryLabel>
                         <Skeleton className="h-4 w-full mb-2" />
-                        <Skeleton className="h-4 w-5/6 mb-6" />
+                        <Skeleton className="h-4 w-5/6" />
                     </BorderBox>
                 </section>
 

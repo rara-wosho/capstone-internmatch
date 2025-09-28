@@ -29,7 +29,7 @@ export default function ExamCard({ exam }) {
             <div className="mt-auto w-full">
                 <Button
                     className="mt-6 w-full border"
-                    variant="secondary"
+                    variant="outlineWhite"
                     asChild
                 >
                     <Link href={`/student/companies/${exam?.company_id}`}>

@@ -110,6 +110,14 @@ export default async function Page({ params }) {
                         </BorderBox>
 
                         <BorderBox>
+                            {!data?.accept_applicants && (
+                                <div className="mb-3">
+                                    <p className="text-destructive text-sm opacity-90">
+                                        This company is currently not accepting
+                                        applicants
+                                    </p>
+                                </div>
+                            )}
                             <TertiaryLabel className="mb-2">
                                 Details
                             </TertiaryLabel>
