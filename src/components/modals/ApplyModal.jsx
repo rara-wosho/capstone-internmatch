@@ -6,8 +6,10 @@ import { useEffect, useState } from "react";
 
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogDescription,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -71,21 +73,22 @@ export default function ApplyModal({ companyId, accept_applicants, term }) {
     }, [open]);
 
     return (
-        <Drawer open={open} onOpenChange={setOpen}>
-            <DrawerTrigger asChild className="w-full">
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild className="w-full">
                 <Button>Apply</Button>
-            </DrawerTrigger>
-            <DrawerContent>
-                <DrawerHeader className="max-w-[600px] mx-auto w-full">
-                    <DrawerTitle className="text-left">
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle className="text-left">
                         <SecondaryLabel>Apply for Internship</SecondaryLabel>
-                    </DrawerTitle>
-                    <DrawerDescription className="text-left">
+                    </DialogTitle>
+
+                    <DialogDescription className="text-left">
                         Please provide your details and required materials so
                         the company can review your application.
-                    </DrawerDescription>
-                </DrawerHeader>
-                <div className="max-w-[600px] mx-auto w-full px-4">
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="max-w-[600px] mx-auto w-full overflow-y-auto max-h-[55svh] mb-4">
                     {loading ? (
                         <div className="flex items-center gap-1">
                             <Loader size={16} className="animate-spin" />{" "}
@@ -131,21 +134,13 @@ export default function ApplyModal({ companyId, accept_applicants, term }) {
                     )}
                 </div>
 
-                <DrawerFooter className="max-w-[600px] mx-auto w-full grid grid-cols-1 sm:grid-cols-2">
-                    <Button
-                        size="sm"
-                        className="order-1 sm:order-2"
-                        disabled={!isEligible}
-                    >
-                        Submit Application
-                    </Button>
-                    <DrawerClose asChild className="order-2 sm:order-1">
-                        <Button size="sm" variant="outline">
-                            Cancel
-                        </Button>
-                    </DrawerClose>
-                </DrawerFooter>
-            </DrawerContent>
-        </Drawer>
+                <DialogFooter>
+                    <DialogClose asChild>
+                        <Button variant="outline">Cancel</Button>
+                    </DialogClose>
+                    <Button>Submit Application</Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 }

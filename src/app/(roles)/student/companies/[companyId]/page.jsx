@@ -19,17 +19,6 @@ const links = [
     { href: "", label: "Company details" },
 ];
 
-import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
-} from "@/components/ui/drawer";
-
 export default async function Page({ params }) {
     const { companyId } = await params;
 
@@ -43,24 +32,6 @@ export default async function Page({ params }) {
 
     return (
         <div className="mx-auto max-w-[900px]">
-            <Drawer>
-                <DrawerTrigger>Open</DrawerTrigger>
-                <DrawerContent>
-                    <DrawerHeader>
-                        <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-                        <DrawerDescription>
-                            This action cannot be undone.
-                        </DrawerDescription>
-                    </DrawerHeader>
-                    <DrawerFooter>
-                        <Button>Submit</Button>
-                        <DrawerClose>
-                            <Button variant="outline">Cancel</Button>
-                        </DrawerClose>
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
-
             <BreadCrumbs className="mb-4" links={links} />
 
             <div className="grid grid-cols-1 gap-x-6 gap-y-8">
