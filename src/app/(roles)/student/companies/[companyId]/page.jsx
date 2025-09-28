@@ -5,7 +5,10 @@ import Image from "next/image";
 import ExaminationSection from "./ExaminationSection";
 import { Button } from "@/components/ui/button";
 import BorderBox from "@/components/ui/BorderBox";
-import { getCompanyDataAndExams } from "@/lib/actions/company";
+import {
+    checkStudentEligibility,
+    getCompanyDataAndExams,
+} from "@/lib/actions/company";
 import ErrorUi from "@/components/ui/ErrorUi";
 import {
     ArrowUpRight,
@@ -18,6 +21,7 @@ import {
 } from "lucide-react";
 import BackButton from "@/components/ui/BackButton";
 import { Separator } from "@/components/ui/separator";
+import ApplyModal from "@/components/modals/ApplyModal";
 
 const links = [
     { href: "", label: "Home" },
@@ -29,8 +33,6 @@ export default async function Page({ params }) {
     const { companyId } = await params;
 
     const { data, error } = await getCompanyDataAndExams(companyId);
-
-    console.log(data);
 
     if (error) {
         return (
@@ -98,21 +100,21 @@ export default async function Page({ params }) {
                             </div>
 
                             <div className="grid grid-cols-2 gap-2">
-                                <Button variant="outline" asChild>
+                                <Button
+                                    className="order-2 sm:order-1"
+                                    variant="outline"
+                                    asChild
+                                >
                                     <a href="#exams">View Exams</a>
                                 </Button>
-
-                                <div className="flex items-center bg-primary rounded-sm grow h-9">
-                                    <button className="px-8 border-white grow">
-                                        Apply
-                                    </button>
-                                    <Separator
-                                        orientation="vertical"
-                                        className="bg-neutral-100/30"
+                                <div className="order-1 sm:order-2">
+                                    <ApplyModal
+                                        companyId={companyId}
+                                        accept_applicants={
+                                            data?.accept_applicants
+                                        }
+                                        term={data?.accept_applicants_term}
                                     />
-                                    <button className="px-3">
-                                        <CircleQuestionMark size={16} />
-                                    </button>
                                 </div>
                             </div>
                         </BorderBox>
