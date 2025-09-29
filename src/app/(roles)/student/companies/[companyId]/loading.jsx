@@ -9,6 +9,7 @@ import {
     Hash,
     LayoutList,
     Calendar,
+    Loader,
 } from "lucide-react";
 import TertiaryLabel from "@/components/ui/TertiaryLabel";
 import BackButton from "@/components/ui/BackButton";
@@ -75,7 +76,7 @@ export default function LoadingCompanyProfile() {
                                 View Exams
                             </Button>
                             <Button className="order-1 sm:order-2" disabled>
-                                Apply
+                                <Loader className="animate-spin" /> Apply
                             </Button>
                         </div>
                     </BorderBox>

@@ -45,6 +45,7 @@ export default function ApplyModal({ companyId, accept_applicants, term }) {
     const [isEligible, setIsEligible] = useState(false);
     const [applied, setApplied] = useState(false);
     const [error, setError] = useState(null);
+    const [checkingApply, setCheckingApply] = useState(true);
 
     if (!userData) {
         return (
@@ -53,22 +54,21 @@ export default function ApplyModal({ companyId, accept_applicants, term }) {
     }
 
     const alreadyApplied = async () => {
-        const supabase = createClient();
-        const { data, error } = await supabase
-            .from("applicants")
-            .select("applied_at")
-            .eq("student_id", userData.id)
-            .eq("company_id", companyId)
-            .maybeSingle();
+        try {
+            const supabase = createClient();
+            const { data, error } = await supabase
+                .from("applicants")
+                .select("applied_at")
+                .eq("student_id", userData.id)
+                .eq("company_id", companyId)
+                .maybeSingle();
 
-        if (error) {
-            setError(error.message);
-            return;
-        }
-
-        // if there is data, the student already applied
-        if (data) {
-            setApplied(true);
+            if (error) throw new Error(error.message);
+            if (data) setApplied(true);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setCheckingApply(false);
         }
     };
 
@@ -92,8 +92,11 @@ export default function ApplyModal({ companyId, accept_applicants, term }) {
     };
 
     useEffect(() => {
+        alreadyApplied();
+    }, []);
+
+    useEffect(() => {
         if (open) {
-            alreadyApplied();
             checkEligibility();
         }
     }, [open]);
@@ -101,7 +104,12 @@ export default function ApplyModal({ companyId, accept_applicants, term }) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild className="w-full">
-                <Button disabled={!accept_applicants}>Apply</Button>
+                <Button
+                    disabled={!accept_applicants || applied || checkingApply}
+                >
+                    {checkingApply && <Loader className="animate-spin" />}
+                    {applied ? "Applied" : "Apply"}
+                </Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
