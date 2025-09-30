@@ -122,16 +122,14 @@ export default function ApplyModal({ companyId, accept_applicants, term }) {
 
     const checkEligibility = async () => {
         setLoading(true);
-        const { eligible, error, message } = await checkStudentEligibility(
+        const { eligible, error } = await checkStudentEligibility(
             companyId,
             userData.id
         );
 
         if (error) {
-            console.log("error: ", error);
-        }
-        if (message) {
-            console.log("message ", message);
+            setError("Something went wrong while checking eligibility.");
+            return;
         }
 
         setIsEligible(eligible);

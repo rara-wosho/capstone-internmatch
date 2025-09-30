@@ -12,7 +12,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { dateFormatter } from "@/utils/date-formatter";
 
 export default function ApplicantCard({ applicant }) {
-    console.log(applicant);
     return (
         <div className="rounded-lg shadow bg-card p-3 md:p-4 lg:p-5 border flex flex-col items-start">
             <div className="w-full flex items-start justify-between">

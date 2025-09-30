@@ -12,7 +12,6 @@ export async function submitApplication(formData) {
     const { error } = await supabase.from("applicants").insert(formData);
 
     if (error) {
-        console.error(error.message);
         return { success: false, error: error.message };
     }
 

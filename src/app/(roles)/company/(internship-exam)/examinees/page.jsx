@@ -32,7 +32,6 @@ export default async function Page() {
         .eq("company_id", companyId)
         .order("created_at", { ascending: false });
 
-    console.log(exams);
     if (tableErr) {
         console.error("Error fetching exams:", tableErr.message);
         return (
