@@ -1,15 +1,16 @@
 import ApplicationSectionCard from "@/components/ui/ApplicationSectionCard";
-import BorderBox from "@/components/ui/BorderBox";
 import EmptyUi from "@/components/ui/EmptyUi";
 import ErrorUi from "@/components/ui/ErrorUi";
 import IconWrapper from "@/components/ui/IconWrapper";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/server";
-import { cn } from "@/lib/utils";
-import { FileUser, Hourglass } from "lucide-react";
-import Link from "next/link";
+import { FileUser } from "lucide-react";
 import { notFound } from "next/navigation";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import BorderBox from "@/components/ui/BorderBox";
+import ApplicationsSection from "@/components/sections/ApplicationsSection";
 
 export default async function Page() {
     const { user } = await getCurrentUser();
@@ -43,12 +44,7 @@ export default async function Page() {
             {applicationsData.length === 0 ? (
                 <EmptyUi message="No Applications" />
             ) : (
-                applicationsData.map((application) => (
-                    <ApplicationSectionCard
-                        key={application?.id}
-                        application={application}
-                    />
-                ))
+                <ApplicationsSection applications={applicationsData} />
             )}
         </div>
     );

@@ -47,7 +47,7 @@ export default function ApplicationSectionCard({ application }) {
                             {application?.companies?.name}
                         </h1>
                     </Link>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs text-muted-foreground">
                         {dateFormatter(application?.applied_at, true)}
                     </p>
                 </div>
@@ -74,7 +74,7 @@ export default function ApplicationSectionCard({ application }) {
                     <Link
                         target="_blank"
                         href={application?.resume_link}
-                        className="text-muted-foreground hover:text-accent-foreground hover:underline underline-offset-2"
+                        className="text-muted-foreground text-sm hover:text-accent-foreground hover:underline underline-offset-2"
                     >
                         {application?.resume_link}
                     </Link>
@@ -85,7 +85,7 @@ export default function ApplicationSectionCard({ application }) {
                         <Link
                             target="_blank"
                             href={application?.portfolio_link}
-                            className="text-muted-foreground hover:text-accent-foreground hover:underline underline-offset-2"
+                            className="text-muted-foreground text-sm hover:text-accent-foreground hover:underline underline-offset-2"
                         >
                             {application?.portfolio_link}
                         </Link>
