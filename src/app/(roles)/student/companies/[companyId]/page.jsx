@@ -9,7 +9,7 @@ import BorderBox from "@/components/ui/BorderBox";
 import { getCompanyDataAndExams } from "@/lib/actions/company";
 
 import ErrorUi from "@/components/ui/ErrorUi";
-import { ChevronLeft, Globe, Star } from "lucide-react";
+import { ChevronLeft, Globe, Star, UserRoundX } from "lucide-react";
 import BackButton from "@/components/ui/BackButton";
 import ApplyModal from "@/components/modals/ApplyModal";
 
@@ -111,8 +111,9 @@ export default async function Page({ params }) {
 
                         <BorderBox>
                             {!data?.accept_applicants && (
-                                <div className="mb-3">
-                                    <p className="text-destructive text-sm opacity-90">
+                                <div className="dark:text-yellow-500 text-yellow-600 mb-3 p-3 border border-yellow-500/40 rounded-md bg-yellow-500/5 flex items-center gap-2">
+                                    <UserRoundX size={16} />
+                                    <p className="text-sm">
                                         This company is currently not accepting
                                         applicants
                                     </p>

@@ -2,7 +2,7 @@
 
 import { useSession } from "@/context/SessionContext";
 import { checkStudentEligibility } from "@/lib/actions/company";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 import {
     Dialog,
@@ -17,41 +17,89 @@ import {
 import ErrorUi from "../ui/ErrorUi";
 import { Button } from "../ui/button";
 
-import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
-} from "@/components/ui/drawer";
 import SecondaryLabel from "../ui/SecondaryLabel";
 import { ScrollArea } from "../ui/scroll-area";
 import FormLabel from "../ui/FormLabel";
 import { Input } from "../ui/input";
-import { Check, Loader } from "lucide-react";
+import { Check, Info, Loader } from "lucide-react";
 import { Separator } from "../ui/separator";
 import Link from "next/link";
 import { Textarea } from "../ui/textarea";
 import { createClient } from "@/lib/supabase/client";
-import { dateFormatter } from "@/utils/date-formatter";
+import { submitApplication } from "@/lib/actions/application";
+import { toast } from "sonner";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 export default function ApplyModal({ companyId, accept_applicants, term }) {
     const { userData } = useSession();
+    const [isPending, startTransition] = useTransition();
+
     const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(true);
     const [isEligible, setIsEligible] = useState(false);
     const [applied, setApplied] = useState(false);
     const [error, setError] = useState(null);
+
+    // loading states
+    const [loading, setLoading] = useState(true);
     const [checkingApply, setCheckingApply] = useState(true);
+
+    // form Data
+    const [formData, setFormData] = useState({
+        resume_link: "",
+        portfolio_link: "",
+        introduction: "",
+    });
 
     if (!userData) {
         return (
             <ErrorUi secondaryMessage="You need to be logged in to apply." />
         );
     }
+
+    const resetForm = () => {
+        setFormData({ resume_link: "", portfolio_link: "", introduction: "" });
+    };
+
+    const handleSubmit = async () => {
+        if (!formData.resume_link) {
+            toast.error("Please provide your resume link.");
+            return;
+        }
+
+        if (!formData.resume_link.startsWith("http")) {
+            toast.error("Invalid resume link.");
+            return;
+        }
+
+        startTransition(async () => {
+            const { success, error } = await submitApplication({
+                ...formData,
+                company_id: companyId,
+                student_id: userData.id,
+                status: "pending",
+            });
+
+            if (!success) {
+                toast.error("Unable to submit application.", {
+                    description: error,
+                });
+                return;
+            }
+
+            toast.success("Application submitted successfully!");
+            resetForm();
+            setTimeout(() => {
+                setOpen(false);
+                setApplied(true);
+            }, 600);
+        });
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
 
     const alreadyApplied = async () => {
         try {
@@ -122,7 +170,7 @@ export default function ApplyModal({ companyId, accept_applicants, term }) {
                         the company can review your application.
                     </DialogDescription>
                 </DialogHeader>
-                <ScrollArea className="max-w-[600px] mx-auto w-full max-h-[55svh]">
+                <ScrollArea className="max-w-[600px] mx-auto w-full max-h-[60svh]">
                     {error && <ErrorUi secondaryMessage={error} />}
 
                     {loading ? (
@@ -131,52 +179,85 @@ export default function ApplyModal({ companyId, accept_applicants, term }) {
                             Checking status
                         </div>
                     ) : isEligible && !error ? (
-                        applied ? (
-                            <div className="text-sm py-3 text-green-600 flex items-center gap-2">
-                                <Check size={16} />
-                                <p>
-                                    You've already submitted your application
-                                    for this company.
+                        <div className="flex flex-col">
+                            <div className="border-sky-600/50 border rounded-sm p-3 bg-accent mb-7">
+                                <p className="text-sm text-accent-foreground mb-2">
+                                    We’ll use the information from your profile
+                                    for this application. Make sure your account
+                                    profile is up to date.
+                                </p>
+                                <p className="text-sm text-accent-foreground">
+                                    Need to edit?{" "}
+                                    <Link
+                                        href={`/student/profile/${userData?.id}`}
+                                        className="underline"
+                                    >
+                                        Click here
+                                    </Link>
                                 </p>
                             </div>
-                        ) : (
-                            <div className="flex flex-col">
-                                <div className="border-sky-600/50 border rounded-sm p-3 bg-accent mb-7">
-                                    <p className="text-sm text-accent-foreground mb-2">
-                                        We’ll use the information from your
-                                        profile for this application. Make sure
-                                        your account profile is up to date.
-                                    </p>
-                                    <p className="text-sm text-accent-foreground">
-                                        Need to edit?{" "}
-                                        <Link
-                                            href={`/student/profile/${userData?.id}`}
-                                            className="underline"
-                                        >
-                                            Click here
-                                        </Link>
-                                    </p>
-                                </div>
-                                <Separator className="mb-5" />
+                            <Separator className="mb-5" />
 
-                                <div className="mb-3">
+                            <div className="mb-3">
+                                <div className="flex items-center gap-1.5">
                                     <FormLabel>Resume link</FormLabel>
-                                    <Input placeholder="Enter a google drive link to your resume" />
+                                    <Popover>
+                                        <PopoverTrigger className="mb-1">
+                                            <Info size={16} />
+                                        </PopoverTrigger>
+                                        <PopoverContent className="p-2 text-sm text-muted-foreground">
+                                            <p className="font-semibold">
+                                                USING GOOGLE DRIVE.
+                                            </p>
+                                            <ul className="list-decimal ps-3 mt-2">
+                                                <li>Upload to Google Drive</li>
+                                                <li>Click "Share"</li>
+                                                <li>
+                                                    Under General access, select
+                                                    “Anyone with the link”
+                                                </li>
+                                                <li>
+                                                    Click "Copy link" then paste
+                                                    here
+                                                </li>
+                                            </ul>
+                                        </PopoverContent>
+                                    </Popover>
                                 </div>
-                                <div className="mb-3">
-                                    <FormLabel>
-                                        Portfolio link (Optional)
-                                    </FormLabel>
-                                    <Input placeholder="e.g. https://yourportfolio.com" />
-                                </div>
-                                <div className="mb-3">
-                                    <FormLabel>
-                                        Short Introduction (Optional)
-                                    </FormLabel>
-                                    <Textarea placeholder="Write a brief introduction about yourself." />
-                                </div>
+                                <Input
+                                    disabled={applied}
+                                    value={formData.resume_link}
+                                    name="resume_link"
+                                    onChange={handleChange}
+                                    placeholder="Enter a valid link to your resume."
+                                />
+                                <p className="text-xs text-muted-foreground mt-1 text-right">
+                                    A Google Drive link is preferred.
+                                </p>
                             </div>
-                        )
+                            <div className="mb-3">
+                                <FormLabel>Portfolio link (Optional)</FormLabel>
+                                <Input
+                                    disabled={applied}
+                                    value={formData.portfolio_link}
+                                    name="portfolio_link"
+                                    onChange={handleChange}
+                                    placeholder="e.g. https://yourportfolio.com"
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <FormLabel>
+                                    Short Introduction (Optional)
+                                </FormLabel>
+                                <Textarea
+                                    disabled={applied}
+                                    value={formData.introduction}
+                                    name="introduction"
+                                    onChange={handleChange}
+                                    placeholder="Write a brief introduction about yourself."
+                                />
+                            </div>
+                        </div>
                     ) : (
                         <div className="p-4 rounded-md border border-amber-500/30 bg-amber-500/5 text-amber-500 flex flex-col justify-center">
                             {term === "all" && (
@@ -207,7 +288,16 @@ export default function ApplyModal({ companyId, accept_applicants, term }) {
                             Cancel
                         </Button>
                     </DialogClose>
-                    <Button disabled={!isEligible || applied}>
+                    <Button
+                        onClick={handleSubmit}
+                        disabled={
+                            !isEligible ||
+                            applied ||
+                            isPending ||
+                            !formData.resume_link
+                        }
+                    >
+                        {isPending && <Loader className="animate-spin" />}
                         Submit Application
                     </Button>
                 </DialogFooter>

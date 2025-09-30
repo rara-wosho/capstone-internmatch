@@ -19,7 +19,8 @@ export default function CompanyCard({ company }) {
                 </div>
             </div>
 
-            <div className="py-2 flex flex-col md:px-2 grow">
+            {/* body  */}
+            <div className="flex flex-col p-2 grow">
                 <p className="text-secondary-foreground font-semibold mb-1 truncate">
                     {company?.name}
                 </p>
@@ -39,7 +40,7 @@ export default function CompanyCard({ company }) {
                     <BriefcaseBusiness size={14} />{" "}
                     <p className="text-xs">Frontend Development + more</p>
                 </div>
-                <div className="flex items-center gap-2 mt-auto">
+                <div className="flex items-center gap-2 mt-auto mb-0.5">
                     <Button
                         size="sm"
                         variant="outlineWhite"
@@ -50,14 +51,6 @@ export default function CompanyCard({ company }) {
                             View Details <ArrowUpRight />
                         </Link>
                     </Button>
-                    {/* <Button variant="secondary" size="sm" asChild>
-                        <Link
-                            target="_blank"
-                            href="https://www.google.com/search?q=hellow+there"
-                        >
-                            <ArrowUpRight size={16} />
-                        </Link>
-                    </Button> */}
                 </div>
             </div>
         </div>

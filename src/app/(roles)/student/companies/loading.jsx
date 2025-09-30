@@ -18,7 +18,7 @@ export default function Loading() {
                     <div key={index} className="border rounded-xl p-2">
                         <Skeleton className="w-full aspect-[5/3.5] mb-3" />
 
-                        <div className="py-2 md:px-2">
+                        <div className="p-2">
                             <Skeleton className="w-[80%] h-4 mb-3" />
                             <Skeleton className="w-full h-3.5 mb-4" />
                             <Skeleton className="w-[80%] h-2.5 mb-3" />
