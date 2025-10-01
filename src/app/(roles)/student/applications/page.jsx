@@ -1,4 +1,3 @@
-import ApplicationSectionCard from "@/components/ui/ApplicationSectionCard";
 import EmptyUi from "@/components/ui/EmptyUi";
 import ErrorUi from "@/components/ui/ErrorUi";
 import IconWrapper from "@/components/ui/IconWrapper";
@@ -8,8 +7,6 @@ import { createClient } from "@/lib/supabase/server";
 import { FileUser } from "lucide-react";
 import { notFound } from "next/navigation";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import BorderBox from "@/components/ui/BorderBox";
 import ApplicationsSection from "@/components/sections/ApplicationsSection";
 
 export default async function Page() {
@@ -23,7 +20,7 @@ export default async function Page() {
     const { data: applicationsData, error: applicationErr } = await supabase
         .from("applicants")
         .select(
-            "id, applied_at, status, reviewed_at, resume_link, portfolio_link , companies(name,id)"
+            "id, applied_at, status, reviewed_at, resume_link, portfolio_link, introduction , companies(name,id)"
         )
         .eq("student_id", user?.id)
         .order("applied_at", { ascending: false });

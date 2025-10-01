@@ -18,6 +18,7 @@ import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { Skeleton } from "./skeleton";
 import { useState } from "react";
+import { Separator } from "./separator";
 
 export default function DashboardHeader({ profileData }) {
     // for profile popover
@@ -81,12 +82,14 @@ export default function DashboardHeader({ profileData }) {
                     <PopoverContent
                         sideOffset={10}
                         align="end"
-                        className="w-fit p-2 rounded-sm"
+                        className="w-fit p-0 rounded-sm"
                     >
-                        <p className="px-3 pb-2 text-sm text-muted-foreground  pt-1 mb-1 border-b dark:border-neutral-700 md:hidden">
+                        <p className="p-3 text-sm text-muted-foreground">
                             {profileData?.firstname}
                         </p>
-                        <SidebarMenu className="text-secondary-foreground/80">
+
+                        <Separator />
+                        <SidebarMenu className="text-secondary-foreground/80 p-1">
                             <SidebarMenuItem>
                                 <SidebarMenuButton
                                     className="cursor-pointer"
@@ -107,9 +110,13 @@ export default function DashboardHeader({ profileData }) {
                                     Account settings
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
-                            <SidebarMenuItem className="border-t dark:border-neutral-700">
+                        </SidebarMenu>
+
+                        <Separator />
+                        <SidebarMenu className="text-secondary-foreground/80 p-1">
+                            <SidebarMenuItem>
                                 <SignOutModal>
-                                    <SidebarMenuButton className="cursor-pointer mt-1.5">
+                                    <SidebarMenuButton className="cursor-pointer">
                                         <LogOut />
                                         Sign Out
                                     </SidebarMenuButton>

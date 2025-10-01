@@ -4,6 +4,8 @@ import { useMemo, useState } from "react";
 import ApplicationSectionCard from "../ui/ApplicationSectionCard";
 import { cn } from "@/lib/utils";
 import { Calendar } from "lucide-react";
+import BorderBox from "../ui/BorderBox";
+import { Skeleton } from "../ui/skeleton";
 
 const TABS = [
     { label: "all" },

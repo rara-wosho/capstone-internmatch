@@ -53,10 +53,11 @@ export default function ApplicationSectionCard({ application }) {
                 </div>
                 <div
                     className={cn(
-                        "font-medium border rounded-full px-3 text-sm uppercase flex items-center gap-1 py-1",
+                        "font-medium border rounded-full px-3 text-xs md:text-sm uppercase flex items-center gap-1 py-1",
                         application?.status === "pending" &&
                             "bg-muted border-neutral-500/70",
-                        application?.status === "cancelled" && "border-0",
+                        application?.status === "cancelled" &&
+                            "text-muted-foreground",
                         application?.status === "accepted" &&
                             "border-green-700 bg-green-700 text-white",
                         application?.reviewed_at &&
@@ -89,6 +90,15 @@ export default function ApplicationSectionCard({ application }) {
                         >
                             {application?.portfolio_link}
                         </Link>
+                    </div>
+                )}
+
+                {application?.introduction && (
+                    <div className="mb-4 flex flex-col">
+                        <FormLabel>Introduction</FormLabel>
+                        <p className="text-muted-foreground text-sm">
+                            {application?.introduction}
+                        </p>
                     </div>
                 )}
 
