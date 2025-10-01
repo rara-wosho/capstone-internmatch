@@ -1,16 +1,18 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ErrorUi from "@/components/ui/ErrorUi";
+import { Skeleton } from "@/components/ui/skeleton";
 import Wrapper from "@/components/Wrapper";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/server";
 import { notFound, redirect } from "next/navigation";
+import { Suspense } from "react";
 
 export default async function Page({ params }) {
     const { applicantId } = await params;
 
     const { user } = await getCurrentUser();
 
-    if (!user || !user?.id) {
+    if (!user?.id) {
         redirect("/sign-in");
     }
 
@@ -34,7 +36,7 @@ export default async function Page({ params }) {
         return <ErrorUi secondaryMessage={error.message} />;
     }
 
-    const student = applicant?.students || {};
+    const student = applicant?.students;
 
     return (
         <div>
@@ -42,7 +44,7 @@ export default async function Page({ params }) {
                 <Avatar className="w-28 aspect-square mb-4">
                     <AvatarImage alt="avatar" src={student?.avatar_url} />
                     <AvatarFallback>
-                        {student?.firstname.charAt(0)}
+                        {student?.firstname?.charAt(0) || "?"}
                     </AvatarFallback>
                 </Avatar>
 
@@ -60,7 +62,49 @@ export default async function Page({ params }) {
                 <p className="text-sm text-muted-foreground">
                     {student?.school ?? "School not set"}
                 </p>
+
+                <Suspense fallback={<Skeleton className="h-3 w-36" />}>
+                    <StudentExamResults
+                        studentId={student?.id}
+                        companyId={user?.id}
+                    />
+                </Suspense>
             </Wrapper>
+        </div>
+    );
+}
+
+async function StudentExamResults({ studentId, companyId }) {
+    if (!studentId || !companyId) {
+        return (
+            <p className="text-sm text-muted-foreground mt-4">
+                Unable to load exam results
+            </p>
+        );
+    }
+
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("exam_attempt")
+        .select("id, score, exam_title")
+        .eq("student_id", studentId)
+        .eq("company_id", companyId);
+
+    if (error) {
+        return <ErrorUi secondaryMessage={error.message} />;
+    }
+    return (
+        <div>
+            {data.length > 0 ? (
+                data.map((attempt) => (
+                    <div key={attempt.id}>
+                        {attempt.exam_title} - Score: {attempt.score}
+                    </div>
+                ))
+            ) : (
+                <p>No exam attempts found</p>
+            )}
         </div>
     );
 }
