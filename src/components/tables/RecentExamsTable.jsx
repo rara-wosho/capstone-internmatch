@@ -25,7 +25,6 @@ export default function RecentExamsTable({ data }) {
                         <TableHead>Started at</TableHead>
                         <TableHead>Completed at</TableHead>
                         <TableHead>Score</TableHead>
-                        <TableHead>Status</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -72,17 +71,6 @@ export default function RecentExamsTable({ data }) {
                                 )}
                             </TableCell>
                             <TableCell>{exam.score}</TableCell>
-                            <TableCell>
-                                <div
-                                    className={cn(
-                                        "border rounded-full text-center py-[3px] px-2 md:px-0",
-                                        exam.status === "accepted" &&
-                                            "dark:border-green-600 text-white bg-green-500/90"
-                                    )}
-                                >
-                                    <p className="text-xs">{exam.status}</p>
-                                </div>
-                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

@@ -10,6 +10,7 @@ import { Button } from "./button";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { dateFormatter } from "@/utils/date-formatter";
+import Link from "next/link";
 
 export default function ApplicantCard({ applicant }) {
     return (
@@ -89,8 +90,10 @@ export default function ApplicantCard({ applicant }) {
             </div>
 
             <div className="flex items-center flex-wrap gap-2 w-full mt-2">
-                <Button className="grow" size="sm" variant="white">
-                    View Details
+                <Button className="grow" size="sm" variant="white" asChild>
+                    <Link href={`/company/applicants/${applicant?.id}`}>
+                        View Details
+                    </Link>
                 </Button>
                 <Button className="grow" size="sm" variant="outline">
                     View Profile

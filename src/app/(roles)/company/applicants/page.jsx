@@ -1,6 +1,7 @@
+import SearchField from "@/components/forms/SearchStudent";
 import ApplicantsSettingsModal from "@/components/modals/ApplicantsSettingsModal";
 import ApplicantsSection from "@/components/sections/ApplicantsSection";
-import { Button } from "@/components/ui/button";
+import BorderBox from "@/components/ui/BorderBox";
 import EmptyUi from "@/components/ui/EmptyUi";
 import ErrorUi from "@/components/ui/ErrorUi";
 import IconWrapper from "@/components/ui/IconWrapper";
@@ -9,8 +10,11 @@ import { getCurrentUser } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/server";
 import { FileUser } from "lucide-react";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
-export default async function ApplicantsPage() {
+export default async function ApplicantsPage({ searchParams }) {
+    const search = (await searchParams)?.search_query || "";
+
     const { user, error: userError } = await getCurrentUser();
 
     if (userError) {
@@ -23,13 +27,28 @@ export default async function ApplicantsPage() {
 
     const supabase = await createClient();
 
-    const { data: applicantsData, error } = await supabase
+    // Build the query
+    let baseQuery = supabase
         .from("applicants")
         .select(
-            "id, applied_at, reviewed_at, student_id, resume_link,status, message, students(firstname, lastname, avatar_url, id, email)"
+            "id, applied_at, reviewed_at, student_id, resume_link, status, introduction, students!inner(firstname, lastname, avatar_url, id, email)"
         )
         .eq("company_id", user?.id)
-        .order("applied_at", { ascending: false });
+        .neq("status", "cancelled");
+
+    // Apply search filter if search query exists
+    if (search && search.trim() !== "") {
+        const searchTerm = `%${search}%`;
+        baseQuery = baseQuery.or(
+            `firstname.ilike.${searchTerm},lastname.ilike.${searchTerm},email.ilike.${searchTerm}`,
+            { foreignTable: "students" }
+        );
+    }
+
+    const { data: applicantsData, error } = await baseQuery.order(
+        "applied_at",
+        { ascending: false }
+    );
 
     if (error) {
         return <ErrorUi secondaryMessage="Unable to fetch applicants data" />;
@@ -51,13 +70,29 @@ export default async function ApplicantsPage() {
                 </div>
             </div>
 
-            {/* <ApplicantsSection applicants={applicantsData} />  */}
-            {/* body  */}
+            <BorderBox className="rounded-xl border bg-card shadow-xs mb-3">
+                <Suspense fallback={<div>Loading search...</div>}>
+                    <SearchField
+                        actionPath="/company/applicants"
+                        placeholder="Search applicant by firstname, lastname, or email"
+                    />
+                </Suspense>
+            </BorderBox>
+
+            {/* Body */}
             {applicantsData.length === 0 ? (
                 <div>
                     <EmptyUi
-                        message="No applicants yet."
-                        secondaryMessage="Once students start applying, their information will appear here."
+                        message={
+                            search
+                                ? "No applicants found."
+                                : "No applicants yet."
+                        }
+                        secondaryMessage={
+                            search
+                                ? `No results found for '${search}'. Try another.`
+                                : "Once students start applying, their information will appear here."
+                        }
                     />
                 </div>
             ) : (
