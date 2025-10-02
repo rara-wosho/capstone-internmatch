@@ -69,7 +69,7 @@
 }
 
 .spin-loader {
-    width: 50px;
+    width: 40px;
     aspect-ratio: 1;
     border-radius: 50%;
     background: radial-gradient(farthest-side, #8967d8 94%, #0000) top/8px 8px

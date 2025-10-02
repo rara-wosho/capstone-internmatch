@@ -16,7 +16,7 @@ const buttonVariants = cva(
                 successOutline:
                     "bg-green-500/10 text-green-500 shadow-xs transition-all hover:opacity-90 focus-visible:ring-green-500/20 dark:focus-visible:ring-green-500/40",
                 destructive:
-                    "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+                    "bg-destructive text-white shadow-xs hover:opacity-80 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
                 dangerOutline:
                     "bg-red-500/5 text-destructive shadow-xs focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 border border-destructive hover:bg-red-500/15",
                 outline:
