@@ -13,10 +13,13 @@ export default function ApplicantActions({ applicant }) {
 
     const handleChangeStatus = (newStatus) => {
         startTransition(async () => {
-            const result = await updateApplicationStatus(
+            const result = await updateApplicationStatus({
                 newStatus,
-                applicant.id
-            );
+                applicationId: applicant.id,
+                receiver: "raeldevprojects@gmail.com",
+                companyName: applicant?.companies?.name,
+                companyEmail: applicant?.companies?.email,
+            });
 
             if (!result.success) {
                 toast.error(result?.error);
@@ -26,6 +29,7 @@ export default function ApplicantActions({ applicant }) {
             toast.success("Status updated successfully.");
         });
     };
+
     return (
         <div className="border rounded-xl bg-card shadow-xs mb-4">
             <div className="py-3 px-3 md:px-5 border-b flex items-center justify-between gap-2 flex-wrap">

@@ -38,7 +38,7 @@ export default async function Page({ params }) {
     const { data: applicant, error } = await supabase
         .from("applicants")
         .select(
-            "id, applied_at, resume_link, portfolio_link, status, introduction, students!inner(id, firstname, lastname, gender, school, email, avatar_url, barangay, city, province)"
+            "id, applied_at, resume_link, portfolio_link, status, introduction, students!inner(id, firstname, lastname, gender, school, email, avatar_url, barangay, city, province), companies!inner(name, email)"
         )
         .eq("id", applicantId)
         .eq("company_id", user?.id)
