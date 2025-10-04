@@ -1,20 +1,12 @@
-import {
-    Check,
-    CheckCheck,
-    Ellipsis,
-    Hourglass,
-    Mail,
-    MapPin,
-} from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 import { Button } from "./button";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
-import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import { dateFormatter } from "@/utils/date-formatter";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export default function ApplicantCard({ applicant }) {
     return (
-        <div className="rounded-lg shadow bg-card p-3 md:p-4 lg:p-5 border flex flex-col items-start">
+        <div className="rounded-xl shadow bg-card p-3 md:p-4 lg:p-5 border flex flex-col items-start">
             <div className="w-full flex items-start justify-between">
                 <div className="mb-3 w-24 aspect-square rounded-full">
                     <Avatar className="w-24 aspect-square">
@@ -32,42 +24,20 @@ export default function ApplicantCard({ applicant }) {
                     </Avatar>
                 </div>
 
-                <div className="flex items-center gap-2">
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            {applicant?.reviewed_at ? (
-                                <Button
-                                    size="smallIcon"
-                                    variant="successOutline"
-                                >
-                                    <CheckCheck />
-                                </Button>
-                            ) : (
-                                <Button size="smallIcon" variant="outline">
-                                    <Hourglass />
-                                </Button>
-                            )}
-                        </PopoverTrigger>
-                        <PopoverContent align="end" className="w-fit p-2">
-                            <div className="text-muted-foreground text-sm flex flex-col">
-                                {applicant?.reviewed_at ? (
-                                    <div>
-                                        <p>Reviewed at</p>
-                                        <p className="text-xs">
-                                            {dateFormatter(
-                                                applicant?.reviewed_at
-                                            )}
-                                        </p>
-                                    </div>
-                                ) : (
-                                    "Not yet reviewed"
-                                )}
-                            </div>
-                        </PopoverContent>
-                    </Popover>
-                    <Button size="smallIcon" variant="outline">
-                        <Ellipsis />
-                    </Button>
+                <div
+                    className={cn(
+                        "flex items-center gap-2 text-sm rounded-full border px-3 py-1 capitalize",
+                        applicant?.status === "pending" &&
+                            "border-neutral-500/40 text-neutral-700 dark:text-neutral-300 bg-secondary",
+                        applicant?.status === "reviewed" &&
+                            "border-sky-500/40 text-sky-600 dark:text-sky-500 bg-sky-500/10",
+                        applicant?.status === "accepted" &&
+                            "border-green-500/40 text-green-600 dark:text-green-500 bg-green-500/10",
+                        applicant?.status === "rejected" &&
+                            "border-red-400/40 text-red-600 dark:text-red-400 bg-red-500/10"
+                    )}
+                >
+                    {applicant?.status}
                 </div>
                 {/* <div className="size-2 bg-amber-500 rounded-full"></div>  */}
             </div>
@@ -89,16 +59,11 @@ export default function ApplicantCard({ applicant }) {
                 </div>
             </div>
 
-            <div className="flex items-center flex-wrap gap-2 w-full mt-2">
-                <Button className="grow" size="sm" variant="white" asChild>
-                    <Link href={`/company/applicants/${applicant?.id}`}>
-                        View Details
-                    </Link>
-                </Button>
-                <Button className="grow" size="sm" variant="outline">
-                    View Profile
-                </Button>
-            </div>
+            <Button className="w-full mt-2" size="sm" variant="white" asChild>
+                <Link href={`/company/applicants/${applicant?.id}`}>
+                    View Details
+                </Link>
+            </Button>
         </div>
     );
 }

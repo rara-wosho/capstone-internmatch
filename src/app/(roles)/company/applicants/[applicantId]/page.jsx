@@ -124,7 +124,7 @@ export default async function Page({ params }) {
                                 applicant?.status === "accepted" &&
                                     "bg-green-500/15 text-green-600 dark:text-green-500 border-green-500/50",
                                 applicant?.status === "rejected" &&
-                                    "bg-red-500/15 text-red-600 dark:text-red-600 border-red-500/50",
+                                    "bg-red-500/10 text-red-600 dark:text-red-400 border-red-400/50",
                                 applicant?.status === "reviewed" &&
                                     "bg-sky-500/15 text-sky-600 dark:text-sky-500 border-sky-500/50"
                             )}

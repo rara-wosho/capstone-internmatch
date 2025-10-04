@@ -31,7 +31,7 @@ export default async function ApplicantsPage({ searchParams }) {
     let baseQuery = supabase
         .from("applicants")
         .select(
-            "id, applied_at, reviewed_at, student_id, resume_link, status, introduction, students!inner(firstname, lastname, avatar_url, id, email)"
+            "id, applied_at, reviewed_at, student_id, resume_link, status, introduction, students!inner(firstname, lastname, avatar_url, id, email, school)"
         )
         .eq("company_id", user?.id)
         .neq("status", "cancelled");

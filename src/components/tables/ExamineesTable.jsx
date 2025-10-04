@@ -212,7 +212,6 @@ export default function ExamineesTable({ examinees, examId }) {
                             <TableHead>Started</TableHead>
                             <TableHead>Completed</TableHead>
                             <TableHead>Score</TableHead>
-                            <TableHead>Status</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -313,24 +312,6 @@ export default function ExamineesTable({ examinees, examId }) {
                                         <TableCell>
                                             <span className="font-semibold text-accent-foreground">
                                                 {examinee?.score ?? 0}
-                                            </span>
-                                        </TableCell>
-                                        <TableCell>
-                                            <span
-                                                className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                                    examinee.status ===
-                                                    "completed"
-                                                        ? "bg-green-100 text-green-800"
-                                                        : examinee.status ===
-                                                          "in_progress"
-                                                        ? "bg-blue-100 text-blue-800"
-                                                        : examinee.status ===
-                                                          "failed"
-                                                        ? "bg-red-100 text-red-800"
-                                                        : "bg-gray-100 text-gray-800"
-                                                }`}
-                                            >
-                                                {examinee?.status || "pending"}
                                             </span>
                                         </TableCell>
                                     </TableRow>

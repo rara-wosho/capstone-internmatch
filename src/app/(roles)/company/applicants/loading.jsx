@@ -5,6 +5,13 @@ import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FileUser, Settings } from "lucide-react";
 
+const TABS = [
+    { label: "all" },
+    { label: "pending" },
+    { label: "accepted" },
+    { label: "reviewed" },
+];
+
 export default function Loading() {
     return (
         <div>
@@ -29,7 +36,18 @@ export default function Loading() {
                     <Skeleton className="h-10 w-full" />
                 </BorderBox>
 
-                <BorderBox className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-card shadow-xs border rounded-xl">
+                <div className="mb-0.5 flex items-center flex-wrap gap-2 mt-3">
+                    {TABS.map((tab) => (
+                        <button
+                            key={tab.label}
+                            className="rounded-sm border px-3 py-1 cursor-pointer hover:text-accent-foreground text-sm text-muted-foreground capitalize transition-colors"
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                     {[...Array(3)].map((_, index) => (
                         <div
                             key={index}
@@ -48,11 +66,10 @@ export default function Loading() {
                             </div>
                             <div className="flex items-center flex-wrap gap-2 w-full mt-3">
                                 <Skeleton className="grow h-8" />
-                                <Skeleton className="grow h-8" />
                             </div>
                         </div>
                     ))}
-                </BorderBox>
+                </div>
             </div>
         </div>
     );
