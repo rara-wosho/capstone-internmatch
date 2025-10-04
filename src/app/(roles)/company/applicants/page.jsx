@@ -65,7 +65,7 @@ export default async function ApplicantsPage({ searchParams }) {
                     <span>Applicants</span>
                 </SecondaryLabel>
 
-                <div className="ms-auto flex items-center gap-2">
+                <div className="ms-auto">
                     <ApplicantsSettingsModal />
                 </div>
             </div>

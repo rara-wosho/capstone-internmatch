@@ -1,4 +1,4 @@
-import { Poppins, Geist } from "next/font/google";
+import { Poppins, Geist, Host_Grotesk } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 

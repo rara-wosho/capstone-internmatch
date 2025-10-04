@@ -149,11 +149,6 @@ const navigationConfig = [
                 roles: ["company"],
                 subItems: [
                     {
-                        href: "/company/examinees",
-                        label: "Examinees",
-                        icon: <Calendar />,
-                    },
-                    {
                         href: "/company/manage-exam",
                         label: "Manage Exam",
                         icon: <Calendar />,
@@ -162,6 +157,11 @@ const navigationConfig = [
                         href: "/company/create-exam",
                         label: "Create Exam",
                         icon: <FileText />,
+                    },
+                    {
+                        href: "/company/examinees",
+                        label: "Examinees",
+                        icon: <Calendar />,
                     },
                 ],
             },
