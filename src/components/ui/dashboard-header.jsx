@@ -16,7 +16,6 @@ import Link from "next/link";
 import SignOutModal from "./SignOutModal";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
-import { Skeleton } from "./skeleton";
 import { useState } from "react";
 import { Separator } from "./separator";
 
@@ -28,7 +27,7 @@ export default function DashboardHeader({ profileData }) {
     if (pathname.startsWith("/student/e/")) return null;
 
     return (
-        <div className="sticky top-0 left-0 px-3 md:px-5 lg:px-8 py-3 flex items-center w-full bg-white border-b z-30 backdrop-blur-2xl dark:bg-background/70">
+        <div className="sticky top-0 left-0 px-3 md:px-5 lg:px-8 h-[60px] flex items-center w-full bg-white border-b z-30 backdrop-blur-2xl dark:bg-background/70">
             <SidebarTrigger />
 
             <div className="border-s ps-2 ms-2 flex items-center">
@@ -45,7 +44,8 @@ export default function DashboardHeader({ profileData }) {
 
             <div className="ms-auto flex items-center gap-3">
                 <div className="flex gap-2">
-                    <IconWrapper>
+                    <IconWrapper className="relative">
+                        <div className="absolute -right-1 -top-1 size-2 rounded-full bg-primary"></div>
                         <Bell size={16} />
                     </IconWrapper>
                     <div className="border rounded-sm bg-card">

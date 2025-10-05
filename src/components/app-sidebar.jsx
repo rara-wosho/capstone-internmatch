@@ -105,7 +105,7 @@ const navigationConfig = [
                 roles: ["student"],
                 subItems: [
                     {
-                        href: "/assessment-test",
+                        href: "/student/assessment-test",
                         label: "Assessment Test",
                         icon: <FileText size={14} />,
                     },
@@ -183,27 +183,9 @@ const navigationConfig = [
         label: "Others",
         items: [
             {
-                href: "/settings",
-                icon: <Settings />,
-                label: "Settings",
-                roles: ["student", "company"],
-            },
-            {
-                href: "/instructor/settings",
-                icon: <Settings />,
-                label: "Settings",
-                roles: ["instructor"],
-            },
-            {
-                href: "/feedbacks",
+                href: "feedbacks",
                 icon: <MessageSquareMore />,
                 label: "Feedbacks",
-                roles: ["student", "instructor", "company"],
-            },
-            {
-                href: "/faq",
-                icon: <MessageCircleQuestionMark />,
-                label: "FAQs",
                 roles: ["student", "instructor", "company"],
             },
         ],
