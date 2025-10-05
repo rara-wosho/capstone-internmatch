@@ -32,15 +32,15 @@ export default function Loading() {
             </div>
 
             <div className="flex flex-col gap-3">
-                <BorderBox className="rounded-xl border bg-card shadow-xs">
+                <BorderBox className="rounded-xl border bg-card shadow-xs mb-2">
                     <Skeleton className="h-10 w-full" />
                 </BorderBox>
 
-                <div className="mb-0.5 flex items-center flex-wrap gap-2 mt-3">
+                <div className="mb-2 flex items-center flex-wrap gap-2">
                     {TABS.map((tab) => (
                         <button
                             key={tab.label}
-                            className="rounded-sm border px-3 py-1 cursor-pointer hover:text-accent-foreground text-sm text-muted-foreground capitalize transition-colors"
+                            className="rounded-sm border px-3 py-1 cursor-pointer hover:text-accent-foreground text-sm text-muted-foreground capitalize transition-colors bg-card"
                         >
                             {tab.label}
                         </button>

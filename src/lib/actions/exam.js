@@ -313,7 +313,8 @@ export async function saveExamsAnswer(
     exam_id,
     started_at,
     exam_title,
-    answersArray
+    answersArray,
+    total_questions
 ) {
     const supabase = await createClient();
 
@@ -344,6 +345,7 @@ export async function saveExamsAnswer(
             exam_title,
             score: correctAnswers.length,
             started_at: started_at ?? new Date().toISOString(),
+            total_questions,
         })
         .select("id")
         .single();

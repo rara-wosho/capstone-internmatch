@@ -70,7 +70,7 @@ export default async function ApplicantsPage({ searchParams }) {
                 </div>
             </div>
 
-            <BorderBox className="rounded-xl border bg-card shadow-xs mb-3">
+            <BorderBox className="rounded-xl border bg-card shadow-xs mb-5">
                 <Suspense fallback={<div>Loading search...</div>}>
                     <SearchField
                         actionPath="/company/applicants"

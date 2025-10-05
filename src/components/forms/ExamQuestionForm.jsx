@@ -120,7 +120,8 @@ export default function ExamQuestionForm({ examinationData }) {
                 examinationData?.id,
                 started_at,
                 examinationData.title,
-                answersArray
+                answersArray,
+                questions.length
             );
 
             if (!success) {
@@ -242,8 +243,8 @@ export default function ExamQuestionForm({ examinationData }) {
                                                     isActive
                                                         ? "border-2 border-primary bg-violet-500/10"
                                                         : isAnswered
-                                                        ? "bg-emerald-100 border border-emerald-400 dark:bg-green-900/30 dark:border-green-700"
-                                                        : "bg-muted hover:bg-muted/80"
+                                                          ? "bg-emerald-100 border border-emerald-400 dark:bg-green-900/30 dark:border-green-700"
+                                                          : "bg-muted hover:bg-muted/80"
                                                 }
                                             `}
                                         key={index}

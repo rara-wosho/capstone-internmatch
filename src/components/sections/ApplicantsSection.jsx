@@ -24,15 +24,16 @@ export default function ApplicantsSection({ applicants }) {
 
     return (
         <>
-            <div className="mb-3 flex items-center flex-wrap gap-2 mt-6">
+            <div className="mb-5 flex items-center flex-wrap gap-2">
                 {TABS.map((tab) => (
                     <button
                         onClick={() => setStatus(tab.label)}
                         key={tab.label}
                         className={cn(
                             "rounded-sm border px-3 py-1 cursor-pointer hover:text-accent-foreground text-sm text-muted-foreground capitalize transition-colors",
-                            status === tab.label &&
-                                "border-blue-500/60 dark:border-sky-400/60 text-accent-foreground bg-accent"
+                            status === tab.label
+                                ? "border-blue-500/60 dark:border-sky-400/60 text-accent-foreground bg-accent"
+                                : "bg-card"
                         )}
                     >
                         {tab.label}

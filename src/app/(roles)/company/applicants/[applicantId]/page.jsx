@@ -68,15 +68,17 @@ export default async function Page({ params }) {
 
                 <BorderBox className="rounded-xl border bg-card shadow-xs mb-4">
                     <div className="flex items-center justify-between flex-wrap">
-                        <Avatar className="w-28 aspect-square mb-4">
-                            <AvatarImage
-                                alt="avatar"
-                                src={student?.avatar_url}
-                            />
-                            <AvatarFallback>
-                                {student?.firstname?.charAt(0) || "?"}
-                            </AvatarFallback>
-                        </Avatar>
+                        <Link href={student?.avatar_url || "#"} target="_blank">
+                            <Avatar className="w-28 aspect-square mb-4">
+                                <AvatarImage
+                                    alt="avatar"
+                                    src={student?.avatar_url}
+                                />
+                                <AvatarFallback>
+                                    {student?.firstname?.charAt(0) || "?"}
+                                </AvatarFallback>
+                            </Avatar>
+                        </Link>
 
                         <div className="flex items-center gap-2 mb-4 flex-row-reverse sm:flex-row">
                             <Button variant="secondary" asChild>

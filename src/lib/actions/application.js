@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "../supabase/server";
 import { Resend } from "resend";
 import { ApplicationSuccess } from "@/components/email/ApplicationSuccess";
+import { getCurrentUser } from "./auth";
 
 export async function submitApplication(formData) {
     const supabase = await createClient();
@@ -66,4 +67,113 @@ export async function updateApplicationStatus({
     revalidatePath(`/company/applicants/${applicationId}`);
     revalidatePath("/company/applicants");
     return { success: true };
+}
+
+// cancel application
+export async function cancelApplication(applicationId) {
+    try {
+        const { user, error: userError } = await getCurrentUser();
+        if (userError || !user?.id) {
+            return { success: false, error: "Unauthorized" };
+        }
+
+        const supabase = await createClient();
+
+        // cancel status if student is the owner
+        const { error } = await supabase
+            .from("applicants")
+            .update({ status: "cancelled" })
+            .eq("id", applicationId)
+            .eq("student_id", user.id); // ✅ Removed optional chaining
+
+        if (error) {
+            console.error("Cancel error:", error);
+            return { success: false, error: "Failed to cancel application" };
+        }
+
+        revalidatePath("/student/applications");
+        return { success: true };
+    } catch (error) {
+        console.error("Unexpected error:", error);
+        return { success: false, error: "An unexpected error occurred" };
+    }
+}
+
+// resubmit application
+export async function resubmitApplication(applicationId) {
+    try {
+        const { user, error: userError } = await getCurrentUser();
+        if (userError || !user?.id) {
+            return { success: false, error: "Unauthorized" };
+        }
+
+        const supabase = await createClient();
+
+        const { error } = await supabase
+            .from("applicants")
+            .update({
+                status: "pending",
+                applied_at: new Date().toISOString(),
+                reviewed_at: null,
+            })
+            .eq("id", applicationId)
+            .eq("student_id", user.id); // ✅ Removed optional chaining
+
+        if (error) {
+            console.error("Resubmit error:", error);
+            return { success: false, error: "Failed to resubmit application" };
+        }
+
+        revalidatePath("/student/applications");
+        return { success: true };
+    } catch (error) {
+        console.error("Unexpected error:", error);
+        return { success: false, error: "An unexpected error occurred" };
+    }
+}
+
+// update application details
+export async function updateApplication(applicationId, data) {
+    try {
+        const { user, error: userError } = await getCurrentUser();
+        if (userError || !user?.id) {
+            return { success: false, error: "Unauthorized" };
+        }
+
+        // Validate data
+        if (!data.resume_link || !data.resume_link.startsWith("http")) {
+            return { success: false, error: "Valid resume link is required" };
+        }
+
+        if (data.portfolio_link && !data.portfolio_link.startsWith("http")) {
+            return {
+                success: false,
+                error: "Portfolio link must be a valid URL",
+            };
+        }
+
+        const supabase = await createClient();
+
+        const { error } = await supabase
+            .from("applicants")
+            .update({
+                resume_link: data.resume_link,
+                portfolio_link: data.portfolio_link || null,
+                introduction: data.introduction || null,
+                updated_at: new Date().toISOString(),
+            })
+            .eq("id", applicationId)
+            .eq("student_id", user.id);
+
+        if (error) {
+            console.error("Update error:", error);
+            return { success: false, error: "Failed to update application" };
+        }
+
+        revalidatePath("/student/applications");
+        return { success: true };
+    } catch (error) {
+        console.error("Unexpected error:", error);
+        return { success: false, error: "An unexpected error occurred" };
+    }
 }

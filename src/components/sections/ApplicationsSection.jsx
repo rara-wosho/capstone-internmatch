@@ -36,8 +36,9 @@ export default function ApplicationsSection({ applications = [] }) {
                         key={tab.label}
                         className={cn(
                             "rounded-sm border px-3 py-1 cursor-pointer hover:text-accent-foreground text-sm text-muted-foreground capitalize transition-colors",
-                            activeTab === tab.label &&
-                                "border-blue-500/60 dark:border-sky-400/60 text-accent-foreground bg-accent"
+                            activeTab === tab.label
+                                ? "border-blue-500/60 dark:border-sky-400/60 text-accent-foreground bg-accent"
+                                : "bg-card"
                         )}
                     >
                         {tab.label}
