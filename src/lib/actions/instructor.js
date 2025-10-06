@@ -42,10 +42,9 @@ export async function createInstructor(formData) {
 }
 
 // submit registration details
-export async function submitRegistration(formData) {
+export async function submitRegistration(prevState, formData) {
     const supabase = await createClient();
 
-    console.log(formData);
     // Extract form data
     const registrationData = {
         firstname: formData.get("firstName"),
@@ -56,7 +55,6 @@ export async function submitRegistration(formData) {
         city: formData.get("city"),
         province: formData.get("province"),
         documents_link: formData.get("documentsLink"),
-        status: "pending", // Default status
     };
 
     // Validate required fields
@@ -70,35 +68,44 @@ export async function submitRegistration(formData) {
         !registrationData.province ||
         !registrationData.documents_link
     ) {
-        return { success: false, error: "All fields are required." };
+        return {
+            success: false,
+            error: "All fields are required.",
+            formData: registrationData, // Return the extracted data object
+        };
     }
 
-    // validate link
+    // Validate link
     if (!registrationData.documents_link.startsWith("https")) {
         return {
             success: false,
-            error: "Documents link is not a valid link.    ",
+            error: "Document link is invalid.",
+            formData: registrationData,
         };
     }
 
     // Insert into Supabase
-    const { data, error } = await supabase
+    const { error } = await supabase
         .from("registrations")
-        .insert([registrationData])
-        .select()
-        .single();
+        .insert([registrationData]);
 
     if (error) {
         console.error("Error submitting registration:", error);
         return {
             success: false,
-            error: "Failed to submit registration. Please try again.",
+            error:
+                error.code === "23505"
+                    ? "This email you provided is already associated with a pending registration."
+                    : "Something went wrong while submitting the form.",
+            formData: registrationData,
         };
     }
 
-    console.log(data);
-
     // Revalidate and redirect on success
     revalidatePath("/create-account/instructor");
-    return { success: true, error: null };
+    return {
+        success: true,
+        error: "",
+        formData: null, // Clear form data on success
+    };
 }
