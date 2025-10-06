@@ -7,7 +7,7 @@ import TertiaryLabel from "./TertiaryLabel";
 
 export default function PublicFooter() {
     return (
-        <div className="border-t bg-card dark:bg-background py-8 px-4">
+        <div className="border-t bg-card dark:bg-background py-6 px-4">
             <Wrapper className="flex items-center">
                 <TertiaryLabel>InternMatch</TertiaryLabel>
                 <div className="flex gap-2 ms-auto">

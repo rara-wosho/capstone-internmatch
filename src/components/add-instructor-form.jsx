@@ -26,7 +26,7 @@ export default function AddInstructorForm() {
     };
 
     return (
-        <div className="p-16 mx-auto w-lg">
+        <div className="mx-auto max-w-lg w-full">
             <Form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <FormLabel>First Name</FormLabel>

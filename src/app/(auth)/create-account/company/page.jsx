@@ -1,3 +1,4 @@
+import CreateCompanyAccountForm from "@/components/forms/CreateCompanyAccountForm";
 import BackButton from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/ui/Logo";
@@ -13,6 +14,8 @@ export default function CreateCompanyPage() {
                         <ChevronLeft size={20} /> Back
                     </BackButton>
                 </div>
+
+                <CreateCompanyAccountForm />
             </main>
         </div>
     );

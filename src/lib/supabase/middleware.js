@@ -43,6 +43,7 @@ export async function updateSession(request) {
         (request.nextUrl.pathname.startsWith("/student") ||
             request.nextUrl.pathname.startsWith("/company") ||
             request.nextUrl.pathname.startsWith("/instructor") ||
+            request.nextUrl.pathname.startsWith("/admin") ||
             request.nextUrl.pathname.startsWith("/interests") ||
             request.nextUrl.pathname.startsWith("/assessment-test"))
     ) {
@@ -68,6 +69,9 @@ export async function updateSession(request) {
             case "instructor":
                 url.pathname = "/instructor";
                 break;
+            case "admin":
+                url.pathname = "/admin";
+                break;
             default:
                 url.pathname = "/";
         }
@@ -84,6 +88,7 @@ export async function updateSession(request) {
             student: "/student",
             company: "/company",
             instructor: "/instructor",
+            admin: "/admin",
         };
 
         // ✅ Special case: assessment is only for students

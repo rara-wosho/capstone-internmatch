@@ -1,11 +1,8 @@
 import AddInstructorForm from "@/components/add-instructor-form";
-import SecondaryLabel from "@/components/ui/SecondaryLabel";
 
 export default function Page() {
     return (
-        <div>
-            <SecondaryLabel>This is the admin page</SecondaryLabel>
-
+        <div className="min-h-svh px-3 py-3 md:py-5">
             <AddInstructorForm />
         </div>
     );
