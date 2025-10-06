@@ -84,11 +84,6 @@ export default function DashboardHeader({ profileData }) {
                         align="end"
                         className="w-fit p-0 rounded-sm"
                     >
-                        <p className="p-3 text-sm text-muted-foreground">
-                            {profileData?.firstname}
-                        </p>
-
-                        <Separator />
                         <SidebarMenu className="text-secondary-foreground/80 p-1">
                             <SidebarMenuItem>
                                 <SidebarMenuButton

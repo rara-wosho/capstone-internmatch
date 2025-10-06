@@ -105,19 +105,9 @@ const navigationConfig = [
                 roles: ["student"],
                 subItems: [
                     {
-                        href: "/student/assessment-test",
-                        label: "Assessment Test",
-                        icon: <FileText size={14} />,
-                    },
-                    {
                         href: "/student/my-exams/recent",
                         label: "Recent Exams",
                         icon: <Calendar size={14} />,
-                    },
-                    {
-                        href: "/student/my-exams/results",
-                        label: "Results",
-                        icon: <BookOpen size={14} />,
                     },
                 ],
             },
@@ -176,6 +166,23 @@ const navigationConfig = [
                 icon: <FileUser />,
                 label: "Applications",
                 roles: ["student"],
+            },
+            {
+                icon: <FileText />,
+                label: "Assessment Test",
+                roles: ["student"],
+                subItems: [
+                    {
+                        href: "/student/assessment-test",
+                        label: "Take Assessment",
+                        icon: <FileText />,
+                    },
+                    {
+                        href: "/student/assessment-result",
+                        label: "Result",
+                        icon: <FileText />,
+                    },
+                ],
             },
         ],
     },

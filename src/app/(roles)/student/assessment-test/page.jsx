@@ -1,3 +1,7 @@
+"use client";
+
+import AvatarInitial from "@/components/ui/avatar-initial";
+import BorderBox from "@/components/ui/BorderBox";
 import { Button } from "@/components/ui/button";
 import {
     Drawer,
@@ -13,18 +17,23 @@ import {
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import TertiaryLabel from "@/components/ui/TertiaryLabel";
 import Wrapper from "@/components/Wrapper";
+import { cn } from "@/lib/utils";
 import { CircleQuestionMark } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
 export default function AssessmentPage() {
+    const [difficulty, setDifficulty] = useState("");
+
     return (
         <Wrapper size="sm">
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3 mb-3">
                 <SecondaryLabel>Assessment Test</SecondaryLabel>
 
                 <Drawer>
                     <DrawerTrigger asChild>
                         <Button variant="secondary" size="sm">
-                            <CircleQuestionMark /> Help
+                            <CircleQuestionMark />
                         </Button>
                     </DrawerTrigger>
                     <DrawerContent>
@@ -150,11 +159,84 @@ export default function AssessmentPage() {
                     </DrawerContent>
                 </Drawer>
             </div>
-            <p className="mt-1 text-muted-foreground">
+            <p className="mt-1 text-muted-foreground mb-5">
                 This assessment is designed to evaluate your knowledge and basic
                 capabilities before proceeding to internship applications.
                 Please complete it in one sitting.
             </p>
+
+            <BorderBox className="border rounded-xl bg-card shadow-xs mb-3">
+                <div className="mb-2 flex">
+                    <AvatarInitial letter="1" />
+                </div>
+
+                <TertiaryLabel className="mb-3">
+                    Choose Difficulty :{" "}
+                    <p className="capitalize">{difficulty}</p>
+                </TertiaryLabel>
+
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => setDifficulty("medium")}
+                        className={cn(
+                            "py-1 px-6 cursor-pointer border rounded-sm",
+                            difficulty === "medium"
+                                ? "border-primary bg-primary text-white"
+                                : ""
+                        )}
+                    >
+                        Medium
+                    </button>
+                    <button
+                        onClick={() => setDifficulty("hard")}
+                        className={cn(
+                            "py-1 px-6 cursor-pointer border rounded-sm",
+                            difficulty === "hard"
+                                ? "border-primary bg-primary text-white"
+                                : ""
+                        )}
+                    >
+                        Hard
+                    </button>
+                </div>
+            </BorderBox>
+
+            <BorderBox
+                className={cn(
+                    "border rounded-xl bg-card shadow-xs mb-3",
+                    !difficulty && "opacity-50 border-0 pointer-events-none"
+                )}
+            >
+                <div className="mb-2 flex">
+                    <AvatarInitial letter="2" />
+                </div>
+                <TertiaryLabel className="mb-3">Please Read</TertiaryLabel>
+                <ul className="list-disc ps-3 text-muted-foreground text-base">
+                    <li>Questions are displayed one by one</li>
+                    <li>
+                        Avoid refreshing the page or you will lose your progress
+                    </li>
+                    <li>You are allowed to go back to previous questions</li>
+                </ul>
+            </BorderBox>
+            <BorderBox
+                className={cn(
+                    "border rounded-xl bg-card shadow-xs mb-3",
+                    !difficulty && "opacity-50 border-0 pointer-events-none"
+                )}
+            >
+                <div className="mb-2 flex">
+                    <AvatarInitial letter="3" />
+                </div>
+                <TertiaryLabel className="mb-3">Start The Test</TertiaryLabel>
+                <p className="text-muted-foreground mb-4">
+                    Take a deep breath and do your best. Good luck with your
+                    assessment test.
+                </p>
+                <Button asChild>
+                    <Link href="/student/assessment-test/start">Start Now</Link>
+                </Button>
+            </BorderBox>
         </Wrapper>
     );
 }

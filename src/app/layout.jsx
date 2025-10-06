@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
             className={cn("scroll-smooth", geist.className)}
         >
             <body
-                className={`antialiased text-neutral-800 dark:text-neutral-200  max-w-[2500px] mx-auto`}
+                className={`antialiased text-neutral-800 dark:text-neutral-200  max-w-[2000px] mx-auto`}
             >
                 <NextTopLoader color="#8967d8" showSpinner={false} />
                 <ThemeProvider
