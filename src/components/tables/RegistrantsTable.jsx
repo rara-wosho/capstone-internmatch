@@ -58,7 +58,9 @@ export default function RegistrantsTable({ registrants }) {
                             <TableHead>Documents Link</TableHead>
                             <TableHead>Registration Date</TableHead>
                             <TableHead>School</TableHead>
-                            <TableHead className="text-right">Status</TableHead>
+                            <TableHead className="text-center">
+                                Status
+                            </TableHead>
                             <TableHead className="text-right">
                                 Actions
                             </TableHead>
@@ -70,7 +72,7 @@ export default function RegistrantsTable({ registrants }) {
                                 key={reg?.id}
                                 className="text-neutral-700 dark:text-neutral-300/90"
                             >
-                                <TableCell className="font-medium">
+                                <TableCell className="font-semibold">
                                     {reg?.firstname} {reg?.lastname}
                                 </TableCell>
                                 <TableCell className="max-w-[180px]">
@@ -89,8 +91,20 @@ export default function RegistrantsTable({ registrants }) {
                                 </TableCell>
                                 <TableCell>{reg?.school}</TableCell>
 
-                                <TableCell className="text-right">
-                                    <p className="capitalize">{reg?.status}</p>
+                                <TableCell>
+                                    <div
+                                        className={cn(
+                                            "rounded-full w-[85px] flex items-center justify-center py-0.5 border mx-auto",
+                                            reg?.status === "accepted" &&
+                                                "border-green-500/30 bg-green-600/70 dark:bg-green-700 text-white",
+                                            reg?.status === "rejected" &&
+                                                "border-red-500/10 bg-red-600/70 dark:bg-red-500/40 text-white"
+                                        )}
+                                    >
+                                        <p className="capitalize text-xs">
+                                            {reg?.status}
+                                        </p>
+                                    </div>
                                 </TableCell>
                                 <TableCell>
                                     <UpdateRegistrationAction

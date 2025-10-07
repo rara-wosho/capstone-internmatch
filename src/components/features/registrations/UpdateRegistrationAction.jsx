@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { updateRegistrationStatus } from "@/lib/actions/registration";
-import { Check, Loader, X } from "lucide-react";
+import { Loader, X } from "lucide-react";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
@@ -27,6 +27,7 @@ export default function UpdateRegistrationAction({ registrationId, status }) {
             toast.success("Successfully updated the status.");
         });
     };
+
     return (
         <div className="flex items-center gap-2 justify-end">
             {status !== "accepted" && (
