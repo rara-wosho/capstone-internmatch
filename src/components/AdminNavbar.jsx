@@ -5,27 +5,24 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const NavLinks = [
-    { href: "/admin", label: "Overview" },
+    { href: "/admin", label: "Dashboard" },
     { href: "/admin/registrations", label: "Registrations" },
-    { href: "/admin/insights", label: "Insights" },
     { href: "/admin/users", label: "Users" },
 ];
 
 export default function AdminNavbar() {
     const pathname = usePathname();
 
-    console.log(pathname);
-
     return (
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-3 items-center">
             {NavLinks.map((nav) => (
                 <Link
-                    href={nav?.href}
                     key={nav.label}
+                    href={nav?.href}
                     className={cn(
-                        "py-2.5",
+                        "py-2.5 relative before:rounded-full before:transition-all before:w-full before:h-0 before:bg-secondary-foreground z-10 before:absolute before:left-0 before:bottom-0",
                         nav.href === pathname
-                            ? "border-b-2 border-neutral-700 dark:border-neutral-300 text-secondary-foreground"
+                            ? "before:h-[2px] text-secondary-foreground"
                             : "text-muted-foreground hover:text-secondary-foreground transition-colors"
                     )}
                 >
