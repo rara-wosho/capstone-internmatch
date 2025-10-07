@@ -1,3 +1,5 @@
+"use client";
+
 import { ArrowUp, MessagesSquare } from "lucide-react";
 import { ThemeToggler } from "../theme-toggler";
 import Wrapper from "../Wrapper";
@@ -25,11 +27,15 @@ export default function PublicFooter() {
                         </TooltipContent>
                     </Tooltip>
                     <Tooltip delayDuration={800}>
-                        <TooltipTrigger className="cursor-pointer">
-                            <IconWrapper>
+                        <TooltipTrigger asChild>
+                            <IconWrapper
+                                onClick={() => window.scrollTo(0, 0)}
+                                className="cursor-pointer"
+                            >
                                 <ArrowUp size={16} />
                             </IconWrapper>
                         </TooltipTrigger>
+
                         <TooltipContent>
                             <p className="text-xs">Scroll to top</p>
                         </TooltipContent>

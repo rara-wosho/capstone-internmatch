@@ -1,3 +1,5 @@
+"use client";
+
 import {
     Tooltip,
     TooltipContent,
@@ -7,6 +9,7 @@ import {
 import IconWrapper from "./IconWrapper";
 import { ArrowUp, MessagesSquare } from "lucide-react";
 import { ThemeToggler } from "../theme-toggler";
+import Link from "next/link";
 
 export default function PrivateFooter() {
     return (
@@ -20,21 +23,30 @@ export default function PrivateFooter() {
                         <ThemeToggler />
                     </div>
                     <Tooltip delayDuration={800}>
-                        <TooltipTrigger className="cursor-pointer">
-                            <IconWrapper>
-                                <MessagesSquare size={16} />
-                            </IconWrapper>
+                        <TooltipTrigger className="cursor-pointer" asChild>
+                            <Link href="#">
+                                <IconWrapper>
+                                    <MessagesSquare size={16} />
+                                </IconWrapper>
+                            </Link>
                         </TooltipTrigger>
                         <TooltipContent>
                             <p className="text-xs">Send message</p>
                         </TooltipContent>
                     </Tooltip>
                     <Tooltip delayDuration={800}>
-                        <TooltipTrigger className="cursor-pointer">
-                            <IconWrapper>
-                                <ArrowUp size={16} />
-                            </IconWrapper>
+                        <TooltipTrigger asChild>
+                            <button
+                                onClick={() => {
+                                    window.scrollTo(0, 0);
+                                }}
+                            >
+                                <IconWrapper className="cursor-pointer">
+                                    <ArrowUp size={16} />
+                                </IconWrapper>
+                            </button>
                         </TooltipTrigger>
+
                         <TooltipContent>
                             <p className="text-xs">Scroll to top</p>
                         </TooltipContent>

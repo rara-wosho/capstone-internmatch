@@ -1,14 +1,19 @@
 import InstructorRegistrationForm from "@/components/forms/InstructorRegistrationForm";
+import BackButton from "@/components/ui/BackButton";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import Wrapper from "@/components/Wrapper";
+import { ChevronLeft } from "lucide-react";
 
 export default function Page() {
     return (
         <div className="min-h-[calc(100svh-60px)] px-3">
             <Wrapper size="sm">
-                <SecondaryLabel className="mb-1 md:mb-2">
-                    Provide details
-                </SecondaryLabel>
+                <div className="flex items-center gap-2 mb-1 md:mb-2">
+                    <BackButton>
+                        <ChevronLeft size={24} />
+                    </BackButton>
+                    <SecondaryLabel>Registration Form</SecondaryLabel>
+                </div>
                 <p className="text-sm mb-4 text-muted-foreground">
                     Before you can create an account, you need to complete the
                     registration form and provide the required verification

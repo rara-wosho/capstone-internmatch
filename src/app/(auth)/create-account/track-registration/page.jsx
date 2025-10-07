@@ -1,10 +1,12 @@
 import SearchField from "@/components/forms/SearchStudent";
+import BackButton from "@/components/ui/BackButton";
 import BorderBox from "@/components/ui/BorderBox";
 import ErrorUi from "@/components/ui/ErrorUi";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import Wrapper from "@/components/Wrapper";
 import { createClient } from "@/lib/supabase/server";
 import { dateFormatter } from "@/utils/date-formatter";
+import { ChevronLeft } from "lucide-react";
 import { Suspense } from "react";
 
 export default async function TrackRegistrationPage({ searchParams }) {
@@ -26,6 +28,9 @@ export default async function TrackRegistrationPage({ searchParams }) {
     return (
         <div className="min-h-[calc(100svh-60px)] px-3">
             <Wrapper size="sm">
+                <BackButton className="mb-3 flex items-center text-muted-foreground hover:text-secondary-foreground transition-colors">
+                    <ChevronLeft size={18} /> Back
+                </BackButton>
                 <SecondaryLabel>Track Registration Status</SecondaryLabel>
                 <p className="text-muted-foreground">
                     Please enter the email address you used during registration.

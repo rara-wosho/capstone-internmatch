@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const NavLinks = [
@@ -18,17 +19,18 @@ export default function AdminNavbar() {
     return (
         <div className="flex gap-2 items-center">
             {NavLinks.map((nav) => (
-                <div
+                <Link
+                    href={nav?.href}
                     key={nav.label}
                     className={cn(
                         "py-2.5",
                         nav.href === pathname
                             ? "border-b-2 border-neutral-700 dark:border-neutral-300 text-secondary-foreground"
-                            : "text-muted-foreground"
+                            : "text-muted-foreground hover:text-secondary-foreground transition-colors"
                     )}
                 >
                     {nav.label}
-                </div>
+                </Link>
             ))}
         </div>
     );
