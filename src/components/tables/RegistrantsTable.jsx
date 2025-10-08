@@ -108,8 +108,7 @@ export default function RegistrantsTable({ registrants }) {
                                 </TableCell>
                                 <TableCell>
                                     <UpdateRegistrationAction
-                                        registrationId={reg?.id}
-                                        status={reg?.status}
+                                        registrant={reg}
                                     />
                                 </TableCell>
                             </TableRow>

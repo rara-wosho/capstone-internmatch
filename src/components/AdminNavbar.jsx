@@ -16,7 +16,7 @@ export default function AdminNavbar({ user }) {
     const pathname = usePathname();
 
     return (
-        <div className="flex gap-3 items-center relative w-full overflow-x-auto pe-10">
+        <div className="flex gap-3 items-center relative w-full overflow-x-auto pr-14">
             <div className="border-r pr-3 flex items-center gap-2">
                 <Logo className="size-5" />
                 <p className="font-semibold text-lg hidden sm:inline-block">

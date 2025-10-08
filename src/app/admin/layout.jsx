@@ -27,7 +27,7 @@ export default async function Layout({ children }) {
                     <Wrapper className="flex items-center justify-between gap-4 relative px-3">
                         <AdminNavbar user={session.user} />
 
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 z-20 bg-card px-1 rounded-full">
                             <Popover>
                                 <PopoverTrigger>
                                     <div className="size-7 flex items-center justify-center rounded-full bg-neutral-100 text-black cursor-pointer">
