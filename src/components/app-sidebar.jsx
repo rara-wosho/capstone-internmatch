@@ -86,12 +86,7 @@ const navigationConfig = [
                 label: "Manage Groups",
                 roles: ["instructor"],
             },
-            {
-                href: "/instructor/students",
-                icon: <CircleUser />,
-                label: "Students",
-                roles: ["instructor"],
-            },
+
             {
                 href: "/student/exams",
                 icon: <NotepadText />,
@@ -111,28 +106,7 @@ const navigationConfig = [
                     },
                 ],
             },
-            {
-                icon: <FileText />,
-                label: "Assessment Test",
-                roles: ["instructor"],
-                subItems: [
-                    {
-                        href: "/instructor/assessment-test",
-                        label: "Manage",
-                        icon: <FileText />,
-                    },
-                    {
-                        href: "/instructor/assessment-test/create",
-                        label: "Create Test",
-                        icon: <FileText />,
-                    },
-                    {
-                        href: "/instructor/assessment-test/takers",
-                        label: "Takers",
-                        icon: <Calendar />,
-                    },
-                ],
-            },
+
             {
                 icon: <ClipboardPen />,
                 label: "Internship Exam",
@@ -187,12 +161,35 @@ const navigationConfig = [
         ],
     },
     {
+        label: "Student",
+        items: [
+            {
+                href: "/instructor/students",
+                icon: <CircleUser />,
+                label: "Manage Students",
+                roles: ["instructor"],
+            },
+            {
+                href: "/instructor/assessment-test",
+                icon: <FileText />,
+                label: "Assessment Test",
+                roles: ["instructor"],
+            },
+            {
+                href: "/instructor/student-applications",
+                icon: <FileUser />,
+                label: "Student Applications",
+                roles: ["instructor"],
+            },
+        ],
+    },
+    {
         label: "Others",
         items: [
             {
                 href: "feedbacks",
                 icon: <MessageSquareMore />,
-                label: "Feedbacks",
+                label: "Feedback",
                 roles: ["student", "instructor", "company"],
             },
         ],
