@@ -12,7 +12,7 @@ export default function HeroSection() {
                 <p className="rounded-full flex items-center gap-1 bg-accent text-accent-foreground border border-accent-foreground/40 text-xs px-3 py-1 translate-y-2">
                     <Sparkles size={12} /> New Startup
                 </p>
-                <h1 className="font-bold text-4xl md:text-[4rem] text-center max-w-4xl bg-linear-to-br from-neutral-900 dark:from-neutral-400 via-gray-700 dark:via-neutral-200 to-neutral-900 bg-clip-text text-transparent">
+                <h1 className="font-bold text-4xl sm:text-5xl md:text-[4rem] text-center max-w-4xl bg-linear-to-br from-neutral-900 dark:from-neutral-400 via-gray-700 dark:via-neutral-200 to-neutral-900 dark:to-neutral-700 bg-clip-text text-transparent">
                     Connecting Skills to Opportunities. Your{" "}
                     <span className="bg-clip-text text-transparent bg-linear-to-t from-violet-800 to-violet-400 dark:to-violet-300">
                         Internship

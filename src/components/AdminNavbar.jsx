@@ -12,7 +12,7 @@ const NavLinks = [
     { href: "/admin/feedbacks", label: "Feedbacks" },
 ];
 
-export default function AdminNavbar({ user }) {
+export default function AdminNavbar() {
     const pathname = usePathname();
 
     return (

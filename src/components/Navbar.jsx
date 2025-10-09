@@ -61,7 +61,7 @@ export default function Navbar() {
                     </Link>
                 </div>
                 <div className="right hidden md:flex justify-end gap-2.5">
-                    <div className="border-e flex items-center pe-3 me-2 gap-3">
+                    <div className="border-e flex items-center me-1 pe-2 gap-3">
                         <Link
                             target="_blank"
                             href="https://www.facebook.com/rae.zionn"

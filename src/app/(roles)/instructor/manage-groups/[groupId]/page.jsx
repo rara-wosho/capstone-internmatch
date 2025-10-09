@@ -7,8 +7,10 @@ import BorderBox from "@/components/ui/BorderBox";
 import BreadCrumbs from "@/components/ui/BreadCrumbs";
 import ErrorUi from "@/components/ui/ErrorUi";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
+import { getCurrentUser } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/server";
 import { ChevronLeft, UserRoundX } from "lucide-react";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 const links = [
@@ -19,15 +21,30 @@ const links = [
 export default async function Page({ params, searchParams }) {
     const { groupId } = await params;
 
+    // get current signed in intructor
+    const { user } = await getCurrentUser();
+
+    if (!user || !user?.id) {
+        notFound();
+    }
+
+    console.log(user.id);
+
     const db = await createClient();
+
     const { data, error } = await db
         .from("groups")
         .select()
         .eq("id", groupId)
-        .single();
+        .eq("ojt_instructor_id", user.id)
+        .maybeSingle();
 
     if (error) {
         return <ErrorUi secondaryMessage={error.message} />;
+    }
+
+    if (!data) {
+        notFound();
     }
 
     // ✅ pull search from query params

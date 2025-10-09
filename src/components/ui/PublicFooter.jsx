@@ -16,7 +16,7 @@ export default function PublicFooter() {
                     <div className="border rounded-sm bg-card">
                         <ThemeToggler />
                     </div>
-                    <Tooltip delayDuration={800}>
+                    <Tooltip delayDuration={500}>
                         <TooltipTrigger className="cursor-pointer">
                             <IconWrapper>
                                 <MessagesSquare size={16} />
@@ -28,12 +28,14 @@ export default function PublicFooter() {
                     </Tooltip>
                     <Tooltip delayDuration={800}>
                         <TooltipTrigger asChild>
-                            <IconWrapper
+                            <button
                                 onClick={() => window.scrollTo(0, 0)}
                                 className="cursor-pointer"
                             >
-                                <ArrowUp size={16} />
-                            </IconWrapper>
+                                <IconWrapper>
+                                    <ArrowUp size={16} />
+                                </IconWrapper>
+                            </button>
                         </TooltipTrigger>
 
                         <TooltipContent>

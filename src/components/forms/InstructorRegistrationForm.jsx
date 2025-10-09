@@ -1,7 +1,7 @@
 "use client";
 
 import { submitRegistration } from "@/lib/actions/instructor";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { Button } from "../ui/button";
 import Form from "next/form";
 import FormLabel from "../ui/FormLabel";
@@ -11,6 +11,8 @@ import { Loader } from "lucide-react";
 import { toast } from "sonner";
 
 export default function InstructorRegistrationForm() {
+    const formRef = useRef(null);
+
     const [state, formAction, isPending] = useActionState(submitRegistration, {
         success: false,
         error: "",
@@ -35,7 +37,11 @@ export default function InstructorRegistrationForm() {
                     {state.error}
                 </div>
             )}
-            <Form action={formAction} className="shadow-xs rounded-xl">
+            <Form
+                ref={formRef}
+                action={formAction}
+                className="shadow-xs rounded-xl"
+            >
                 <div className="bg-card p-3 md:p-5 lg:p-8 rounded-t-xl border-b">
                     <p className="text-sm text-muted-foreground mb-3">
                         All fields are required
@@ -149,7 +155,14 @@ export default function InstructorRegistrationForm() {
                         />
                     </div>
 
-                    <div className="mt-4 md:mt-6 flex justify-end">
+                    <div className="mt-4 md:mt-6 flex sm:justify-end gap-2 flex-wrap">
+                        <Button
+                            variant="ghost"
+                            type="button"
+                            onClick={() => formRef.current.reset()}
+                        >
+                            Reset Form
+                        </Button>
                         <Button
                             disabled={isPending}
                             type="submit"

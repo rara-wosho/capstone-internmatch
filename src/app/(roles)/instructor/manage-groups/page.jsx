@@ -76,7 +76,7 @@ export default async function Page({ searchParams }) {
                     data.map((g) => <GroupCard key={g.id} data={g} />)
                 ) : (
                     <p className="col-span-full text-center text-muted-foreground py-6">
-                        No groups found.
+                        No groups yet. Click 'New Group' to create one.
                     </p>
                 )}
             </div>

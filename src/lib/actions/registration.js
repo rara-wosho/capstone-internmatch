@@ -76,7 +76,7 @@ export async function acceptRegistration(registrant) {
         return { success: false, error: registrationErr.message };
     }
 
-    revalidatePath("/admin/registrations");
+    revalidatePath("/admin/registrations", "page");
     return { success: true, error: "" };
 }
 
@@ -93,6 +93,6 @@ export async function rejectRegistration(registrationId) {
         return { success: false, error: error.message };
     }
 
-    revalidatePath("/admin/registrations");
+    revalidatePath("/admin/registrations", "page");
     return { success: true, error: "" };
 }

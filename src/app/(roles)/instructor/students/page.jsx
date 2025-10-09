@@ -5,6 +5,7 @@ import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { Suspense } from "react";
 import ErrorUi from "@/components/ui/ErrorUi";
 import { createClient } from "@/lib/supabase/server";
+import EmptyUi from "@/components/ui/EmptyUi";
 
 export default async function Page({ searchParams }) {
     const db = await createClient();
@@ -12,6 +13,7 @@ export default async function Page({ searchParams }) {
     // ✅ get search query
     const search = (await searchParams)?.search_query || "";
 
+    // get current user
     const {
         data: { session },
     } = await db.auth.getSession();
@@ -19,7 +21,7 @@ export default async function Page({ searchParams }) {
     let studentQuery = db
         .from("students")
         .select(
-            `id, firstname,lastname,avatar_url, email,course, gender, age, groups(ojt_instructor_id, group_name, id)`
+            `id, firstname,lastname,avatar_url, email,course, gender, age, groups!inner(ojt_instructor_id, group_name, id)`
         )
         .order("created_at", { ascending: false });
 
@@ -67,11 +69,13 @@ export default async function Page({ searchParams }) {
                 {students.length > 0 ? (
                     <StudentsTable students={students} />
                 ) : (
-                    <p className="text-center text-muted-foreground py-8">
-                        {search
-                            ? "No matching students found."
-                            : "No students available."}
-                    </p>
+                    <div className="text-center text-muted-foreground py-8">
+                        {search ? (
+                            <p>No matching students found.</p>
+                        ) : (
+                            <EmptyUi secondaryMessage="No students registered yet." />
+                        )}
+                    </div>
                 )}
             </div>
         </div>

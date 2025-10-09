@@ -45,7 +45,7 @@ export default async function TrackRegistrationPage({ searchParams }) {
                     </Suspense>
                 </BorderBox>
                 <p className="text-xs text-muted-foreground mt-1 sm:mt-2 mb-8">
-                    Note: Enter the exact email address you used during
+                    💡 Note: Enter the exact email address you used during
                     registration, including capitalization.
                 </p>
 
@@ -60,7 +60,7 @@ export default async function TrackRegistrationPage({ searchParams }) {
                     (registration.length > 0 ? (
                         registration.map((reg, index) => (
                             <div
-                                className="py-3 flex items-center justify-between gap-3 border-b"
+                                className="py-3 flex items-center justify-between gap-3"
                                 key={index}
                             >
                                 <div>

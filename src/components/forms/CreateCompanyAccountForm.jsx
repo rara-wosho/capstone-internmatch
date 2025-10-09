@@ -142,39 +142,36 @@ export default function CreateCompanyAccountForm() {
 
                 <div className="mb-8">
                     <TertiaryLabel className="mb-3">Address</TertiaryLabel>
-                    <div className="grid grid-cols-1 md:grid-cols-2 mb-3">
-                        <div>
-                            <FormLabel>Barangay/Street</FormLabel>
-                            <Input
-                                name="barangay"
-                                type="text"
-                                value={form.barangay}
-                                onChange={handleChange}
-                                placeholder="Zone 2, Tipanoy Landless"
-                            />
-                        </div>
+                    <div className=" mb-3">
+                        <FormLabel>Barangay/Street</FormLabel>
+                        <Input
+                            name="barangay"
+                            type="text"
+                            value={form.barangay}
+                            onChange={handleChange}
+                            placeholder="Zone 2, Tipanoy Landless"
+                        />
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                        <div>
-                            <FormLabel>Municipality/City</FormLabel>
-                            <Input
-                                name="city"
-                                type="text"
-                                value={form.city}
-                                onChange={handleChange}
-                                placeholder="Iligan City"
-                            />
-                        </div>
-                        <div>
-                            <FormLabel>Province</FormLabel>
-                            <Input
-                                name="province"
-                                type="text"
-                                value={form.province}
-                                onChange={handleChange}
-                                placeholder="Lanao Del Norte"
-                            />
-                        </div>
+
+                    <div className="mb-3">
+                        <FormLabel>Municipality/City</FormLabel>
+                        <Input
+                            name="city"
+                            type="text"
+                            value={form.city}
+                            onChange={handleChange}
+                            placeholder="Iligan City"
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <FormLabel>Province</FormLabel>
+                        <Input
+                            name="province"
+                            type="text"
+                            value={form.province}
+                            onChange={handleChange}
+                            placeholder="Lanao Del Norte"
+                        />
                     </div>
                 </div>
 
@@ -182,17 +179,15 @@ export default function CreateCompanyAccountForm() {
                     <TertiaryLabel className="mb-3">
                         Account Credentials
                     </TertiaryLabel>
-                    <div className="grid grid-cols-1 md:grid-cols-2 mb-3">
-                        <div>
-                            <FormLabel>Email</FormLabel>
-                            <Input
-                                name="email"
-                                type="email"
-                                value={form.email}
-                                onChange={handleChange}
-                                placeholder="deverian@sample.com"
-                            />
-                        </div>
+                    <div className="mb-3">
+                        <FormLabel>Email</FormLabel>
+                        <Input
+                            name="email"
+                            type="email"
+                            value={form.email}
+                            onChange={handleChange}
+                            placeholder="deverian@sample.com"
+                        />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                         <div>
@@ -218,7 +213,7 @@ export default function CreateCompanyAccountForm() {
                     </div>
                 </div>
 
-                <div className="mt-4 pt-8 flex justify-end">
+                <div className="mt-4 mb-1 flex justify-end">
                     <SubmitButton
                         className="grow sm:grow-0"
                         disabled={isPending}
