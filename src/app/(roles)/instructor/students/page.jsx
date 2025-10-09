@@ -6,6 +6,9 @@ import { Suspense } from "react";
 import ErrorUi from "@/components/ui/ErrorUi";
 import { createClient } from "@/lib/supabase/server";
 import EmptyUi from "@/components/ui/EmptyUi";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { Search } from "lucide-react";
 
 export default async function Page({ searchParams }) {
     const db = await createClient();
@@ -45,13 +48,11 @@ export default async function Page({ searchParams }) {
 
     return (
         <div>
-            <div className="flex items-center mb-4 flex-wrap gap-y-3 gap-x-14">
-                <div>
-                    <SecondaryLabel>Students</SecondaryLabel>
-                    <p className="text-sm text-muted-foreground">
-                        A list of all students in your groups
-                    </p>
-                </div>
+            <div className="mb-4">
+                <SecondaryLabel>Students</SecondaryLabel>
+                <p className="text-sm text-muted-foreground">
+                    A list of all students in your groups
+                </p>
             </div>
 
             <BorderBox className="border rounded-xl bg-card mb-3">

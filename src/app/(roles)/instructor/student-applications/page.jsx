@@ -5,11 +5,18 @@ import { getCurrentUser } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/server";
 import { FileUser } from "lucide-react";
 import { notFound } from "next/navigation";
-
 import EmptyUi from "@/components/ui/EmptyUi";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Suspense } from "react";
+import SearchField from "@/components/forms/SearchStudent";
+import BorderBox from "@/components/ui/BorderBox";
+import SortDate from "@/components/SortDate";
+import InstructorApplicationsSection from "@/components/sections/InstructorApplicationsSection";
 
-export default async function StudentApplicationsPage() {
+export default async function StudentApplicationsPage({ searchParams }) {
+    const search = searchParams?.search_query?.trim() || "";
+    const sort = searchParams?.sort || "desc"; // default: newest first
+
     const { user } = await getCurrentUser();
 
     if (!user || !user?.id) {
@@ -18,28 +25,43 @@ export default async function StudentApplicationsPage() {
 
     const supabase = await createClient();
 
-    const { data: applications, error: applicationError } = await supabase
+    let baseQuery = supabase
         .from("students")
         .select(
             `
-    id, firstname, lastname, avatar_url, 
-    group_id,
-    groups!inner(ojt_instructor_id),
-    applicants!inner(
-      id,
-      student_id,
-      applied_at,
-      status, companies(name,id)
-    )
-  `
+            id,
+            firstname,
+            lastname,
+            avatar_url,
+            group_id,
+            groups!inner(ojt_instructor_id),
+            applicants!inner(
+              id,
+              student_id,
+              applied_at,
+              status,
+              companies(name, id)
+            )
+        `
         )
-        .eq("groups.ojt_instructor_id", user.id);
+        .eq("groups.ojt_instructor_id", user.id)
+        .order("applied_at", {
+            ascending: sort === "asc",
+            referencedTable: "applicants",
+        });
+
+    //  Apply search filter
+    if (search) {
+        baseQuery = baseQuery.or(
+            `firstname.ilike.%${search}%,lastname.ilike.%${search}`
+        );
+    }
+
+    const { data: applications, error: applicationError } = await baseQuery;
 
     if (applicationError) {
         return <ErrorUi secondaryMessage={applicationError.message} />;
     }
-
-    console.log(applications);
 
     return (
         <div>
@@ -50,41 +72,26 @@ export default async function StudentApplicationsPage() {
                 <p>Student Applications</p>
             </SecondaryLabel>
 
-            {applications.length > 0 ? (
-                applications.map((app) => (
-                    <div
-                        key={app.id}
-                        className="border rounded-xl mb-3 bg-card shadow-xs"
-                    >
-                        <div className="flex items-center gap-2 p-4 border-b">
-                            <Avatar className="size-5 aspect-square">
-                                <AvatarImage
-                                    src={app.avatar_url}
-                                    alt="Avatar"
-                                />
-                                <AvatarFallback>?</AvatarFallback>
-                            </Avatar>
-                            <p className="font-semibold">
-                                {app.firstname} {app.lastname}
-                            </p>
-                        </div>
-                        <div className="p-4 space-y-3">
-                            {app.applicants.map((a) => (
-                                <div
-                                    key={a.id}
-                                    className="flex items-center gap-4 text-muted-foreground text-sm"
-                                >
-                                    <p className="font-medium text-secondary-foreground">
-                                        {a.companies.name}
-                                    </p>
-                                    <p>{a.status}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                ))
+            <BorderBox className="border rounded-xl bg-card shadow-xs mb-4">
+                <Suspense fallback={<p>Loading...</p>}>
+                    <SearchField
+                        className="grow"
+                        actionPath="/instructor/student-applications"
+                        placeholder="Search student"
+                    />
+                </Suspense>
+            </BorderBox>
+
+            {applications?.length > 0 ? (
+                <InstructorApplicationsSection applications={applications} />
             ) : (
-                <EmptyUi secondaryMessage="No student submits an application yet." />
+                <EmptyUi
+                    secondaryMessage={
+                        search
+                            ? `We found no result matching '${search}'`
+                            : "No student submits an application yet."
+                    }
+                />
             )}
         </div>
     );
