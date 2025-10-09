@@ -83,7 +83,7 @@ const navigationConfig = [
             {
                 href: "/instructor/manage-groups",
                 icon: <Users />,
-                label: "Manage Groups",
+                label: "Groups",
                 roles: ["instructor"],
             },
 
@@ -166,7 +166,7 @@ const navigationConfig = [
             {
                 href: "/instructor/students",
                 icon: <CircleUser />,
-                label: "Manage Students",
+                label: "Students List",
                 roles: ["instructor"],
             },
             {
