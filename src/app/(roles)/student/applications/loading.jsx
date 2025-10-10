@@ -27,7 +27,7 @@ export default function Loading() {
                 {TABS.map((tab) => (
                     <button
                         key={tab.label}
-                        className="rounded-sm border px-3 py-1 cursor-pointer hover:text-accent-foreground text-sm text-muted-foreground capitalize transition-colors bg-card"
+                        className="rounded-sm px-3 py-1 cursor-pointer hover:text-accent-foreground text-sm text-muted-foreground capitalize transition-colors bg-secondary"
                     >
                         {tab.label}
                     </button>

@@ -14,8 +14,8 @@ import SortDate from "@/components/SortDate";
 import InstructorApplicationsSection from "@/components/sections/InstructorApplicationsSection";
 
 export default async function StudentApplicationsPage({ searchParams }) {
-    const search = searchParams?.search_query?.trim() || "";
-    const sort = searchParams?.sort || "desc"; // default: newest first
+    const search = (await searchParams)?.search_query?.trim() || "";
+    const sort = (await searchParams)?.sort || "desc"; // default: newest first
 
     const { user } = await getCurrentUser();
 
@@ -65,11 +65,8 @@ export default async function StudentApplicationsPage({ searchParams }) {
 
     return (
         <div>
-            <SecondaryLabel className="mb-4 md:mb-5 space-x-2">
-                <IconWrapper>
-                    <FileUser size={17} />
-                </IconWrapper>
-                <p>Student Applications</p>
+            <SecondaryLabel className="mb-4 md:mb-5">
+                Student Applications
             </SecondaryLabel>
 
             <BorderBox className="border rounded-xl bg-card shadow-xs mb-4">

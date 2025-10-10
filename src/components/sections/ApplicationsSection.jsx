@@ -29,7 +29,7 @@ export default function ApplicationsSection({ applications = [] }) {
     return (
         <div>
             {/* Tabs */}
-            <div className="mb-3 flex items-center flex-wrap gap-2">
+            <div className="mb-3 flex items-center flex-wrap gap-1 md:gap-2">
                 {TABS.map((tab) => (
                     <button
                         onClick={() => setActiveTab(tab.label)}
@@ -38,7 +38,7 @@ export default function ApplicationsSection({ applications = [] }) {
                             "rounded-sm border px-3 py-1 cursor-pointer hover:text-accent-foreground text-sm text-muted-foreground capitalize transition-colors",
                             activeTab === tab.label
                                 ? "border-blue-500/60 dark:border-sky-400/60 text-accent-foreground bg-accent"
-                                : "bg-card"
+                                : "bg-secondary border-transparent"
                         )}
                     >
                         {tab.label}
