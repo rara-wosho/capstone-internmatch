@@ -30,7 +30,8 @@ export default function Page() {
     }, [state]);
 
     return (
-        <>
+        <div className="flex flex-col">
+            {/* page header  */}
             <div className="flex items-center justify-between px-4 h-[65px]">
                 <div className="flex items-center">
                     <div className="border-r me-2 pe-3">
@@ -44,10 +45,11 @@ export default function Page() {
                         <Logo className="w-5 h-5 me-3" /> InternMatch
                     </Link>
                 </div>
-                <ThemeToggler className="border rounded-sm bg-card p-2" />
+                <ThemeToggler className="border rounded-sm bg-card p-1.5" />
             </div>
 
-            <div className="p-0 md:p-5 flex flex-col items-center justify-center min-h-[calc(100vh-65px)] bg-linear-to-b from-transparent to-blue-200/50 dark:to-blue-950/40 from-50% relative md:pb-14">
+            {/* main content  */}
+            <div className="p-0 md:p-5 flex flex-col items-center justify-center min-h-[calc(100vh-65px)] bg-linear-to-b from-transparent to-blue-200/50 dark:to-blue-950/40 from-50% relative pb-8 md:pb-14">
                 {/* wrapper */}
                 <div className="p-2 lg:p-5 gap-8 lg:border rounded-3xl flex items-center w-full max-w-[1000px] lg:bg-[rgb(253,253,253)] lg:dark:bg-background relative isolate overflow-hidden">
                     <div className="hidden lg:block rounded-[100%] border-4 border-neutral-100 dark:border-neutral-900 h-[200px] w-[500px] absolute -left-20 -top-32 -z-10"></div>
@@ -169,6 +171,6 @@ export default function Page() {
                     </Card>
                 </div>
             </div>
-        </>
+        </div>
     );
 }

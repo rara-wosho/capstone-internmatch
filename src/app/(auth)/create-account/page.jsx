@@ -14,7 +14,7 @@ import Link from "next/link";
 
 export default function Page() {
     return (
-        <div className="min-h-[calc(100svh-60px)] px-4 md:px-8 pb-16 bg-linear-to-b  from-transparent dark:from-transparent to-[rgb(253,253,253)] dark:to-blue-950/40 from-50%">
+        <div className="min-h-[calc(100svh-64px)] px-4 md:px-8 pb-16 bg-linear-to-b  from-transparent dark:from-transparent to-[rgb(253,253,253)] dark:to-blue-950/40 from-50%">
             <Wrapper size="sm">
                 <SecondaryLabel>
                     <span>Choose an account type</span>

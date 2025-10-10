@@ -29,7 +29,7 @@ export default function InstructorApplicationsSection({ applications = [] }) {
     return (
         <>
             {/* Tabs */}
-            <div className="mb-4 flex items-center flex-wrap gap-1 md:gap-2">
+            <div className="mb-4 flex items-center flex-wrap gap-1.5 sm:gap-2">
                 {TABS.map((tab) => (
                     <button
                         onClick={() => setActiveTab(tab.label)}
@@ -44,6 +44,11 @@ export default function InstructorApplicationsSection({ applications = [] }) {
                         {tab.label}
                     </button>
                 ))}
+                <div className="border-l ps-3 sm:ps-3.5 ms-1">
+                    <div className="rounded-sm px-3 py-1 text-sm text-muted-foreground bg-card border tabular-nums">
+                        Total : {filteredApplications.length}
+                    </div>
+                </div>
             </div>
 
             {filteredApplications.length === 0 ? (
@@ -80,22 +85,30 @@ export default function InstructorApplicationsSection({ applications = [] }) {
                             </Link>
 
                             <div className="p-4 space-y-3">
-                                {app.applicants?.map((a) => (
-                                    <div
-                                        key={a.id}
-                                        className="flex items-center justify-between gap-2 text-muted-foreground text-sm"
-                                    >
-                                        <div className="flex flex-col">
-                                            <p className="font-medium text-secondary-foreground">
-                                                {a.companies.name}
-                                            </p>
-                                            <p className="text-xs text-muted-foreground">
-                                                {dateFormatter(a.applied_at)}
-                                            </p>
-                                        </div>
-                                        <p className="capitalize">{a.status}</p>
-                                    </div>
-                                ))}
+                                {app.applicants?.map(
+                                    (a) =>
+                                        (activeTab === a.status ||
+                                            activeTab === "all") && (
+                                            <div
+                                                key={a.id}
+                                                className="flex items-center justify-between gap-2 text-muted-foreground text-sm"
+                                            >
+                                                <div className="flex flex-col">
+                                                    <p className="font-medium text-secondary-foreground">
+                                                        {a.companies.name}
+                                                    </p>
+                                                    <p className="text-xs text-muted-foreground">
+                                                        {dateFormatter(
+                                                            a.applied_at
+                                                        )}
+                                                    </p>
+                                                </div>
+                                                <p className="capitalize">
+                                                    {a.status}
+                                                </p>
+                                            </div>
+                                        )
+                                )}
                             </div>
                         </div>
                     ))}

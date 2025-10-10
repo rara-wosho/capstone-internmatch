@@ -6,11 +6,11 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 
 export default function HeroSection() {
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center pt-[140px] pb-16 bg-dots isolate relative px-3">
-            <div className="-z-10 bg-linear-to-b from-transparent to-blue-200/30 dark:to-blue-950/40 from-50% absolute inset-0"></div>
+        <div className="min-h-screen flex flex-col items-center justify-center pt-[140px] pb-16 isolate relative px-3">
+            <div className="-z-10 bg-linear-to-b from-transparent to-blue-200/20 dark:to-blue-950/40 from-50% absolute inset-0"></div>
             <Wrapper className="flex flex-col items-center justify-center gap-y-8 px-4">
                 <p className="rounded-full flex items-center gap-1 bg-accent text-accent-foreground border border-accent-foreground/40 text-xs px-3 py-1 translate-y-2">
-                    <Sparkles size={12} /> New Startup
+                    <Sparkles size={12} /> Beta Release : Version 1.0
                 </p>
                 <h1 className="font-bold text-4xl sm:text-5xl md:text-[4rem] text-center max-w-4xl bg-linear-to-br from-neutral-900 dark:from-neutral-400 via-gray-700 dark:via-neutral-200 to-neutral-900 dark:to-neutral-700 bg-clip-text text-transparent">
                     Connecting Skills to Opportunities. Your{" "}
@@ -32,12 +32,9 @@ export default function HeroSection() {
                         </Link>
                     </Button>
                     <Button variant="outline" asChild size="lg">
-                        <Link
-                            className="flex items-center"
-                            href="#how-it-works"
-                        >
+                        <a className="flex items-center" href="#how-it-works">
                             See How It Works
-                        </Link>
+                        </a>
                     </Button>
                 </div>
             </Wrapper>

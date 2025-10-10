@@ -17,7 +17,7 @@ export default async function TrackRegistrationPage({ searchParams }) {
         const { data, error } = await supabase
             .from("registrations")
             .select("firstname, lastname, email, status, registered_at")
-            .like("email", `%${search}%`);
+            .like("email", `${search}`);
 
         if (error) {
             return <ErrorUi />;
@@ -26,7 +26,7 @@ export default async function TrackRegistrationPage({ searchParams }) {
         registration = data;
     }
     return (
-        <div className="min-h-[calc(100svh-60px)] px-3">
+        <div className="min-h-[calc(100svh-64px)] px-3">
             <Wrapper size="sm">
                 <BackButton className="mb-3 flex items-center text-muted-foreground hover:text-secondary-foreground transition-colors">
                     <ChevronLeft size={18} /> Back

@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export default function Page() {
     return (
-        <div className="min-h-[calc(100svh-60px)] px-3 pb-16">
+        <div className="min-h-[calc(100svh-64px)] px-3 pb-16">
             <Wrapper size="sm">
                 <div className="flex items-center gap-x-1 mb-1 md:mb-4">
                     <BackButton className="hover:text-accent-foreground">

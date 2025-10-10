@@ -29,7 +29,7 @@ export default function ApplicationsSection({ applications = [] }) {
     return (
         <div>
             {/* Tabs */}
-            <div className="mb-3 flex items-center flex-wrap gap-1 md:gap-2">
+            <div className="mb-3 flex items-center flex-wrap gap-1.5 sm:gap-2">
                 {TABS.map((tab) => (
                     <button
                         onClick={() => setActiveTab(tab.label)}

@@ -16,7 +16,7 @@ export default function Home() {
             </div>
 
             <div className="px-3 py-[4rem] md:py-[6rem] bg-linear-to-t from-transparent to-blue-100/30 dark:to-blue-950/40 from-50% relative">
-                <div className="absolute inset-0 bg-dots"></div>
+                <div className="absolute inset-0"></div>
                 <ContactSection />
             </div>
         </div>

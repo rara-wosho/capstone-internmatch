@@ -20,7 +20,7 @@ export default function Navbar() {
             <Wrapper className="grid grid-cols-2 md:grid-cols-3">
                 <Link href="/" className="flex items-center gap-2">
                     <Logo className="w-5 h-5" />
-                    <p className="font-bold">InternMatch</p>
+                    <p className="font-bold text-lg">InternMatch</p>
                 </Link>
                 <div className="hidden md:flex middle items-center justify-center gap-6 text-neutral-700 dark:text-neutral-300">
                     <Link
@@ -77,7 +77,8 @@ export default function Navbar() {
                     </Button>
                 </div>
 
-                <div className="ms-auto md:hidden flex items-center pe-2">
+                <div className="ms-auto md:hidden flex items-center gap-3 pe-2">
+                    <ThemeToggler />
                     <MobileNavbar />
                 </div>
             </Wrapper>

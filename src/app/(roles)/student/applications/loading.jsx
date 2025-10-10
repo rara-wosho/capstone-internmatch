@@ -23,7 +23,7 @@ export default function Loading() {
             </SecondaryLabel>
 
             {/* Tabs */}
-            <div className="mb-3 flex items-center flex-wrap gap-2">
+            <div className="mb-3 flex items-center flex-wrap gap-1.5 sm:gap-2">
                 {TABS.map((tab) => (
                     <button
                         key={tab.label}
