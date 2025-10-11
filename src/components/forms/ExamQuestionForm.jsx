@@ -184,6 +184,7 @@ export default function ExamQuestionForm({ examinationData }) {
 
     return (
         <div>
+            {/* Open modal when exam is submitted  */}
             <AlertDialog open={isRecorded}>
                 <AlertDialogTrigger className="sr-only">
                     Open
@@ -208,6 +209,7 @@ export default function ExamQuestionForm({ examinationData }) {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+
             <div className="grid grid-cols-1 gap-3 md:gap-4 mt-7 lg:grid-cols-[1fr_2.7fr]">
                 <div className="left-section flex flex-col gap-3 md:gap-4">
                     <TimeRemaining

@@ -1,9 +1,5 @@
-import ErrorUi from "@/components/ui/ErrorUi";
+import MonitorTabSwitch from "@/components/exam/MonitorTabSwitch";
 
 export default function Page() {
-    return (
-        <div>
-            <ErrorUi />
-        </div>
-    );
+    return <div>{/* <MonitorTabSwitch />  */}</div>;
 }

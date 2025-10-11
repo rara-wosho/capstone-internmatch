@@ -29,7 +29,7 @@ const buttonVariants = cva(
                 link: "text-primary underline-offset-4 hover:underline",
                 white: "shadow-xs bg-neutral-800 border-gray-400 dark:bg-neutral-100 text-neutral-50 dark:text-black hover:opacity-90 border border-neutral-800 dark:border-neutral-100",
                 outlineWhite:
-                    "shadow-xs bg-white dark:bg-secondary text-neutral-800 dark:text-foreground hover:opacity-90 border border-neutral-500 dark:border-secondary",
+                    "shadow-xs bg-white dark:bg-secondary text-neutral-800 dark:text-foreground hover:opacity-80 border border-neutral-500 dark:border-secondary",
             },
             size: {
                 default: "h-9 px-4 py-2.5 has-[>svg]:px-3",

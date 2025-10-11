@@ -1,15 +1,23 @@
 import AdminNavbar from "@/components/AdminNavbar";
+import AdminOffCanvas from "@/components/AdminOffCanvas";
+import { Button } from "@/components/ui/button";
+import IconWrapper from "@/components/ui/IconWrapper";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
 import PrivateFooter from "@/components/ui/PrivateFooter";
-import { SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
+import {
+    SidebarMenu,
+    SidebarMenuItem,
+    SidebarProvider,
+} from "@/components/ui/sidebar";
 import SignOutModal from "@/components/ui/SignOutModal";
 import Wrapper from "@/components/Wrapper";
 import { getCurrentUser } from "@/lib/actions/auth";
-import { CircleUserRound } from "lucide-react";
+import { CircleUserRound, MessageSquareQuote } from "lucide-react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export default async function Layout({ children }) {
@@ -27,34 +35,13 @@ export default async function Layout({ children }) {
                     <Wrapper className="flex items-center justify-between gap-4 relative px-3">
                         <AdminNavbar user={session.user} />
 
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 z-20 bg-card px-1 rounded-full">
-                            <Popover>
-                                <PopoverTrigger>
-                                    <div className="size-7 flex items-center justify-center rounded-full bg-neutral-100 text-black cursor-pointer">
-                                        <CircleUserRound size={20} />
-                                    </div>
-                                </PopoverTrigger>
-
-                                <PopoverContent
-                                    align="end"
-                                    className="w-fit p-0 text-muted-foreground"
-                                >
-                                    <div className="border-b px-3 py-2 text-secondary-foreground font-medium">
-                                        {session.user.email}
-                                    </div>
-                                    <div className="px-3 py-2">
-                                        <SidebarMenu>
-                                            <SidebarMenuItem>
-                                                <SignOutModal>
-                                                    <button className="hover:text-secondary-foreground cursor-pointer w-full text-left">
-                                                        Sign Out
-                                                    </button>
-                                                </SignOutModal>
-                                            </SidebarMenuItem>
-                                        </SidebarMenu>
-                                    </div>
-                                </PopoverContent>
-                            </Popover>
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 z-20 rounded-full flex items-center gap-2">
+                            <Link href="/admin/feedbacks">
+                                <IconWrapper>
+                                    <MessageSquareQuote size={18} />
+                                </IconWrapper>
+                            </Link>
+                            <AdminOffCanvas user={session.user} />
                         </div>
                     </Wrapper>
                 </div>
