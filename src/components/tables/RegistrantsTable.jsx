@@ -25,7 +25,7 @@ const TABS = [
 ];
 
 export default function RegistrantsTable({ registrants }) {
-    const [status, setStatus] = useState("pending");
+    const [status, setStatus] = useState("all");
     const filteredData = useMemo(() => {
         if (status === "all") return registrants;
 

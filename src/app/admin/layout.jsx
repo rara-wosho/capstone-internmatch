@@ -31,7 +31,7 @@ export default async function Layout({ children }) {
         <>
             <section className="min-h-svh">
                 {/* admin layout header  */}
-                <div className="sticky top-0 left-0 bg-card z-50 border-b dark:border-transparent">
+                <div className="sticky top-0 left-0 bg-card z-50 border-b">
                     <Wrapper className="flex items-center justify-between gap-4 relative px-3">
                         <AdminNavbar user={session.user} />
 

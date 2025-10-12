@@ -16,7 +16,7 @@ export default function AdminNavbar() {
 
     return (
         <div className="flex gap-3 items-center relative w-full h-[60px]">
-            <div className="md:border-r pr-3 flex items-center gap-2">
+            <div className="me-4 flex items-center gap-2">
                 <Logo className="size-5" />
                 <p className="font-semibold text-lg">InternMatch</p>
             </div>

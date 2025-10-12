@@ -63,7 +63,7 @@ export default function Pagination({
     return (
         <div
             className={cn(
-                "flex items-center justify-between flex-wrap gap-y-3",
+                "flex items-center justify-center gap-x-2 sm:justify-between flex-wrap gap-y-3",
                 className
             )}
         >
@@ -72,26 +72,6 @@ export default function Pagination({
             </p>
 
             <div className="flex items-center gap-1 grow sm:grow-0 justify-center text-muted-foreground">
-                {/* Previous Button */}
-                <Button
-                    size="smallest"
-                    variant="ghost"
-                    asChild
-                    disabled={!hasPrevious}
-                    className={
-                        !hasPrevious ? "pointer-events-none opacity-50" : ""
-                    }
-                >
-                    <Link
-                        href={
-                            hasPrevious ? createPageUrl(currentPage - 1) : "#"
-                        }
-                    >
-                        <ChevronLeft />{" "}
-                        <span className="hidden sm:inline-flex">Prev</span>
-                    </Link>
-                </Button>
-
                 {/* First page if not visible */}
                 {visiblePages[0] > 1 && (
                     <>
@@ -105,16 +85,27 @@ export default function Pagination({
                 )}
 
                 {/* Visible page numbers */}
-                {visiblePages.map((page) => (
-                    <Button
-                        key={page}
-                        size="smallIcon"
-                        variant={page === currentPage ? "default" : "outline"}
-                        asChild
-                    >
-                        <Link href={createPageUrl(page)}>{page}</Link>
-                    </Button>
-                ))}
+                <border className="rounded-sm bg-card border">
+                    {visiblePages.map((page) => (
+                        <button
+                            key={page}
+                            // size="smallIcon"
+                            // variant={page === currentPage ? "default" : "outline"}
+                            // asChild
+                        >
+                            <Link
+                                className={cn(
+                                    "size-7 flex items-center justify-center text-sm rounded-sm",
+                                    page === currentPage &&
+                                        "bg-neutral-200 text-black"
+                                )}
+                                href={createPageUrl(page)}
+                            >
+                                {page}
+                            </Link>
+                        </button>
+                    ))}
+                </border>
 
                 {/* Last page if not visible */}
                 {visiblePages[visiblePages.length - 1] < totalPages && (
@@ -131,19 +122,51 @@ export default function Pagination({
                     </>
                 )}
 
-                {/* Next Button */}
-                <Button
-                    variant="ghost"
-                    asChild
-                    size="smallest"
-                    disabled={!hasNext}
-                    className={!hasNext ? "pointer-events-none opacity-50" : ""}
-                >
-                    <Link href={hasNext ? createPageUrl(currentPage + 1) : "#"}>
-                        <span className="hidden sm:inline-flex">Next</span>{" "}
-                        <ChevronRight />
-                    </Link>
-                </Button>
+                {/* Previous Button */}
+                <div className="flex items-center bg-card rounded-sm border ms-2">
+                    <button
+                        // size="smallest"
+                        // variant="secondary"
+                        // asChild
+                        disabled={!hasPrevious}
+                        className={cn(
+                            "flex items-center border-r",
+                            !hasPrevious ? "pointer-events-none opacity-50" : ""
+                        )}
+                    >
+                        <Link
+                            className="flex items-center h-7 px-2"
+                            href={
+                                hasPrevious
+                                    ? createPageUrl(currentPage - 1)
+                                    : "#"
+                            }
+                        >
+                            <ChevronLeft size={22} />
+                        </Link>
+                    </button>
+
+                    {/* Next Button */}
+                    <button
+                        // variant="outline"
+                        // asChild
+                        // size="smallest"
+                        disabled={!hasNext}
+                        className={cn(
+                            "flex items-center",
+                            !hasNext ? "pointer-events-none opacity-50" : ""
+                        )}
+                    >
+                        <Link
+                            className="flex items-center h-7 px-2"
+                            href={
+                                hasNext ? createPageUrl(currentPage + 1) : "#"
+                            }
+                        >
+                            <ChevronRight size={22} />
+                        </Link>
+                    </button>
+                </div>
             </div>
         </div>
     );
