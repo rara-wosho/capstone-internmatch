@@ -65,7 +65,7 @@ export default async function Page({ params }) {
             </SecondaryLabel>
 
             {/* body  */}
-            <Wrapper className="px-3">
+            <Wrapper className="px-3" size="sm">
                 {questions.length === 0 ? (
                     <div className="text-muted-foreground text-center">
                         No questions yet. Click 'Add Question' button to add
@@ -73,7 +73,15 @@ export default async function Page({ params }) {
                     </div>
                 ) : (
                     questions?.map((q) => (
-                        <div key={q.id}>{q.assessment_question_text}</div>
+                        <div
+                            key={q.id}
+                            className="border p-3 rounded-xl bg-card mb-3"
+                        >
+                            {q.assessment_question_text}
+                            {q.assessment_choices.map((c) => (
+                                <div key={c.id}>{c.assessment_choice_text}</div>
+                            ))}
+                        </div>
                     ))
                 )}
             </Wrapper>

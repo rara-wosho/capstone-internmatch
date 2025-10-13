@@ -1,3 +1,3 @@
-export default function AdminUsersPage() {
+export default async function AdminUsersPage() {
     return <div></div>;
 }
