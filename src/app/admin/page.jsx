@@ -1,6 +1,7 @@
 import AddInstructorForm from "@/components/add-instructor-form";
+import BarChart from "@/components/charts/BarChart";
 import UserCountCard from "@/components/features/admin/UserCountCard";
-import IconWrapper from "@/components/ui/IconWrapper";
+import BorderBox from "@/components/ui/BorderBox";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import Wrapper from "@/components/Wrapper";
 import { createClient } from "@/lib/supabase/server";
@@ -14,56 +15,82 @@ import {
 export default async function Page() {
     const supabase = await createClient();
 
-    const getStudentCount = async () => {
-        const { count } = await supabase
-            .from("students")
-            .select("id", { count: "exact", head: true });
-
-        return count;
-    };
-    const getInstructorCount = async () => {
-        const { count } = await supabase
-            .from("ojt_instructors")
-            .select("id", { count: "exact", head: true });
-
-        return count;
-    };
-    const getPendingInstructorCount = async () => {
-        const { count } = await supabase
-            .from("ojt_instructors")
-            .select("id", { count: "exact", head: true })
-            .eq("status", "pending");
-
-        return count;
-    };
-    const getCompanyCount = async () => {
-        const { count } = await supabase
-            .from("companies")
-            .select("id", { count: "exact", head: true });
-
-        return count;
-    };
-
-    const [studentCount, instructorCount, pendingCount, companyCount] =
+    // ========= FETCH ALL USER DATA AT ONCE =========
+    const [studentsRes, instructorsRes, companiesRes, registrationsRes] =
         await Promise.all([
-            getStudentCount(),
-            getInstructorCount(),
-            getPendingInstructorCount(),
-            getCompanyCount(),
+            supabase.from("students").select("id, created_at"),
+            supabase.from("ojt_instructors").select("id, created_at"),
+            supabase.from("companies").select("id, created_at"),
+            supabase.from("registrations").select("status"),
         ]);
 
+    const students = studentsRes.data || [];
+    const instructors = instructorsRes.data || [];
+    const companies = companiesRes.data || [];
+    const pending = registrationsRes.data || [];
+
+    // ========= DERIVED COUNTS =========
+    const studentCount = students.length;
+    const instructorCount = instructors.length;
+    const companyCount = companies.length;
+    const pendingCount = pending.filter((i) => i.status === "pending").length;
+
+    // ========= MONTHLY REGISTRATION PER ROLE =========
+    const monthLabels = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    ];
+
+    // Helper to count per month for a dataset
+    const getMonthlyCounts = (data) => {
+        const monthlyCount = Array(12).fill(0);
+        data.forEach((user) => {
+            if (user.created_at) {
+                const month = new Date(user.created_at).getMonth();
+                monthlyCount[month]++;
+            }
+        });
+        return monthlyCount;
+    };
+
+    const studentMonthly = getMonthlyCounts(students);
+    const instructorMonthly = getMonthlyCounts(instructors);
+    const companyMonthly = getMonthlyCounts(companies);
+
+    // Format for grouped bar chart
+    const groupedData = monthLabels.map((label, index) => ({
+        label,
+        values: [
+            studentMonthly[index],
+            instructorMonthly[index],
+            companyMonthly[index],
+        ],
+    }));
+
+    // ========= RENDER =========
     return (
         <div>
             <SecondaryLabel className="mb-3 md:mb-8 border-b py-4 md:py-8">
                 <Wrapper className="flex items-center px-3">Dashboard</Wrapper>
             </SecondaryLabel>
 
-            <Wrapper className="px-3">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
+            <Wrapper className="px-3 mb-8">
+                {/* COUNT CARDS */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 mb-4">
                     <UserCountCard
                         className="text-white bg-linear-to-br from-violet-400 dark:from-violet-400  to-violet-500 dark:to-violet-900"
                         role="Pending Registrations"
-                        count={pendingCount || 0}
+                        count={pendingCount}
                         icon={<Hourglass size={22} />}
                     />
                     <UserCountCard
@@ -74,7 +101,7 @@ export default async function Page() {
                     />
                     <UserCountCard
                         className="bg-card"
-                        role="Ojt Instructors"
+                        role="OJT Instructors"
                         count={instructorCount}
                         icon={<SquareUserRound size={22} />}
                     />
@@ -85,8 +112,28 @@ export default async function Page() {
                         icon={<Building2 size={22} />}
                     />
                 </div>
+
+                {/* GROUPED BAR CHART */}
+                <BorderBox className="border bg-card rounded-xl shadow-sm">
+                    <BarChart
+                        data={groupedData}
+                        title="Monthly Account Creations by Role"
+                        xAxisLabel="Month"
+                        yAxisLabel="Accounts Created"
+                        height={400}
+                        grouped={true}
+                        groupLabels={["Students", "Instructors", "Companies"]}
+                        groupColors={[
+                            "bg-gradient-to-b from-violet-400/90 to-violet-500",
+                            "bg-fuchsia-400 dark:bg-fuchsia-700",
+                            "bg-accent-foreground",
+                        ]}
+                        showLegend={true}
+                    />
+                </BorderBox>
             </Wrapper>
-            {/* <AddInstructorForm />  */}
+
+            {/* <AddInstructorForm /> */}
         </div>
     );
 }
