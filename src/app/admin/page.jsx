@@ -86,7 +86,7 @@ export default async function Page() {
 
             <Wrapper className="px-3 mb-8">
                 {/* COUNT CARDS */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 mb-4">
+                <div className="flex items-center flex-wrap gap-2 sm:gap-3 mb-4">
                     <UserCountCard
                         className="text-white bg-linear-to-br from-violet-400 dark:from-violet-400  to-violet-500 dark:to-violet-900"
                         role="Pending Registrations"
@@ -119,12 +119,11 @@ export default async function Page() {
                         data={groupedData}
                         title="Monthly Account Creations by Role"
                         xAxisLabel="Month"
-                        yAxisLabel="Accounts Created"
-                        height={400}
+                        height={300}
                         grouped={true}
                         groupLabels={["Students", "Instructors", "Companies"]}
                         groupColors={[
-                            "bg-gradient-to-b from-violet-400/90 to-violet-500",
+                            "bg-primary",
                             "bg-fuchsia-400 dark:bg-fuchsia-700",
                             "bg-accent-foreground",
                         ]}

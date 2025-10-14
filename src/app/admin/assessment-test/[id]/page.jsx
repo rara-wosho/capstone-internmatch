@@ -39,25 +39,11 @@ export default async function Page({ params }) {
             {/* header  */}
             <SecondaryLabel className="mb-3 md:mb-8 border-b py-4 md:py-8">
                 <Wrapper className="flex items-center flex-wrap gap-x-6 gap-y-3 justify-between px-3">
-                    <div className="flex flex-col">
-                        <div className="flex items-center gap-1.5 mb-1">
-                            <BackButton className="hover:text-accent-foreground">
-                                <ChevronLeft size={23} />
-                            </BackButton>
-                            <p>{data.assessment_title}</p>
-                        </div>
-                        <div
-                            className={cn(
-                                "capitalize text-sm my-1 flex items-center gap-2",
-                                data.assessment_difficulty
-                            )}
-                        >
-                            <Gauge size={14} /> {data.assessment_difficulty}
-                        </div>
-                        <p className="text-sm text-muted-foreground font-normal flex items-center gap-2">
-                            <Calendar size={13} />
-                            Created at: {dateFormatter(data.created_at)}
-                        </p>
+                    <div className="flex items-center gap-1 mb-1">
+                        <BackButton className="hover:text-accent-foreground">
+                            <ChevronLeft className="size-5 md:size-6" />
+                        </BackButton>
+                        <p>{data.assessment_title}</p>
                     </div>
 
                     <AddAssessmentQuestionModal assessmentId={assessmentId} />
@@ -66,23 +52,44 @@ export default async function Page({ params }) {
 
             {/* body  */}
             <Wrapper className="px-3" size="sm">
+                <p className="text-sm text-muted-foreground mb-2 whitespace-pre-wrap">
+                    {data?.assessment_description
+                        ? data?.assessment_description
+                        : "No description or instruction provided"}
+                </p>
+                <div
+                    className={cn(
+                        "capitalize text-sm my-1 flex items-center gap-2",
+                        data.assessment_difficulty
+                    )}
+                >
+                    <Gauge size={14} /> {data.assessment_difficulty}
+                </div>
+                <p className="text-sm text-muted-foreground font-normal flex items-center gap-2 mb-4 md:mb-5">
+                    <Calendar size={13} />
+                    Created at: {dateFormatter(data.created_at)}
+                </p>
                 {questions.length === 0 ? (
-                    <div className="text-muted-foreground text-center">
+                    <div className="text-muted-foreground">
                         No questions yet. Click 'Add Question' button to add
                         question.
                     </div>
                 ) : (
-                    questions?.map((q) => (
-                        <div
-                            key={q.id}
-                            className="border p-3 rounded-xl bg-card mb-3"
-                        >
-                            {q.assessment_question_text}
-                            {q.assessment_choices.map((c) => (
-                                <div key={c.id}>{c.assessment_choice_text}</div>
-                            ))}
-                        </div>
-                    ))
+                    <>
+                        {questions?.map((q) => (
+                            <div
+                                key={q.id}
+                                className="border p-3 rounded-xl bg-card mb-3"
+                            >
+                                {q.assessment_question_text}
+                                {q.assessment_choices.map((c) => (
+                                    <div key={c.id}>
+                                        {c.assessment_choice_text}
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </>
                 )}
             </Wrapper>
         </div>

@@ -107,7 +107,13 @@ const BarChart = ({
                                                 className="flex flex-col items-center relative"
                                             >
                                                 {/* Value label on hover */}
-                                                <div className="absolute -top-6 z-20">
+                                                <div
+                                                    className={cn(
+                                                        "absolute -top-6 z-20",
+                                                        value === 0 &&
+                                                            "opacity-0"
+                                                    )}
+                                                >
                                                     <span className="text-xs font-semibold text-secondary-foreground px-2 py-1">
                                                         {value}
                                                     </span>
@@ -142,7 +148,7 @@ const BarChart = ({
 
                                 {/* Label */}
                                 <div className="absolute left-0 -bottom-8 w-full text-center">
-                                    <span className="text-sm font-medium text-gray-600 break-words">
+                                    <span className="text-sm font-medium text-muted-foreground break-words">
                                         {item.label}
                                     </span>
                                 </div>

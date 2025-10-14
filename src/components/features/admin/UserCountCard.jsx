@@ -5,7 +5,7 @@ export default function UserCountCard({ className, role, count, icon }) {
     return (
         <div
             className={cn(
-                "rounded-xl p-4 flex flex-col gap-y-2 shadow-xs relative overflow-hidden",
+                "rounded-xl p-4 flex flex-col gap-y-2 shadow-xs relative overflow-hidden grow shrink-0 basis-[200px]",
                 className
             )}
         >
