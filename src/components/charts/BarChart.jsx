@@ -18,8 +18,6 @@ const BarChart = ({
     showLegend = true, // Show legend for grouped bars
     groupLabels = [], // Labels for each bar in a group (e.g., ['Student', 'Instructor', 'Staff'])
 }) => {
-    const [hoveredGroup, setHoveredGroup] = useState(null);
-
     if (!data || data.length === 0) {
         return (
             <div className="w-full p-8 bg-gray-50 rounded-lg">
@@ -36,13 +34,7 @@ const BarChart = ({
     const chartHeight = height - 60;
 
     // Default colors for grouped bars if not provided
-    const defaultGroupColors = [
-        "bg-gradient-to-b from-violet-400/90 to-violet-500",
-        "bg-gradient-to-b from-blue-400/90 to-blue-500",
-        "bg-gradient-to-b from-green-400/90 to-green-500",
-        "bg-gradient-to-b from-amber-400/90 to-amber-500",
-        "bg-gradient-to-b from-rose-400/90 to-rose-500",
-    ];
+    const defaultGroupColors = ["bg-primary", "bg-accent"];
 
     const colors = groupColors.length > 0 ? groupColors : defaultGroupColors;
 
@@ -79,82 +71,86 @@ const BarChart = ({
                 )}
 
                 {/* Chart area */}
-                <div className="flex items-end justify-around h-full px-4 pb-9 pt-4 overflow-x-auto">
-                    {data.map((item, idx) => {
-                        // Handle both grouped and single bar data
-                        const isGrouped = grouped && Array.isArray(item.values);
-                        const values = isGrouped ? item.values : [item.value];
+                <div className="overflow-x-auto">
+                    <div className="flex items-end justify-around h-full px-4 pb-9 pt-4">
+                        {data.map((item, idx) => {
+                            // Handle both grouped and single bar data
+                            const isGrouped =
+                                grouped && Array.isArray(item.values);
+                            const values = isGrouped
+                                ? item.values
+                                : [item.value];
 
-                        return (
-                            <div
-                                key={idx}
-                                className="flex flex-col items-center group w-full mx-2 grow h-full justify-end relative"
-                                onMouseEnter={() => setHoveredGroup(idx)}
-                                onMouseLeave={() => setHoveredGroup(null)}
-                            >
-                                {/* Grouped bars container */}
-                                <div className="w-full flex justify-center gap-1 items-end">
-                                    {values.map((value, barIdx) => {
-                                        const barHeight =
-                                            (value / maxValue) * chartHeight;
-                                        const barColorClass = isGrouped
-                                            ? colors[barIdx]
-                                            : barColor;
+                            return (
+                                <div
+                                    key={idx}
+                                    className="flex flex-col items-center group w-full mx-2 grow h-full justify-end relative"
+                                >
+                                    {/* Grouped bars container */}
+                                    <div className="w-full flex justify-center gap-1 items-end">
+                                        {values.map((value, barIdx) => {
+                                            const barHeight =
+                                                (value / maxValue) *
+                                                chartHeight;
+                                            const barColorClass = isGrouped
+                                                ? colors[barIdx]
+                                                : barColor;
 
-                                        return (
-                                            <div
-                                                key={barIdx}
-                                                className="flex flex-col items-center relative"
-                                            >
-                                                {/* Value label on hover */}
+                                            return (
                                                 <div
-                                                    className={cn(
-                                                        "absolute -top-6 z-20",
-                                                        value === 0 &&
-                                                            "opacity-0"
-                                                    )}
+                                                    key={barIdx}
+                                                    className="flex flex-col items-center relative"
                                                 >
-                                                    <span className="text-xs font-semibold text-secondary-foreground px-2 py-1">
-                                                        {value}
-                                                    </span>
-                                                </div>
-                                                {/* {hoveredGroup === idx && (
+                                                    {/* Value label on hover */}
+                                                    <div
+                                                        className={cn(
+                                                            "absolute -top-6 z-20",
+                                                            value === 0 &&
+                                                                "opacity-0"
+                                                        )}
+                                                    >
+                                                        <span className="text-xs font-semibold text-secondary-foreground px-2 py-1">
+                                                            {value}
+                                                        </span>
+                                                    </div>
+                                                    {/* {hoveredGroup === idx && (
                                                 )} */}
 
-                                                {/* Background bar */}
-                                                <div
-                                                    style={{
-                                                        height: `${chartHeight}px`,
-                                                    }}
-                                                    className={cn(
-                                                        "absolute bottom-0  rounded-lg bg-secondary w-full left-1/2 -translate-x-1/2",
-                                                        grouped
-                                                            ? "opacity-0"
-                                                            : "opacity-40 dark:opacity-15"
-                                                    )}
-                                                />
+                                                    {/* Background bar */}
+                                                    <div
+                                                        style={{
+                                                            height: `${chartHeight}px`,
+                                                        }}
+                                                        className={cn(
+                                                            "absolute bottom-0  rounded-lg bg-secondary w-full left-1/2 -translate-x-1/2",
+                                                            grouped
+                                                                ? "opacity-0"
+                                                                : "opacity-40 dark:opacity-15"
+                                                        )}
+                                                    />
 
-                                                {/* Actual bar */}
-                                                <div
-                                                    className={`z-10 ${grouped ? "w-4" : "w-8"} ${barColorClass} ${hoverColor} rounded-sm transition-all duration-300 cursor-pointer relative`}
-                                                    style={{
-                                                        height: `${barHeight}px`,
-                                                    }}
-                                                />
-                                            </div>
-                                        );
-                                    })}
-                                </div>
+                                                    {/* Actual bar */}
+                                                    <div
+                                                        className={`z-10 ${grouped ? "w-4" : "w-8"} ${barColorClass} ${hoverColor} rounded-sm transition-all duration-300 cursor-pointer relative`}
+                                                        style={{
+                                                            height: `${barHeight}px`,
+                                                        }}
+                                                    />
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
 
-                                {/* Label */}
-                                <div className="absolute left-0 -bottom-8 w-full text-center">
-                                    <span className="text-sm font-medium text-muted-foreground break-words">
-                                        {item.label}
-                                    </span>
+                                    {/* Label */}
+                                    <div className="absolute left-0 -bottom-8 w-full text-center">
+                                        <span className="text-sm font-medium text-muted-foreground break-words">
+                                            {item.label}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                        );
-                    })}
+                            );
+                        })}
+                    </div>
                 </div>
 
                 {/* X-axis label */}

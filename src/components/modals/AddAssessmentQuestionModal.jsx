@@ -110,7 +110,7 @@ export default function AddAssessmentQuestionModal({ assessmentId }) {
             <DialogTrigger className="grow sm:grow-0" asChild>
                 <Button>Add Question</Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="sm:max-w-3xl">
                 <DialogHeader>
                     <DialogTitle>Add Question</DialogTitle>
                     <DialogDescription className="sr-only">
@@ -136,7 +136,8 @@ export default function AddAssessmentQuestionModal({ assessmentId }) {
                                 key={index}
                                 className="mb-2 flex items-center gap-2"
                             >
-                                <Input
+                                <input
+                                    className="flex grow border-b h-9 outline-0 text-sm items-center"
                                     required
                                     value={choice.choiceText}
                                     onChange={(e) =>

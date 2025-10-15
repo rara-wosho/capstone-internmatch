@@ -1,3 +1,4 @@
+import AssessmentQuestionCard from "@/components/features/admin/AssessmentQuestionCard";
 import AddAssessmentQuestionModal from "@/components/modals/AddAssessmentQuestionModal";
 import BackButton from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/button";
@@ -7,7 +8,7 @@ import Wrapper from "@/components/Wrapper";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { dateFormatter } from "@/utils/date-formatter";
-import { Calendar, ChevronLeft, Gauge } from "lucide-react";
+import { Calendar, ChevronLeft, Gauge, Pen, Trash } from "lucide-react";
 import { notFound } from "next/navigation";
 
 export default async function Page({ params }) {
@@ -22,7 +23,7 @@ export default async function Page({ params }) {
     const { data, error } = await db
         .from("assessment_test")
         .select(
-            "*, assessment_questions(id, assessment_question_text, assessment_choices(id, assessment_choice_text))"
+            "*, assessment_questions(id, assessment_question_text, assessment_choices(id, is_correct, assessment_choice_text))"
         )
         .eq("id", assessmentId)
         .single();
@@ -30,12 +31,11 @@ export default async function Page({ params }) {
     if (error) {
         return <ErrorUi secondaryMessage={error.message} />;
     }
-    console.log(data);
 
-    const questions = data?.assessment_questions;
+    const questions = data?.assessment_questions || [];
 
     return (
-        <div>
+        <div className="pb-5 md:pb-7">
             {/* header  */}
             <SecondaryLabel className="mb-3 md:mb-8 border-b py-4 md:py-8">
                 <Wrapper className="flex items-center flex-wrap gap-x-6 gap-y-3 justify-between px-3">
@@ -75,21 +75,9 @@ export default async function Page({ params }) {
                         question.
                     </div>
                 ) : (
-                    <>
-                        {questions?.map((q) => (
-                            <div
-                                key={q.id}
-                                className="border p-3 rounded-xl bg-card mb-3"
-                            >
-                                {q.assessment_question_text}
-                                {q.assessment_choices.map((c) => (
-                                    <div key={c.id}>
-                                        {c.assessment_choice_text}
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
-                    </>
+                    questions?.map((q) => (
+                        <AssessmentQuestionCard key={q.id} question={q} />
+                    ))
                 )}
             </Wrapper>
         </div>
