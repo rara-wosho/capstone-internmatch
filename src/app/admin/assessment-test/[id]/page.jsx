@@ -24,7 +24,7 @@ export default async function Page({ params }) {
     const { data, error } = await db
         .from("assessment_test")
         .select(
-            "id, created_at, assessment_title, assessment_description, assessment_difficulty, assessment_questions(id, assessment_question_text, assessment_choices(id, is_correct, assessment_choice_text))"
+            "id, created_at, updated_at, assessment_title, assessment_description, assessment_difficulty, assessment_questions(id, assessment_question_text, assessment_choices(id, is_correct, assessment_choice_text))"
         )
         .eq("id", assessmentId)
         .order("created_at", {
@@ -80,10 +80,17 @@ export default async function Page({ params }) {
                 >
                     <Gauge size={14} /> {data.assessment_difficulty}
                 </div>
-                <p className="text-sm text-muted-foreground font-normal flex items-center gap-2 mb-4 md:mb-5">
+                <p className="text-sm text-muted-foreground font-normal flex items-center gap-2 mb-1">
                     <Calendar size={13} />
                     Created at: {dateFormatter(data.created_at)}
                 </p>
+
+                {data?.updated_at && (
+                    <p className="text-sm text-muted-foreground font-normal flex items-center gap-2 mb-4 md:mb-5">
+                        <Calendar size={13} />
+                        Updated at: {dateFormatter(data.updated_at)}
+                    </p>
+                )}
                 {questions.length === 0 ? (
                     <div className="text-muted-foreground">
                         No questions yet. Click 'Add Question' button to add

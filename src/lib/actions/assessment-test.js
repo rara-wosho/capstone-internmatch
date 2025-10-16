@@ -33,6 +33,37 @@ export async function createAssessmentTest(formData) {
     redirect(`/admin/assessment-test/${data.id}`);
 }
 
+// update or edit assessment test details
+export async function updateAssessmentTest(assessmentId, formData) {
+    // validate inputs
+    const assessment_title = formData.get("assessment_title") || "";
+    const assessment_description = formData.get("assessment_description") || "";
+    const assessment_difficulty = formData.get("assessment_difficulty") || "";
+
+    if (!assessmentId || !assessment_difficulty || !assessment_title) {
+        return { success: false, error: "Please fill in all required fields." };
+    }
+
+    const supabase = await createClient();
+
+    const updateData = {
+        assessment_title,
+        assessment_description,
+        assessment_difficulty,
+    };
+
+    const { error } = await supabase
+        .from("assessment_test")
+        .update(updateData)
+        .eq("id", assessmentId);
+
+    if (error) {
+        return { success: false, error: error.message };
+    }
+
+    revalidatePath(`/admin/assessment-test/${assessmentId}`);
+    return { success: true, error: "" };
+}
 // add assessment question together with its  choices
 export async function addAssessmentQuestion(assessmentId, question, choices) {
     // Validation

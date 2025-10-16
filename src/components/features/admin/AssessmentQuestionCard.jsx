@@ -8,13 +8,15 @@ import {
     deleteAssessmentQuestion,
     updateAssessmentQuestion,
 } from "@/lib/actions/assessment-test";
-import { Check, Pen, Trash } from "lucide-react";
+import { Check, Loader, Pen, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
 export default function AssessmentQuestionCard({ question }) {
     const router = useRouter();
+
+    const [isPending, startTransition] = useTransition();
 
     const [isEditing, setIsEditing] = useState(false);
     const [editedQuestion, setEditedQuestion] = useState(
@@ -61,23 +63,25 @@ export default function AssessmentQuestionCard({ question }) {
         );
     };
 
-    const handleSaveChanges = async () => {
-        const result = await updateAssessmentQuestion({
-            id: question.id,
-            question_text: editedQuestion,
-            choices: editedChoices,
-        });
-
-        if (!result.success) {
-            toast.error("Unable to save changes.", {
-                description: result.error,
+    const handleSaveChanges = () => {
+        startTransition(async () => {
+            const result = await updateAssessmentQuestion({
+                id: question.id,
+                question_text: editedQuestion,
+                choices: editedChoices,
             });
-            return;
-        }
 
-        toast.success("Question updated successfully.");
-        setIsEditing(false);
-        router.refresh();
+            if (!result.success) {
+                toast.error("Unable to save changes.", {
+                    description: result.error,
+                });
+                return;
+            }
+
+            toast.success("Question updated successfully.");
+            setIsEditing(false);
+            router.refresh();
+        });
     };
 
     return (
@@ -177,7 +181,12 @@ export default function AssessmentQuestionCard({ question }) {
                         >
                             Cancel
                         </Button>
-                        <Button size="sm" onClick={handleSaveChanges}>
+                        <Button
+                            disabled={isPending}
+                            size="sm"
+                            onClick={handleSaveChanges}
+                        >
+                            {isPending && <Loader className="animate-spin" />}
                             Save Changes
                         </Button>
                     </div>

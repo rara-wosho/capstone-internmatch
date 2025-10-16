@@ -97,7 +97,7 @@ export const CreateTestModal = () => {
                                 <SelectItem value="moderate">
                                     Moderate
                                 </SelectItem>
-                                <SelectItem value="Difficult">
+                                <SelectItem value="difficult">
                                     Difficult
                                 </SelectItem>
                             </SelectContent>
