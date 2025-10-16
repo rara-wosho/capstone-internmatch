@@ -28,7 +28,6 @@ export default async function Page({ params }) {
         return <ErrorUi secondaryMessage={studentError.message} />;
     }
 
-    console.log(studentData);
     return (
         <div>
             <Wrapper size="sm">

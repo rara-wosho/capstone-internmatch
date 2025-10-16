@@ -20,8 +20,6 @@ export default async function AdminAssessmentTestPage() {
         return <ErrorUi secondaryMessage={error.message} />;
     }
 
-    console.log(data);
-
     return (
         <div>
             <SecondaryLabel className="mb-3 md:mb-8 border-b py-4 md:py-8">

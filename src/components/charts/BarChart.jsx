@@ -3,6 +3,8 @@
 import { useState } from "react";
 import TertiaryLabel from "../ui/TertiaryLabel";
 import { cn } from "@/lib/utils";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import Link from "next/link";
 
 // Reusable BarChart Component with Grouped Bars Support
 const BarChart = ({
@@ -13,6 +15,7 @@ const BarChart = ({
     height = 400,
     barColor = "bg-gradient-to-b from-violet-400/90 to-violet-500",
     hoverColor = "hover:opacity-70",
+    link,
     grouped = false, // Enable grouped bars
     groupColors = [], // Array of colors for each bar in a group
     showLegend = true, // Show legend for grouped bars
@@ -20,8 +23,13 @@ const BarChart = ({
 }) => {
     if (!data || data.length === 0) {
         return (
-            <div className="w-full p-8 bg-gray-50 rounded-lg">
-                <p className="text-gray-500 text-center">No data available</p>
+            <div className="w-full p-8">
+                <TertiaryLabel className="justify-center mb-2">
+                    {title}
+                </TertiaryLabel>
+                <p className="text-muted-foreground text-center">
+                    No data available
+                </p>
             </div>
         );
     }
@@ -71,7 +79,9 @@ const BarChart = ({
                 )}
 
                 {/* Chart area */}
-                <div className="overflow-x-auto">
+                <ScrollArea className="w-full whitespace-nowrap">
+                    <ScrollBar orientation="horizontal" />
+
                     <div className="flex items-end justify-around h-full px-4 pb-9 pt-4">
                         {data.map((item, idx) => {
                             // Handle both grouped and single bar data
@@ -130,12 +140,16 @@ const BarChart = ({
                                                     />
 
                                                     {/* Actual bar */}
-                                                    <div
-                                                        className={`z-10 ${grouped ? "w-4" : "w-8"} ${barColorClass} ${hoverColor} rounded-sm transition-all duration-300 cursor-pointer relative`}
-                                                        style={{
-                                                            height: `${barHeight}px`,
-                                                        }}
-                                                    />
+                                                    <Link
+                                                        href={link ? link : "#"}
+                                                    >
+                                                        <div
+                                                            className={`z-10 ${grouped ? "w-4" : "w-8"} ${barColorClass} ${hoverColor} rounded-sm transition-all duration-300 cursor-pointer relative`}
+                                                            style={{
+                                                                height: `${barHeight}px`,
+                                                            }}
+                                                        />
+                                                    </Link>
                                                 </div>
                                             );
                                         })}
@@ -143,7 +157,7 @@ const BarChart = ({
 
                                     {/* Label */}
                                     <div className="absolute left-0 -bottom-8 w-full text-center">
-                                        <span className="text-sm font-medium text-muted-foreground break-words">
+                                        <span className="text-sm font-medium text-muted-foreground break-words capitalize">
                                             {item.label}
                                         </span>
                                     </div>
@@ -151,12 +165,12 @@ const BarChart = ({
                             );
                         })}
                     </div>
-                </div>
+                </ScrollArea>
 
                 {/* X-axis label */}
                 {xAxisLabel && (
                     <div className="absolute -bottom-8 left-1/2 -translate-x-1/2">
-                        <span className="text-sm font-medium text-secondary-foreground">
+                        <span className="text-sm font-medium text-secondary-foreground capitalize">
                             {xAxisLabel}
                         </span>
                     </div>

@@ -28,8 +28,6 @@ export default async function Page({ params, searchParams }) {
         notFound();
     }
 
-    console.log(user.id);
-
     const db = await createClient();
 
     const { data, error } = await db

@@ -1,7 +1,9 @@
 import AddInstructorForm from "@/components/add-instructor-form";
+import AdminFeedbackGraph from "@/components/blocks/AdminFeedbackGraph";
 import BarChart from "@/components/charts/BarChart";
 import UserCountCard from "@/components/features/admin/UserCountCard";
 import BorderBox from "@/components/ui/BorderBox";
+import { Button } from "@/components/ui/button";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import Wrapper from "@/components/Wrapper";
 import { createClient } from "@/lib/supabase/server";
@@ -81,7 +83,10 @@ export default async function Page() {
     return (
         <div>
             <SecondaryLabel className="mb-3 md:mb-8 border-b py-4 md:py-8">
-                <Wrapper className="flex items-center px-3">Dashboard</Wrapper>
+                <Wrapper className="flex items-center px-3 justify-between">
+                    Dashboard
+                    <Button>Refresh</Button>
+                </Wrapper>
             </SecondaryLabel>
 
             <Wrapper className="px-3 mb-8">
@@ -113,8 +118,8 @@ export default async function Page() {
                     />
                 </div>
 
-                {/* GROUPED BAR CHART */}
-                <BorderBox className="border bg-card rounded-xl shadow-sm">
+                {/* GROUPED BAR CHART - ACCOUNT CREATION */}
+                <BorderBox className="border bg-card rounded-xl shadow-sm mb-4">
                     <BarChart
                         data={groupedData}
                         title="Monthly Account Creations by Role"
@@ -130,6 +135,10 @@ export default async function Page() {
                         showLegend={true}
                     />
                 </BorderBox>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <AdminFeedbackGraph />
+                </div>
             </Wrapper>
 
             {/* <AddInstructorForm /> */}
