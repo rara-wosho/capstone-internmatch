@@ -5,10 +5,14 @@ import { Button } from "./button";
 import { ArrowUpRight, BriefcaseBusiness, MapPin } from "lucide-react";
 import Link from "next/link";
 import Logo from "./Logo";
-import { useSession } from "@/context/SessionContext";
+import { usePathname } from "next/navigation";
 
 export default function CompanyCard({ company }) {
-    const { userData } = useSession();
+    const pathname = usePathname();
+
+    const isStudent = pathname.startsWith("student");
+
+    console.log("is student: ", isStudent);
 
     return (
         <div className="bg-white border dark:border-neutral-900 dark:bg-card rounded-xl p-2 flex flex-col">
@@ -58,7 +62,7 @@ export default function CompanyCard({ company }) {
                         className="grow"
                         asChild
                     >
-                        {userData?.role === "student" ? (
+                        {isStudent ? (
                             <Link href={`/student/companies/${company?.id}`}>
                                 View Details <ArrowUpRight />
                             </Link>
