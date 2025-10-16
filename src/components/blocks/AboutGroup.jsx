@@ -1,8 +1,10 @@
-import { BookOpen, Calendar, Pencil, Users2 } from "lucide-react";
+import { BookOpen, Calendar, Info, Pencil, Users2 } from "lucide-react";
 import TertiaryLabel from "../ui/TertiaryLabel";
 import BorderBox from "../ui/BorderBox";
 import { dateFormatter } from "@/utils/date-formatter";
 import EditGroupModal from "../forms/EditGroupModal";
+import { Button } from "../ui/button";
+import DeleteGroupModal from "../modals/DeleteGroupModal";
 
 export default function AboutGroup({ data, memberCount }) {
     return (
@@ -29,6 +31,17 @@ export default function AboutGroup({ data, memberCount }) {
                 <Calendar size={14} />
                 {dateFormatter(data?.created_at)}
             </p>
+
+            <div className="mt-4">
+                {memberCount > 0 ? (
+                    <div className="text-sm text-muted-foreground flex items-center gap-1">
+                        <Info size={15} />
+                        You can only delete a group when it has no members.
+                    </div>
+                ) : (
+                    <DeleteGroupModal id={data?.id} />
+                )}
+            </div>
         </BorderBox>
     );
 }

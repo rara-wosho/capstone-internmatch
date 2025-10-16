@@ -2,6 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "../supabase/server";
+import { redirect } from "next/navigation";
+import { getCurrentUser } from "./auth";
 
 export async function createGroup(formData) {
     // const instructor_id = formData.get("instructor-id");
@@ -56,5 +58,20 @@ export async function toggleGroupShareable(groupId, value) {
         return { success: false };
     }
 
+    revalidatePath("/instructor/manage-groups");
     return { success: true };
+}
+
+// delete group
+export async function deleteGroup(groupId) {
+    const supabase = await createClient();
+
+    const { error } = await supabase.from("groups").delete().eq("id", groupId);
+
+    if (error) {
+        return { success: false, error: error.message };
+    }
+
+    revalidatePath("/instructor/manage-groups");
+    redirect("/instructor/manage-groups");
 }

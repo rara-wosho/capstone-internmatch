@@ -1,22 +1,33 @@
+"use client";
+
 import Image from "next/image";
 import { Button } from "./button";
 import { ArrowUpRight, BriefcaseBusiness, MapPin } from "lucide-react";
 import Link from "next/link";
+import Logo from "./Logo";
+import { useSession } from "@/context/SessionContext";
 
 export default function CompanyCard({ company }) {
+    const { userData } = useSession();
+
     return (
         <div className="bg-white border dark:border-neutral-900 dark:bg-card rounded-xl p-2 flex flex-col">
-            <div className="relative w-full aspect-[5/3.5] mb-3 rounded-sm overflow-hidden ">
-                <Image
-                    src="https://i.pinimg.com/1200x/5f/33/c7/5f33c741560bb71ebedb831267603c1b.jpg"
-                    fill
-                    alt="image"
-                    className="object-cover"
-                />
-
-                <div className="absolute backdrop-blur-2xl rounded-full px-2 py-[2px] right-2 top-2 bg-neutral-200 shadow-xs">
-                    <p className="text-xs text-neutral-700">Top rated</p>
-                </div>
+            <div className="relative w-full aspect-[5/3.5] mb-3 rounded-sm overflow-hidden">
+                {company?.avatar_url ? (
+                    <Image
+                        src={company?.avatar_url}
+                        fill
+                        alt="image"
+                        className="object-cover"
+                    />
+                ) : (
+                    <div className="bg-accent w-full h-full flex flex-col items-center justify-center">
+                        <Logo className="size-10 aspect-square" />
+                        <p className="mt-1 text-xs text-muted-foreground">
+                            No Photo Available
+                        </p>
+                    </div>
+                )}
             </div>
 
             {/* body  */}
@@ -47,9 +58,15 @@ export default function CompanyCard({ company }) {
                         className="grow"
                         asChild
                     >
-                        <Link href={`/student/companies/${company?.id}`}>
-                            View Details <ArrowUpRight />
-                        </Link>
+                        {userData?.role === "student" ? (
+                            <Link href={`/student/companies/${company?.id}`}>
+                                View Details <ArrowUpRight />
+                            </Link>
+                        ) : (
+                            <Link href={`/instructor/companies/${company?.id}`}>
+                                View Details <ArrowUpRight />
+                            </Link>
+                        )}
                     </Button>
                 </div>
             </div>

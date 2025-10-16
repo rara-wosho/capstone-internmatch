@@ -156,7 +156,6 @@ export default function GroupMembersTable({ members, search }) {
                         <TableHead className="font-bold text-center">
                             Exam Access
                         </TableHead>
-                        <TableHead className="font-bold">Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -208,16 +207,6 @@ export default function GroupMembersTable({ members, search }) {
                                         </span>
                                     </div>
                                 )}
-                            </TableCell>
-                            <TableCell>
-                                <div className="flex items-center gap-3">
-                                    <button>
-                                        <BanIcon size={18} />
-                                    </button>
-                                    <button className="text-destructive">
-                                        <Trash size={18} />
-                                    </button>
-                                </div>
                             </TableCell>
                         </TableRow>
                     ))}

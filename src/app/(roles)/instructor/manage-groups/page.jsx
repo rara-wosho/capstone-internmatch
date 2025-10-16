@@ -23,7 +23,7 @@ export default async function Page({ searchParams }) {
 
     let query = supabase
         .from("groups")
-        .select()
+        .select("id, group_name, is_shareable, group_description, students(id)")
         .eq("ojt_instructor_id", session.user.id)
         .order("created_at", { ascending: false });
 
@@ -41,6 +41,7 @@ export default async function Page({ searchParams }) {
         return <ErrorUi />;
     }
 
+    console.log(data);
     return (
         <div>
             <SecondaryLabel className="mb-4 md:mb-5 space-x-2">

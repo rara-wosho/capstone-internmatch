@@ -1,5 +1,6 @@
 import AddInstructorForm from "@/components/add-instructor-form";
 import AdminFeedbackGraph from "@/components/blocks/AdminFeedbackGraph";
+import FeedbacksOverviewList from "@/components/blocks/FeedbacksOverviewList";
 import BarChart from "@/components/charts/BarChart";
 import UserCountCard from "@/components/features/admin/UserCountCard";
 import BorderBox from "@/components/ui/BorderBox";
@@ -139,8 +140,14 @@ export default async function Page() {
                     />
                 </BorderBox>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {/* feedback graphs  */}
                     <AdminFeedbackGraph />
+
+                    {/* feedbacks list  */}
+                    <BorderBox className="border rounded-xl bg-card shadow-xs">
+                        <FeedbacksOverviewList />
+                    </BorderBox>
                 </div>
             </Wrapper>
 

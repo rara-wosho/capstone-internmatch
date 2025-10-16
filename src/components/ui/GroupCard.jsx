@@ -32,11 +32,12 @@ export default function GroupCard({ data }) {
                     </div>
 
                     <p className="text-xs text-muted-foreground group-hover:text-accent-foreground">
-                        {dateFormatter(data?.created_at)}
+                        {data?.students?.length} Member
+                        {data?.students?.length > 1 && "s"}
                     </p>
                 </div>
             </Link>
-            <div className="ms-auto rounded-full flex items-center justify-center me-3 pt-6">
+            <div className="ms-auto rounded-full flex items-center justify-center me-3 pt-6 px-1">
                 <EditGroupModal group={data} />
             </div>
         </div>
