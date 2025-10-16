@@ -1,15 +1,15 @@
 import AssessmentQuestionCard from "@/components/features/admin/AssessmentQuestionCard";
 import AddAssessmentQuestionModal from "@/components/modals/AddAssessmentQuestionModal";
+import DeleteAssessmentModal from "@/components/modals/DeleteAssessmentModal";
 import EditAssessmentModal from "@/components/modals/EditAssessmentModal";
 import BackButton from "@/components/ui/BackButton";
-import { Button } from "@/components/ui/button";
 import ErrorUi from "@/components/ui/ErrorUi";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import Wrapper from "@/components/Wrapper";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { dateFormatter } from "@/utils/date-formatter";
-import { Calendar, ChevronLeft, Gauge, Pen, Trash } from "lucide-react";
+import { Calendar, ChevronLeft, Gauge, Trash } from "lucide-react";
 import { notFound } from "next/navigation";
 
 export default async function Page({ params }) {
@@ -58,6 +58,7 @@ export default async function Page({ params }) {
                     </div>
                     <div className="flex items-center gap-2">
                         <EditAssessmentModal assessment={data} />
+                        <DeleteAssessmentModal assessmentId={data?.id} />
                         <AddAssessmentQuestionModal
                             assessmentId={assessmentId}
                         />
@@ -67,11 +68,13 @@ export default async function Page({ params }) {
 
             {/* body  */}
             <Wrapper className="px-3" size="sm">
-                <p className="text-sm text-muted-foreground mb-2 whitespace-pre-wrap">
-                    {data?.assessment_description
-                        ? data?.assessment_description
-                        : "No description or instruction provided"}
-                </p>
+                <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                        {data?.assessment_description
+                            ? data?.assessment_description
+                            : "No description or instruction provided"}
+                    </p>
+                </div>
                 <div
                     className={cn(
                         "capitalize text-sm my-1 flex items-center gap-2",

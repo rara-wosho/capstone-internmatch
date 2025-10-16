@@ -64,6 +64,30 @@ export async function updateAssessmentTest(assessmentId, formData) {
     revalidatePath(`/admin/assessment-test/${assessmentId}`);
     return { success: true, error: "" };
 }
+
+// delete assessment test
+export async function deleteAssessmentTest(assessmentId) {
+    if (!assessmentId) {
+        return {
+            success: false,
+            error: "Unable to identify which assessment test to delete. Please select an assessment test before proceeding.",
+        };
+    }
+
+    const supabase = await createClient();
+
+    const { error } = await supabase
+        .from("assessment_test")
+        .delete()
+        .eq("id", assessmentId);
+
+    if (error) {
+        return { success: false, error: error.message };
+    }
+
+    redirect("/admin/assessment-test");
+}
+
 // add assessment question together with its  choices
 export async function addAssessmentQuestion(assessmentId, question, choices) {
     // Validation

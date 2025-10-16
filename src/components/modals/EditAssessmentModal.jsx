@@ -25,6 +25,7 @@ import { Input } from "../ui/input";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { updateAssessmentTest } from "@/lib/actions/assessment-test";
+import { PenIcon } from "lucide-react";
 
 export default function EditAssessmentModal({ assessment }) {
     if (!assessment) return null;
@@ -57,6 +58,7 @@ export default function EditAssessmentModal({ assessment }) {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button variant="outline" disabled={isPending}>
+                    <PenIcon />
                     {isPending ? "Please wait..." : "Edit"}
                 </Button>
             </DialogTrigger>

@@ -14,7 +14,7 @@ import { Button } from "../ui/button";
 import { useCallback, useState, useTransition, useRef } from "react";
 import { Input } from "../ui/input";
 import FormLabel from "../ui/FormLabel";
-import { Check, Loader } from "lucide-react";
+import { Check, CirclePlus, Loader } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { addAssessmentQuestion } from "@/lib/actions/assessment-test";
 import { toast } from "sonner";
@@ -108,7 +108,9 @@ export default function AddAssessmentQuestionModal({ assessmentId }) {
     return (
         <Dialog open={open} onOpenChange={handleOpenChange}>
             <DialogTrigger className="grow sm:grow-0" asChild>
-                <Button>Add Question</Button>
+                <Button>
+                    <CirclePlus /> Add Question
+                </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-3xl">
                 <DialogHeader>

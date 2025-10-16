@@ -89,7 +89,7 @@ export default function AssessmentQuestionCard({ question }) {
             {!isEditing ? (
                 <div className="flex items-start sm:flex-row flex-col sm:justify-between gap-3">
                     <div>
-                        <p className="font-medium mb-1">
+                        <p className="text-secondary-foreground mb-1">
                             {question.assessment_question_text}
                         </p>
                         <div className="text-muted-foreground text-sm mb-2">
@@ -161,13 +161,7 @@ export default function AssessmentQuestionCard({ question }) {
                                 size="icon"
                                 title="Mark as correct"
                             >
-                                <Check
-                                    className={
-                                        c.is_correct
-                                            ? "text-white"
-                                            : "text-muted-foreground"
-                                    }
-                                />
+                                <Check />
                             </Button>
                         </div>
                     ))}
