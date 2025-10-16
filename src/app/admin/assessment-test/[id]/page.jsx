@@ -1,5 +1,6 @@
 import AssessmentQuestionCard from "@/components/features/admin/AssessmentQuestionCard";
 import AddAssessmentQuestionModal from "@/components/modals/AddAssessmentQuestionModal";
+import EditAssessmentModal from "@/components/modals/EditAssessmentModal";
 import BackButton from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/button";
 import ErrorUi from "@/components/ui/ErrorUi";
@@ -23,13 +24,23 @@ export default async function Page({ params }) {
     const { data, error } = await db
         .from("assessment_test")
         .select(
-            "*, assessment_questions(id, assessment_question_text, assessment_choices(id, is_correct, assessment_choice_text))"
+            "id, created_at, assessment_title, assessment_description, assessment_difficulty, assessment_questions(id, assessment_question_text, assessment_choices(id, is_correct, assessment_choice_text))"
         )
         .eq("id", assessmentId)
-        .single();
+        .order("created_at", {
+            referencedTable: "assessment_questions",
+            ascending: true,
+        })
+        .maybeSingle();
 
     if (error) {
         return <ErrorUi secondaryMessage={error.message} />;
+    }
+
+    console.log(data);
+
+    if (!data) {
+        notFound();
     }
 
     const questions = data?.assessment_questions || [];
@@ -45,8 +56,12 @@ export default async function Page({ params }) {
                         </BackButton>
                         <p>{data.assessment_title}</p>
                     </div>
-
-                    <AddAssessmentQuestionModal assessmentId={assessmentId} />
+                    <div className="flex items-center gap-2">
+                        <EditAssessmentModal assessment={data} />
+                        <AddAssessmentQuestionModal
+                            assessmentId={assessmentId}
+                        />
+                    </div>
                 </Wrapper>
             </SecondaryLabel>
 
@@ -75,9 +90,17 @@ export default async function Page({ params }) {
                         question.
                     </div>
                 ) : (
-                    questions?.map((q) => (
-                        <AssessmentQuestionCard key={q.id} question={q} />
-                    ))
+                    <>
+                        {questions?.map((q) => (
+                            <AssessmentQuestionCard key={q.id} question={q} />
+                        ))}
+
+                        <div className="flex items-center justify-center mt-2">
+                            <AddAssessmentQuestionModal
+                                assessmentId={assessmentId}
+                            />
+                        </div>
+                    </>
                 )}
             </Wrapper>
         </div>

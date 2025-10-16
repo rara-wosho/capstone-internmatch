@@ -10,12 +10,13 @@ import Link from "next/link";
 const BarChart = ({
     data,
     title = "Bar Chart",
+    description = "",
     xAxisLabel = "",
     yAxisLabel = "",
     height = 400,
-    barColor = "bg-gradient-to-b from-violet-400/90 to-violet-500",
+    barColor = "bg-primary",
     hoverColor = "hover:opacity-70",
-    link,
+    link = "",
     grouped = false, // Enable grouped bars
     groupColors = [], // Array of colors for each bar in a group
     showLegend = true, // Show legend for grouped bars
@@ -49,9 +50,15 @@ const BarChart = ({
     return (
         <div className="w-full mb-8">
             {/* Title */}
-            <TertiaryLabel className="text-center justify-center mb-2">
+            <TertiaryLabel className="text-center justify-center mb-1">
                 {title}
             </TertiaryLabel>
+
+            {description && (
+                <p className="text-sm text-muted-foreground text-center mb-2">
+                    {description}
+                </p>
+            )}
 
             {/* Legend for grouped bars */}
             {grouped && showLegend && groupLabels.length > 0 && (
@@ -141,10 +148,18 @@ const BarChart = ({
 
                                                     {/* Actual bar */}
                                                     <Link
-                                                        href={link ? link : "#"}
+                                                        href={
+                                                            link === ""
+                                                                ? "#"
+                                                                : link
+                                                        }
+                                                        className={`${
+                                                            link === "" &&
+                                                            "pointer-events-none"
+                                                        }`}
                                                     >
                                                         <div
-                                                            className={`z-10 ${grouped ? "w-4" : "w-8"} ${barColorClass} ${hoverColor} rounded-sm transition-all duration-300 cursor-pointer relative`}
+                                                            className={`z-10 ${grouped ? "w-4 rounded" : "w-8 rounded-sm"} ${barColorClass} ${hoverColor}  transition-all duration-300 cursor-pointer relative`}
                                                             style={{
                                                                 height: `${barHeight}px`,
                                                             }}

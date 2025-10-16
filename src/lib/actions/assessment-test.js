@@ -97,3 +97,51 @@ export async function addAssessmentQuestion(assessmentId, question, choices) {
     revalidatePath(`/admin/assessment-test/${assessmentId}`);
     return { success: true };
 }
+
+// delete assessment test question
+export async function deleteAssessmentQuestion(questionId) {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+        .from("assessment_questions")
+        .delete()
+        .eq("id", questionId);
+
+    if (error) {
+        return { success: false, error: error.message };
+    }
+
+    return { success: true, error: "" };
+}
+
+// edit assessment question and choices
+export async function updateAssessmentQuestion({ id, question_text, choices }) {
+    const supabase = await createClient();
+
+    // Update question text
+    const { error: questionErr } = await supabase
+        .from("assessment_questions")
+        .update({ assessment_question_text: question_text })
+        .eq("id", id);
+
+    if (questionErr) {
+        return { success: false, error: questionErr.message };
+    }
+
+    // Update each choice
+    for (const choice of choices) {
+        const { error: choiceErr } = await supabase
+            .from("assessment_choices")
+            .update({
+                assessment_choice_text: choice.assessment_choice_text,
+                is_correct: choice.is_correct,
+            })
+            .eq("id", choice.id);
+
+        if (choiceErr) {
+            return { success: false, error: choiceErr.message };
+        }
+    }
+
+    return { success: true };
+}

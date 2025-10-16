@@ -14,9 +14,14 @@ import {
     SidebarProvider,
 } from "@/components/ui/sidebar";
 import SignOutModal from "@/components/ui/SignOutModal";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 import Wrapper from "@/components/Wrapper";
 import { getCurrentUser } from "@/lib/actions/auth";
-import { CircleUserRound, MessageSquareQuote } from "lucide-react";
+import { MessageSquareQuote } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -36,11 +41,19 @@ export default async function Layout({ children }) {
                         <AdminNavbar user={session.user} />
 
                         <div className="absolute right-3 top-1/2 -translate-y-1/2 z-20 rounded-full flex items-center gap-2">
-                            <Link href="/admin/feedbacks">
-                                <IconWrapper>
-                                    <MessageSquareQuote size={18} />
-                                </IconWrapper>
-                            </Link>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Link href="/admin/feedbacks">
+                                        <IconWrapper>
+                                            <MessageSquareQuote size={18} />
+                                        </IconWrapper>
+                                    </Link>
+                                </TooltipTrigger>
+
+                                <TooltipContent>
+                                    <p className="text-xs">Feedbacks</p>
+                                </TooltipContent>
+                            </Tooltip>
                             <AdminOffCanvas user={session.user} />
                         </div>
                     </Wrapper>

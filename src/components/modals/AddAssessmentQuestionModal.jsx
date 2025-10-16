@@ -119,7 +119,7 @@ export default function AddAssessmentQuestionModal({ assessmentId }) {
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
+                    <div className="mb-2">
                         <FormLabel>Question</FormLabel>
                         <Textarea
                             required
@@ -136,7 +136,7 @@ export default function AddAssessmentQuestionModal({ assessmentId }) {
                                 key={index}
                                 className="mb-2 flex items-center gap-2"
                             >
-                                <input
+                                <Input
                                     className="flex grow border-b h-9 outline-0 text-sm items-center"
                                     required
                                     value={choice.choiceText}

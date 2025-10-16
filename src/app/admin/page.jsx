@@ -13,6 +13,7 @@ import {
     Hourglass,
     SquareUserRound,
 } from "lucide-react";
+import Link from "next/link";
 
 export default async function Page() {
     const supabase = await createClient();
@@ -85,7 +86,9 @@ export default async function Page() {
             <SecondaryLabel className="mb-3 md:mb-8 border-b py-4 md:py-8">
                 <Wrapper className="flex items-center px-3 justify-between">
                     Dashboard
-                    <Button>Refresh</Button>
+                    <Button asChild variant="outline">
+                        <Link href="/admin">Refresh</Link>
+                    </Button>
                 </Wrapper>
             </SecondaryLabel>
 

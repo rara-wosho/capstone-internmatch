@@ -37,12 +37,12 @@ export default async function AdminFeedbackGraph() {
     return (
         <BorderBox className="border rounded-xl bg-card shadow-xs">
             <BarChart
+                description={`${feedbacks.length} total feedback`}
                 link="/admin/feedbacks"
                 title="Feedbacks"
                 data={feedbackData}
                 height={200}
                 xAxisLabel="Categories"
-                yAxisLabel="Number of Feedbacks"
             />
         </BorderBox>
     );
