@@ -1,7 +1,9 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { supabaseAdmin } from "../supabase/admin";
 import { createClient } from "../supabase/server";
+import { revalidatePath } from "next/cache";
 
 // create a company account using anon auth
 export async function createCompanyAccount(form) {
@@ -67,7 +69,7 @@ export async function createCompanyAccount(form) {
         return { success: false, message: tableError.message };
     }
 
-    return { success: true, message: "Company account created successfully" };
+    redirect("/company/offers?from=sign-up");
 }
 
 // fetch all list of companies
@@ -234,4 +236,23 @@ export async function checkStudentEligibility(companyId, studentId) {
         eligible: false,
         message: "Student has not met the company’s application requirements.",
     };
+}
+
+export async function upsertCompanyOffers(offers, companyId) {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+        .from("company_offers")
+        .upsert(
+            { company_id: companyId, offers: offers },
+            { onConflict: "company_id" }
+        );
+
+    if (error) {
+        console.error(error.message);
+        return { success: false, error: error.message };
+    }
+
+    revalidatePath("/company/offers", "page");
+    return { success: true, error: "" };
 }

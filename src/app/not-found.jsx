@@ -15,7 +15,7 @@ export default function NotFound() {
                 Sorry, we can't find that page!
             </SecondaryLabel>
             <p className="text-sm text-center text-muted-foreground px-5 max-w-[300px]">
-                Don't worry though, everything is STILL AWESOME!
+                Don't worry though, everything is still AWESOME!
             </p>
         </div>
     );

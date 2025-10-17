@@ -1,15 +1,12 @@
 import AddGroupModal from "@/components/forms/AddGroupModal";
 import SearchGroup from "@/components/forms/SearchGroup";
 import BorderBox from "@/components/ui/BorderBox";
-import { Button } from "@/components/ui/button";
 import ErrorUi from "@/components/ui/ErrorUi";
 import GroupCard from "@/components/ui/GroupCard";
 import IconWrapper from "@/components/ui/IconWrapper";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
-import SortData from "@/components/ui/SortData";
 import { createClient } from "@/lib/supabase/server";
-import { ArrowUpDown, Users } from "lucide-react";
-import { redirect } from "next/navigation";
+import { Users } from "lucide-react";
 import { Suspense } from "react";
 
 export default async function Page({ searchParams }) {
@@ -51,7 +48,7 @@ export default async function Page({ searchParams }) {
                 <p>Manage Groups</p>
             </SecondaryLabel>
 
-            <BorderBox className="flex items-center gap-x-2 md:gap-x-3 gap-y-3 justify-between flex-wrap mb-5 bg-card border rounded-xl">
+            <BorderBox className="flex items-center gap-x-2 md:gap-x-3 gap-y-3 justify-between flex-wrap mb-4 bg-card border rounded-xl">
                 <div className="flex items-center gap-2 md:gap-3 grow">
                     <Suspense fallback={null}>
                         <SearchGroup />
@@ -62,14 +59,15 @@ export default async function Page({ searchParams }) {
                 <AddGroupModal />
             </BorderBox>
 
-            <div className="mb-3 justify-end flex gap-3 flex-wrap">
+            <div className="mb-4 flex gap-3 flex-wrap">
                 <div className="flex items-center gap-1">
+                    <p className="text-sm text-muted-foreground">
+                        Indicator :{" "}
+                    </p>
                     <div className="size-2 rounded-full bg-green-500"></div>
-                    <p className="text-sm text-muted-foreground">Active</p>
-                </div>
-                <div className="flex items-center gap-1">
-                    <div className="size-2 rounded-full bg-muted-foreground"></div>
-                    <p className="text-sm text-muted-foreground">Inactive</p>
+                    <p className="text-sm text-muted-foreground">
+                        Active group link
+                    </p>
                 </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3">

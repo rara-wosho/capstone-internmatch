@@ -70,24 +70,6 @@ export default function CreateCompanyAccountForm() {
                 toast.error(message || "Failed to create account.");
                 return;
             }
-
-            toast.success(message);
-            setForm({
-                companyName: "",
-                description: "",
-                barangay: "",
-                city: "",
-                province: "",
-                phone: "",
-                website: "",
-                email: "",
-                password: "",
-                confirmPassword: "",
-            });
-
-            setTimeout(() => {
-                router.replace("/company");
-            }, 1000);
         });
     };
 
@@ -102,6 +84,7 @@ export default function CreateCompanyAccountForm() {
                         <div>
                             <FormLabel>Company Name</FormLabel>
                             <Input
+                                required
                                 name="companyName"
                                 value={form.companyName}
                                 onChange={handleChange}
@@ -109,8 +92,9 @@ export default function CreateCompanyAccountForm() {
                             />
                         </div>
                         <div>
-                            <FormLabel>Company description</FormLabel>
+                            <FormLabel>About Company</FormLabel>
                             <Textarea
+                                required
                                 name="description"
                                 value={form.description}
                                 onChange={handleChange}
@@ -145,6 +129,7 @@ export default function CreateCompanyAccountForm() {
                     <div className=" mb-3">
                         <FormLabel>Barangay/Street</FormLabel>
                         <Input
+                            required
                             name="barangay"
                             type="text"
                             value={form.barangay}
@@ -156,6 +141,7 @@ export default function CreateCompanyAccountForm() {
                     <div className="mb-3">
                         <FormLabel>Municipality/City</FormLabel>
                         <Input
+                            required
                             name="city"
                             type="text"
                             value={form.city}
@@ -166,6 +152,7 @@ export default function CreateCompanyAccountForm() {
                     <div className="mb-3">
                         <FormLabel>Province</FormLabel>
                         <Input
+                            required
                             name="province"
                             type="text"
                             value={form.province}
@@ -182,6 +169,7 @@ export default function CreateCompanyAccountForm() {
                     <div className="mb-3">
                         <FormLabel>Email</FormLabel>
                         <Input
+                            required
                             name="email"
                             type="email"
                             value={form.email}
@@ -193,6 +181,7 @@ export default function CreateCompanyAccountForm() {
                         <div>
                             <FormLabel>Password</FormLabel>
                             <Input
+                                required
                                 name="password"
                                 type="password"
                                 value={form.password}
@@ -203,6 +192,7 @@ export default function CreateCompanyAccountForm() {
                         <div>
                             <FormLabel>Confirm password</FormLabel>
                             <Input
+                                required
                                 name="confirmPassword"
                                 type="password"
                                 value={form.confirmPassword}

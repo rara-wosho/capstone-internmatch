@@ -1,6 +1,5 @@
 import Link from "next/link";
 import AvatarInitial from "./avatar-initial";
-import { dateFormatter } from "@/utils/date-formatter";
 import EditGroupModal from "../forms/EditGroupModal";
 
 export default function GroupCard({ data }) {
@@ -12,14 +11,11 @@ export default function GroupCard({ data }) {
                 className="flex items-center ps-3 pe-2 py-5 w-full"
             >
                 <div className="relative">
-                    <div className="absolute top-0 left-0">
+                    <div className="absolute bottom-0.5 left-0.5">
                         {data?.is_shareable && (
                             <div className="size-2 bg-green-500 rounded-full">
                                 <div className="animate-ping size-2 bg-green-500 rounded-full"></div>
                             </div>
-                        )}
-                        {!data?.is_shareable && (
-                            <div className="size-2 bg-muted-foreground rounded-full"></div>
                         )}
                     </div>
                     <AvatarInitial letter={initial} />
