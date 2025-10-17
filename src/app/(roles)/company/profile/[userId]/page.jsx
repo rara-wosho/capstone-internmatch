@@ -33,7 +33,7 @@ export default async function Page({ params }) {
 
     return (
         <div>
-            <SecondaryLabel className="mb-3 gap-2.5">
+            <SecondaryLabel className="mb-4 md:mb-5 gap-2.5">
                 <IconWrapper>
                     <User size={20} />
                 </IconWrapper>

@@ -2,7 +2,12 @@
 
 import Image from "next/image";
 import { Button } from "./button";
-import { ArrowUpRight, BriefcaseBusiness, MapPin } from "lucide-react";
+import {
+    ArrowUpRight,
+    Briefcase,
+    BriefcaseBusiness,
+    MapPin,
+} from "lucide-react";
 import Link from "next/link";
 import Logo from "./Logo";
 import { usePathname } from "next/navigation";
@@ -11,8 +16,6 @@ export default function CompanyCard({ company }) {
     const pathname = usePathname();
 
     const isStudent = pathname.startsWith("student");
-
-    console.log("is student: ", isStudent);
 
     return (
         <div className="bg-white border dark:border-neutral-900 dark:bg-card rounded-xl p-2 flex flex-col">
@@ -39,7 +42,7 @@ export default function CompanyCard({ company }) {
                 <p className="text-secondary-foreground font-semibold mb-1 truncate">
                     {company?.name}
                 </p>
-                <p className="text-sm mb-3 text-muted-foreground truncate">
+                <p className="text-sm mb-3 text-muted-foreground line-clamp-2">
                     {company?.details}
                 </p>
 
@@ -51,9 +54,10 @@ export default function CompanyCard({ company }) {
                         </p>
                     </div>
                 )}
-                <div className="flex items-center text-muted-foreground gap-1.5 mb-4">
-                    <BriefcaseBusiness size={14} />{" "}
-                    <p className="text-xs">Frontend Development + more</p>
+                <div className="text-muted-foreground mb-4">
+                    <p className="text-xs truncate">
+                        {company?.company_offers?.offers.join(", ")}
+                    </p>
                 </div>
                 <div className="flex items-center gap-2 mt-auto mb-0.5">
                     <Button

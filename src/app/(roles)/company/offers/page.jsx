@@ -1,10 +1,12 @@
 import SelectCompanyOffersSection from "@/components/sections/SelectCompanyOffersSection";
+import BackButton from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/button";
 import ErrorUi from "@/components/ui/ErrorUi";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import Wrapper from "@/components/Wrapper";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/server";
+import { ChevronLeft } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export default async function CompanyOffersPage({ searchParams }) {
@@ -35,6 +37,11 @@ export default async function CompanyOffersPage({ searchParams }) {
             {/* Header */}
             <Wrapper size="sm">
                 <div className="flex flex-col mb-4 md:mb-5 gap-3">
+                    {!isFromSignUp && (
+                        <BackButton className="flex items-center gap-1">
+                            <ChevronLeft size={18} /> Back
+                        </BackButton>
+                    )}
                     <SecondaryLabel className="gap-2">
                         Company’s Internship Offers
                     </SecondaryLabel>
@@ -53,7 +60,7 @@ export default async function CompanyOffersPage({ searchParams }) {
 
                 <SelectCompanyOffersSection
                     initialOffers={offers?.offers || []}
-                    isFromSignUp={isFromSignUp !== ""}
+                    isFromSignUp={isFromSignUp === "signup"}
                     companyId={user.id}
                 />
             </Wrapper>

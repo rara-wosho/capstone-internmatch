@@ -11,6 +11,9 @@ export async function createCompanyAccount(form) {
 
     const name = form.companyName;
     const details = form.description;
+    const barangay = form.barangay;
+    const city = form.city;
+    const province = form.province;
     const phone = form.phone;
     const website = form?.website || "";
     const email = form?.email;
@@ -56,6 +59,9 @@ export async function createCompanyAccount(form) {
         id: userId,
         name,
         details,
+        barangay,
+        city,
+        province,
         email,
         phone,
         website,
@@ -69,7 +75,7 @@ export async function createCompanyAccount(form) {
         return { success: false, message: tableError.message };
     }
 
-    redirect("/company/offers?from=sign-up");
+    redirect("/company/offers?from=signup");
 }
 
 // fetch all list of companies
@@ -78,7 +84,9 @@ export async function getCompanies() {
 
     const { data, error } = await supabase
         .from("companies")
-        .select()
+        .select(
+            "id, name, details, barangay, province, city, company_offers(offers)"
+        )
         .order("created_at", { ascending: true });
 
     if (error) {

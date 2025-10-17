@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Plus, X } from "lucide-react";
+import { Loader, Plus, X } from "lucide-react";
 import BorderBox from "../ui/BorderBox";
 import { cn } from "@/lib/utils";
 import { upsertCompanyOffers } from "@/lib/actions/company";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const OFFER_CHOICES = [
     "Web Development",
@@ -34,6 +35,9 @@ export default function SelectCompanyOffersSection({
     const [companyOffers, setCompanyOffers] = useState(initialOffers);
     const [customOffer, setCustomOffer] = useState("");
 
+    const router = useRouter();
+    const [isPending, startTransition] = useTransition();
+
     const handleAddCustomOffer = () => {
         if (!customOffer.trim()) return;
 
@@ -52,15 +56,22 @@ export default function SelectCompanyOffersSection({
         setCompanyOffers((prev) => prev.filter((off) => offer !== off));
     };
 
-    const handleUpsertOffer = async () => {
-        const result = await upsertCompanyOffers(companyOffers, companyId);
+    const handleUpsertOffer = () => {
+        startTransition(async () => {
+            const result = await upsertCompanyOffers(companyOffers, companyId);
 
-        if (!result.success) {
-            toast.error("Unable to update company offers", {
-                description: result.error,
-            });
-        }
-        toast.success("Updated successfully");
+            if (!result.success) {
+                toast.error("Unable to update company offers", {
+                    description: result.error,
+                });
+            }
+            toast.success("Your company offers have been successfully saved.");
+            if (isFromSignUp) {
+                router.replace("/company");
+            } else {
+                router.replace(`/company/profile/${companyId}`);
+            }
+        });
     };
 
     return (
@@ -69,14 +80,14 @@ export default function SelectCompanyOffersSection({
                 <BorderBox className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                     {companyOffers.length === 0 ? (
                         <div className="text-sm text-muted-foreground">
-                            No offers yet. Please add offer or select from our
-                            choices.
+                            No offers yet. Please add offer or select from the
+                            given choices.
                         </div>
                     ) : (
                         companyOffers.map((offer, index) => (
                             <div
                                 key={index}
-                                className="rounded-sm ps-3 pe-6 text-sm min-h-10 py-2 text-muted-foreground hover:text-secondary-foreground flex items-center bg-card shadow-xs relative w-full border"
+                                className="rounded-sm ps-3 pe-6 text-sm min-h-10 py-2 text-muted-foreground hover:text-secondary-foreground flex items-center bg-muted relative w-full"
                             >
                                 {offer}
                                 <button
@@ -131,7 +142,7 @@ export default function SelectCompanyOffersSection({
                                 }
                                 key={index}
                                 className={cn(
-                                    "rounded-sm ps-3 pe-6 text-sm min-h-10 py-2 text-muted-foreground hover:text-secondary-foreground flex items-center bg-card shadow-xs relative w-full border",
+                                    "rounded-sm ps-3 pe-6 text-sm min-h-10 py-2 text-muted-foreground bg-muted cursor-pointer flex items-center",
                                     companyOffers.includes(choice) &&
                                         "opacity-40 pointer-events-none border-transparent"
                                 )}
@@ -142,8 +153,12 @@ export default function SelectCompanyOffersSection({
                     </div>
 
                     <div className="flex items-center mt-6 justify-end">
-                        <Button onClick={handleUpsertOffer}>
-                            Save Changes
+                        <Button
+                            disabled={isPending}
+                            onClick={handleUpsertOffer}
+                        >
+                            {isPending && <Loader className="animate-spin" />}
+                            {isFromSignUp ? "Finish Setup" : "Save Offers"}
                         </Button>
                     </div>
                 </BorderBox>
