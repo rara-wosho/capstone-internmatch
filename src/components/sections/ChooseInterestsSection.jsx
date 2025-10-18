@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import BorderBox from "../ui/BorderBox";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Plus, X } from "lucide-react";
+import { Loader, Plus, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { upsertStudentInterests } from "@/lib/actions/student";
+import { toast } from "sonner";
 
 const INTEREST_CHOICES = [
     "Web Development",
@@ -24,9 +26,15 @@ const INTEREST_CHOICES = [
     "Project Assistance",
 ];
 
-export default function ChooseInterestsSection({ interests }) {
+export default function ChooseInterestsSection({
+    studentId,
+    interests,
+    isOnboarding,
+}) {
     const [selectedInterests, setSelectedInterests] = useState(() => interests);
     const [customInterest, setCustomInterest] = useState("");
+
+    const [isPending, startTransition] = useTransition();
 
     const handleAddInterest = () => {
         if (selectedInterests.includes(customInterest)) return;
@@ -49,6 +57,21 @@ export default function ChooseInterestsSection({ interests }) {
         setSelectedInterests((prev) => prev.filter((i) => interest !== i));
     };
 
+    const handleSubmitInterests = () => {
+        startTransition(async () => {
+            const result = await upsertStudentInterests(
+                studentId,
+                selectedInterests
+            );
+
+            if (!result.success) {
+                toast.error("Unable to add interests.", {
+                    description: result.error,
+                });
+            }
+        });
+    };
+
     return (
         <>
             <div className="border rounded-xl bg-card shadow-xs mb-3">
@@ -56,7 +79,7 @@ export default function ChooseInterestsSection({ interests }) {
                     {selectedInterests.length === 0 ? (
                         <div className="text-sm text-muted-foreground">
                             You don't have any interests yet. You can add now or
-                            select from the choices below.
+                            select from the list below.
                         </div>
                     ) : (
                         <div className="flex flex-wrap gap-2">
@@ -111,8 +134,9 @@ export default function ChooseInterestsSection({ interests }) {
 
             <div className="border bg-card shadow-xs rounded-xl">
                 <BorderBox>
-                    <p className="mb-2">
-                        Select from default list (Recommended)
+                    <p className="mb-4 text-sm  text-muted-foreground">
+                        Explore common IT fields below and select the ones that
+                        match your interests (recommended)
                     </p>
 
                     <div className="flex items-center gap-2 flex-wrap">
@@ -134,6 +158,18 @@ export default function ChooseInterestsSection({ interests }) {
                                 {interest}
                             </div>
                         ))}
+                    </div>
+
+                    <div className="mt-4 flex items-center justify-between">
+                        <Button
+                            onClick={handleSubmitInterests}
+                            disabled={isPending}
+                        >
+                            {isPending && <Loader className="animate-spin" />}
+                            {isOnboarding
+                                ? "Save and Get Started"
+                                : "Save Interests"}
+                        </Button>
                     </div>
                 </BorderBox>
             </div>

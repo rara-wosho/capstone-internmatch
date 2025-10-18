@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "../supabase/admin";
 import { createClient } from "../supabase/server";
+import { redirect } from "next/navigation";
 
 // Function for creating student account in authentication and table
 
@@ -162,4 +163,22 @@ export async function deleteAvatar(table, userId, pathToRevalidate) {
 
     revalidatePath(pathToRevalidate, "page");
     return { success: true };
+}
+
+// upsert student interests
+export async function upsertStudentInterests(studentId, interests) {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+        .from("interests")
+        .upsert(
+            { student_id: studentId, interest: interests },
+            { onConflict: "student_id" }
+        );
+
+    if (error) {
+        return { success: false, error: error.message };
+    }
+
+    redirect(`/student/profile/${studentId}`);
 }
