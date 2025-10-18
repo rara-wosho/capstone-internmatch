@@ -12,6 +12,11 @@ import { Mail, MapPin, SquareArrowOutUpRight, User } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+// Set page  title
+export const metadata = {
+    title: "Profile | InternMatch",
+};
+
 export default async function Page({ params }) {
     const { userId } = await params;
 

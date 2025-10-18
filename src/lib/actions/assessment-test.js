@@ -200,3 +200,34 @@ export async function updateAssessmentQuestion({ id, question_text, choices }) {
 
     return { success: true };
 }
+
+// get assessment tests for a student
+export async function getAssessmentTestsForStudent(studentId) {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("assessment_test")
+        .select(
+            `id, assessment_title, assessment_description, assessment_difficulty,
+            assessment_attempt!left(
+                id,
+                student_id,
+                started_at
+            )`
+        )
+        .eq("assessment_attempt.student_id", studentId);
+
+    if (error) {
+        console.error("Error fetching assessments:", error);
+        return { success: false, error: "Failed to fetch assessments." };
+    }
+
+    // Transform data to include hasAttempted flag
+    const assessments = data.map((test) => ({
+        ...test,
+        hasAttempted: test.assessment_attempt.length > 0,
+        attemptDetails: test.assessment_attempt[0] || null,
+    }));
+
+    return { success: true, data: assessments };
+}

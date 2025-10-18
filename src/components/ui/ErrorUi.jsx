@@ -25,7 +25,7 @@ export default function ErrorUi({ message, secondaryMessage }) {
             <p className="text-center text-muted-foreground max-w-[300px]">
                 {secondaryMessage
                     ? secondaryMessage
-                    : "  Please check your internet connection and try again."}
+                    : " Please check your internet connection and try again."}
             </p>
         </div>
         // <div className="bg-red-800/5 p-3 rounded-xl items-center gap-2 border dark:border-red-400/20 border-red-600/20">

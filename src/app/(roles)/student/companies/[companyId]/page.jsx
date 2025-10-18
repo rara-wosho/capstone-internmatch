@@ -9,9 +9,23 @@ import BorderBox from "@/components/ui/BorderBox";
 import { getCompanyDataAndExams } from "@/lib/actions/company";
 
 import ErrorUi from "@/components/ui/ErrorUi";
-import { ChevronLeft, Globe, Star, UserRoundX } from "lucide-react";
+import {
+    BookOpen,
+    Briefcase,
+    ChevronLeft,
+    Globe,
+    Handshake,
+    Info,
+    Star,
+    UserRoundX,
+} from "lucide-react";
 import BackButton from "@/components/ui/BackButton";
 import ApplyModal from "@/components/modals/ApplyModal";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
 
 const links = [
     { href: "", label: "Home" },
@@ -19,16 +33,21 @@ const links = [
     { href: "", label: "Company details" },
 ];
 
+// Set page  title
+export const metadata = {
+    title: "Company Details",
+};
+
 export default async function Page({ params }) {
     const { companyId } = await params;
 
     const { data, error } = await getCompanyDataAndExams(companyId);
 
     if (error) {
-        return (
-            <ErrorUi secondaryMessage="We're not able to fetch the data that you need." />
-        );
+        return <ErrorUi secondaryMessage={error} />;
     }
+
+    console.log(data);
 
     return (
         <div className="mx-auto max-w-[900px]">
@@ -40,8 +59,8 @@ export default async function Page({ params }) {
                     <section className="bg-card border rounded-xl mb-3">
                         <BorderBox className="border-b flex items-center justify-between">
                             <BackButton className="flex items-center text-sm text-muted-foreground hover:text-secondary-foreground">
-                                <ChevronLeft size={17} />
-                                Back
+                                <ChevronLeft size={18} />
+                                <span>Back</span>
                             </BackButton>
 
                             <div className="flex items-center text-muted-foreground">
@@ -109,7 +128,7 @@ export default async function Page({ params }) {
                             </div>
                         </BorderBox>
 
-                        <BorderBox>
+                        <BorderBox className="border-b">
                             {!data?.accept_applicants && (
                                 <div className="dark:text-yellow-500 text-yellow-600 mb-3 p-3 border border-yellow-500/40 rounded-md bg-yellow-500/5 flex items-center gap-2">
                                     <UserRoundX size={16} />
@@ -120,7 +139,65 @@ export default async function Page({ params }) {
                                 </div>
                             )}
                             <TertiaryLabel className="mb-2">
-                                Details
+                                <BookOpen className="size-3 md:size-4" /> About{" "}
+                                {data?.name}
+                            </TertiaryLabel>
+                            <p className="text-muted-foreground">
+                                {data?.details}
+                            </p>
+                        </BorderBox>
+                        <BorderBox className="border-b">
+                            <div className="mb-2 flex items-center gap-2">
+                                <TertiaryLabel>
+                                    <Briefcase className="size-3 md:size-4" />
+                                    Company Offers
+                                </TertiaryLabel>
+                                <Popover>
+                                    <PopoverTrigger>
+                                        <Info
+                                            className="text-muted-foreground"
+                                            size={16}
+                                        />
+                                    </PopoverTrigger>
+                                    <PopoverContent>
+                                        <p className="text-sm text-muted-foreground">
+                                            These offers represent the fields or
+                                            roles available within this company.
+                                            They are not current openings but
+                                            areas where the company may provide
+                                            internships or training
+                                            opportunities
+                                        </p>
+                                    </PopoverContent>
+                                </Popover>
+                            </div>
+                            <div className="flex items-center gap-2 flex-wrap">
+                                {!data?.company_offers ? (
+                                    <div className="text-sm text-muted-foreground">
+                                        This company hasn’t listed any
+                                        internship offers yet. Please check back
+                                        soon for available opportunities.
+                                    </div>
+                                ) : (
+                                    data?.company_offers?.offers.map(
+                                        (offer, i) => (
+                                            <div
+                                                key={i}
+                                                className="flex items-center whitespace-nowrap text-sm text-secondary-foreground px-3 md:px-4 h-9 rounded-full bg-muted"
+                                            >
+                                                {offer}
+                                            </div>
+                                        )
+                                    )
+                                )}
+                            </div>
+                        </BorderBox>
+
+                        {/* Get in touch section  */}
+                        <BorderBox className="">
+                            <TertiaryLabel className="mb-2">
+                                <Handshake className="size-3 md:size-4" />
+                                Get In Touch
                             </TertiaryLabel>
                             <p className="text-muted-foreground">
                                 {data?.details}

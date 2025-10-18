@@ -1,8 +1,6 @@
-"use client";
-
-import AvatarInitial from "@/components/ui/avatar-initial";
 import BorderBox from "@/components/ui/BorderBox";
 import { Button } from "@/components/ui/button";
+
 import {
     Drawer,
     DrawerClose,
@@ -13,17 +11,31 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer";
+import ErrorUi from "@/components/ui/ErrorUi";
 
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import TertiaryLabel from "@/components/ui/TertiaryLabel";
 import Wrapper from "@/components/Wrapper";
-import { cn } from "@/lib/utils";
+import { getAssessmentTestsForStudent } from "@/lib/actions/assessment-test";
+import { getCurrentUser } from "@/lib/actions/auth";
 import { CircleQuestionMark } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
+import { redirect } from "next/navigation";
 
-export default function AssessmentPage() {
-    const [difficulty, setDifficulty] = useState("");
+export default async function AssessmentPage() {
+    const { user } = await getCurrentUser();
+
+    if (!user || !user?.id) {
+        redirect("/sign-in");
+    }
+
+    // Fetch assessment tests
+    const result = await getAssessmentTestsForStudent(user.id);
+
+    if (!result?.success) {
+        return (
+            <ErrorUi secondaryMessage="Unable to fetch assessment tests. Please check your internet connection and try again." />
+        );
+    }
 
     return (
         <Wrapper size="sm">
@@ -31,10 +43,8 @@ export default function AssessmentPage() {
                 <SecondaryLabel>Assessment Test</SecondaryLabel>
 
                 <Drawer>
-                    <DrawerTrigger asChild>
-                        <Button variant="secondary" size="sm">
-                            <CircleQuestionMark />
-                        </Button>
+                    <DrawerTrigger className="cursor-pointer">
+                        <CircleQuestionMark size={18} />
                     </DrawerTrigger>
                     <DrawerContent>
                         <Wrapper size="sm" className="overflow-y-auto">
@@ -164,79 +174,39 @@ export default function AssessmentPage() {
                 capabilities before proceeding to internship applications.
                 Please complete it in one sitting.
             </p>
-
-            <BorderBox className="border rounded-xl bg-card shadow-xs mb-3">
-                <div className="mb-2 flex">
-                    <AvatarInitial letter="1" />
-                </div>
-
-                <TertiaryLabel className="mb-3">
-                    Choose Difficulty :{" "}
-                    <p className="capitalize">{difficulty}</p>
-                </TertiaryLabel>
-
-                <div className="flex items-center gap-2">
-                    <button
-                        onClick={() => setDifficulty("medium")}
-                        className={cn(
-                            "py-1 px-6 cursor-pointer border rounded-sm",
-                            difficulty === "medium"
-                                ? "border-primary bg-primary text-white"
-                                : ""
-                        )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                {result.data.map((test) => (
+                    <BorderBox
+                        key={test.id}
+                        className="border rounded-xl bg-card shadow-xs"
                     >
-                        Medium
-                    </button>
-                    <button
-                        onClick={() => setDifficulty("hard")}
-                        className={cn(
-                            "py-1 px-6 cursor-pointer border rounded-sm",
-                            difficulty === "hard"
-                                ? "border-primary bg-primary text-white"
-                                : ""
-                        )}
-                    >
-                        Hard
-                    </button>
-                </div>
-            </BorderBox>
+                        <p className="mb-1">{test.assessment_title}</p>
 
-            <BorderBox
-                className={cn(
-                    "border rounded-xl bg-card shadow-xs mb-3",
-                    !difficulty && "opacity-50 border-0 pointer-events-none"
-                )}
-            >
-                <div className="mb-2 flex">
-                    <AvatarInitial letter="2" />
-                </div>
-                <TertiaryLabel className="mb-3">Please Read</TertiaryLabel>
-                <ul className="list-disc ps-3 text-muted-foreground text-base">
-                    <li>Questions are displayed one by one</li>
-                    <li>
-                        Avoid refreshing the page or you will lose your progress
-                    </li>
-                    <li>You are allowed to go back to previous questions</li>
-                </ul>
-            </BorderBox>
-            <BorderBox
-                className={cn(
-                    "border rounded-xl bg-card shadow-xs mb-3",
-                    !difficulty && "opacity-50 border-0 pointer-events-none"
-                )}
-            >
-                <div className="mb-2 flex">
-                    <AvatarInitial letter="3" />
-                </div>
-                <TertiaryLabel className="mb-3">Start The Test</TertiaryLabel>
-                <p className="text-muted-foreground mb-4">
-                    Take a deep breath and do your best. Good luck with your
-                    assessment test.
-                </p>
-                <Button asChild>
-                    <Link href="/student/assessment-test/start">Start Now</Link>
-                </Button>
-            </BorderBox>
+                        <p className="text-sm text-muted-foreground mb-3">
+                            {test.assessment_description
+                                ? test.assessment_description
+                                : "No description provided."}
+                        </p>
+
+                        <div className="rounded-full px-3 h-7 text-secondary-foreground capitalize inline-flex items-center text-sm bg-muted">
+                            {test.assessment_difficulty}
+                        </div>
+                        <div className="pt-4 mt-4 border-t flex items-center gap-2">
+                            {test.hasAttempted && <Button>View Result</Button>}
+                            <Button
+                                variant={
+                                    test.hasAttempted ? "outline" : "default"
+                                }
+                                disabled={test.hasAttempted}
+                            >
+                                {test.hasAttempted
+                                    ? "Already Answered"
+                                    : "Start Assessment Test"}
+                            </Button>
+                        </div>
+                    </BorderBox>
+                ))}
+            </div>
         </Wrapper>
     );
 }
