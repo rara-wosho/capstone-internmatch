@@ -86,10 +86,8 @@ export default function CreateStudentAccountForm9({ groupId, school }) {
             return;
         }
 
-        toast.success("Account created successfully.", {
-            description: "Redirecting to onboarding...",
-        });
-        router.replace("/student/interests?onboarding=true");
+        toast.success("Account created successfully.");
+        router.replace("/student/interests?onboarding=yes");
     };
 
     return (
