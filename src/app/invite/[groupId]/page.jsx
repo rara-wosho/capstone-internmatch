@@ -21,7 +21,7 @@ export default async function Page({ params }) {
     const supabase = await createClient();
     const { data, error } = await supabase
         .from("groups")
-        .select("id, is_shareable, group_name")
+        .select("id, is_shareable, group_name, ojt_instructors(school)")
         .eq("id", groupId)
         .maybeSingle();
 
@@ -88,7 +88,10 @@ export default async function Page({ params }) {
                             </p>
                         </div>
 
-                        <CreateStudentAccountForm groupId={groupId} />
+                        <CreateStudentAccountForm
+                            groupId={groupId}
+                            school={data?.ojt_instructors?.school || ""}
+                        />
                     </>
                 )}
 

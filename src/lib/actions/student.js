@@ -4,17 +4,45 @@ import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "../supabase/admin";
 import { createClient } from "../supabase/server";
 
+// Function for creating student account in authentication and table
+
 export async function createStudentAccount(formData, groupId) {
     const supabase = await createClient();
 
-    // 1. create user in authentication
+    // Validation checks
+    if (
+        !formData?.firstName ||
+        !formData?.lastName ||
+        !formData?.school ||
+        !formData?.course ||
+        !formData?.email ||
+        !formData?.password
+    ) {
+        return { success: false, error: "Missing required fields." };
+    }
+
+    // Simple email format validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(formData.email)) {
+        return { success: false, error: "Invalid email format." };
+    }
+
+    // Password length validation
+    if (formData.password.length < 6) {
+        return {
+            success: false,
+            error: "Password must be at least 6 characters long.",
+        };
+    }
+
+    // Create auth user
     const { data, error } = await supabase.auth.signUp({
-        email: formData?.email,
-        password: formData?.password,
+        email: formData.email,
+        password: formData.password,
         options: {
             data: {
-                firstname: formData?.firstName,
-                lastname: formData?.lastName,
+                firstname: formData.firstName,
+                lastname: formData.lastName,
                 role: "student",
             },
         },
@@ -24,21 +52,26 @@ export async function createStudentAccount(formData, groupId) {
         return { success: false, error: error.message };
     }
 
-    // 2. insert student data in student table
+    const userId = data.user?.id;
+
+    // insert into `students` table
     const { error: insertError } = await supabase.from("students").insert([
         {
-            id: data.user.id,
-            email: formData?.email,
-            firstname: formData?.firstName,
-            lastname: formData?.lastName,
+            id: userId,
+            email: formData.email,
+            firstname: formData.firstName,
+            lastname: formData.lastName,
+            middlename: formData.middlename || null,
+            school: formData.school,
+            course: formData.course,
             group_id: groupId,
             role: "student",
         },
     ]);
 
+    // Rollback if insert fails
     if (insertError) {
-        // rollback: delete auth user to keep things consistent
-        await supabaseAdmin.auth.admin.deleteUser(data.user.id);
+        await supabaseAdmin.auth.admin.deleteUser(userId);
         return { success: false, error: insertError.message };
     }
 

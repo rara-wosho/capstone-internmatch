@@ -12,10 +12,13 @@ import { ArrowRight } from "lucide-react";
 import { createStudentAccount } from "@/lib/actions/student";
 import { useRouter } from "next/navigation";
 
-export default function CreateStudentAccountForm9({ groupId }) {
+export default function CreateStudentAccountForm9({ groupId, school }) {
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
+        middlename: "",
+        school,
+        course: "",
         email: "",
         password: "",
         confirmPassword: "",
@@ -31,36 +34,62 @@ export default function CreateStudentAccountForm9({ groupId }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Check password length
-        if (formData.password.length < 6) {
-            toast.error("Password must be at least 6 characters long.", {
-                position: "top-center",
-            });
+        const {
+            firstName,
+            lastName,
+            school,
+            email,
+            password,
+            confirmPassword,
+            course,
+        } = formData;
+
+        // Required fields check
+        if (
+            !firstName.trim() ||
+            !lastName.trim() ||
+            !email.trim() ||
+            !school.trim() ||
+            !course.trim()
+        ) {
+            toast.error("Please fill in all required fields.");
             return;
         }
 
-        // Check password match
-        if (formData.password !== formData.confirmPassword) {
-            toast.error("Passwords do not match.", { position: "top-center" });
+        // Email format check (simple pattern)
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            toast.error("Please enter a valid email address.");
             return;
         }
 
-        // If all goods
+        // Password length
+        if (password.length < 6) {
+            toast.error("Password must be at least 6 characters long.");
+            return;
+        }
+
+        // Password match
+        if (password !== confirmPassword) {
+            toast.error("Passwords do not match.");
+            return;
+        }
+
+        // Submit
         const { success, error } = await createStudentAccount(
             formData,
             groupId
         );
 
         if (!success) {
-            toast.error(error);
+            toast.error(error || "Failed to create account.");
             return;
         }
 
-        // toast.success("Account created successfully!");
         toast.success("Account created successfully.", {
-            description: "Please wait for redirection...",
+            description: "Redirecting to onboarding...",
         });
-        router.replace("/student/interests");
+        router.replace("/student/interests?onboarding=true");
     };
 
     return (
@@ -69,7 +98,8 @@ export default function CreateStudentAccountForm9({ groupId }) {
             className="mx-auto max-w-lg w-full md:px-4"
         >
             {/* Personal Info */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+            <h4 className="font-medium mb-1">Personal Information</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
                 <div>
                     <FormLabel>First Name</FormLabel>
                     <Input
@@ -91,8 +121,37 @@ export default function CreateStudentAccountForm9({ groupId }) {
                         onChange={handleChange}
                     />
                 </div>
+                <div className="col-span-1 sm:col-span-2">
+                    <FormLabel>Middle Name (Optional)</FormLabel>
+                    <Input
+                        name="middlename"
+                        placeholder="Rivero"
+                        value={formData.middlename}
+                        onChange={handleChange}
+                    />
+                </div>
             </div>
 
+            {/* Academics  */}
+            <h4 className="font-medium mb-1">Academics</h4>
+            <div className="mb-5">
+                <div className="mb-3">
+                    <FormLabel>School</FormLabel>
+                    <Input
+                        required
+                        name="school"
+                        value={formData.school}
+                        onChange={handleChange}
+                        placeholder="University of Science and Technology of Southern Philippines"
+                    />
+                </div>
+                <div className="mb-3">
+                    <FormLabel>Course</FormLabel>
+                    <Input placeholder="Bachelor of Science in Information Technology" />
+                </div>
+            </div>
+
+            <h4 className="font-medium mb-1">Account Credentials</h4>
             {/* Credentials */}
             <div className="mb-8">
                 <div className="grid grid-cols-1 gap-3">

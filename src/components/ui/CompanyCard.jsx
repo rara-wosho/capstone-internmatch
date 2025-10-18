@@ -15,7 +15,7 @@ import { usePathname } from "next/navigation";
 export default function CompanyCard({ company }) {
     const pathname = usePathname();
 
-    const isStudent = pathname.startsWith("student");
+    const isStudent = pathname.startsWith("/student");
 
     return (
         <div className="bg-white border dark:border-neutral-900 dark:bg-card rounded-xl p-2 flex flex-col">
