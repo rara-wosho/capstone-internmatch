@@ -1,3 +1,4 @@
+import AssessmentTestCard from "@/components/ui/AssessmentTestCard";
 import BorderBox from "@/components/ui/BorderBox";
 import { Button } from "@/components/ui/button";
 
@@ -176,35 +177,7 @@ export default async function AssessmentPage() {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                 {result.data.map((test) => (
-                    <BorderBox
-                        key={test.id}
-                        className="border rounded-xl bg-card shadow-xs"
-                    >
-                        <p className="mb-1">{test.assessment_title}</p>
-
-                        <p className="text-sm text-muted-foreground mb-3">
-                            {test.assessment_description
-                                ? test.assessment_description
-                                : "No description provided."}
-                        </p>
-
-                        <div className="rounded-full px-3 h-7 text-secondary-foreground capitalize inline-flex items-center text-sm bg-muted">
-                            {test.assessment_difficulty}
-                        </div>
-                        <div className="pt-4 mt-4 border-t flex items-center gap-2">
-                            {test.hasAttempted && <Button>View Result</Button>}
-                            <Button
-                                variant={
-                                    test.hasAttempted ? "outline" : "default"
-                                }
-                                disabled={test.hasAttempted}
-                            >
-                                {test.hasAttempted
-                                    ? "Already Answered"
-                                    : "Start Assessment Test"}
-                            </Button>
-                        </div>
-                    </BorderBox>
+                    <AssessmentTestCard key={test.id} assessmentTest={test} />
                 ))}
             </div>
         </Wrapper>

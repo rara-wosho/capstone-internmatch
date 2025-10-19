@@ -215,7 +215,8 @@ export async function getAssessmentTestsForStudent(studentId) {
                 started_at
             )`
         )
-        .eq("assessment_attempt.student_id", studentId);
+        .eq("assessment_attempt.student_id", studentId)
+        .eq("is_deleted", false);
 
     if (error) {
         console.error("Error fetching assessments:", error);

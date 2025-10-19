@@ -25,6 +25,7 @@ export default function DashboardHeader({ profileData }) {
     const pathname = usePathname();
 
     if (pathname.startsWith("/student/e/")) return null;
+    if (pathname.startsWith("/student/assessment-test/")) return null;
 
     return (
         <div className="sticky top-0 left-0 px-3 md:px-5 lg:px-8 h-[60px] flex items-center w-full bg-white border-b z-30 backdrop-blur-2xl dark:bg-background/70">
