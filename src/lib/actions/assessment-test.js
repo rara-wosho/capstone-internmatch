@@ -78,7 +78,7 @@ export async function deleteAssessmentTest(assessmentId) {
 
     const { error } = await supabase
         .from("assessment_test")
-        .delete()
+        .update({ is_deleted: true })
         .eq("id", assessmentId);
 
     if (error) {
@@ -159,7 +159,7 @@ export async function deleteAssessmentQuestion(questionId) {
 
     const { error } = await supabase
         .from("assessment_questions")
-        .delete()
+        .update({ is_deleted: true })
         .eq("id", questionId);
 
     if (error) {

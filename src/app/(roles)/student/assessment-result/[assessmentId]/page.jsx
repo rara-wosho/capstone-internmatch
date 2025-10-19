@@ -7,6 +7,7 @@ import { getCurrentUser } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dateFormatter } from "@/utils/date-formatter";
 import { ChevronLeft } from "lucide-react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function AssessmentResultPage({ params }) {
@@ -32,7 +33,7 @@ export default async function AssessmentResultPage({ params }) {
     violation,
     assessment_test(assessment_title),
     assessment_attempt_answers (
-      assessment_questions ( assessment_question_text )
+      assessment_questions ( id )
     )
   `
         )
@@ -56,10 +57,13 @@ export default async function AssessmentResultPage({ params }) {
 
     return (
         <div>
-            <BackButton className="mb-3 flex items-center text-muted-foreground">
+            <Link
+                href="/student/assessment-test"
+                className="mb-3 flex items-center text-sm text-muted-foreground"
+            >
                 <ChevronLeft size={18} />
                 <span>Back</span>
-            </BackButton>
+            </Link>
             <Wrapper size="sm" className="flex flex-col items-center pt-8">
                 <div className="w-[150px] mb-6 aspect-square rounded-full flex items-center justify-center bg-violet-500/40">
                     <div className="w-[130px] aspect-square rounded-full bg-background flex items-center justify-center">
@@ -100,6 +104,12 @@ export default async function AssessmentResultPage({ params }) {
                         </div>
                     ))}
                 </div>
+
+                {data?.violation && (
+                    <div className="text-sm text-destructive">
+                        {data.violation}
+                    </div>
+                )}
             </Wrapper>
         </div>
     );

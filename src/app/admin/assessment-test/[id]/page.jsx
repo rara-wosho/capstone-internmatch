@@ -27,6 +27,8 @@ export default async function Page({ params }) {
             "id, created_at, updated_at, assessment_title, assessment_description, assessment_difficulty, assessment_questions(id, assessment_question_text, assessment_choices(id, is_correct, assessment_choice_text))"
         )
         .eq("id", assessmentId)
+        .eq("is_deleted", false)
+        .eq("assessment_questions.is_deleted", false)
         .order("created_at", {
             referencedTable: "assessment_questions",
             ascending: true,
@@ -101,8 +103,12 @@ export default async function Page({ params }) {
                     </div>
                 ) : (
                     <>
-                        {questions?.map((q) => (
-                            <AssessmentQuestionCard key={q.id} question={q} />
+                        {questions?.map((q, index) => (
+                            <AssessmentQuestionCard
+                                number={index + 1}
+                                key={q.id}
+                                question={q}
+                            />
                         ))}
 
                         <div className="flex items-center justify-center mt-2">

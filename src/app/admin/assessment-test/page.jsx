@@ -15,6 +15,7 @@ export default async function AdminAssessmentTestPage() {
     const { data, error } = await supabase
         .from("assessment_test")
         .select("id, assessment_title, created_at, assessment_difficulty")
+        .eq("is_deleted", false)
         .order("created_at", { ascending: false });
 
     if (error) {

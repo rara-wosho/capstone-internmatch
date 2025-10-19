@@ -81,6 +81,7 @@ export default function ExaminationSection({ companyExams }) {
                                 <h1 className="mb-1.5 font-semibold">
                                     {exam?.title}
                                 </h1>
+
                                 <p className="text-sm text-muted-foreground mb-4">
                                     {exam?.description
                                         ? exam?.description
@@ -125,6 +126,16 @@ export default function ExaminationSection({ companyExams }) {
                                     </span>
                                 </p>
                             )}
+
+                            {!userData.exam_access && (
+                                <p className="text-sm text-yellow-600 mb-4 border border-yellow-600/40 bg-yellow-500/5 rounded-sm p-2">
+                                    <span>
+                                        You can’t take this exam yet. Your
+                                        instructor hasn’t granted you access.
+                                    </span>
+                                </p>
+                            )}
+
                             <div className="mt-auto flex items-center mb-1">
                                 <Dialog>
                                     {userData.exam_access && (

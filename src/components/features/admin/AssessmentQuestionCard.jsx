@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
-export default function AssessmentQuestionCard({ question }) {
+export default function AssessmentQuestionCard({ question, number }) {
     const router = useRouter();
 
     const [isPending, startTransition] = useTransition();
@@ -90,7 +90,7 @@ export default function AssessmentQuestionCard({ question }) {
                 <div className="flex items-start sm:flex-row flex-col sm:justify-between gap-3">
                     <div>
                         <p className="text-secondary-foreground mb-1">
-                            {question.assessment_question_text}
+                            {number}. {question.assessment_question_text}
                         </p>
                         <div className="text-muted-foreground text-sm mb-2">
                             Answer:{" "}

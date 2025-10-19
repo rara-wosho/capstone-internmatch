@@ -1,10 +1,11 @@
 import Link from "next/link";
 import BorderBox from "./BorderBox";
 import { Button } from "./button";
+import { cn } from "@/lib/utils";
 
 export default function AssessmentTestCard({ assessmentTest }) {
     return (
-        <BorderBox className="border rounded-xl bg-card shadow-xs">
+        <BorderBox className="border rounded-xl bg-card shadow-xs flex flex-col">
             <p className="mb-1">{assessmentTest.assessment_title}</p>
 
             <p className="text-sm text-muted-foreground mb-3">
@@ -13,7 +14,7 @@ export default function AssessmentTestCard({ assessmentTest }) {
                     : "No description provided."}
             </p>
 
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-2 flex-wrap mb-4">
                 <div className="rounded-full px-3 h-7 text-secondary-foreground capitalize inline-flex items-center text-sm bg-muted">
                     {assessmentTest.assessment_difficulty}
                 </div>
@@ -25,21 +26,24 @@ export default function AssessmentTestCard({ assessmentTest }) {
                 )}
             </div>
 
-            <div className="pt-4 mt-4 border-t flex items-end justify-between gap-2">
-                {assessmentTest.hasAttempted ? (
-                    <Button variant="default" asChild>
+            <div className="pt-4 border-t flex items-end gap-2 mt-auto">
+                <Button disabled={assessmentTest.hasAttempted} asChild>
+                    <Link
+                        href={`/student/assessment-test/${assessmentTest.id}/start`}
+                        className={cn(
+                            assessmentTest.hasAttempted &&
+                                "pointer-events-none opacity-50"
+                        )}
+                    >
+                        View Details
+                    </Link>
+                </Button>
+                {assessmentTest.hasAttempted && (
+                    <Button variant="outline" asChild>
                         <Link
                             href={`/student/assessment-result/${assessmentTest.id}`}
                         >
                             View Result
-                        </Link>
-                    </Button>
-                ) : (
-                    <Button asChild variant="default">
-                        <Link
-                            href={`/student/assessment-test/${assessmentTest.id}/start`}
-                        >
-                            View Details
                         </Link>
                     </Button>
                 )}
