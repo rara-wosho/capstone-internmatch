@@ -232,3 +232,74 @@ export async function getAssessmentTestsForStudent(studentId) {
 
     return { success: true, data: assessments };
 }
+
+// submit assessment test answers
+export async function submitAssessmentAnswers(
+    studentId,
+    assessmentId,
+    answers,
+    totalItem,
+    violation
+) {
+    console.log("violation from server: ", violation);
+    // validate ids
+    if (!studentId || !assessmentId) {
+        return {
+            success: false,
+            error: "Missing student id or assessment id.",
+        };
+    }
+
+    //  Validate client-sent answers
+    // if (!Array.isArray(answers) || answers.length === 0) {
+    //     return { success: false, error: "No answers provided." };
+    // }
+
+    const supabase = await createClient();
+
+    // calculate the total score
+    const totalScore = answers.filter((ans) => ans.is_answer_correct);
+
+    // 1️⃣ Create a new attempt record
+    const { data: attempt, error: attemptError } = await supabase
+        .from("assessment_attempt")
+        .insert({
+            student_id: studentId,
+            assessment_test_id: assessmentId,
+            assessment_total_item: totalItem,
+            assessment_score: totalScore.length,
+            violation,
+        })
+        .select("id")
+        .single();
+
+    if (attemptError) {
+        console.error("Error creating attempt:", attemptError.message);
+        return {
+            success: false,
+            error: attemptError.message,
+        };
+    }
+
+    // Prepare answer rows
+    const answerRows = answers.map((answer) => {
+        return {
+            attempt_id: attempt.id,
+            assessment_question_id: answer.question_id,
+            assessment_selected_choice_id: answer.selected_choice_id,
+            is_answer_correct: answer.is_answer_correct,
+        };
+    });
+
+    // STEP 2: insert attempt answers
+    const { error: answersError } = await supabase
+        .from("assessment_attempt_answers")
+        .insert(answerRows);
+
+    if (answersError) {
+        console.error("Error saving answers:", answersError.message);
+        return { success: false, error: "Failed to save answers." };
+    }
+
+    redirect(`/student/assessment-result/${assessmentId}`);
+}

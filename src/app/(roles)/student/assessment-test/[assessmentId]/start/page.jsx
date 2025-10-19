@@ -64,6 +64,8 @@ export default async function StartAssessmentPage({ params }) {
     return (
         <Wrapper size="sm">
             <AssessmentQuestionsSection
+                studentId={user.id}
+                assessmentId={assessment?.id}
                 title={assessment?.assessment_title || ""}
                 description={
                     assessment?.assessment_description ||
