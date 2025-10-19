@@ -148,21 +148,10 @@ const navigationConfig = [
                 roles: ["student"],
             },
             {
+                href: "/student/assessment-test",
                 icon: <FileText />,
                 label: "Assessment Test",
                 roles: ["student"],
-                subItems: [
-                    {
-                        href: "/student/assessment-test",
-                        label: "Take Assessment",
-                        icon: <FileText />,
-                    },
-                    {
-                        href: "/student/assessment-result",
-                        label: "Result",
-                        icon: <FileText />,
-                    },
-                ],
             },
         ],
     },
