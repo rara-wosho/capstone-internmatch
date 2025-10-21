@@ -39,8 +39,6 @@ export default async function Page({ params }) {
         return <ErrorUi secondaryMessage={error.message} />;
     }
 
-    console.log(data);
-
     if (!data) {
         notFound();
     }

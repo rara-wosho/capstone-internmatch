@@ -38,7 +38,6 @@ export default async function Page({ searchParams }) {
         return <ErrorUi />;
     }
 
-    console.log(data);
     return (
         <div>
             <SecondaryLabel className="mb-4 md:mb-5 space-x-2">

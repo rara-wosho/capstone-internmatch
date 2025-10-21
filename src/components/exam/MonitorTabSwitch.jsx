@@ -17,7 +17,6 @@ const MonitorTabSwitch = () => {
     useEffect(() => {
         const handleTabSwitch = () => {
             if (document.hidden) {
-                console.log("document hidden");
                 setHidden(true);
             }
         };

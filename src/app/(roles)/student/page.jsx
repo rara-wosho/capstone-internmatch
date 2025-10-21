@@ -1,4 +1,7 @@
+import StudentActivityLog from "@/components/blocks/StudentActivityLog";
 import BorderBox from "@/components/ui/BorderBox";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export default function StudentDashboardPage() {
     return (
@@ -40,16 +43,22 @@ export default function StudentDashboardPage() {
                         </p>
                     </BorderBox>
                 </div>
-                <div className="rounded-xl border bg-card shadow-xs h-full">
+                <div className="rounded-xl border bg-card shadow-xs h-full relative pb-14">
                     <BorderBox className="border-b">
                         <h1>Activity Logs</h1>
                     </BorderBox>
 
-                    <BorderBox>
-                        <p className="text-sm text-muted-foreground">
-                            No activities yet.
-                        </p>
-                    </BorderBox>
+                    <StudentActivityLog />
+
+                    <div className="border-t absolute bottom-0 left-0 w-full bg-card z-10 px-4 md:px-5 h-14 flex items-center rounded-b-xl">
+                        <Link
+                            href="/#"
+                            className="w-full text-left font-medium text-primary-text flex  items-center gap-1 hover:gap-2 transition-all h-10"
+                        >
+                            <span>See all activities</span>
+                            <ArrowRight size={18} />
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

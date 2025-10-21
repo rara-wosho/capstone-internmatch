@@ -211,9 +211,8 @@ export async function getAssessmentTestsForStudent(studentId) {
             `id, assessment_title, assessment_description, assessment_difficulty,
             assessment_attempt!left(
                 id,
-                student_id,
                 started_at
-            )`
+            ), assessment_questions(id)`
         )
         .eq("assessment_attempt.student_id", studentId)
         .eq("is_deleted", false);

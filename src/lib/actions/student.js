@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "../supabase/admin";
 import { createClient } from "../supabase/server";
 import { redirect } from "next/navigation";
+import { getCurrentUser } from "./auth";
 
 // Function for creating student account in authentication and table
 
@@ -181,4 +182,73 @@ export async function upsertStudentInterests(studentId, interests) {
     }
 
     redirect(`/student/profile/${studentId}`);
+}
+
+// Get student activity logs
+export async function getStudentActivityLogs(limit) {
+    try {
+        const { user } = await getCurrentUser();
+
+        if (!user || !user.id) {
+            return { success: false, data: null, error: "Unauthorized access" };
+        }
+
+        const supabase = await createClient();
+
+        let query = supabase
+            .from("students")
+            .select(
+                `
+                created_at,
+                firstname,
+                lastname,
+                applicants (
+                    id,
+                    applied_at,
+                    company_id,
+                    status
+                ),
+                exam_attempt (
+                    completed_at,
+                    exam_id,
+                    exam_title
+                )
+            `
+            )
+            .eq("id", user.id)
+            .order("applied_at", {
+                referencedTable: "applicants",
+                ascending: false,
+            });
+
+        // Only apply limit if provided
+        if (limit) {
+            query = query.limit(limit, { referencedTable: "applicants" });
+        }
+
+        query = query.order("completed_at", {
+            referencedTable: "exam_attempt",
+            ascending: false,
+        });
+
+        // Only apply limit if provided
+        if (limit) {
+            query = query.limit(limit, { referencedTable: "exam_attempt" });
+        }
+
+        const { data, error } = await query.maybeSingle();
+
+        if (error) {
+            console.error(error.message);
+            return { success: false, data: null, error: error.message };
+        }
+
+        return { success: true, data, error: null };
+    } catch (err) {
+        return {
+            success: false,
+            data: null,
+            error: err.message || "Unexpected error",
+        };
+    }
 }

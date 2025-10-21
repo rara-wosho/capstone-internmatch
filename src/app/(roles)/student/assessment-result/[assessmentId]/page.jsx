@@ -11,7 +11,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function AssessmentResultPage({ params }) {
-    const assessmentId = (await params)?.assessmentId || "";
+    const attemptId = (await params)?.assessmentId || "";
 
     const { user } = await getCurrentUser();
 
@@ -38,14 +38,21 @@ export default async function AssessmentResultPage({ params }) {
   `
         )
         .eq("student_id", user.id)
-        .eq("assessment_test_id", assessmentId)
+        .eq("id", attemptId)
         .maybeSingle(); // or .single()
 
     if (error) {
-        return <ErrorUi secondaryMessage={error.message} />;
+        console.log(error);
+        return (
+            <ErrorUi
+                secondaryMessage={
+                    error.code === "22P02"
+                        ? "The link you used is invalid. Please use a valid link or go back to previous page."
+                        : error.message
+                }
+            />
+        );
     }
-
-    console.log(data);
 
     if (!data) {
         return (
@@ -106,8 +113,8 @@ export default async function AssessmentResultPage({ params }) {
                 </div>
 
                 {data?.violation && (
-                    <div className="text-sm text-destructive">
-                        {data.violation}
+                    <div className="text-sm text-destructive mt-6">
+                        Violation : {data.violation}
                     </div>
                 )}
             </Wrapper>

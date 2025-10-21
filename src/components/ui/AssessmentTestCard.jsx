@@ -4,6 +4,8 @@ import { Button } from "./button";
 import { cn } from "@/lib/utils";
 
 export default function AssessmentTestCard({ assessmentTest }) {
+    const questionCount = assessmentTest?.assessment_questions?.length || 0;
+
     return (
         <BorderBox className="border rounded-xl bg-card shadow-xs flex flex-col">
             <p className="mb-1">{assessmentTest.assessment_title}</p>
@@ -26,7 +28,11 @@ export default function AssessmentTestCard({ assessmentTest }) {
                 )}
             </div>
 
-            <div className="pt-4 border-t flex items-end gap-2 mt-auto">
+            <div className="py-2 mt-auto text-sm">
+                {questionCount} total questions.
+            </div>
+
+            <div className="pt-4 border-t flex items-end gap-2">
                 <Button disabled={assessmentTest.hasAttempted} asChild>
                     <Link
                         href={`/student/assessment-test/${assessmentTest.id}/start`}
@@ -41,7 +47,7 @@ export default function AssessmentTestCard({ assessmentTest }) {
                 {assessmentTest.hasAttempted && (
                     <Button variant="outline" asChild>
                         <Link
-                            href={`/student/assessment-result/${assessmentTest.id}`}
+                            href={`/student/assessment-result/${assessmentTest.attemptDetails.id}`}
                         >
                             View Result
                         </Link>
