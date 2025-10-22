@@ -300,5 +300,5 @@ export async function submitAssessmentAnswers(
         return { success: false, error: "Failed to save answers." };
     }
 
-    redirect(`/student/assessment-result/${assessmentId}`);
+    redirect(`/student/assessment-result/${attempt.id}`);
 }

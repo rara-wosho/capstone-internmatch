@@ -1,66 +1,73 @@
+import ExamScoresGraph from "@/components/blocks/ExamScoresGraph";
 import StudentActivityLog from "@/components/blocks/StudentActivityLog";
+import { StudentDashboardDetails } from "@/components/blocks/StudentDashboardDetails";
+import StudentDashboardOverview from "@/components/blocks/StudentDashboardOverview";
 import BorderBox from "@/components/ui/BorderBox";
-import { ArrowRight } from "lucide-react";
+import DashboardCountBox from "@/components/ui/DashboardCountBox";
+import TitleText from "@/components/ui/TitleText";
+import { getCurrentUser } from "@/lib/actions/auth";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
-export default function StudentDashboardPage() {
+export default async function StudentDashboardPage() {
+    const { user } = await getCurrentUser();
+
+    if (!user || !user?.id) {
+        notFound();
+    }
+
     return (
-        <div className="grid gap-3 grid-cols-1 md:grid-cols-[2fr_1.3fr]">
-            <div className="flex flex-col gap-3">
-                <div className="gap-3 flex flex-wrap">
-                    <div className="bg-card rounded-xl grow basis-[120px] border p-5"></div>
-                    <div className="bg-card rounded-xl grow basis-[120px] border p-5"></div>
-                    <div className="bg-card rounded-xl grow basis-[120px] border p-5"></div>
-                    <div className="bg-card rounded-xl grow basis-[120px] border p-5"></div>
+        <>
+            <div className="grid gap-3 md:gap-4 grid-cols-1 md:grid-cols-[2fr_1fr]">
+                {/* ========= LEFT SECTION ==============  */}
+                <div className="flex flex-col gap-3 md:gap-4">
+                    <StudentDashboardDetails userId={user.id} />
+                    <StudentDashboardOverview userId={user.id} />
+
+                    <div className="flex flex-wrap gap-3 md:gap-4 h-full">
+                        <div className="rounded-xl grow border bg-card">
+                            <BorderBox>
+                                <ExamScoresGraph userId={user.id} />
+                            </BorderBox>
+                        </div>
+                        <div className="rounded-xl grow border bg-card">
+                            <BorderBox>
+                                <ExamScoresGraph userId={user.id} />
+                            </BorderBox>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="bg-card rounded-xl border shadow-xs">
-                    <BorderBox className="border-b">
-                        Pending Applications
-                    </BorderBox>
-                    <BorderBox className="border-b"></BorderBox>
-                    <BorderBox className="border-b"></BorderBox>
-                    <BorderBox className="border-b"></BorderBox>
-                    <BorderBox className="border-b"></BorderBox>
-                    <BorderBox className="border-b"></BorderBox>
-                    <BorderBox className="border-b"></BorderBox>
-                    <BorderBox className="border-b"></BorderBox>
-                    <BorderBox className="border-b"></BorderBox>
-                    <BorderBox className="border-b"></BorderBox>
-                    <BorderBox></BorderBox>
-                </div>
-            </div>
+                {/* ============ RIGHT SECTION ================= */}
+                <div className="flex flex-col gap-3 md:gap-4">
+                    {/* <div className="rounded-xl border bg-card">
+                        <BorderBox className="border-b">
+                            <TitleText>Recent Notifications</TitleText>
+                        </BorderBox>
 
-            <div className="flex flex-col gap-3">
-                <div className="rounded-xl border bg-card shadow-xs">
-                    <BorderBox className="border-b">
-                        <h1>Notifications</h1>
-                    </BorderBox>
+                        <BorderBox>
+                            <p className="text-sm text-muted-foreground">
+                                No notifications yet. Stay tune for more
+                                updates.
+                            </p>
+                        </BorderBox>
+                    </div> */}
+                    <div className="rounded-xl border bg-card h-full relative">
+                        <BorderBox className="border-b flex items-center justify-between">
+                            <TitleText>Activity Logs</TitleText>
 
-                    <BorderBox>
-                        <p className="text-sm text-muted-foreground">
-                            No notifications yet. Stay tune for more updates.
-                        </p>
-                    </BorderBox>
-                </div>
-                <div className="rounded-xl border bg-card shadow-xs h-full relative pb-14">
-                    <BorderBox className="border-b">
-                        <h1>Activity Logs</h1>
-                    </BorderBox>
+                            <Link
+                                href="#"
+                                className="hover:text-accent-foreground transition-colors font-light"
+                            >
+                                <span>See all</span>
+                            </Link>
+                        </BorderBox>
 
-                    <StudentActivityLog />
-
-                    <div className="border-t absolute bottom-0 left-0 w-full bg-card z-10 px-4 md:px-5 h-14 flex items-center rounded-b-xl">
-                        <Link
-                            href="/#"
-                            className="w-full text-left font-medium text-primary-text flex  items-center gap-1 hover:gap-2 transition-all h-10"
-                        >
-                            <span>See all activities</span>
-                            <ArrowRight size={18} />
-                        </Link>
+                        <StudentActivityLog />
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }

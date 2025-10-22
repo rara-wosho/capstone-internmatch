@@ -101,7 +101,7 @@ export default async function AssessmentResultPage({ params }) {
                 <p className="text-sm text-muted-foreground mb-4">
                     These are the number of items you answered
                 </p>
-                <div className="flex items-center justify-center gap-2">
+                <div className="flex items-center justify-center flex-wrap px-4 gap-2">
                     {assessmentAnwers.map((answer, i) => (
                         <div
                             key={i}

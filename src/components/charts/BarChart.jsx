@@ -10,6 +10,7 @@ import Link from "next/link";
 const BarChart = ({
     data,
     title = "Bar Chart",
+    truncateLabel = false,
     description = "",
     xAxisLabel = "",
     yAxisLabel = "",
@@ -89,7 +90,7 @@ const BarChart = ({
                 <ScrollArea className="w-full whitespace-nowrap">
                     <ScrollBar orientation="horizontal" />
 
-                    <div className="flex items-end justify-around h-full px-4 pb-9 pt-4">
+                    <div className="flex justify-around items-end h-full px-4 pb-9 pt-4">
                         {data.map((item, idx) => {
                             // Handle both grouped and single bar data
                             const isGrouped =
@@ -171,7 +172,13 @@ const BarChart = ({
                                     </div>
 
                                     {/* Label */}
-                                    <div className="absolute left-0 -bottom-8 w-full text-center">
+                                    <div
+                                        className={cn(
+                                            "absolute left-1/2 -translate-x-1/2 -bottom-8 w-full text-center",
+                                            truncateLabel &&
+                                                "truncate max-w-[80px]"
+                                        )}
+                                    >
                                         <span className="text-sm font-medium text-muted-foreground break-words capitalize">
                                             {item.label}
                                         </span>
