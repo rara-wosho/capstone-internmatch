@@ -3,7 +3,7 @@ import BorderBox from "../ui/BorderBox";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import SecondaryLabel from "../ui/SecondaryLabel";
 import { Button } from "../ui/button";
-import { PencilLine } from "lucide-react";
+import { GraduationCap, MapPin, PencilLine, School } from "lucide-react";
 import Link from "next/link";
 import TitleText from "../ui/TitleText";
 
@@ -37,13 +37,37 @@ export async function StudentDashboardDetails({ userId }) {
                 </div>
             </div>
 
-            <TitleText>About Me</TitleText>
-            <p className="text-muted-foreground mt-2">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Consectetur qui expedita, autem placeat, sint distinctio
-                excepturi ipsa repudiandae iusto molestiae tenetur, totam saepe
-                aliquam molestias. Voluptates est nobis exercitationem eum!
-            </p>
+            <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                    <School size={15} />
+                    <p className="text-muted-foreground">
+                        {data?.school ? (
+                            data.school
+                        ) : (
+                            <span className="italic">School not yet set.</span>
+                        )}
+                    </p>
+                </div>
+                <div className="flex items-center gap-2">
+                    <GraduationCap size={15} />
+                    <p className="text-muted-foreground">
+                        {data?.course ? (
+                            data.course
+                        ) : (
+                            <span className="italic">Course not yet set.</span>
+                        )}
+                    </p>
+                </div>
+
+                {data?.barangay && data?.city && data?.province && (
+                    <div className="flex items-center gap-2">
+                        <MapPin size={15} />
+                        <p className="text-muted-foreground">
+                            {data.barangay}, {data.city}, {data.province}
+                        </p>
+                    </div>
+                )}
+            </div>
         </BorderBox>
     );
 }

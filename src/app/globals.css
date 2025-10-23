@@ -66,6 +66,19 @@
     --dots-color: rgba(100, 100, 100, 0.25);
 }
 
+.animation-show {
+    animation: animation-show 0.3s ease-out forwards;
+}
+
+@keyframes animation-show {
+    from {
+        transform: translateY(15px);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
 .bg-dots {
     background-color: transparent;
     background-image: radial-gradient(var(--dots-color) 2px, transparent 0);

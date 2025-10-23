@@ -18,54 +18,51 @@ export default async function StudentDashboardPage() {
 
     return (
         <>
-            <div className="grid gap-3 md:gap-4 grid-cols-1 md:grid-cols-[2fr_1fr]">
-                {/* ========= LEFT SECTION ==============  */}
-                <div className="flex flex-col gap-3 md:gap-4">
-                    <StudentDashboardDetails userId={user.id} />
-                    <StudentDashboardOverview userId={user.id} />
+            {/* ========= LEFT SECTION ==============  */}
+            <div className="flex flex-col gap-3 md:gap-4 animation-show mb-3 md:mb-4">
+                <StudentDashboardDetails userId={user.id} />
+                <StudentDashboardOverview userId={user.id} />
 
-                    <div className="flex flex-wrap gap-3 md:gap-4 h-full">
-                        <div className="rounded-xl grow border bg-card">
-                            <BorderBox>
-                                <ExamScoresGraph userId={user.id} />
-                            </BorderBox>
-                        </div>
-                        <div className="rounded-xl grow border bg-card">
-                            <BorderBox>
-                                <ExamScoresGraph userId={user.id} />
-                            </BorderBox>
-                        </div>
-                    </div>
-                </div>
-
-                {/* ============ RIGHT SECTION ================= */}
-                <div className="flex flex-col gap-3 md:gap-4">
-                    {/* <div className="rounded-xl border bg-card">
-                        <BorderBox className="border-b">
-                            <TitleText>Recent Notifications</TitleText>
-                        </BorderBox>
-
+                {/* <div className="flex flex-wrap gap-3 md:gap-4 h-full">
+                    <div className="rounded-xl grow border bg-card">
                         <BorderBox>
-                            <p className="text-sm text-muted-foreground">
-                                No notifications yet. Stay tune for more
-                                updates.
-                            </p>
+                            <ExamScoresGraph userId={user.id} />
                         </BorderBox>
-                    </div> */}
-                    <div className="rounded-xl border bg-card h-full relative">
-                        <BorderBox className="border-b flex items-center justify-between">
-                            <TitleText>Activity Logs</TitleText>
-
-                            <Link
-                                href="#"
-                                className="hover:text-accent-foreground transition-colors font-light"
-                            >
-                                <span>See all</span>
-                            </Link>
-                        </BorderBox>
-
-                        <StudentActivityLog />
                     </div>
+                    <div className="rounded-xl grow border bg-card">
+                        <BorderBox>
+                            <ExamScoresGraph userId={user.id} />
+                        </BorderBox>
+                    </div>
+                </div> */}
+            </div>
+
+            {/* ============ RIGHT SECTION ================= */}
+            <div className="flex flex-wrap gap-3 md:gap-4 animation-show delay-300">
+                <div className="rounded-xl border bg-card grow basis-auto">
+                    <BorderBox className="border-b">
+                        <TitleText>Recent Notifications</TitleText>
+                    </BorderBox>
+
+                    <BorderBox>
+                        <p className="text-sm text-muted-foreground">
+                            No notifications yet. Stay tune for more updates.
+                        </p>
+                    </BorderBox>
+                </div>
+                <div className="rounded-xl border bg-card grow basis-auto h-full relative">
+                    <BorderBox className="border-b flex items-center justify-between">
+                        <TitleText>Activity Logs</TitleText>
+
+                        <Link
+                            href="#"
+                            className="hover:text-accent-foreground transition-colors font-light"
+                        >
+                            <span>See all</span>
+                        </Link>
+                    </BorderBox>
+
+                    <StudentActivityLog />
                 </div>
             </div>
         </>
