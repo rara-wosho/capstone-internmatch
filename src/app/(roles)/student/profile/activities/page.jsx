@@ -28,7 +28,14 @@ export default async function StudentActivitiesPage() {
             </SecondaryLabel>
 
             <div className="flex flex-col gap-3">
-                <TitleText>Applications</TitleText>
+                <TitleText>
+                    Applications{" "}
+                    {data?.applications?.length === 0 && (
+                        <span className="text-muted-foreground ms-1">
+                            {data?.applications.length} Activity
+                        </span>
+                    )}
+                </TitleText>
                 {data?.applications?.map((application) => (
                     <div
                         className="p-4 rounded-xl bg-card shadow-xs flex items-center justify-between gap-3 flex-wrap"
@@ -59,7 +66,14 @@ export default async function StudentActivitiesPage() {
                         </Button>
                     </div>
                 ))}
-                <TitleText>Exam Attempts</TitleText>
+                <TitleText>
+                    Exam Attempts{" "}
+                    {data?.exam_attempts?.length === 0 && (
+                        <span className="text-muted-foreground ms-1">
+                            {data?.exam_attempts.length} Activity
+                        </span>
+                    )}
+                </TitleText>
                 {data?.exam_attempts?.map((attempt) => (
                     <div
                         className="p-4 rounded-xl bg-card shadow-xs flex items-center justify-between gap-3 flex-wrap"

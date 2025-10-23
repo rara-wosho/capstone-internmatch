@@ -12,7 +12,7 @@ export default function DashboardCountBox({
     return (
         <Link
             href={href}
-            className={`p-4 border rounded-xl bg-card grow basis-[130px] flex items-center gap-2.5 ${className} ${href === "#" && "pointer-events-none"}`}
+            className={`p-5 border rounded-xl bg-card grow basis-[130px] flex items-center gap-2.5 ${className} ${href === "#" && "pointer-events-none"}`}
         >
             <div
                 className={cn(
@@ -24,10 +24,12 @@ export default function DashboardCountBox({
             </div>
 
             <div>
+                <p className="font-bold text-xl whitespace-nowrap">
+                    {valueText}
+                </p>
                 <p className="text-muted-foreground text-sm whitespace-nowrap">
                     {label}
                 </p>
-                <p className="font-bold whitespace-nowrap">{valueText}</p>
             </div>
         </Link>
     );

@@ -32,7 +32,7 @@ export default async function ExamScoresGraph({ userId }) {
                         data={examsData}
                         title="Top Exam Scores"
                         xAxisLabel="Exam Title"
-                        height={300}
+                        height={200}
                     />
                 </div>
             )}

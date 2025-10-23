@@ -22,23 +22,15 @@ export default async function StudentDashboardPage() {
             <div className="flex flex-col gap-3 md:gap-4 animation-show mb-3 md:mb-4">
                 <StudentDashboardDetails userId={user.id} />
                 <StudentDashboardOverview userId={user.id} />
-
-                {/* <div className="flex flex-wrap gap-3 md:gap-4 h-full">
-                    <div className="rounded-xl grow border bg-card">
-                        <BorderBox>
-                            <ExamScoresGraph userId={user.id} />
-                        </BorderBox>
-                    </div>
-                    <div className="rounded-xl grow border bg-card">
-                        <BorderBox>
-                            <ExamScoresGraph userId={user.id} />
-                        </BorderBox>
-                    </div>
-                </div> */}
             </div>
 
             {/* ============ RIGHT SECTION ================= */}
             <div className="flex flex-wrap gap-3 md:gap-4 animation-show delay-300">
+                <div className="rounded-xl grow border bg-card basis-[300px]">
+                    <BorderBox>
+                        <ExamScoresGraph userId={user.id} />
+                    </BorderBox>
+                </div>
                 <div className="rounded-xl border bg-card grow basis-auto">
                     <BorderBox className="border-b">
                         <TitleText>Recent Notifications</TitleText>
@@ -50,12 +42,12 @@ export default async function StudentDashboardPage() {
                         </p>
                     </BorderBox>
                 </div>
-                <div className="rounded-xl border bg-card grow basis-auto h-full relative">
+                <div className="rounded-xl border bg-card grow basis-auto h-full">
                     <BorderBox className="border-b flex items-center justify-between">
                         <TitleText>Activity Logs</TitleText>
 
                         <Link
-                            href="#"
+                            href="/student/profile/activities"
                             className="hover:text-accent-foreground transition-colors font-light"
                         >
                             <span>See all</span>
