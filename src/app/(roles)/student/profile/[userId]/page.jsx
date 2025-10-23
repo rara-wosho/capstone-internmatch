@@ -96,9 +96,13 @@ export default async function Page({ params }) {
                         </p>
                     </BorderBox>
                 </div>
-                <div className="border rounded-xl bg-card shadow-xs">
-                    {/* <ProfileTabSection companyData={companyData} />  */}
-                </div>
+                <BorderBox className="border rounded-xl bg-card shadow-xs">
+                    <Button asChild variant="outline">
+                        <Link href="/student/profile/activities">
+                            Activity Logs
+                        </Link>
+                    </Button>
+                </BorderBox>
             </div>
         </div>
     );

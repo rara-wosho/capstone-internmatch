@@ -3,7 +3,7 @@ import { getStudentActivityLogs } from "@/lib/actions/student";
 import { dateFormatter } from "@/utils/date-formatter";
 
 export default async function StudentActivityLog() {
-    const { data, activityDates, error } = await getStudentActivityLogs(1);
+    const { data, error } = await getStudentActivityLogs(1);
 
     return (
         <BorderBox>
@@ -14,8 +14,8 @@ export default async function StudentActivityLog() {
             )}
 
             <div className="space-y-3 text-muted-foreground">
-                {data?.applicants.length > 0 &&
-                    data?.applicants.map((application) => (
+                {data?.applications.length > 0 &&
+                    data?.applications.map((application) => (
                         <div key={application.id} className="flex flex-col">
                             <p className="text-xs mb-1">
                                 {dateFormatter(application.applied_at)}
@@ -29,8 +29,8 @@ export default async function StudentActivityLog() {
                             </p>
                         </div>
                     ))}
-                {data?.exam_attempt.length > 0 &&
-                    data?.exam_attempt.map((attempt) => (
+                {data?.exam_attempts.length > 0 &&
+                    data?.exam_attempts.map((attempt) => (
                         <div
                             key={attempt.completed_at}
                             className="flex flex-col"
