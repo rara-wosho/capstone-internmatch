@@ -42,35 +42,6 @@ export async function StudentDashboardDetails({ userId }) {
                     </Button>
                 </div>
             </div>
-
-            {/* <div className="flex flex-col gap-1 mb-3">
-                <div className="flex items-center gap-2">
-                    <p className="text-muted-foreground">
-                        {data?.school ? (
-                            data.school
-                        ) : (
-                            <span className="italic">School not yet set.</span>
-                        )}
-                    </p>
-                </div>
-                <div className="flex items-center gap-2">
-                    <p className="text-muted-foreground">
-                        {data?.course ? (
-                            data.course
-                        ) : (
-                            <span className="italic">Course not yet set.</span>
-                        )}
-                    </p>
-                </div>
-
-                {data?.barangay && data?.city && data?.province && (
-                    <div className="flex items-center gap-2">
-                        <p className="text-muted-foreground">
-                            {data.barangay}, {data.city}, {data.province}
-                        </p>
-                    </div>
-                )}
-            </div> */}
         </div>
     );
 }

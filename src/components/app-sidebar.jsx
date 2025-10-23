@@ -18,6 +18,7 @@ import {
     User,
     NotepadText,
     FileUser,
+    Shield,
 } from "lucide-react";
 
 import {
@@ -186,6 +187,28 @@ const navigationConfig = [
                 icon: <MessageSquareMore />,
                 label: "Feedback",
                 roles: ["student", "instructor", "company"],
+            },
+            {
+                label: "Settings",
+                icon: <Settings />,
+                roles: ["student"],
+                subItems: [
+                    {
+                        href: "/student/account/edit",
+                        icon: <User />,
+                        label: "Account",
+                    },
+                    {
+                        href: "/student/profile/activities",
+                        icon: <User />,
+                        label: "Activity Logs",
+                    },
+                    {
+                        href: "/student/interests",
+                        icon: <Shield />,
+                        label: "Interests",
+                    },
+                ],
             },
         ],
     },

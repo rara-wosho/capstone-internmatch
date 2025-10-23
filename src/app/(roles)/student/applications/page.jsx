@@ -9,7 +9,12 @@ import { notFound } from "next/navigation";
 
 import ApplicationsSection from "@/components/sections/ApplicationsSection";
 
-export default async function Page() {
+// Set page  title
+export const metadata = {
+    title: "Applications",
+};
+
+export default async function ApplicationsPage() {
     const { user } = await getCurrentUser();
 
     if (!user || !user?.id) {

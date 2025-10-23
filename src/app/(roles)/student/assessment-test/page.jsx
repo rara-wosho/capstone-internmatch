@@ -22,6 +22,11 @@ import { getCurrentUser } from "@/lib/actions/auth";
 import { CircleQuestionMark } from "lucide-react";
 import { redirect } from "next/navigation";
 
+// Set page  title
+export const metadata = {
+    title: "Assessment Test",
+};
+
 export default async function AssessmentPage() {
     const { user } = await getCurrentUser();
 

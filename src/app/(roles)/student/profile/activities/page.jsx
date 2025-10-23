@@ -1,3 +1,4 @@
+import BackButton from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/button";
 import ErrorUi from "@/components/ui/ErrorUi";
 import IconWrapper from "@/components/ui/IconWrapper";
@@ -6,7 +7,7 @@ import TitleText from "@/components/ui/TitleText";
 import Wrapper from "@/components/Wrapper";
 import { getStudentActivityLogs } from "@/lib/actions/student";
 import { dateFormatter } from "@/utils/date-formatter";
-import { ArrowUpRight, ClipboardList } from "lucide-react";
+import { ArrowUpRight, ChevronLeft, ClipboardList } from "lucide-react";
 import Link from "next/link";
 
 export default async function StudentActivitiesPage() {
@@ -20,6 +21,9 @@ export default async function StudentActivitiesPage() {
 
     return (
         <Wrapper size="sm">
+            <BackButton className="flex items-center mb-3 text-muted-foreground">
+                <ChevronLeft size={19} /> Back
+            </BackButton>
             <SecondaryLabel className="mb-3 space-x-2">
                 <IconWrapper>
                     <ClipboardList size={17} />
