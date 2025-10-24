@@ -1,3 +1,4 @@
+import EditStudentForm from "@/components/forms/EditStudentForm";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import BackButton from "@/components/ui/BackButton";
 import BorderBox from "@/components/ui/BorderBox";
@@ -32,7 +33,7 @@ export default async function StudentEditAccountPage({ params }) {
                 preferred fields and match you with suitable opportunities.
             </p>
 
-            <BorderBox className="mb-3 bg-card border shadow-xs flex flex-col items-center gap-3 rounded-xl">
+            <BorderBox className="mb-3 bg-card shadow-xs flex flex-col items-center gap-3 rounded-xl">
                 <Avatar className="w-[110px] aspect-square">
                     <AvatarImage
                         src={
@@ -50,61 +51,7 @@ export default async function StudentEditAccountPage({ params }) {
                     <UploadAvatar currentAvatarUrl={studentData.avatar_url} />
                 </div>
             </BorderBox>
-            <div className="bg-card shadow-xs rounded-xl border mb-3">
-                <div className="px-3 md:px-5 py-4 border-b">
-                    <TitleText>Personal Information</TitleText>
-                </div>
-                <BorderBox className="space-y-2.5">
-                    <div className="flex flex-wrap gap-2">
-                        <div className="grow basis-[300px]">
-                            <FormLabel>First Name</FormLabel>
-                            <Input />
-                        </div>
-                        <div className="grow basis-[300px]">
-                            <FormLabel>Middle Name (Optional)</FormLabel>
-                            <Input />
-                        </div>
-                    </div>
-                    <div>
-                        <FormLabel>Last Name</FormLabel>
-                        <Input />
-                    </div>
-                </BorderBox>
-            </div>
-            <div className="bg-card shadow-xs rounded-xl border mb-3">
-                <div className="px-3 md:px-5 py-4 border-b">
-                    <TitleText>Address</TitleText>
-                </div>
-                <BorderBox className="space-y-2.5">
-                    <div>
-                        <FormLabel>Barangay</FormLabel>
-                        <Input />
-                    </div>
-                    <div>
-                        <FormLabel>City</FormLabel>
-                        <Input />
-                    </div>
-                    <div>
-                        <FormLabel>Province</FormLabel>
-                        <Input />
-                    </div>
-                </BorderBox>
-            </div>
-            <div className="bg-card shadow-xs rounded-xl border mb-3">
-                <div className="px-3 md:px-5 py-4 border-b">
-                    <TitleText>Academics</TitleText>
-                </div>
-                <BorderBox className="space-y-2.5">
-                    <div>
-                        <FormLabel>School</FormLabel>
-                        <Input />
-                    </div>
-                    <div>
-                        <FormLabel>Course</FormLabel>
-                        <Input />
-                    </div>
-                </BorderBox>
-            </div>
+            <EditStudentForm studentData={studentData} />
         </Wrapper>
     );
 }

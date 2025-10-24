@@ -266,7 +266,7 @@ export async function getStudentEditData() {
     const { data, error } = await supabase
         .from("students")
         .select(
-            "firstname, lastname, middlename, gender, age, barangay, city, province, school, course, avatar_url"
+            "id, firstname, lastname, middlename, gender, age, barangay, city, province, school, course, avatar_url"
         )
         .eq("id", user.id)
         .single();
@@ -276,6 +276,94 @@ export async function getStudentEditData() {
     }
 
     return { success: true, error: null, data };
+}
+
+// Update student details
+export async function updateStudentDetails(formData) {
+    try {
+        // Extract data from formData
+        const studentId = formData.get("studentId");
+        const firstname = formData.get("firstname");
+        const middlename = formData.get("middlename");
+        const lastname = formData.get("lastname");
+        const age = formData.get("age");
+        const gender = formData.get("gender");
+        const barangay = formData.get("barangay");
+        const city = formData.get("city");
+        const province = formData.get("province");
+        const school = formData.get("school");
+        const course = formData.get("course");
+
+        // Validate student id
+        if (!studentId) {
+            return {
+                success: false,
+                error: "Student ID is missing. Please try again.",
+            };
+        }
+
+        // Validate required fields
+        if (
+            !firstname ||
+            !lastname ||
+            !age ||
+            !gender ||
+            !barangay ||
+            !city ||
+            !province ||
+            !school ||
+            !course
+        ) {
+            return {
+                success: false,
+                error: "Please fill in required fields.",
+            };
+        }
+
+        // Initialize Supabase client
+        const supabase = await createClient();
+
+        // Update student in database
+        const { data, error } = await supabase
+            .from("students") // Replace with your actual table name
+            .update({
+                firstname,
+                middlename: middlename || null,
+                lastname,
+                age: age ? parseInt(age) : null,
+                gender: gender || null,
+                barangay: barangay || null,
+                city: city || null,
+                province: province || null,
+                school: school || null,
+                course: course || null,
+            })
+            .eq("id", studentId)
+            .select()
+            .single();
+
+        if (error) {
+            console.error("Error updating student:", error);
+            return {
+                success: false,
+                error: "Failed to update student details",
+            };
+        }
+
+        revalidatePath(`/student/account/edit`);
+        revalidatePath(`/student/profile/${studentId}`);
+
+        return {
+            success: true,
+            // data
+        };
+    } catch (error) {
+        console.error("Unexpected error:", error);
+        return {
+            success: false,
+            error: "An unexpected error occurred",
+        };
+    }
 }
 
 // Get student activity logs

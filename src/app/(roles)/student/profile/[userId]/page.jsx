@@ -59,6 +59,7 @@ export default async function Page({ params }) {
     if (!studentData) {
         notFound();
     }
+
     return (
         <Wrapper size="sm">
             {/* ======= HEADER ========  */}
@@ -158,6 +159,19 @@ export default async function Page({ params }) {
                             </Link>
                         </div>
                         <div className="flex items-center gap-2 flex-wrap">
+                            {(studentData?.interests?.interest.length === 0 ||
+                                !studentData?.interests) && (
+                                <div className="text-muted-foreground">
+                                    You did not put any interests yet.{" "}
+                                    <Link
+                                        className="underline"
+                                        href="/student/interests"
+                                    >
+                                        Add now
+                                    </Link>
+                                </div>
+                            )}
+
                             {studentData?.interests?.interest?.map((inter) => (
                                 <div
                                     className="rounded-full bg-muted px-3 h-8 flex items-center text-sm whitespace-nowrap"
