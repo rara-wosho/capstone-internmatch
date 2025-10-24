@@ -7,7 +7,7 @@ import { useSession } from "@/context/SessionContext";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-import { Image as Gallery, Trash, X } from "lucide-react";
+import { Image as Gallery, Loader, Trash, X } from "lucide-react";
 import { deleteAvatar } from "@/lib/actions/student";
 
 export default function UploadAvatar({ currentAvatarUrl }) {
@@ -112,14 +112,14 @@ export default function UploadAvatar({ currentAvatarUrl }) {
             );
 
             if (result.success) {
-                toast.success("Avatar deleted successfully.");
+                toast.success("Avatar removed successfully.");
                 router.refresh();
             } else {
-                throw new Error("Failed to delete avatar");
+                throw new Error("Failed to remove avatar");
             }
         } catch (error) {
             console.error(error.message);
-            toast.error(error.message || "Unable to delete avatar.");
+            toast.error(error.message || "Unable to remove avatar.");
         } finally {
             setIsDeleting(false);
         }
@@ -156,22 +156,18 @@ export default function UploadAvatar({ currentAvatarUrl }) {
                         isUploading && "pointer-events-none"
                     } cursor-pointer bg-card border-2 border-dashed rounded-lg flex flex-col justify-center items-center p-3`}
                 >
-                    <p className="text-sm text-muted-foreground mb-2 truncate max-w-[200px]">
-                        {avatar?.name ? (
-                            <span className="text-accent-foreground">
-                                {avatar?.name}
-                            </span>
-                        ) : (
-                            "No file chosen"
-                        )}
-                    </p>
-
-                    <div className="text-xs text-muted-foreground text-center">
-                        Max file size 3 MB
-                    </div>
-
-                    {error && (
+                    {error ? (
                         <p className="text-destructive text-xs mt-1">{error}</p>
+                    ) : (
+                        <p className="text-sm text-muted-foreground truncate max-w-[200px]">
+                            {avatar?.name ? (
+                                <span className="text-accent-foreground">
+                                    {avatar?.name}
+                                </span>
+                            ) : (
+                                "No file chosen"
+                            )}
+                        </p>
                     )}
                 </div>
             </div>
@@ -190,6 +186,7 @@ export default function UploadAvatar({ currentAvatarUrl }) {
                     disabled={isUploading || !avatar || error}
                     className="mt-2 w-full"
                 >
+                    {isUploading && <Loader className="animate-spin" />}
                     {isUploading ? "Updating..." : "Update Avatar Now"}
                 </Button>
             ) : (

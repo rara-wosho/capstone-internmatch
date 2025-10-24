@@ -44,6 +44,7 @@ export default function CreateStudentAccountForm9({ groupId, school }) {
             course,
         } = formData;
 
+        console.log(formData);
         // Required fields check
         if (
             !firstName.trim() ||
@@ -145,7 +146,13 @@ export default function CreateStudentAccountForm9({ groupId, school }) {
                 </div>
                 <div className="mb-3">
                     <FormLabel>Course</FormLabel>
-                    <Input placeholder="Bachelor of Science in Information Technology" />
+                    <Input
+                        required
+                        name="course"
+                        value={formData.course}
+                        onChange={handleChange}
+                        placeholder="Bachelor of Science in Information Technology"
+                    />
                 </div>
             </div>
 

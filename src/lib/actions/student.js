@@ -114,21 +114,6 @@ export async function revokeExamAccess(studentIds = []) {
     return { success: true };
 }
 
-// update or insert students' interests
-export async function updateStudentInterests(interestId, newArray) {
-    const supabase = await createClient();
-
-    const { data, error } = await supabase
-        .from("interests")
-        .upsert({ id: interestId, interest: newArray }) //intentionally leave interestId to undefined to perform insert, otherwise update
-        .select();
-
-    if (error) {
-        return { success: false, data: null };
-    }
-    return { success: true, data };
-}
-
 export async function getStudentProfileData(studentId) {
     const supabase = await createClient();
 
@@ -183,85 +168,6 @@ export async function upsertStudentInterests(studentId, interests) {
 
     redirect(`/student/profile/${studentId}`);
 }
-
-// Get student activity logs
-// export async function getStudentActivityLogs(limit) {
-//     try {
-//         const { user } = await getCurrentUser();
-
-//         if (!user || !user.id) {
-//             return { success: false, data: null, error: "Unauthorized access" };
-//         }
-
-//         const supabase = await createClient();
-
-//         let query = supabase
-//             .from("students")
-//             .select(
-//                 `
-//                 created_at,
-//                 firstname,
-//                 lastname,
-//                 applicants (
-//                     id,
-//                     applied_at,
-//                     company_id,
-//                     status
-//                 ),
-//                 exam_attempt (
-//                     completed_at,
-//                     exam_id,
-//                     exam_title
-//                 )
-//             `
-//             )
-//             .eq("id", user.id)
-//             .order("applied_at", {
-//                 referencedTable: "applicants",
-//                 ascending: false,
-//             })
-//             .order("completed_at", {
-//                 referencedTable: "exam_attempt",
-//                 ascending: false,
-//             });
-
-//         if (limit) {
-//             query = query
-//                 .limit(limit, { referencedTable: "applicants" })
-//                 .limit(limit, { referencedTable: "exam_attempt" });
-//         }
-
-//         const { data, error } = await query.maybeSingle();
-
-//         if (error) {
-//             console.error(error.message);
-//             return { success: false, data: null, error: error.message };
-//         }
-
-//         // 🧠 Extract all activity dates
-//         const applicantDates = data?.applicants?.map((a) => a.applied_at) || [];
-//         const examDates = data?.exam_attempt?.map((e) => e.completed_at) || [];
-
-//         // Combine and remove nulls
-//         const allDates = [...applicantDates, ...examDates].filter(Boolean);
-
-//         // Optionally convert to JS Date objects (if your calendar needs Date type)
-//         const parsedDates = allDates.map((date) => new Date(date));
-
-//         return {
-//             success: true,
-//             data,
-//             activityDates: parsedDates, // ✅ Calendar-friendly
-//             error: null,
-//         };
-//     } catch (err) {
-//         return {
-//             success: false,
-//             data: null,
-//             error: err.message || "Unexpected error",
-//         };
-//     }
-// }
 
 // Get student activity logs
 export async function getStudentActivityLogs(limit) {
@@ -342,3 +248,111 @@ export async function getStudentActivityLogs(limit) {
         };
     }
 }
+
+// get student details for profile  editing
+export async function getStudentEditData() {
+    const { user } = await getCurrentUser();
+
+    if (!user || !user?.id) {
+        return {
+            success: false,
+            error: "Unable to verify user. Please refresh the page and try again.",
+            data: null,
+        };
+    }
+
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("students")
+        .select(
+            "firstname, lastname, middlename, gender, age, barangay, city, province, school, course, avatar_url"
+        )
+        .eq("id", user.id)
+        .single();
+
+    if (error) {
+        return { success: false, error: error.message, data: null };
+    }
+
+    return { success: true, error: null, data };
+}
+
+// Get student activity logs
+// export async function getStudentActivityLogs(limit) {
+//     try {
+//         const { user } = await getCurrentUser();
+
+//         if (!user || !user.id) {
+//             return { success: false, data: null, error: "Unauthorized access" };
+//         }
+
+//         const supabase = await createClient();
+
+//         let query = supabase
+//             .from("students")
+//             .select(
+//                 `
+//                 created_at,
+//                 firstname,
+//                 lastname,
+//                 applicants (
+//                     id,
+//                     applied_at,
+//                     company_id,
+//                     status
+//                 ),
+//                 exam_attempt (
+//                     completed_at,
+//                     exam_id,
+//                     exam_title
+//                 )
+//             `
+//             )
+//             .eq("id", user.id)
+//             .order("applied_at", {
+//                 referencedTable: "applicants",
+//                 ascending: false,
+//             })
+//             .order("completed_at", {
+//                 referencedTable: "exam_attempt",
+//                 ascending: false,
+//             });
+
+//         if (limit) {
+//             query = query
+//                 .limit(limit, { referencedTable: "applicants" })
+//                 .limit(limit, { referencedTable: "exam_attempt" });
+//         }
+
+//         const { data, error } = await query.maybeSingle();
+
+//         if (error) {
+//             console.error(error.message);
+//             return { success: false, data: null, error: error.message };
+//         }
+
+//         // 🧠 Extract all activity dates
+//         const applicantDates = data?.applicants?.map((a) => a.applied_at) || [];
+//         const examDates = data?.exam_attempt?.map((e) => e.completed_at) || [];
+
+//         // Combine and remove nulls
+//         const allDates = [...applicantDates, ...examDates].filter(Boolean);
+
+//         // Optionally convert to JS Date objects (if your calendar needs Date type)
+//         const parsedDates = allDates.map((date) => new Date(date));
+
+//         return {
+//             success: true,
+//             data,
+//             activityDates: parsedDates, // ✅ Calendar-friendly
+//             error: null,
+//         };
+//     } catch (err) {
+//         return {
+//             success: false,
+//             data: null,
+//             error: err.message || "Unexpected error",
+//         };
+//     }
+// }

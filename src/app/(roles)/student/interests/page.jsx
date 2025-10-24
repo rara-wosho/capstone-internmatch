@@ -2,6 +2,7 @@ import ChooseInterestsSection from "@/components/sections/ChooseInterestsSection
 import BackButton from "@/components/ui/BackButton";
 import ErrorUi from "@/components/ui/ErrorUi";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
+import Wrapper from "@/components/Wrapper";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/server";
 import { ChevronLeft } from "lucide-react";
@@ -31,7 +32,7 @@ export default async function Page({ searchParams }) {
     const interests = data?.interest || [];
 
     return (
-        <div>
+        <Wrapper size="sm">
             {isOnboarding !== "yes" && (
                 <BackButton className="flex items-center mb-2 text-muted-foreground">
                     <ChevronLeft size={19} /> Back
@@ -50,6 +51,6 @@ export default async function Page({ searchParams }) {
                 interests={interests}
                 isOnboarding={isOnboarding === "yes"}
             />
-        </div>
+        </Wrapper>
     );
 }

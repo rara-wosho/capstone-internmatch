@@ -90,8 +90,10 @@ export default async function Page({ params }) {
                         </p> */}
 
                         <div className="flex items-center gap-2 mt-3">
-                            <Button>
-                                <PencilLine /> Edit Profile
+                            <Button asChild>
+                                <Link href="/student/account/edit">
+                                    <PencilLine /> Edit Profile
+                                </Link>
                             </Button>
                             <Button asChild variant="outline">
                                 <Link href="/student/profile/activities">

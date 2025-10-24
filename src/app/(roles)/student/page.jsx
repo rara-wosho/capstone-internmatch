@@ -25,7 +25,7 @@ export default async function StudentDashboardPage() {
             </div>
 
             {/* ============ RIGHT SECTION ================= */}
-            <div className="flex flex-wrap gap-3 md:gap-4 animation-show delay-300">
+            <div className="flex flex-wrap gap-3 md:gap-4 animation-show">
                 <div className="rounded-xl grow border bg-card basis-[300px]">
                     <BorderBox>
                         <ExamScoresGraph userId={user.id} />
@@ -42,7 +42,7 @@ export default async function StudentDashboardPage() {
                         </p>
                     </BorderBox>
                 </div>
-                <div className="rounded-xl border bg-card grow basis-auto h-full">
+                <div className="rounded-xl border bg-card grow basis-auto h-auto">
                     <BorderBox className="border-b flex items-center justify-between">
                         <TitleText>Activity Logs</TitleText>
 

@@ -6,11 +6,9 @@ import {
     ClipboardPen,
     LayoutDashboard,
     LogOut,
-    MessageCircleQuestionMark,
     MessageSquareMore,
     Settings,
     Users,
-    BookOpen,
     Calendar,
     FileText,
     CircleUser,
@@ -48,7 +46,6 @@ import {
 
 import Logo from "./ui/Logo";
 import { useMemo } from "react";
-import { useSession } from "@/context/SessionContext";
 import SignOutModal from "./ui/SignOutModal";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
@@ -183,10 +180,22 @@ const navigationConfig = [
         label: "Others",
         items: [
             {
-                href: "feedbacks",
+                href: "/instructor/feedback",
                 icon: <MessageSquareMore />,
                 label: "Feedback",
-                roles: ["student", "instructor", "company"],
+                roles: ["instructor"],
+            },
+            {
+                href: "/company/feedback",
+                icon: <MessageSquareMore />,
+                label: "Feedback",
+                roles: ["company"],
+            },
+            {
+                href: "/student/feedback",
+                icon: <MessageSquareMore />,
+                label: "Feedback",
+                roles: ["student"],
             },
             {
                 label: "Settings",

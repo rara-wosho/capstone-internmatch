@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import BorderBox from "../ui/BorderBox";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -163,7 +163,9 @@ export default function ChooseInterestsSection({
                     <div className="mt-4 flex items-center justify-between">
                         <Button
                             onClick={handleSubmitInterests}
-                            disabled={isPending}
+                            disabled={
+                                isPending || selectedInterests.length === 0
+                            }
                         >
                             {isPending && <Loader className="animate-spin" />}
                             {isOnboarding
