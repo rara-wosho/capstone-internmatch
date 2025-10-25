@@ -61,3 +61,22 @@ export async function addQuestionAndChoices(questionData, exam_id) {
     revalidatePath(`/company/manage-exam/${exam_id}`, "page");
     return { success: true, error: null };
 }
+
+// restore deleted question
+export async function restoreQuestion(id) {
+    try {
+        const supabase = await createClient();
+
+        const { error } = await supabase
+            .from("questions")
+            .update({ is_deleted: false })
+            .eq("id", id);
+
+        if (error) throw error;
+
+        revalidatePath("/company/trash");
+        return { success: true };
+    } catch (err) {
+        return { success: false, error: err.message };
+    }
+}

@@ -37,7 +37,7 @@ function Input({ icon, className, type, ...props }) {
                 <button
                     type="button"
                     onClick={togglePasswordVisibility}
-                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
+                    className="absolute inset-y-0 right-0 flex items-center px-3 cursor-pointer text-muted-foreground hover:text-foreground"
                 >
                     {!showPassword ? (
                         <EyeOffIcon size={20} />

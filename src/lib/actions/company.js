@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { supabaseAdmin } from "../supabase/admin";
 import { createClient } from "../supabase/server";
 import { revalidatePath } from "next/cache";
+import { getCurrentUser } from "./auth";
 
 // create a company account using anon auth
 export async function createCompanyAccount(form) {
@@ -263,4 +264,62 @@ export async function upsertCompanyOffers(offers, companyId) {
 
     revalidatePath("/company/offers", "page");
     return { success: true, error: "" };
+}
+
+// Get company's trash items
+export async function getCompanyTrashItems() {
+    const { user } = await getCurrentUser();
+
+    if (!user || !user?.id) {
+        return {
+            success: false,
+            error: "You are not authorized to perform this action.",
+        };
+    }
+
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("companies")
+        .select(
+            `
+            id,
+            exams (
+                id,
+                title,
+                is_deleted,
+                questions (
+                    id,
+                    question_text,
+                    is_deleted
+                )
+            )
+        `
+        )
+        .eq("id", user.id)
+        .maybeSingle();
+
+    if (error) {
+        return { success: false, error: error.message };
+    }
+
+    if (!data) {
+        return { success: true, data: { exams: [] }, error: null };
+    }
+
+    // ✅ Filter results manually (simpler and more flexible)
+    const deletedExams = data.exams?.filter((exam) => exam.is_deleted) || [];
+    const deletedQuestions =
+        data.exams?.flatMap(
+            (exam) =>
+                exam.questions?.filter(
+                    (q) => q.is_deleted && !exam.is_deleted
+                ) || []
+        ) || [];
+
+    return {
+        success: true,
+        data: { deletedExams, deletedQuestions },
+        error: null,
+    };
 }

@@ -13,7 +13,8 @@ export default async function ExamsPage() {
         .select(
             "company_id, updated_at, title, description, duration, questions(id), companies(name)"
         )
-        .eq("is_published", true);
+        .eq("is_published", true)
+        .eq("is_deleted", false);
 
     if (error) {
         return (

@@ -60,7 +60,10 @@ export async function updateExamDetails(formData) {
 export async function deleteExam(examId) {
     const supabase = await createClient();
 
-    const { error } = await supabase.from("exams").delete().eq("id", examId);
+    const { error } = await supabase
+        .from("exams")
+        .update({ is_deleted: true })
+        .eq("id", examId);
 
     if (error) {
         console.error(error.message);
@@ -107,6 +110,8 @@ export async function getExamById(examId) {
         `
             )
             .eq("id", examId)
+            .eq("is_deleted", false)
+            .eq("questions.is_deleted", false)
             .single(); // we expect only one exam
 
         if (error) {
@@ -380,4 +385,23 @@ export async function saveExamsAnswer(
         // data: { answersArray, student_id, exam_id, started_at },
         error: null,
     };
+}
+
+// restore exam
+export async function restoreExam(id) {
+    try {
+        const supabase = await createClient();
+
+        const { error } = await supabase
+            .from("exams")
+            .update({ is_deleted: false })
+            .eq("id", id);
+
+        if (error) throw error;
+
+        revalidatePath("/company/trash");
+        return { success: true };
+    } catch (err) {
+        return { success: false, error: err.message };
+    }
 }

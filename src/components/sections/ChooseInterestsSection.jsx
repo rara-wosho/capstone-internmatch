@@ -61,7 +61,8 @@ export default function ChooseInterestsSection({
         startTransition(async () => {
             const result = await upsertStudentInterests(
                 studentId,
-                selectedInterests
+                selectedInterests,
+                isOnboarding
             );
 
             if (!result.success) {

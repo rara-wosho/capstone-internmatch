@@ -43,6 +43,8 @@ export default async function Page({ params }) {
             `
         )
         .eq("id", examId)
+        .eq("is_deleted", false)
+        .eq("questions.is_deleted", false)
         .order("created_at", { referencedTable: "questions", ascending: true })
         .maybeSingle();
 

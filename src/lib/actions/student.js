@@ -152,7 +152,11 @@ export async function deleteAvatar(table, userId, pathToRevalidate) {
 }
 
 // upsert student interests
-export async function upsertStudentInterests(studentId, interests) {
+export async function upsertStudentInterests(
+    studentId,
+    interests,
+    isOnBoarding
+) {
     const supabase = await createClient();
 
     const { error } = await supabase
@@ -166,7 +170,11 @@ export async function upsertStudentInterests(studentId, interests) {
         return { success: false, error: error.message };
     }
 
-    redirect(`/student/profile/${studentId}`);
+    if (isOnBoarding) {
+        redirect(`/student/`);
+    } else {
+        redirect(`/student/profile/${studentId}`);
+    }
 }
 
 // Get student activity logs

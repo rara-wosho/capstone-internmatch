@@ -11,7 +11,7 @@ import { Loader } from "lucide-react";
 export default function ApplicantActions({ applicant }) {
     const [isPending, startTransition] = useTransition();
 
-    const handleChangeStatus = (newStatus) => {
+    const handleChangeStatus = async (newStatus) => {
         startTransition(async () => {
             const result = await updateApplicationStatus({
                 newStatus,

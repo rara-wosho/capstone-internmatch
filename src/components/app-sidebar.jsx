@@ -17,6 +17,7 @@ import {
     NotepadText,
     FileUser,
     Shield,
+    Trash,
 } from "lucide-react";
 
 import {
@@ -218,6 +219,13 @@ const navigationConfig = [
                         label: "Interests",
                     },
                 ],
+            },
+            {
+                // Recently deleted items for company
+                href: "/company/trash",
+                label: "Trash",
+                icon: <Trash />,
+                roles: ["company"],
             },
         ],
     },

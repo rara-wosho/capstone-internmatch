@@ -151,7 +151,7 @@ export default function AddQuestionCard({
 
             const { error } = await supabase
                 .from("questions")
-                .delete()
+                .update({ is_deleted: true })
                 .eq("id", questionId);
 
             if (error) {
