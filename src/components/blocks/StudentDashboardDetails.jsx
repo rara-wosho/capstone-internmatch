@@ -33,7 +33,7 @@ export async function StudentDashboardDetails({ userId }) {
 
                 <div className="flex items-center flex-row-reverse sm:flex-row gap-2">
                     <Button asChild variant="outline">
-                        <Link href={`/student/profile/${userId}`}>
+                        <Link href="/student/account/edit">
                             <PencilLine /> Edit Profile
                         </Link>
                     </Button>

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import ErrorUi from "@/components/ui/ErrorUi";
 import FormLabel from "@/components/ui/FormLabel";
 import { Input } from "@/components/ui/input";
+import ProfilePercentage from "@/components/ui/ProfilePercentage";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import TitleText from "@/components/ui/TitleText";
 import UploadAvatar from "@/components/UploadAvatar";
@@ -16,7 +17,12 @@ import { ChevronLeft } from "lucide-react";
 export default async function StudentEditAccountPage({ params }) {
     const isOnboarding = (await params)?.onboarding || "";
 
-    const { success, data: studentData, error } = await getStudentEditData();
+    const {
+        success,
+        percentage,
+        data: studentData,
+        error,
+    } = await getStudentEditData();
 
     if (!success) {
         return <ErrorUi secondaryMessage={error} />;
@@ -27,11 +33,15 @@ export default async function StudentEditAccountPage({ params }) {
             <BackButton className="flex items-center mb-2 text-muted-foreground">
                 <ChevronLeft size={19} /> Back
             </BackButton>
-            <SecondaryLabel>Edit Profile Details</SecondaryLabel>
-            <p className="text-sm text-muted-foreground mb-4 md:mb-5">
-                Your selected interests will help companies understand your
-                preferred fields and match you with suitable opportunities.
-            </p>
+            <SecondaryLabel className="mb-3 md:mb-4">
+                Edit Profile Details
+            </SecondaryLabel>
+
+            {percentage !== 100 && (
+                <div className="w-full mb-3">
+                    <ProfilePercentage />
+                </div>
+            )}
 
             <BorderBox className="mb-3 bg-card shadow-xs flex flex-col items-center gap-3 rounded-xl">
                 <Avatar className="w-[110px] aspect-square">
@@ -51,6 +61,7 @@ export default async function StudentEditAccountPage({ params }) {
                     <UploadAvatar currentAvatarUrl={studentData.avatar_url} />
                 </div>
             </BorderBox>
+
             <EditStudentForm studentData={studentData} />
         </Wrapper>
     );

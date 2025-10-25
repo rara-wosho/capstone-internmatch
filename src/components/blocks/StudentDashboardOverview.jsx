@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import DashboardCountBox from "../ui/DashboardCountBox";
 import { createClient } from "@/lib/supabase/server";
+import ProfilePercentage from "../ui/ProfilePercentage";
 
 export default async function StudentDashboardOverview({ userId }) {
     const supabase = await createClient();
@@ -32,7 +33,7 @@ export default async function StudentDashboardOverview({ userId }) {
     );
 
     return (
-        <div className="gap-3 md:gap-4 flex flex-wrap">
+        <div className="gap-2 sm:gap-3 md:gap-4 flex flex-wrap">
             <DashboardCountBox
                 href="/student/applications"
                 label="Pending Applications"
@@ -74,6 +75,8 @@ export default async function StudentDashboardOverview({ userId }) {
                 valueText={data.exam_access ? "Allowed" : "Not Allowed"}
                 color="bg-violet-500/80"
             />
+
+            <ProfilePercentage />
         </div>
     );
 }

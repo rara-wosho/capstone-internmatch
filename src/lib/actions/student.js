@@ -250,6 +250,7 @@ export async function getStudentActivityLogs(limit) {
 }
 
 // get student details for profile  editing
+// and percentage of empty fields.
 export async function getStudentEditData() {
     const { user } = await getCurrentUser();
 
@@ -275,7 +276,24 @@ export async function getStudentEditData() {
         return { success: false, error: error.message, data: null };
     }
 
-    return { success: true, error: null, data };
+    // list of fields to check for missing values.
+    const fieldsToCheck = [
+        "firstname",
+        "lastname",
+        "gender",
+        "age",
+        "barangay",
+        "city",
+        "province",
+        "course",
+        "school",
+        "avatar_url",
+    ];
+
+    const filledCount = fieldsToCheck.filter((field) => !!data[field]).length;
+    const percentage = Math.round((filledCount / fieldsToCheck.length) * 100);
+
+    return { success: true, error: null, data, percentage };
 }
 
 // Update student details
