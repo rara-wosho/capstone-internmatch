@@ -80,7 +80,7 @@ export default async function Page({ params }) {
                 </div>
             </div>
 
-            <div className="flex items-center flex-wrap mb-5 gap-3">
+            <div className="flex items-center flex-wrap mb-5 gap-2">
                 <AboutExamModal exam={exam} />
                 <Button
                     asChild
@@ -97,7 +97,7 @@ export default async function Page({ params }) {
                 </Button>
                 <QuestionReportsModal examId={exam?.id}>
                     <Button variant="primaryOutline" size="sm">
-                        <ChartBar /> Reports
+                        <ChartBar /> Report
                     </Button>
                 </QuestionReportsModal>
             </div>

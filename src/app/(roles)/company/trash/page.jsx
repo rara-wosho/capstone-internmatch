@@ -6,7 +6,7 @@ import ErrorUi from "@/components/ui/ErrorUi";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import IconWrapper from "@/components/ui/IconWrapper";
-import { Trash } from "lucide-react";
+import { Loader, Trash } from "lucide-react";
 
 import { getCompanyTrashItems } from "@/lib/actions/company";
 
@@ -81,7 +81,7 @@ export default function CompanyTrashPage() {
 
     return (
         <div>
-            <div className="mb-4">
+            <div className="mb-2">
                 <SecondaryLabel className="space-x-2">
                     <IconWrapper>
                         <Trash size={18} />
@@ -102,7 +102,13 @@ export default function CompanyTrashPage() {
                     {deletedExams.length === 0 ? (
                         <div className="text-muted-foreground mt-4">
                             {fetching ? (
-                                <div>Loading trash items...</div>
+                                <div className="flex items-center gap-2">
+                                    <Loader
+                                        size={18}
+                                        className="animate-spin"
+                                    />
+                                    <p>Loading trash items...</p>
+                                </div>
                             ) : (
                                 <div>No deleted exam.</div>
                             )}
