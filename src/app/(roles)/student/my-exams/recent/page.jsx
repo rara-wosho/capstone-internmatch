@@ -16,7 +16,7 @@ export default async function Page() {
     const { data, error } = await supabase
         .from("exam_attempt")
         .select(
-            "id, completed_at, started_at, exam_id, exam_title, score, company_id, companies(name)"
+            "id, completed_at, started_at, exam_id, exam_title, score, company_id, companies(name), exams(is_deleted)"
         )
         .eq("student_id", user.id)
         .order("started_at", { ascending: false });

@@ -31,9 +31,16 @@ export default function RecentExamsTable({ data }) {
                     {data?.map((exam) => (
                         <TableRow key={exam.id}>
                             <TableCell>
-                                <p className="truncate max-w-[250px]">
+                                <p
+                                    className={`truncate max-w-[250px] ${exam.exams.is_deleted && "line-through opacity-60"}`}
+                                >
                                     {exam.exam_title}
                                 </p>
+                                {exam.exams.is_deleted && (
+                                    <div className="text-xs text-muted-foreground">
+                                        Deleted exam
+                                    </div>
+                                )}
                             </TableCell>
                             <TableCell>
                                 <Link

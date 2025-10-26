@@ -61,8 +61,10 @@ export default function QuestionReportsModal({ examId, children }) {
             <DialogTrigger asChild>{children}</DialogTrigger>
             <DialogContent className="sm:max-w-5xl">
                 <DialogHeader>
-                    <DialogTitle>Question Performance Report</DialogTitle>
-                    <DialogDescription>
+                    <DialogTitle className="text-left">
+                        Question Performance Report
+                    </DialogTitle>
+                    <DialogDescription className="text-left">
                         This report summarizes how students performed on each
                         question.
                     </DialogDescription>

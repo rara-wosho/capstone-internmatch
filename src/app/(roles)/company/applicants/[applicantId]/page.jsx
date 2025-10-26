@@ -5,15 +5,14 @@ import BreadCrumbs from "@/components/ui/BreadCrumbs";
 import { Button } from "@/components/ui/button";
 import ErrorUi from "@/components/ui/ErrorUi";
 import FormLabel from "@/components/ui/FormLabel";
-import IconWrapper from "@/components/ui/IconWrapper";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { Skeleton } from "@/components/ui/skeleton";
+import TitleText from "@/components/ui/TitleText";
 import Wrapper from "@/components/Wrapper";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
-import { dateFormatter } from "@/utils/date-formatter";
-import { Check, File, Link2, Mail, MapPin, School, X } from "lucide-react";
+import { File, Link2, Mail, MapPin, School, X } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -38,11 +37,11 @@ export default async function Page({ params }) {
     const { data: applicant, error } = await supabase
         .from("applicants")
         .select(
-            "id, applied_at, resume_link, portfolio_link, status, introduction, students!inner(id, firstname, lastname, gender, school, email, avatar_url, barangay, city, province), companies!inner(name, email)"
+            "id, applied_at, resume_link, portfolio_link, status, introduction, students!inner(id, firstname, lastname, gender, school, email, avatar_url, barangay, city, province, assessment_attempt(id)), companies!inner(name, email)"
         )
         .eq("id", applicantId)
         .eq("company_id", user?.id)
-        .single();
+        .maybeSingle();
 
     // Handle errors - notFound for missing data, ErrorUi for other errors
     if (error) {
@@ -53,7 +52,16 @@ export default async function Page({ params }) {
         return <ErrorUi secondaryMessage={error.message} />;
     }
 
-    const student = applicant?.students;
+    // No applicant data with the provided student id
+    if (!applicant) {
+        notFound();
+    }
+
+    const student = applicant?.students || [];
+    const assessmentAttempt = applicant?.students?.assessment_attempt || [];
+
+    console.log("application data: ", applicant);
+    console.log("assessment attempt data: ", assessmentAttempt);
 
     return (
         <div>
@@ -69,10 +77,13 @@ export default async function Page({ params }) {
                 <BorderBox className="rounded-xl border bg-card shadow-xs mb-4">
                     <div className="flex items-center justify-between flex-wrap">
                         <Link href={student?.avatar_url || "#"} target="_blank">
-                            <Avatar className="w-28 aspect-square mb-4">
+                            <Avatar className="w-20 sm:w-28 aspect-square mb-4">
                                 <AvatarImage
                                     alt="avatar"
-                                    src={student?.avatar_url}
+                                    src={
+                                        student?.avatar_url ||
+                                        "/images/default-avatar.jpg"
+                                    }
                                 />
                                 <AvatarFallback>
                                     {student?.firstname?.charAt(0) || "?"}
@@ -136,11 +147,15 @@ export default async function Page({ params }) {
                     </div>
                     <div className="mt-4 flex flex-col gap-2 mb-5">
                         <div className="flex items-center text-muted-foreground gap-2">
-                            <School size={14} />
+                            <div>
+                                <School size={14} />
+                            </div>
                             <p className="text-sm">{student?.school}</p>
                         </div>
                         <div className="flex items-center text-muted-foreground gap-2">
-                            <MapPin size={14} />
+                            <div>
+                                <MapPin size={14} />
+                            </div>
                             <p className="text-sm">
                                 {student?.barangay}, {student?.city},{" "}
                                 {student?.province}
@@ -153,7 +168,9 @@ export default async function Page({ params }) {
                                 href={`${applicant?.resume_link}`}
                                 className="flex items-center text-muted-foreground gap-2 transition-colors hover:text-accent-foreground"
                             >
-                                <File size={14} />
+                                <div>
+                                    <File size={14} />
+                                </div>
 
                                 <p className="text-sm truncate max-w-[300px] hover:max-w-[700px]">
                                     Resume Link: {applicant?.resume_link}
@@ -166,7 +183,9 @@ export default async function Page({ params }) {
                                 href={`${applicant?.portfolio_link}`}
                                 className="flex items-center text-muted-foreground gap-2 transition-colors hover:text-accent-foreground"
                             >
-                                <Link2 size={15} />
+                                <div>
+                                    <Link2 size={15} />
+                                </div>
                                 <p className="text-sm">
                                     Portfolio: {applicant?.portfolio_link}
                                 </p>
@@ -184,14 +203,17 @@ export default async function Page({ params }) {
 
                 <ApplicantActions applicant={applicant} />
 
-                <BorderBox className="border rounded-xl bg-card shadow-xs">
-                    <p>Exam Results</p>
+                <BorderBox className="border rounded-xl bg-blue-400/20 dark:bg-blue-500/30 border-blue-500/50 text-blue-600 dark:text-blue-400 shadow-xs mb-3">
+                    <TitleText>Exam Results</TitleText>
                     <Suspense fallback={<Skeleton className="h-3 w-36" />}>
                         <StudentExamResults
                             studentId={student?.id}
                             companyId={user?.id}
                         />
                     </Suspense>
+                </BorderBox>
+                <BorderBox className="border rounded-xl bg-card shadow-xs mb-3">
+                    <TitleText>Assessment Test Results</TitleText>
                 </BorderBox>
             </Wrapper>
         </div>

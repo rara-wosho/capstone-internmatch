@@ -131,6 +131,7 @@ export async function getCompanyDataAndExams(companyId) {
         )
         .eq("id", companyId)
         .eq("exams.is_published", true)
+        .eq("exams.is_deleted", false)
         .order("created_at", { referencedTable: "exams", ascending: true })
         .maybeSingle();
 
@@ -322,4 +323,26 @@ export async function getCompanyTrashItems() {
         data: { deletedExams, deletedQuestions },
         error: null,
     };
+}
+
+// Get companies dashboard overview data
+export async function getCompanyDashboardOverview(companyId) {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("companies")
+        .select(
+            "exams(title, is_published), exam_attempt(id), applicants(id, status)"
+        )
+        .eq("id", companyId)
+        .eq("exams.is_deleted", false)
+        .eq("exam_attempt.company_id", companyId)
+        .order("created_at", { referencedTable: "exams", ascending: false })
+        .maybeSingle();
+
+    if (error) {
+        return { success: false, error: error.message, data: [] };
+    }
+
+    return { success: true, error: "", data };
 }

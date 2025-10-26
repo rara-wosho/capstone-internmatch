@@ -1,21 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import BorderBox from "../ui/BorderBox";
 import Form from "next/form";
 import FormLabel from "../ui/FormLabel";
 import { Textarea } from "../ui/textarea";
 import TitleText from "../ui/TitleText";
-import { Bug, Info, Lightbulb } from "lucide-react";
+import { Bug, Info, Lightbulb, Loader, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
+import { useSession } from "@/context/SessionContext";
+import { submitFeedback } from "@/lib/actions/feedback";
+import { toast } from "sonner";
 
 export default function FeedbackForm() {
-    const [feedback, setFeedback] = useState({
+    const { userData } = useSession();
+
+    const [formData, setFormData] = useState({
         category: "suggestions",
-        message: "",
+        feedback: "",
+        rating: 5,
+        role: userData.role,
     });
-    const [status, setStatus] = useState(null);
+
+    const [isPending, startTransition] = useTransition();
 
     const categories = [
         {
@@ -39,41 +47,27 @@ export default function FeedbackForm() {
     ];
 
     function handleChangeCategory(category) {
-        setFeedback((prev) => ({ ...prev, category }));
+        setFormData((prev) => ({ ...prev, category }));
     }
 
     function handleChangeMessage(e) {
-        setFeedback((prev) => ({ ...prev, message: e.target.value }));
+        setFormData((prev) => ({ ...prev, feedback: e.target.value }));
     }
 
     async function handleSubmit(e) {
         e.preventDefault();
-        // if (!feedback.message.trim()) {
-        //     setStatus({ type: "error", text: "Please enter your feedback." });
-        //     return;
-        // }
 
-        // try {
-        //     // Example: save via API route or server action
-        //     const res = await fetch("/api/feedback", {
-        //         method: "POST",
-        //         headers: { "Content-Type": "application/json" },
-        //         body: JSON.stringify(feedback),
-        //     });
+        startTransition(async () => {
+            const { success, error } = await submitFeedback(formData);
 
-        //     if (!res.ok) throw new Error("Failed to send feedback");
+            if (!success || error) {
+                toast.error(error);
+                return;
+            }
 
-        //     setStatus({
-        //         type: "success",
-        //         text: "Thank you for your feedback!",
-        //     });
-        //     setFeedback({ category: "suggestions", message: "" });
-        // } catch (err) {
-        //     setStatus({
-        //         type: "error",
-        //         text: "Something went wrong. Please try again.",
-        //     });
-        // }
+            toast.success("Submitted feedback successfully.");
+            setFormData((prev) => ({ ...prev, feedback: "" }));
+        });
     }
 
     return (
@@ -86,7 +80,7 @@ export default function FeedbackForm() {
                         onClick={() => handleChangeCategory(id)}
                         className={cn(
                             "rounded-lg basis-[250px] grow border flex gap-2 p-3 cursor-pointer transition",
-                            feedback.category === id
+                            formData.category === id
                                 ? "border-accent-foreground bg-accent text-accent-foreground"
                                 : "hover:text-accent-foreground"
                         )}
@@ -101,12 +95,35 @@ export default function FeedbackForm() {
                     </div>
                 ))}
             </div>
-
+            <div className="mb-3">
+                <FormLabel>Rate your experience</FormLabel>
+                <div className="flex items-center gap-2">
+                    {[...Array(5)].map((s, index) => (
+                        <div
+                            onClick={() =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    rating: index + 1,
+                                }))
+                            }
+                            key={index}
+                            className="text-yellow-500 cursor-pointer size-6 flex items-center justify-center"
+                        >
+                            <Star
+                                className={`${formData.rating > index && "fill-yellow-500"}`}
+                            />
+                        </div>
+                    ))}
+                    <p className="ms-2 text-sm text-muted-foreground">
+                        {formData.rating} Star{formData.rating > 1 && "s"}
+                    </p>
+                </div>
+            </div>
             {/* Feedback Form */}
             <Form onSubmit={handleSubmit} className="space-y-3">
                 <FormLabel>Your Feedback</FormLabel>
                 <Textarea
-                    value={feedback.message}
+                    value={formData.feedback}
                     onChange={handleChangeMessage}
                     placeholder="Share your thoughts, suggestions, or report issues..."
                     className="min-h-[120px]"
@@ -115,9 +132,10 @@ export default function FeedbackForm() {
                     <Button
                         type="submit"
                         className="mt-2"
-                        disabled={!feedback.message}
+                        disabled={!formData.feedback || isPending}
                     >
-                        Submit Feedback
+                        {isPending && <Loader className="animate-spin" />}
+                        {isPending ? "Submitting Feedback" : "Submit Feedback"}
                     </Button>
                 </div>
             </Form>
