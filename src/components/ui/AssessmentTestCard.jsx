@@ -41,7 +41,7 @@ export default function AssessmentTestCard({ assessmentTest }) {
                                 "pointer-events-none opacity-50"
                         )}
                     >
-                        View Details
+                        Start Test
                     </Link>
                 </Button>
                 {assessmentTest.hasAttempted && (

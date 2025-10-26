@@ -6,7 +6,7 @@ export default function StudentFeedbackPage() {
     return (
         <Wrapper size="sm">
             <div className="mb-4 md:mb-5">
-                <SecondaryLabel>Feedback (Under construction)</SecondaryLabel>
+                <SecondaryLabel>Feedback</SecondaryLabel>
                 <p className="text-muted-foreground text-sm">
                     Your feedback helps us improve InternMatch. We appreciate
                     you taking the time to share your thoughts.
