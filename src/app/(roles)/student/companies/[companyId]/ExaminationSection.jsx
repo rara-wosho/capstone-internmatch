@@ -143,7 +143,13 @@ export default function ExaminationSection({ companyExams }) {
                                             asChild
                                             className="w-full"
                                         >
-                                            <Button>Start examination</Button>
+                                            <Button
+                                                disabled={exam?.hasAttempted}
+                                            >
+                                                {exam?.hasAttempted
+                                                    ? "Already answered"
+                                                    : "View exam details"}
+                                            </Button>
                                         </DialogTrigger>
                                     )}
                                     <DialogContent className="sm:max-w-2xl">

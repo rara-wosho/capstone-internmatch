@@ -122,16 +122,26 @@ export async function getCompanyById(id) {
 
 // fetch company data and exams
 export async function getCompanyDataAndExams(companyId) {
+    // Get student id/current user id
+    const { user } = await getCurrentUser();
+
+    if (!user || !user?.id) {
+        return { data: null, error: "Unauthorized." };
+    }
+
     const supabase = await createClient();
 
     const { data, error } = await supabase
         .from("companies")
         .select(
-            `*, company_offers(offers), exams(id, created_at, title, description, instruction, duration, updated_at, questions(id))`
+            `id, created_at, name, details, barangay, province, city, phone, email, links, website, avatar_url, accept_applicants, accept_applicants_term, 
+            company_offers(offers), 
+            exams(id, created_at, title, description, instruction, duration, updated_at, questions(id), exam_attempt(completed_at))`
         )
         .eq("id", companyId)
         .eq("exams.is_published", true)
         .eq("exams.is_deleted", false)
+        .eq("exams.exam_attempt.student_id", user.id)
         .order("created_at", { referencedTable: "exams", ascending: true })
         .maybeSingle();
 
@@ -144,10 +154,19 @@ export async function getCompanyDataAndExams(companyId) {
 
     // Add question_count to each exam
     const examsWithCount =
-        data?.exams?.map((exam) => ({
-            ...exam,
-            question_count: exam.questions?.length ?? 0,
-        })) ?? [];
+        data?.exams?.map((exam) => {
+            const attempts = exam.exam_attempt || [];
+            const hasAttempted = attempts.length > 0;
+
+            return {
+                ...exam,
+                hasAttempted,
+                question_count: exam.questions?.length ?? 0,
+                // Remove unnecessary data
+                questions: undefined,
+                exam_attempt: undefined,
+            };
+        }) ?? [];
 
     return {
         data: {
