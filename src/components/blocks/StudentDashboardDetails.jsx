@@ -1,9 +1,7 @@
 import { getStudentProfileData } from "@/lib/actions/student";
-import BorderBox from "../ui/BorderBox";
-import { Avatar, AvatarImage } from "../ui/avatar";
 import SecondaryLabel from "../ui/SecondaryLabel";
 import { Button } from "../ui/button";
-import { GraduationCap, MapPin, PencilLine, School } from "lucide-react";
+import { PencilLine } from "lucide-react";
 import Link from "next/link";
 
 export async function StudentDashboardDetails({ userId }) {

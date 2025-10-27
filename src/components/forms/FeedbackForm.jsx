@@ -77,13 +77,14 @@ export default function FeedbackForm() {
     }
 
     const fetchOwnFeedback = useCallback(async () => {
-        setFetchingFeedback(true);
+        // setFetchingFeedback(true);
         const supabase = createClient();
 
         const { data, error } = await supabase
             .from("feedbacks")
             .select("feedback, submitted_at, category")
-            .eq("user_id", userData.id);
+            .eq("user_id", userData.id)
+            .order("submitted_at", { ascending: false });
 
         if (error) {
             setOwnFeedbacks([]);

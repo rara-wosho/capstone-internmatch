@@ -1,26 +1,22 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import BorderBox from "@/components/ui/BorderBox";
 import { Button } from "@/components/ui/button";
 import ErrorUi from "@/components/ui/ErrorUi";
-import IconWrapper from "@/components/ui/IconWrapper";
+import FormLabel from "@/components/ui/FormLabel";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import TertiaryLabel from "@/components/ui/TertiaryLabel";
 import TitleText from "@/components/ui/TitleText";
-import UploadAvatar from "@/components/UploadAvatar";
 import Wrapper from "@/components/Wrapper";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { getStudentProfileData } from "@/lib/actions/student";
+import { createClient } from "@/lib/supabase/server";
 
 import {
-    Bell,
     GraduationCap,
     Mail,
     MapPin,
     PencilLine,
     Settings,
     ShieldCheck,
-    SquareArrowOutUpRight,
     User,
     Users,
 } from "lucide-react";
@@ -60,6 +56,7 @@ export default async function Page({ params }) {
         notFound();
     }
 
+    const ojt_instructor = studentData?.groups?.ojt_instructors;
     return (
         <Wrapper size="sm">
             {/* ======= HEADER ========  */}
@@ -113,13 +110,13 @@ export default async function Page({ params }) {
                             <TabsTrigger value="profile">
                                 <User /> Profile
                             </TabsTrigger>
-                            <TabsTrigger value="credentials">
-                                <ShieldCheck />
-                                Credentials
-                            </TabsTrigger>
                             <TabsTrigger value="group">
                                 <Users />
                                 Group
+                            </TabsTrigger>
+                            <TabsTrigger value="credentials">
+                                <ShieldCheck />
+                                Credentials
                             </TabsTrigger>
                         </TabsList>
                     </div>
@@ -196,7 +193,23 @@ export default async function Page({ params }) {
                         Change your password here.
                     </TabsContent>
                     <TabsContent value="group">
-                        Change your password here.
+                        <div className="mb-2">
+                            <TitleText>
+                                {studentData?.groups?.group_name}
+                            </TitleText>
+                            <p className="text-muted-foreground text-sm">
+                                Your group's name
+                            </p>
+                        </div>
+                        <div className="mb-2">
+                            <TitleText>
+                                {ojt_instructor?.firstname}{" "}
+                                {ojt_instructor?.lastname}
+                            </TitleText>
+                            <p className="text-muted-foreground text-sm">
+                                Ojt Instructor/Group creator
+                            </p>
+                        </div>
                     </TabsContent>
                 </Tabs>
             </div>

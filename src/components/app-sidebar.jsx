@@ -421,7 +421,10 @@ export function AppSidebar({ profileData }) {
                             asChild
                             className="hover:bg-transparent"
                         >
-                            <Link href={`/${role}/profile/${profileData?.id}`}>
+                            <Link
+                                onClick={handleLinkClick}
+                                href={`/${role}/profile/${profileData?.id}`}
+                            >
                                 <Avatar>
                                     <AvatarImage
                                         src={
