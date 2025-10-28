@@ -170,7 +170,7 @@ export default function ChooseInterestsSection({
                         >
                             {isPending && <Loader className="animate-spin" />}
                             {isOnboarding
-                                ? "Save and Get Started"
+                                ? "Save and Proceed"
                                 : "Save Interests"}
                         </Button>
                     </div>

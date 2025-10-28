@@ -9,9 +9,11 @@ import FormLabel from "../ui/FormLabel";
 import { Button } from "../ui/button";
 import { updateStudentDetails } from "@/lib/actions/student";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-export default function EditStudentForm({ studentData }) {
+export default function EditStudentForm({ isOnboarding, studentData }) {
     const [isPending, startTransition] = useTransition();
+    const router = useRouter();
 
     const handleSubmit = async (formData) => {
         startTransition(async () => {
@@ -24,7 +26,10 @@ export default function EditStudentForm({ studentData }) {
                     });
                     return;
                 }
-                toast.success("Student details updated successfully");
+                toast.success("Student details saved successfully");
+                if (isOnboarding) {
+                    router.replace("/student");
+                }
             } catch (error) {
                 toast.error("Something went wrong.", {
                     description: error.message,
@@ -147,7 +152,7 @@ export default function EditStudentForm({ studentData }) {
 
             <div className="flex justify-end gap-2">
                 <Button type="submit" disabled={isPending}>
-                    {isPending ? "Saving..." : "Save Changes"}
+                    {isPending ? "Saving Details..." : "Save Profile Details"}
                 </Button>
             </div>
         </Form>

@@ -1,6 +1,14 @@
 "use client";
 
-import { Bell, ChevronDown, LogOut, Settings, User } from "lucide-react";
+import {
+    Bell,
+    ChevronDown,
+    ListChecks,
+    LogOut,
+    Logs,
+    Settings,
+    User,
+} from "lucide-react";
 import { ThemeToggler } from "../theme-toggler";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import {
@@ -103,9 +111,31 @@ export default function DashboardHeader({ profileData }) {
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
                             <SidebarMenuItem>
-                                <SidebarMenuButton className="cursor-pointer">
-                                    <Settings />
-                                    Account settings
+                                <SidebarMenuButton
+                                    className="cursor-pointer"
+                                    asChild
+                                >
+                                    <Link
+                                        onNavigate={() => setOpen(false)}
+                                        href={`/student/interests`}
+                                    >
+                                        <ListChecks />
+                                        Interests
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton
+                                    className="cursor-pointer"
+                                    asChild
+                                >
+                                    <Link
+                                        onNavigate={() => setOpen(false)}
+                                        href={`/student/profile/activities`}
+                                    >
+                                        <Logs />
+                                        Activity Logs
+                                    </Link>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
                         </SidebarMenu>
@@ -114,7 +144,7 @@ export default function DashboardHeader({ profileData }) {
                         <SidebarMenu className="text-secondary-foreground/80 p-1">
                             <SidebarMenuItem>
                                 <SignOutModal>
-                                    <SidebarMenuButton className="cursor-pointer">
+                                    <SidebarMenuButton className="cursor-pointer text-destructive hover:text-destructive dark:hover:text-destructive">
                                         <LogOut />
                                         Sign Out
                                     </SidebarMenuButton>

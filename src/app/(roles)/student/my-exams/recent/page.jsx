@@ -1,4 +1,5 @@
 import RecentExamsTable from "@/components/tables/RecentExamsTable";
+import EmptyUi from "@/components/ui/EmptyUi";
 import ErrorUi from "@/components/ui/ErrorUi";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { getCurrentUser } from "@/lib/actions/auth";
@@ -33,7 +34,7 @@ export default async function Page() {
                 <RecentExamsTable data={data} />
             ) : (
                 <div>
-                    <p>No results found</p>
+                    <EmptyUi secondaryMessage="You haven't taken any exams yet." />
                 </div>
             )}
         </div>

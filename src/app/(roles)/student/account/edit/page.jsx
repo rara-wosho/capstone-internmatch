@@ -14,8 +14,9 @@ import Wrapper from "@/components/Wrapper";
 import { getStudentEditData } from "@/lib/actions/student";
 import { ChevronLeft } from "lucide-react";
 
-export default async function StudentEditAccountPage({ params }) {
-    const isOnboarding = (await params)?.onboarding || "";
+export default async function StudentEditAccountPage({ searchParams }) {
+    const onboarding = (await searchParams)?.onboarding || "";
+    const isOnboarding = onboarding === "yes";
 
     const {
         success,
@@ -30,11 +31,26 @@ export default async function StudentEditAccountPage({ params }) {
 
     return (
         <Wrapper size="sm">
-            <BackButton className="flex items-center mb-2 text-muted-foreground">
-                <ChevronLeft size={19} /> Back
-            </BackButton>
+            {!isOnboarding && (
+                <BackButton className="flex items-center mb-2 text-muted-foreground">
+                    <ChevronLeft size={19} /> Back
+                </BackButton>
+            )}
             <SecondaryLabel className="mb-3 md:mb-4">
-                Edit Profile Details
+                <div>
+                    <p>
+                        {isOnboarding
+                            ? "🚀 Let’s Get Your Account Ready"
+                            : "Edit Profile Details"}
+                    </p>
+                    {isOnboarding && (
+                        <p className="text-muted-foreground text-sm font-normal">
+                            You’re almost there! Just a few more steps to
+                            personalize your experience and start exploring
+                            opportunities.
+                        </p>
+                    )}
+                </div>
             </SecondaryLabel>
 
             {percentage !== 100 && (
@@ -62,7 +78,10 @@ export default async function StudentEditAccountPage({ params }) {
                 </div>
             </BorderBox>
 
-            <EditStudentForm studentData={studentData} />
+            <EditStudentForm
+                isOnboarding={isOnboarding}
+                studentData={studentData}
+            />
         </Wrapper>
     );
 }

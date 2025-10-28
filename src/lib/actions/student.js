@@ -173,7 +173,7 @@ export async function upsertStudentInterests(
     }
 
     if (isOnBoarding) {
-        redirect(`/student/`);
+        redirect(`/student/account/edit?onboarding=yes`);
     } else {
         redirect(`/student/profile/${studentId}`);
     }

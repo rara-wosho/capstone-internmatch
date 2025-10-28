@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import ErrorUi from "@/components/ui/ErrorUi";
 import FormLabel from "@/components/ui/FormLabel";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TitleText from "@/components/ui/TitleText";
 import Wrapper from "@/components/Wrapper";
