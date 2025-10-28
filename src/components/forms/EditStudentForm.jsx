@@ -26,9 +26,13 @@ export default function EditStudentForm({ isOnboarding, studentData }) {
                     });
                     return;
                 }
-                toast.success("Student details saved successfully");
                 if (isOnboarding) {
+                    toast.success("Student details saved successfully", {
+                        description: "Redirecting to dashboard.",
+                    });
                     router.replace("/student");
+                } else {
+                    toast.success("Student details saved successfully");
                 }
             } catch (error) {
                 toast.error("Something went wrong.", {
