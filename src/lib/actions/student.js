@@ -394,6 +394,69 @@ export async function updateStudentDetails(formData) {
     }
 }
 
+// Get exams taken by a student
+export async function getStudentRecentExams(studentId) {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("exam_attempt")
+        .select(
+            `
+            id,
+           
+            exam_title,
+            score,
+            completed_at,
+            total_questions,
+            exams(is_deleted )
+        `
+        )
+        .eq("student_id", studentId)
+        .order("completed_at", { ascending: false });
+
+    if (error) {
+        return { success: false, error: error.message };
+    }
+
+    return { success: true, data };
+}
+
+// Get assessment test taken by a student
+export async function getRecentAssessmentTest(studentId) {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("assessment_attempt")
+        .select(
+            `
+            id,
+            assessment_score,
+            assessment_total_item,
+            submitted_at,
+            assessment_test(is_deleted, assessment_title)
+        `
+        )
+        .eq("student_id", studentId)
+        .order("submitted_at", { ascending: false });
+
+    if (error) {
+        console.error("Error fetching assessment tests:", error);
+        return { success: false, error: error.message, data: [] };
+    }
+
+    const formattedData = data.map((attempt) => ({
+        id: attempt.id,
+        assessment_title:
+            attempt.assessment_test?.assessment_title ?? "Untitled Test",
+        score: attempt.assessment_score ?? 0,
+        total_questions: attempt.assessment_total_item ?? 0,
+        completed_at: attempt.submitted_at,
+        is_deleted: attempt.assessment_test?.is_deleted,
+    }));
+
+    return { success: true, data: formattedData };
+}
+
 // Get student activity logs
 // export async function getStudentActivityLogs(limit) {
 //     try {
