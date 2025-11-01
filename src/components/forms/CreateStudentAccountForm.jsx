@@ -44,7 +44,6 @@ export default function CreateStudentAccountForm9({ groupId, school }) {
             course,
         } = formData;
 
-        console.log(formData);
         // Required fields check
         if (
             !firstName.trim() ||

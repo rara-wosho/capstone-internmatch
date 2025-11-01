@@ -42,7 +42,6 @@ export default async function AssessmentResultPage({ params }) {
         .maybeSingle(); // or .single()
 
     if (error) {
-        console.log(error);
         return (
             <ErrorUi
                 secondaryMessage={

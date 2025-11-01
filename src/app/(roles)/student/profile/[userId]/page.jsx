@@ -130,13 +130,17 @@ export default async function Page({ params }) {
 
                         <div className="flex flex-col gap-1 mb-5">
                             <div className="flex items-center gap-2">
-                                <Mail size={16} />
+                                <div className="size-5 flex items-center justify-center shrink-0">
+                                    <Mail size={16} />
+                                </div>
                                 <p className="text-muted-foreground text-sm sm:text-base">
                                     {studentData?.email}
                                 </p>
                             </div>
                             <div className="flex items-center gap-2">
-                                <GraduationCap size={18} />
+                                <div className="size-5 flex items-center justify-center shrink-0">
+                                    <GraduationCap size={18} />
+                                </div>
                                 <p className="text-muted-foreground text-sm sm:text-base">
                                     {studentData?.school}
                                 </p>
@@ -144,7 +148,9 @@ export default async function Page({ params }) {
 
                             {studentData?.city && (
                                 <div className="flex items-center gap-2">
-                                    <MapPin size={16} />
+                                    <div className="size-5 flex items-center justify-center shrink-0">
+                                        <MapPin size={16} />
+                                    </div>
                                     <p className="text-muted-foreground text-sm sm:text-base">
                                         {studentData?.barangay},{" "}
                                         {studentData?.city},{" "}

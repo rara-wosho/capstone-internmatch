@@ -5,6 +5,8 @@ import BreadCrumbs from "@/components/ui/BreadCrumbs";
 import { Button } from "@/components/ui/button";
 import ErrorUi from "@/components/ui/ErrorUi";
 import FormLabel from "@/components/ui/FormLabel";
+import InfoPopover from "@/components/ui/info-popover";
+import { Popover } from "@/components/ui/popover";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { Skeleton } from "@/components/ui/skeleton";
 import TitleText from "@/components/ui/TitleText";
@@ -12,7 +14,18 @@ import Wrapper from "@/components/Wrapper";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
-import { File, Link2, Mail, MapPin, School, X } from "lucide-react";
+import { dateFormatter } from "@/utils/date-formatter";
+import {
+    File,
+    FileText,
+    Info,
+    Link2,
+    Mail,
+    MapPin,
+    NotepadText,
+    School,
+    X,
+} from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -37,7 +50,7 @@ export default async function Page({ params }) {
     const { data: applicant, error } = await supabase
         .from("applicants")
         .select(
-            "id, applied_at, resume_link, portfolio_link, status, introduction, students!inner(id, firstname, lastname, gender, school, email, avatar_url, barangay, city, province, assessment_attempt(id)), companies!inner(name, email)"
+            "id, applied_at, resume_link, portfolio_link, status, introduction, students!inner(id, firstname, lastname, gender, school, email, avatar_url, barangay, city, province, assessment_attempt(id, submitted_at, assessment_score, assessment_total_item, assessment_test(assessment_title)))"
         )
         .eq("id", applicantId)
         .eq("company_id", user?.id)
@@ -60,9 +73,6 @@ export default async function Page({ params }) {
     const student = applicant?.students || [];
     const assessmentAttempt = applicant?.students?.assessment_attempt || [];
 
-    console.log("application data: ", applicant);
-    console.log("assessment attempt data: ", assessmentAttempt);
-
     return (
         <div>
             <Wrapper size="sm">
@@ -74,7 +84,8 @@ export default async function Page({ params }) {
                     </div>
                 </div>
 
-                <BorderBox className="rounded-xl border bg-card shadow-xs mb-4">
+                {/* ======= ABOUT THE STUDENT SECTION ============= */}
+                <BorderBox className="rounded-xl border bg-card shadow-xs mb-3">
                     <div className="flex items-center justify-between flex-wrap">
                         <Link href={student?.avatar_url || "#"} target="_blank">
                             <Avatar className="w-20 sm:w-28 aspect-square mb-4">
@@ -203,8 +214,8 @@ export default async function Page({ params }) {
 
                 <ApplicantActions applicant={applicant} />
 
-                <BorderBox className="border rounded-xl bg-blue-400/20 dark:bg-blue-500/30 border-blue-500/50 text-blue-600 dark:text-blue-400 shadow-xs mb-3">
-                    <TitleText>Exam Results</TitleText>
+                <BorderBox className="border rounded-xl bg-card shadow-xs mb-3">
+                    <TitleText className="mb-3">Exam Results</TitleText>
                     <Suspense fallback={<Skeleton className="h-3 w-36" />}>
                         <StudentExamResults
                             studentId={student?.id}
@@ -213,7 +224,42 @@ export default async function Page({ params }) {
                     </Suspense>
                 </BorderBox>
                 <BorderBox className="border rounded-xl bg-card shadow-xs mb-3">
-                    <TitleText>Assessment Test Results</TitleText>
+                    <div className="flex items-center gap-2 mb-3">
+                        <TitleText>Assessment Test Results</TitleText>
+
+                        <InfoPopover
+                            textContent="Assessment tests evaluate a student’s core competencies and readiness for real work tasks. They serve as an additional tool to help you identify and select qualified internship candidates."
+                            trigger={<Info size={16} />}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        {assessmentAttempt.map((assessment) => (
+                            <div
+                                key={assessment.id}
+                                className="flex items-center gap-2"
+                            >
+                                <div className="text-blue-500 bg-blue-500/10 p-2 rounded-sm border-blue-500/10">
+                                    <FileText size={18} />
+                                </div>
+                                <div className="flex flex-col w-full">
+                                    <p className="text-sm">
+                                        {
+                                            assessment.assessment_test
+                                                ?.assessment_title
+                                        }
+                                    </p>
+                                    <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+                                        <p>
+                                            Score :{" "}
+                                            {assessment.assessment_score}/
+                                            {assessment?.assessment_total_item}
+                                        </p>
+                                        {/* <p>{dateFormatter(attempt.completed_at)}</p>  */}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </BorderBox>
             </Wrapper>
         </div>
@@ -233,7 +279,7 @@ async function StudentExamResults({ studentId, companyId }) {
 
     const { data, error } = await supabase
         .from("exam_attempt")
-        .select("id, score, exam_title")
+        .select("id, score, exam_title, completed_at, total_questions")
         .eq("student_id", studentId)
         .eq("company_id", companyId);
 
@@ -241,11 +287,23 @@ async function StudentExamResults({ studentId, companyId }) {
         return <ErrorUi secondaryMessage={error.message} />;
     }
     return (
-        <div>
+        <div className="space-y-2">
             {data.length > 0 ? (
                 data.map((attempt) => (
-                    <div key={attempt.id}>
-                        {attempt.exam_title} - Score: {attempt.score}
+                    <div key={attempt.id} className="flex items-center gap-2">
+                        <div className="text-green-500 bg-green-500/10 p-2 rounded-sm border-green-500/10">
+                            <NotepadText size={18} />
+                        </div>
+                        <div className="flex flex-col w-full">
+                            <p className="text-sm">{attempt.exam_title}</p>
+                            <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+                                <p>
+                                    Score : {attempt.score}/
+                                    {attempt?.total_questions}
+                                </p>
+                                <p>{dateFormatter(attempt.completed_at)}</p>
+                            </div>
+                        </div>
                     </div>
                 ))
             ) : (

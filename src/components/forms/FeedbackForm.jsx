@@ -101,7 +101,6 @@ export default function FeedbackForm() {
         fetchOwnFeedback();
     }, []);
 
-    console.log(ownFeedbacks);
     return (
         <>
             <BorderBox className="bg-card shadow-xs rounded-xl p-4 mb-6">

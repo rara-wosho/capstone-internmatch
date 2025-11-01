@@ -1,7 +1,6 @@
 import { User, Users } from "lucide-react";
 import DashboardCountBox from "../ui/DashboardCountBox";
 import { getCompanyDashboardOverview } from "@/lib/actions/company";
-import ErrorUi from "../ui/ErrorUi";
 import TitleText from "../ui/TitleText";
 
 export default async function CompanyDashboardOverview({ userId }) {
@@ -31,12 +30,11 @@ export default async function CompanyDashboardOverview({ userId }) {
         (e) => e.status === "reviewed"
     );
 
-    console.log("data : ", data);
     return (
         <>
             <div className="rounded-xl bg-card p-3 sm:p-4 border md:p-5 mb-2 sm:mb-3 md:mb-4">
                 <TitleText>Applicants</TitleText>
-                <div className="flex items-center gap-2 mt-2">
+                <div className="flex items-center flex-wrap gap-2 mt-2">
                     <DashboardCountBox
                         icon={<Users />}
                         valueText={applicants.length}
@@ -61,7 +59,7 @@ export default async function CompanyDashboardOverview({ userId }) {
             </div>
             <div className="rounded-xl bg-card p-3 sm:p-4 border md:p-5 mb-2 sm:mb-3 md:mb-4">
                 <TitleText>Exams</TitleText>
-                <div className="flex items-center gap-2 mt-2">
+                <div className="flex items-center flex-wrap gap-2 mt-2">
                     <DashboardCountBox
                         icon={<Users />}
                         valueText={data?.exams?.length}

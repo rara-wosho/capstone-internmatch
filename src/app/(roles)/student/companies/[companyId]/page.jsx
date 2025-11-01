@@ -47,8 +47,6 @@ export default async function Page({ params }) {
         return <ErrorUi secondaryMessage={error} />;
     }
 
-    console.log("data: ", data);
-
     return (
         <div className="mx-auto max-w-[900px]">
             <BreadCrumbs className="mb-4" links={links} />

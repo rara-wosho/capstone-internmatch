@@ -52,7 +52,6 @@ export default async function Page({ searchParams }) {
                     <Suspense fallback={null}>
                         <SearchGroup />
                     </Suspense>
-                    {/* <SortData />  */}
                 </div>
 
                 <AddGroupModal />

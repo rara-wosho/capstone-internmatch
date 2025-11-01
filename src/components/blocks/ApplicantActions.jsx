@@ -31,7 +31,7 @@ export default function ApplicantActions({ applicant }) {
     };
 
     return (
-        <div className="border rounded-xl bg-card shadow-xs mb-4">
+        <div className="border rounded-xl bg-card shadow-xs mb-3">
             <div className="py-3 px-3 md:px-5 border-b flex items-center justify-between gap-2 flex-wrap">
                 <p className="text-sm text-muted-foreground">
                     Applied at:{" "}
@@ -55,7 +55,11 @@ export default function ApplicantActions({ applicant }) {
                 )}
                 <div className="flex items-center gap-2 grow sm:grow-0 sm:flex-row-reverse">
                     <Button
-                        disabled={isPending || applicant.status === "accepted"}
+                        disabled={
+                            isPending ||
+                            applicant.status === "accepted" ||
+                            applicant.status === "rejected"
+                        }
                         onClick={() => handleChangeStatus("accepted")}
                         className="grow"
                         variant="success"
@@ -65,7 +69,11 @@ export default function ApplicantActions({ applicant }) {
                             : "Accept"}
                     </Button>
                     <Button
-                        disabled={isPending || applicant.status === "rejected"}
+                        disabled={
+                            isPending ||
+                            applicant.status === "rejected" ||
+                            applicant.status === "accepted"
+                        }
                         onClick={() => handleChangeStatus("rejected")}
                         className="grow"
                         variant="destructive"
@@ -76,7 +84,12 @@ export default function ApplicantActions({ applicant }) {
                     </Button>
                 </div>
                 <Button
-                    disabled={isPending || applicant.status === "reviewed"}
+                    disabled={
+                        isPending ||
+                        applicant.status === "reviewed" ||
+                        applicant.status === "rejected" ||
+                        applicant.status === "accepted"
+                    }
                     onClick={() => handleChangeStatus("reviewed")}
                     variant="outline"
                 >
