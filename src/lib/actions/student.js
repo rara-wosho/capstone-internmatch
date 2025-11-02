@@ -136,7 +136,12 @@ export async function getStudentProfileData(studentId) {
 }
 
 // delete avatar in table only
-export async function deleteAvatar(table, userId, pathToRevalidate) {
+export async function deleteAvatar(
+    table,
+    userId,
+    pathToRevalidate,
+    secondPath = ""
+) {
     const supabase = await createClient();
 
     const { error } = await supabase
@@ -150,6 +155,9 @@ export async function deleteAvatar(table, userId, pathToRevalidate) {
     }
 
     revalidatePath(pathToRevalidate, "page");
+    if (secondPath) {
+        revalidatePath(secondPath, "page");
+    }
     return { success: true };
 }
 
@@ -175,7 +183,7 @@ export async function upsertStudentInterests(
     if (isOnBoarding) {
         redirect(`/student/account/edit?onboarding=yes`);
     } else {
-        redirect(`/student/profile/${studentId}`);
+        redirect("/student/profile");
     }
 }
 
@@ -379,7 +387,7 @@ export async function updateStudentDetails(formData) {
         }
 
         revalidatePath(`/student/account/edit`);
-        revalidatePath(`/student/profile/${studentId}`);
+        revalidatePath("/student/profile");
 
         return {
             success: true,

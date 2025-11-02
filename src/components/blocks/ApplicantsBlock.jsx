@@ -53,7 +53,7 @@ export default async function ApplicantsBlock({ userId }) {
 
     let chartData = [];
 
-    if (data.length > 0) {
+    if (data?.length > 0) {
         chartData = monthLabels.map((label, index) => ({
             label,
             value: monthlyCounts[index],

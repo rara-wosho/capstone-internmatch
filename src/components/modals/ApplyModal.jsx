@@ -187,7 +187,7 @@ export default function ApplyModal({ companyId, accept_applicants, term }) {
                                 <p className="text-sm text-accent-foreground">
                                     Need to edit?{" "}
                                     <Link
-                                        href={`/student/profile/${userData?.id}`}
+                                        href={"/student/account/edit"}
                                         className="underline"
                                     >
                                         Click here

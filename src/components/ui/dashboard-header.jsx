@@ -103,27 +103,31 @@ export default function DashboardHeader({ profileData }) {
                                 >
                                     <Link
                                         onNavigate={() => setOpen(false)}
-                                        href={`/${profileData?.role}/profile/${profileData?.id}`}
+                                        href={`/${profileData?.role}/profile`}
                                     >
                                         <User />
                                         Your profile
                                     </Link>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
-                            <SidebarMenuItem>
-                                <SidebarMenuButton
-                                    className="cursor-pointer"
-                                    asChild
-                                >
-                                    <Link
-                                        onNavigate={() => setOpen(false)}
-                                        href={`/student/interests`}
+
+                            {/* Render interests item for students  only  */}
+                            {profileData?.role === "student" && (
+                                <SidebarMenuItem>
+                                    <SidebarMenuButton
+                                        className="cursor-pointer"
+                                        asChild
                                     >
-                                        <ListChecks />
-                                        Interests
-                                    </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
+                                        <Link
+                                            onNavigate={() => setOpen(false)}
+                                            href={`/student/interests`}
+                                        >
+                                            <ListChecks />
+                                            Interests
+                                        </Link>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            )}
                             <SidebarMenuItem>
                                 <SidebarMenuButton
                                     className="cursor-pointer"

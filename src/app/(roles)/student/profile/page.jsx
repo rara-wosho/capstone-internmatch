@@ -33,9 +33,7 @@ export const metadata = {
     title: "Profile | InternMatch",
 };
 
-export default async function Page({ params }) {
-    const userId = (await params)?.userId;
-
+export default async function StudentProfilePage() {
     const { user, error } = await getCurrentUser();
 
     if (error) {
@@ -43,7 +41,7 @@ export default async function Page({ params }) {
     }
 
     // ✅ If not logged in or user mismatch, go 404
-    if (!user || user?.id !== userId) {
+    if (!user || !user?.id) {
         notFound();
     }
 
@@ -51,12 +49,13 @@ export default async function Page({ params }) {
         success,
         data: studentData,
         error: studentErr,
-    } = await getStudentProfileData(userId);
+    } = await getStudentProfileData(user.id);
 
     if (!success) {
         return <ErrorUi secondaryMessage={studentErr} />;
     }
 
+    console.log("student data: ", studentData);
     if (!studentData) {
         notFound();
     }
@@ -196,11 +195,11 @@ export default async function Page({ params }) {
 
                         {/* ===== RECENT EXAMS ===== */}
                         <Suspense fallback={null}>
-                            <ExamsTaken studentId={userId} />
+                            <ExamsTaken studentId={user.id} />
                         </Suspense>
                         {/* ===== RECENT ASSESSMENT TEST ===== */}
                         <Suspense fallback={null}>
-                            <AssessmentTaken studentId={userId} />
+                            <AssessmentTaken studentId={user.id} />
                         </Suspense>
                     </TabsContent>
 

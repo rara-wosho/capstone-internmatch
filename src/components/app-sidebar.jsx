@@ -423,7 +423,7 @@ export function AppSidebar({ profileData }) {
                         >
                             <Link
                                 onClick={handleLinkClick}
-                                href={`/${role}/profile/${profileData?.id}`}
+                                href={`/${role}/profile`}
                             >
                                 <Avatar>
                                     <AvatarImage

@@ -106,9 +106,11 @@ export async function getCompanyById(id) {
 
     const { data, error } = await supabase
         .from("companies")
-        .select()
+        .select(
+            "avatar_url, barangay, city, province, details, email, links, name, phone, website, company_offers(offers)"
+        )
         .eq("id", id)
-        .single();
+        .maybeSingle();
 
     if (error) {
         return {
@@ -117,7 +119,31 @@ export async function getCompanyById(id) {
         };
     }
 
-    return { data, error: null };
+    if (!data) {
+        return {
+            data: null,
+            error: "Company not found.",
+        };
+    }
+
+    console.log(data.company_offers);
+
+    // ✅ Format data for consistent frontend use
+    const formattedData = {
+        name: data.name || "Unknown Company",
+        avatar_url: data.avatar_url || "/images/default-avatar.jpg",
+        email: data.email || "No email provided",
+        phone: data.phone || "No phone number provided",
+        website: data.website || "",
+        barangay: data.barangay || "",
+        city: data.city || "",
+        province: data.province || "",
+        details: data.details || "",
+        links: Array.isArray(data.links) ? data.links : [],
+        offers: data.company_offers?.offers.map((o) => o).filter(Boolean) || [],
+    };
+
+    return { data: formattedData, error: null };
 }
 
 // fetch company data and exams

@@ -69,7 +69,7 @@ export default function SelectCompanyOffersSection({
             if (isFromSignUp) {
                 router.replace("/company");
             } else {
-                router.replace(`/company/profile/${companyId}`);
+                router.back();
             }
         });
     };

@@ -108,7 +108,8 @@ export default function UploadAvatar({ currentAvatarUrl }) {
             const result = await deleteAvatar(
                 table,
                 user?.id,
-                `/student/profile/${user?.id}`
+                "/student/profile",
+                "/student/account/edit"
             );
 
             if (result.success) {
