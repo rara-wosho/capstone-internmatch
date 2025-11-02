@@ -79,6 +79,64 @@ export async function createCompanyAccount(form) {
     redirect("/company/offers?from=signup");
 }
 
+// Update company details
+export async function updateCompanyDetails(formData) {
+    // Get the company's id
+    const companyId = formData.get("company-id") || "";
+
+    if (!companyId) {
+        return { success: false, error: "Unauthorized action." };
+    }
+
+    // Get and sanitize inputs
+    const name = (formData.get("name") || "").trim();
+    const details = (formData.get("details") || "").trim();
+    const phone = (formData.get("phone") || "").trim();
+    const website = (formData.get("website") || "").trim();
+    const barangay = (formData.get("barangay") || "").trim();
+    const city = (formData.get("city") || "").trim();
+    const province = (formData.get("province") || "").trim();
+
+    // Validate websit link
+    if (!website.startsWith("http") && website) {
+        return { success: false, error: "Invalid website link" };
+    }
+
+    // ✅ Basic validation
+    if (!name || !details || !barangay || !city || !province) {
+        return {
+            success: false,
+            error: "Please fill out all required fields before saving.",
+        };
+    }
+
+    const supabase = await createClient();
+
+    // Prepare data
+    const rowData = {
+        name,
+        details,
+        phone,
+        website,
+        barangay,
+        city,
+        province,
+    };
+
+    const { error } = await supabase
+        .from("companies")
+        .update(rowData)
+        .eq("id", companyId);
+
+    if (error) {
+        return { success: false, error: error.message || "Update failed." };
+    }
+
+    revalidatePath("/company/profile");
+    revalidatePath("/company/profile/edit");
+    return { success: true, error: "" };
+}
+
 // fetch all list of companies
 export async function getCompanies() {
     const supabase = await createClient();
@@ -125,8 +183,6 @@ export async function getCompanyById(id) {
             error: "Company not found.",
         };
     }
-
-    console.log(data.company_offers);
 
     // ✅ Format data for consistent frontend use
     const formattedData = {

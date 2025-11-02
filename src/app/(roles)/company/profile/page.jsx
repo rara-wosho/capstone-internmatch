@@ -60,9 +60,16 @@ export default async function Page() {
                         </div>
                     </div>
 
-                    <Button asChild>
-                        <Link href="/company/profile/edit">Edit Profile</Link>
-                    </Button>
+                    <div className="flex flex-row-reverse sm:flex-row items-center gap-2">
+                        <Button asChild variant="outline">
+                            <Link href="/company/offers">Update Offers</Link>
+                        </Button>
+                        <Button asChild>
+                            <Link href="/company/profile/edit">
+                                Edit Profile
+                            </Link>
+                        </Button>
+                    </div>
                 </div>
 
                 <div className="space-y-3">
