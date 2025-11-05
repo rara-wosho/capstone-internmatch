@@ -6,6 +6,7 @@ import TitleText from "@/components/ui/TitleText";
 import Wrapper from "@/components/Wrapper";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { getCompanyById } from "@/lib/actions/company";
+import { Globe, Mail, MapPin, PenLine, Phone } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
@@ -30,8 +31,6 @@ export default async function Page() {
         return <ErrorUi message="Failed to fetch company data." />;
 
     if (!companyData) notFound();
-
-    console.log("data: ", companyData);
 
     return (
         <div>
@@ -71,12 +70,61 @@ export default async function Page() {
                         </Button>
                     </div>
                 </div>
-
-                <div className="space-y-3">
+                {/* ABOUT COMPANY SECTION  */}
+                <div className="space-y-2 mb-4">
                     <TitleText>About company</TitleText>
                     <p className="text-muted-foreground">
                         {companyData.details}
                     </p>
+                </div>
+                <TitleText className="mb-2">Get in touch</TitleText>
+                {/* PHONE NUMBER  */}
+                <div className="flex items-center gap-1 text-muted-foreground mb-1">
+                    <div className="size-5 shrink-0 flex items-center">
+                        <Phone size={16} />
+                    </div>
+                    <p>{companyData.phone}</p>
+                </div>
+                {/* EMAIL ADDRESS  */}
+                <div className="flex items-center gap-1 text-muted-foreground mb-1">
+                    <div className="size-5 shrink-0 flex items-center">
+                        <Mail size={16} />
+                    </div>
+                    <p>{companyData.email}</p>
+                </div>
+                {/* WEBSITE, IF THERE IS  */}
+                {companyData?.website && (
+                    <Link
+                        target="_blank"
+                        href={companyData.website}
+                        className="flex items-center gap-1 text-muted-foreground mb-1 hover:underline underline-offset-2"
+                    >
+                        <div className="size-5 shrink-0 flex items-center">
+                            <Globe size={16} />
+                        </div>
+                        <p>{companyData.website}</p>
+                    </Link>
+                )}
+                <div className="space-y-2 mb-4 mt-4">
+                    <div className="flex items-center gap-2">
+                        <TitleText>Company Offers</TitleText>
+                        <Link
+                            href="/company/offers"
+                            className="text-muted-foreground hover:text-accent-foreground transition-colors"
+                        >
+                            <PenLine size={16} />
+                        </Link>
+                    </div>
+                    <div className="flex flex-wrap gap-x-2 gap-y-3">
+                        {companyData.offers.map((o, index) => (
+                            <div
+                                key={index}
+                                className="bg-secondary rounded-full px-3 h-9 flex items-center whitespace-nowrap text-sm text-muted-foreground"
+                            >
+                                {o}
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </Wrapper>
         </div>

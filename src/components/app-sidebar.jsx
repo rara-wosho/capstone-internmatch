@@ -198,6 +198,27 @@ const navigationConfig = [
                 label: "Feedback",
                 roles: ["student"],
             },
+
+            // SETTINGS FOR COMPANY
+            {
+                label: "Settings",
+                icon: <Settings />,
+                roles: ["company"],
+                subItems: [
+                    {
+                        href: "/company/profile/edit",
+                        icon: <User />,
+                        label: "Edit Profile",
+                    },
+                    {
+                        href: "/company/activities",
+                        icon: <User />,
+                        label: "Activity Logs",
+                    },
+                ],
+            },
+
+            // SETTINGS FOR STUDENTS
             {
                 label: "Settings",
                 icon: <Settings />,

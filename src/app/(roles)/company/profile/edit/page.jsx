@@ -2,11 +2,6 @@ import Wrapper from "@/components/Wrapper";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { getCompanyById } from "@/lib/actions/company";
 import { redirect } from "next/navigation";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import TitleText from "@/components/ui/TitleText";
-import FormLabel from "@/components/ui/FormLabel";
 import ErrorUi from "@/components/ui/ErrorUi";
 import BorderBox from "@/components/ui/BorderBox";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
@@ -16,10 +11,12 @@ import BackButton from "@/components/ui/BackButton";
 import UpdateCompanyDetailsForm from "@/components/forms/UpdateCompanyDetailsForm";
 import UploadAvatar from "@/components/UploadAvatar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import UpdateCompanyPasswordForm from "@/components/forms/UpdateCompanyPasswordForm";
 
 export const metadata = {
-    title: "Edit Company Details | InternMatch",
+    title: "Edit Company Details",
 };
 
 export default async function EditCompanyPage() {
@@ -65,11 +62,33 @@ export default async function EditCompanyPage() {
                     </div>
                 </BorderBox>
 
-                <BorderBox className="border rounded-xl bg-card">
-                    <UpdateCompanyDetailsForm
-                        defaultFormData={{ ...company, id: user.id }}
-                    />
-                </BorderBox>
+                <Tabs defaultValue="account" className="w-full">
+                    <div className="border rounded-xl bg-card">
+                        <div className="border-b">
+                            <TabsList className="h-[50px] px-3 md:px-5 space-x-3">
+                                <TabsTrigger value="account">
+                                    Account Info
+                                </TabsTrigger>
+                                <TabsTrigger value="password">
+                                    Change Password
+                                </TabsTrigger>
+                            </TabsList>
+                        </div>
+                        <BorderBox>
+                            <TabsContent value="account">
+                                <UpdateCompanyDetailsForm
+                                    defaultFormData={{
+                                        ...company,
+                                        id: user.id,
+                                    }}
+                                />
+                            </TabsContent>
+                            <TabsContent value="password">
+                                <UpdateCompanyPasswordForm />
+                            </TabsContent>
+                        </BorderBox>
+                    </div>
+                </Tabs>
             </Wrapper>
         </>
     );
