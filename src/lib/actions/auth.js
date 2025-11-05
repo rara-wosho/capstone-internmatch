@@ -86,3 +86,44 @@ export async function getCurrentUser() {
         },
     };
 }
+
+// UPDATE USER PASSWORD
+export async function updatePassword(formData) {
+    const newPassword = formData.get("new-password");
+    const confirmPassword = formData.get("confirm-password");
+
+    if (!newPassword || !confirmPassword) {
+        return { success: false, error: "All fields are required." };
+    }
+
+    if (newPassword.length < 6) {
+        return {
+            success: false,
+            error: "Password must be at least 6 characters long.",
+        };
+    }
+
+    if (newPassword !== confirmPassword) {
+        return { success: false, error: "Passwords do not match." };
+    }
+
+    // Verify if the current user has a valid session
+    const { user, error: userError } = await getCurrentUser();
+
+    if (userError || !user) {
+        return { success: false, error: "Unauthorized or session expired." };
+    }
+
+    const supabase = await createClient();
+
+    // ✅ Update password
+    const { error } = await supabase.auth.updateUser({
+        password: newPassword,
+    });
+
+    if (error) {
+        return { success: false, error: error.message };
+    }
+
+    return { success: true, message: "Password updated successfully." };
+}

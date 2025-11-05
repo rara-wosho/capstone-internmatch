@@ -13,7 +13,7 @@ import UploadAvatar from "@/components/UploadAvatar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import UpdateCompanyPasswordForm from "@/components/forms/UpdateCompanyPasswordForm";
+import ChangePasswordForm from "@/components/forms/ChangePasswordForm";
 
 export const metadata = {
     title: "Edit Company Details",
@@ -84,7 +84,7 @@ export default async function EditCompanyPage() {
                                 />
                             </TabsContent>
                             <TabsContent value="password">
-                                <UpdateCompanyPasswordForm />
+                                <ChangePasswordForm />
                             </TabsContent>
                         </BorderBox>
                     </div>
