@@ -81,6 +81,7 @@ export async function getCurrentUser() {
         error: false,
         session,
         user: {
+            email: session?.user?.email,
             id: session?.user?.id,
             role: session?.user?.user_metadata?.role,
         },
@@ -89,10 +90,13 @@ export async function getCurrentUser() {
 
 // UPDATE USER PASSWORD
 export async function updatePassword(formData) {
+    const email = formData.get("email");
+    const currentPassword = formData.get("current-password");
     const newPassword = formData.get("new-password");
     const confirmPassword = formData.get("confirm-password");
 
-    if (!newPassword || !confirmPassword) {
+    // ✅ Validate input
+    if (!email || !currentPassword || !newPassword || !confirmPassword) {
         return { success: false, error: "All fields are required." };
     }
 
@@ -107,23 +111,37 @@ export async function updatePassword(formData) {
         return { success: false, error: "Passwords do not match." };
     }
 
-    // Verify if the current user has a valid session
-    const { user, error: userError } = await getCurrentUser();
-
-    if (userError || !user) {
-        return { success: false, error: "Unauthorized or session expired." };
-    }
-
     const supabase = await createClient();
 
-    // ✅ Update password
-    const { error } = await supabase.auth.updateUser({
+    // ✅ Step 1: Reauthenticate the user to confirm current password
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password: currentPassword,
+    });
+
+    if (signInError) {
+        return {
+            success: false,
+            error: "Current password is incorrect.",
+        };
+    }
+
+    // ✅ Step 2: Update the user's password
+    const { error: updateError } = await supabase.auth.updateUser({
         password: newPassword,
     });
 
-    if (error) {
-        return { success: false, error: error.message };
+    if (updateError) {
+        return {
+            success: false,
+            error:
+                updateError.message ||
+                "Something went wrong while updating your password.",
+        };
     }
 
-    return { success: true, message: "Password updated successfully." };
+    return {
+        success: true,
+        message: "Password updated successfully.",
+    };
 }

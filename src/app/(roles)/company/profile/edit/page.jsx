@@ -84,7 +84,7 @@ export default async function EditCompanyPage() {
                                 />
                             </TabsContent>
                             <TabsContent value="password">
-                                <ChangePasswordForm />
+                                <ChangePasswordForm email={user.email} />
                             </TabsContent>
                         </BorderBox>
                     </div>

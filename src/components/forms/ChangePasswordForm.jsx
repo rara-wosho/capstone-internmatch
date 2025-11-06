@@ -9,7 +9,7 @@ import { updatePassword } from "@/lib/actions/auth";
 import { toast } from "sonner";
 import { Loader } from "lucide-react";
 
-export default function ChangePasswordForm() {
+export default function ChangePasswordForm({ email }) {
     const [isPending, startTransition] = useTransition();
 
     const handleChangePassword = (e) => {
@@ -28,16 +28,16 @@ export default function ChangePasswordForm() {
     };
     return (
         <Form onSubmit={handleChangePassword}>
+            {/* HIDDEN EMAIL INPUT FOR SIGNINWITHPASSWORD */}
+            <input type="hidden" name="email" defaultValue={email} />
             <div className="mb-3">
-                <p className="text-xs text-muted-foreground">
-                    Current password fied is not functional yet
-                </p>
                 <FormLabel>Current Password</FormLabel>
-                <Input name="current-password" />
+                <Input type="password" required name="current-password" />
             </div>
             <div className="mb-3">
                 <FormLabel>New Password</FormLabel>
                 <Input
+                    required
                     type="password"
                     name="new-password"
                     placeholder="Min of 6 characters"
@@ -46,6 +46,7 @@ export default function ChangePasswordForm() {
             <div className="mb-3">
                 <FormLabel>Confirm New Password</FormLabel>
                 <Input
+                    required
                     type="password"
                     name="confirm-password"
                     placeholder="Re-type new password"
