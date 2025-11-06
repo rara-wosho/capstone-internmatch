@@ -37,12 +37,28 @@ export default async function Page() {
             <Wrapper size="sm">
                 <div className="flex items-center justify-between flex-wrap gap-4 border-b dark:border-neutral-800/90 pb-5 mb-4">
                     <div className="flex items-center gap-3">
-                        <Avatar className="size-20">
-                            <AvatarImage src={companyData.avatar_url} />
-                            <AvatarFallback>
-                                {companyData.name.charAt(0)}
-                            </AvatarFallback>
-                        </Avatar>
+                        <Link
+                            target={
+                                companyData?.avatar_url ? "_blank" : "_self"
+                            }
+                            href={
+                                companyData?.avatar_url
+                                    ? companyData.avatar_url
+                                    : "#"
+                            }
+                        >
+                            <Avatar className="size-20">
+                                <AvatarImage
+                                    src={
+                                        companyData.avatar_url ||
+                                        "/images/default-avatar.jpg"
+                                    }
+                                />
+                                <AvatarFallback>
+                                    {companyData.name.charAt(0)}
+                                </AvatarFallback>
+                            </Avatar>
+                        </Link>
 
                         <div>
                             <SecondaryLabel>{companyData.name}</SecondaryLabel>
@@ -50,12 +66,6 @@ export default async function Page() {
                                 {companyData.barangay}, {companyData.city},{" "}
                                 {companyData.province}{" "}
                             </p>
-
-                            {companyData.website && (
-                                <Link href={companyData.website}>
-                                    {companyData.website}
-                                </Link>
-                            )}
                         </div>
                     </div>
 

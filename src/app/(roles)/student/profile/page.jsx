@@ -67,18 +67,26 @@ export default async function StudentProfilePage() {
             {/* ======= HEADER ========  */}
             <div className="flex items-center flex-wrap justify-between gap-5 mb-5">
                 <div className="flex items-center gap-3 flex-wrap">
-                    <Avatar className="w-[130px] aspect-square">
-                        <AvatarImage
-                            src={
-                                studentData?.avatar_url ||
-                                "/images/default-avatar.jpg"
-                            }
-                        />
-                        <AvatarFallback>
-                            {studentData?.firstname?.[0] || "?"}
-                        </AvatarFallback>
-                    </Avatar>
-
+                    <Link
+                        target={studentData?.avatar_url ? "_blank" : "_self"}
+                        href={
+                            studentData?.avatar_url
+                                ? studentData.avatar_url
+                                : "#"
+                        }
+                    >
+                        <Avatar className="w-[130px] aspect-square">
+                            <AvatarImage
+                                src={
+                                    studentData?.avatar_url ||
+                                    "/images/default-avatar.jpg"
+                                }
+                            />
+                            <AvatarFallback>
+                                {studentData?.firstname?.[0] || "?"}
+                            </AvatarFallback>
+                        </Avatar>
+                    </Link>
                     <div>
                         <SecondaryLabel>
                             {studentData?.firstname} {studentData?.lastname}

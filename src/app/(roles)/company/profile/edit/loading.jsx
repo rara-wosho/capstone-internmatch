@@ -11,13 +11,9 @@ export default function Loading() {
                 <Skeleton className="h-7 w-64" />
             </div>
 
-            <BorderBox className="border rounded-xl bg-card mb-3">
-                <div className="max-w-[300px] flex flex-col items-center gap-y-1.5 mx-auto">
-                    <Skeleton className="mb-2 w-24 aspect-square rounded-full" />
-                    <Skeleton className="h-10 w-full" />
-                    <Skeleton className="h-9 w-full" />
-                    <Skeleton className="h-9 w-full" />
-                </div>
+            <BorderBox className="border rounded-xl bg-card mb-3 gap-5 flex items-center">
+                <Skeleton className="w-24 rounded-full aspect-square" />
+                <Skeleton className="h-9 w-28" />
             </BorderBox>
             <div className="border rounded-xl bg-card">
                 <div className="flex items-center gap-3 px-3 md:px-5 h-[52px] border-b">

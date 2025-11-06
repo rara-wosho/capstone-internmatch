@@ -187,7 +187,7 @@ export async function getCompanyById(id) {
     // ✅ Format data for consistent frontend use
     const formattedData = {
         name: data.name || "Unknown Company",
-        avatar_url: data.avatar_url || "/images/default-avatar.jpg",
+        avatar_url: data.avatar_url || "",
         email: data.email || "No email provided",
         phone: data.phone || "No phone number provided",
         website: data.website || "",

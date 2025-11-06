@@ -50,14 +50,19 @@ export default async function EditCompanyPage() {
                     </IconWrapper>
                     <SecondaryLabel>Edit Company Details</SecondaryLabel>
                 </div>
-                <BorderBox className="mb-3 bg-card rounded-xl border">
-                    <div className="mx-auto max-w-[300px]">
-                        <Avatar className="w-24 mx-auto aspect-square mb-3">
-                            <AvatarImage src={company.avatar_url} />
-                            <AvatarFallback>
-                                {company.name.charAt(0)}
-                            </AvatarFallback>
-                        </Avatar>
+                <BorderBox className="mb-3 bg-card rounded-xl border flex items-center gap-5">
+                    <Avatar className="w-24 aspect-square">
+                        <AvatarImage
+                            src={
+                                company.avatar_url ||
+                                "/images/default-avatar.jpg"
+                            }
+                        />
+                        <AvatarFallback>
+                            {company.name.charAt(0)}
+                        </AvatarFallback>
+                    </Avatar>
+                    <div>
                         <UploadAvatar currentAvatarUrl={company.avatar_url} />
                     </div>
                 </BorderBox>

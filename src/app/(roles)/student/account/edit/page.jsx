@@ -59,8 +59,8 @@ export default async function StudentEditAccountPage({ searchParams }) {
                 </div>
             )}
 
-            <BorderBox className="mb-3 bg-card shadow-xs flex flex-col items-center gap-3 rounded-xl">
-                <Avatar className="w-[110px] aspect-square">
+            <BorderBox className="mb-3 bg-card shadow-xs flex items-center gap-5 rounded-xl">
+                <Avatar className="w-[120px] aspect-square">
                     <AvatarImage
                         src={
                             studentData.avatar_url ||
@@ -73,7 +73,7 @@ export default async function StudentEditAccountPage({ searchParams }) {
                     </AvatarFallback>
                 </Avatar>
 
-                <div className="mx auto max-w-[300px]">
+                <div>
                     <UploadAvatar currentAvatarUrl={studentData.avatar_url} />
                 </div>
             </BorderBox>
