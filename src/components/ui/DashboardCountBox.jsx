@@ -27,7 +27,7 @@ export default function DashboardCountBox({
                 <p className="font-bold text-xl whitespace-nowrap">
                     {valueText}
                 </p>
-                <p className="text-muted-foreground text-sm whitespace-nowrap">
+                <p className="text-muted-foreground  whitespace-nowrap">
                     {label}
                 </p>
             </div>

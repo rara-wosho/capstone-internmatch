@@ -5,6 +5,7 @@ import BreadCrumbs from "@/components/ui/BreadCrumbs";
 import { Button } from "@/components/ui/button";
 import ErrorUi from "@/components/ui/ErrorUi";
 import FormLabel from "@/components/ui/FormLabel";
+import IconWrapper from "@/components/ui/IconWrapper";
 import InfoPopover from "@/components/ui/info-popover";
 import { Popover } from "@/components/ui/popover";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
@@ -18,6 +19,7 @@ import { dateFormatter } from "@/utils/date-formatter";
 import {
     File,
     FileText,
+    Hourglass,
     Info,
     Link2,
     Mail,
@@ -212,6 +214,31 @@ export default async function Page({ params }) {
                     </div>
                 </BorderBox>
 
+                {applicant.status === "accepted" && (
+                    <BorderBox className="border rounded-xl bg-card shadow-xs mb-3">
+                        <div className="flex items-center gap-2 mb-3 md:mb-4">
+                            <TitleText className="font-medium text-lg">
+                                Instructor Approval Pending
+                            </TitleText>
+                            <InfoPopover
+                                trigger={<Info size={18} />}
+                                textContent="The instructor will review and decide whether the student can officially proceed with the internship. Once approved, the student will be marked as an intern under your company.
+
+In some cases, the student may not be able to proceed if their instructor disapproves the application."
+                            />
+                        </div>
+
+                        <div className="p-3 border border-blue-400/25 bg-blue-400/10 rounded-lg shadow-xs">
+                            <p className="text-accent-foreground">
+                                This application has been accepted by your
+                                company and is now awaiting approval from the
+                                student’s OJT instructor.
+                            </p>
+                        </div>
+                    </BorderBox>
+                )}
+
+                {/* Application actions to toggle status  */}
                 <ApplicantActions applicant={applicant} />
 
                 <BorderBox className="border rounded-xl bg-card shadow-xs mb-3">

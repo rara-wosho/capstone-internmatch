@@ -177,8 +177,8 @@ export async function updateApplication(applicationId, data) {
     }
 }
 
-// Get approved and accepted applications by company
-export async function getApprovedApplicantsByCompany(companyId) {
+// Get approved and accepted applications by company (with optional search)
+export async function getApprovedApplicantsByCompany(companyId, search) {
     if (!companyId) {
         return {
             success: false,
@@ -188,7 +188,8 @@ export async function getApprovedApplicantsByCompany(companyId) {
 
     const supabase = await createClient();
 
-    const { data, error } = await supabase
+    // Base query
+    let query = supabase
         .from("applicants")
         .select(
             `
@@ -199,21 +200,37 @@ export async function getApprovedApplicantsByCompany(companyId) {
                 firstname,
                 middlename,
                 lastname,
-                school
+                school,
+                course
             )
             `
         )
         .eq("company_id", companyId)
         .eq("status", "accepted")
-        .not("approved_at", "is", null)
-        .order("approved_at", { ascending: false });
+        .not("approved_at", "is", null);
+
+    //  Optional search - filter on the students table with OR logic
+    // Search query on a referenced table
+    if (search?.trim()) {
+        const searchTerm = `%${search.trim()}%`;
+
+        // Use the correct syntax for filtering on joined tables
+        query = query.or(
+            `firstname.ilike.${searchTerm},middlename.ilike.${searchTerm},lastname.ilike.${searchTerm},school.ilike.${searchTerm},course.ilike.${searchTerm}`,
+            { foreignTable: "students" }
+        );
+    }
+
+    query = query.order("approved_at", { ascending: false });
+
+    const { data, error } = await query;
 
     if (error) {
         return { success: false, error: error.message, data: null };
     }
 
     // ✅ Format returned data cleanly
-    const formattedData = data.map((d) => ({
+    const formattedData = (data ?? []).map((d) => ({
         id: d.id,
         approved_at: d.approved_at,
         applied_at: d.applied_at,
@@ -221,6 +238,7 @@ export async function getApprovedApplicantsByCompany(companyId) {
         middlename: d.students.middlename,
         lastname: d.students.lastname,
         school: d.students.school,
+        course: d.students.course,
     }));
 
     return { success: true, error: "", data: formattedData };

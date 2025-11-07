@@ -2,10 +2,9 @@ import {
     ClipboardCheck,
     FileText,
     FileUser,
-    User,
+    SquareCheckBig,
     UserRoundCheck,
     UserRoundX,
-    Users,
 } from "lucide-react";
 import DashboardCountBox from "../ui/DashboardCountBox";
 import { getCompanyDashboardOverview } from "@/lib/actions/company";
@@ -40,6 +39,10 @@ export default async function CompanyDashboardOverview({ userId }) {
         (e) => e.status === "reviewed"
     );
 
+    const approvedApplicants = data?.applicants?.filter(
+        (e) => e.approved_at !== null
+    );
+
     return (
         <>
             <div className="mb-3 md:mb-5">
@@ -70,6 +73,12 @@ export default async function CompanyDashboardOverview({ userId }) {
                     </div>
                 </div>
                 <div className="flex items-center flex-wrap gap-2 mt-2">
+                    <DashboardCountBox
+                        href="/company/approved-applicants"
+                        icon={<SquareCheckBig />}
+                        valueText={approvedApplicants.length}
+                        label={"Approved Applicants"}
+                    />
                     <DashboardCountBox
                         href="/company/applicants"
                         icon={<FileUser />}
