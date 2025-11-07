@@ -135,10 +135,16 @@ const navigationConfig = [
                 ],
             },
             {
-                href: "/company/applicants",
                 icon: <FileUser />,
                 label: "Applicants",
                 roles: ["company"],
+                subItems: [
+                    { href: "/company/applicants", label: "Manage" },
+                    {
+                        href: "/company/approved-applicants",
+                        label: "Approved",
+                    },
+                ],
             },
             {
                 href: "/student/applications",

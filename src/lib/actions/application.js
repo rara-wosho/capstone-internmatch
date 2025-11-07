@@ -3,7 +3,6 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "../supabase/server";
 import { Resend } from "resend";
-import { ApplicationSuccess } from "@/components/email/ApplicationSuccess";
 import { getCurrentUser } from "./auth";
 
 export async function submitApplication(formData) {
@@ -176,4 +175,53 @@ export async function updateApplication(applicationId, data) {
         console.error("Unexpected error:", error);
         return { success: false, error: "An unexpected error occurred" };
     }
+}
+
+// Get approved and accepted applications by company
+export async function getApprovedApplicantsByCompany(companyId) {
+    if (!companyId) {
+        return {
+            success: false,
+            error: "Not a valid user. Please provide user id.",
+        };
+    }
+
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("applicants")
+        .select(
+            `
+            id,
+            approved_at,
+            applied_at,
+            students!inner(
+                firstname,
+                middlename,
+                lastname,
+                school
+            )
+            `
+        )
+        .eq("company_id", companyId)
+        .eq("status", "accepted")
+        .not("approved_at", "is", null)
+        .order("approved_at", { ascending: false });
+
+    if (error) {
+        return { success: false, error: error.message, data: null };
+    }
+
+    // ✅ Format returned data cleanly
+    const formattedData = data.map((d) => ({
+        id: d.id,
+        approved_at: d.approved_at,
+        applied_at: d.applied_at,
+        firstname: d.students.firstname,
+        middlename: d.students.middlename,
+        lastname: d.students.lastname,
+        school: d.students.school,
+    }));
+
+    return { success: true, error: "", data: formattedData };
 }

@@ -53,8 +53,8 @@ export default function ChangePasswordForm({ email }) {
                 />
             </div>
             <p className="text-xs text-muted-foreground">
-                Changing your password will automatically sign you out of all
-                other active sessions.
+                Changing your password will sign you out of all other active
+                sessions.
             </p>
 
             <div className="flex items-center justify-end py-3">
