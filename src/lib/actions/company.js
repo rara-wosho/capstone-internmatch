@@ -448,3 +448,36 @@ export async function getCompanyDashboardOverview(companyId) {
 
     return { success: true, error: "", data };
 }
+
+// Get company's activities
+export async function getCompanyActivities() {
+    const { user } = await getCurrentUser();
+
+    if (!user || !user?.id) {
+        return { success: false, error: "Authorization failed." };
+    }
+
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("companies")
+        .select(
+            `
+            created_at,
+            exams(created_at, title)
+        `
+        )
+        .eq("id", user.id)
+        .maybeSingle();
+
+    if (error) {
+        return { success: false, error: error.message, data: null };
+    }
+
+    const formattedData = {
+        created_at: data?.created_at ?? null,
+        exams: data?.exams ?? [],
+    };
+
+    return { success: true, error: "", data: formattedData };
+}
