@@ -15,6 +15,21 @@ import { Suspense } from "react";
 export default async function ApplicantsPage({ searchParams }) {
     const search = (await searchParams)?.search_query || "";
 
+    // Get initial status from query string or default to "all"
+    let initialStatus = (await searchParams)?.status || "all";
+
+    // Only allow valid statuses
+    const validStatuses = [
+        "all",
+        "pending",
+        "accepted",
+        "reviewed",
+        "rejected",
+    ];
+    if (!validStatuses.includes(initialStatus)) {
+        initialStatus = "all";
+    }
+
     const { user, error: userError } = await getCurrentUser();
 
     if (userError) {
@@ -96,7 +111,10 @@ export default async function ApplicantsPage({ searchParams }) {
                     />
                 </div>
             ) : (
-                <ApplicantsSection applicants={applicantsData} />
+                <ApplicantsSection
+                    initialStatus={initialStatus}
+                    applicants={applicantsData}
+                />
             )}
         </div>
     );

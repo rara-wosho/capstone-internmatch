@@ -227,7 +227,7 @@ const navigationConfig = [
                     {
                         href: "/student/account/edit",
                         icon: <User />,
-                        label: "Account",
+                        label: "Edit Profile",
                     },
                     {
                         href: "/student/profile/activities",

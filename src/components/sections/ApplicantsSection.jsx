@@ -11,10 +11,11 @@ const TABS = [
     { label: "pending" },
     { label: "accepted" },
     { label: "reviewed" },
+    { label: "rejected" },
 ];
 
-export default function ApplicantsSection({ applicants }) {
-    const [status, setStatus] = useState("all");
+export default function ApplicantsSection({ initialStatus, applicants }) {
+    const [status, setStatus] = useState(initialStatus);
 
     const sortedApplicants = useMemo(() => {
         if (status === "all") return applicants;

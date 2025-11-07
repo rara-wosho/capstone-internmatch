@@ -433,11 +433,12 @@ export async function getCompanyDashboardOverview(companyId) {
     const { data, error } = await supabase
         .from("companies")
         .select(
-            "exams(title, is_published), exam_attempt(id), applicants(id, status)"
+            "accept_applicants, exams(title, is_published), exam_attempt(id), applicants(id, status)"
         )
         .eq("id", companyId)
         .eq("exams.is_deleted", false)
         .eq("exam_attempt.company_id", companyId)
+        .neq("applicants.status", "cancelled")
         .order("created_at", { referencedTable: "exams", ascending: false })
         .maybeSingle();
 
