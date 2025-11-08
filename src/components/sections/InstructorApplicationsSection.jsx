@@ -68,9 +68,12 @@ export default function InstructorApplicationsSection({ applications = [] }) {
                                 href={`/instructor/students/${app.id}`}
                                 className="flex items-center gap-2 p-4 border-b"
                             >
-                                <Avatar className="size-5 aspect-square">
+                                <Avatar className="size-6 aspect-square">
                                     <AvatarImage
-                                        src={app.avatar_url}
+                                        src={
+                                            app.avatar_url ||
+                                            "/images/default-avatar.jpg"
+                                        }
                                         alt="Avatar"
                                     />
                                     <AvatarFallback>?</AvatarFallback>

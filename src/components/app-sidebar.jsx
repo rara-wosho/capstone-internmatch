@@ -176,10 +176,21 @@ const navigationConfig = [
                 roles: ["instructor"],
             },
             {
-                href: "/instructor/student-applications",
                 icon: <FileUser />,
                 label: "Student Applications",
                 roles: ["instructor"],
+                subItems: [
+                    {
+                        href: "/instructor/student-applications",
+                        label: "Overview",
+                        icon: <User />,
+                    },
+                    {
+                        href: "/instructor/accepted",
+                        label: "Accepted",
+                        icon: <User />,
+                    },
+                ],
             },
         ],
     },
