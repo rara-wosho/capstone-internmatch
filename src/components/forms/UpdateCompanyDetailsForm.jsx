@@ -19,7 +19,6 @@ export default function UpdateCompanyDetailsForm({ defaultFormData }) {
         startTransition(async () => {
             const result = await updateCompanyDetails(formData);
             if (!result.success) {
-                console.log("error ", result.error);
                 toast.error("Unable to update details.", {
                     description: result.error,
                 });

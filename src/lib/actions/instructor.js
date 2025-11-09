@@ -111,7 +111,7 @@ export async function submitRegistration(prevState, formData) {
 }
 
 // Get approved applications for an instructor
-export async function getApprovedApplicationsByInstructor(
+export async function getAcceptedApplicationsByInstructor(
     instructorId,
     search
 ) {
@@ -130,6 +130,7 @@ export async function getApprovedApplicationsByInstructor(
             `
             id,
             approved_at,
+            approve_status,
             applied_at,
             students!inner(
                 id,
@@ -150,7 +151,6 @@ export async function getApprovedApplicationsByInstructor(
             `
         )
         .eq("status", "accepted")
-        .not("approved_at", "is", null)
         .eq("students.groups.ojt_instructor_id", instructorId)
         .order("approved_at", { ascending: false });
 
@@ -172,6 +172,7 @@ export async function getApprovedApplicationsByInstructor(
     const formattedData = (data ?? []).map((d) => ({
         id: d.id,
         approved_at: d.approved_at,
+        approve_status: d.approve_status,
         applied_at: d.applied_at,
         student_id: d.students.id,
         firstname: d.students.firstname,
@@ -198,6 +199,7 @@ export async function getApprovedApplicationsByInstructor(
         acc[companyId].students.push({
             id: item.id, // application id
             approved_at: item.approved_at,
+            approve_status: item.approve_status,
             applied_at: item.applied_at,
             student_id: item.student_id,
             firstname: item.firstname,

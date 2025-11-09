@@ -4,7 +4,7 @@ import ErrorUi from "@/components/ui/ErrorUi";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import TitleText from "@/components/ui/TitleText";
 import { getCurrentUser } from "@/lib/actions/auth";
-import { getApprovedApplicationsByInstructor } from "@/lib/actions/instructor";
+import { getAcceptedApplicationsByInstructor } from "@/lib/actions/instructor";
 import { Building, Building2 } from "lucide-react";
 
 export default async function AcceptedApplicationsPage() {
@@ -14,7 +14,7 @@ export default async function AcceptedApplicationsPage() {
         return <ErrorUi secondaryMessage="Authentication failed." />;
     }
 
-    const { success, error, data } = await getApprovedApplicationsByInstructor(
+    const { success, error, data } = await getAcceptedApplicationsByInstructor(
         user.id
     );
 
@@ -38,7 +38,7 @@ export default async function AcceptedApplicationsPage() {
                     key={company.company_id}
                     className="border rounded-xl bg-card"
                 >
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-2 mb-3">
                         <div className="size-4 flex items-center shrink-0">
                             <Building2 size={16} />
                         </div>

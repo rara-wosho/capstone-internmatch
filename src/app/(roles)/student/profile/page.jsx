@@ -55,7 +55,6 @@ export default async function StudentProfilePage() {
         return <ErrorUi secondaryMessage={studentErr} />;
     }
 
-    console.log("student data: ", studentData);
     if (!studentData) {
         notFound();
     }

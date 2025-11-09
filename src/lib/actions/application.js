@@ -207,7 +207,7 @@ export async function getApprovedApplicantsByCompany(companyId, search) {
         )
         .eq("company_id", companyId)
         .eq("status", "accepted")
-        .not("approved_at", "is", null);
+        .eq("approve_status", "approved");
 
     //  Optional search - filter on the students table with OR logic
     // Search query on a referenced table
@@ -242,4 +242,43 @@ export async function getApprovedApplicantsByCompany(companyId, search) {
     }));
 
     return { success: true, error: "", data: formattedData };
+}
+
+// Approve the application of a student
+// For instructor action
+export async function approveStudentApplication(applicationId) {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+        .from("applicants")
+        .update({
+            approved_at: new Date().toISOString(),
+            approve_status: "approved",
+        })
+        .eq("id", applicationId);
+
+    if (error) {
+        return { success: false, error: error.message };
+    }
+
+    revalidatePath("/instructor/accepted", "page");
+    return { success: true, error: "" };
+}
+
+//Reject the accepted application with note
+export async function submitCannotProceedStatus(applicationId, message = "") {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+        .from("applicants")
+        .update({ approve_status: "rejected", cannot_proceed_message: message })
+        .eq("id", applicationId);
+
+    if (error) {
+        console.log(error);
+        return { success: false, error: error.message };
+    }
+
+    revalidatePath("instructor/accepted");
+    return { success: true, error: "" };
 }

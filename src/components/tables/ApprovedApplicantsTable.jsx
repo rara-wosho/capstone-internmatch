@@ -23,7 +23,7 @@ export default function ApprovedApplicantsTable({ applicants }) {
                 </TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Complete Name</TableHead>
+                        <TableHead>Student Name</TableHead>
                         <TableHead>School</TableHead>
                         <TableHead>Course</TableHead>
                         <TableHead>Date Approved</TableHead>
@@ -31,11 +31,8 @@ export default function ApprovedApplicantsTable({ applicants }) {
                 </TableHeader>
                 <TableBody>
                     {applicants.map((app) => (
-                        <TableRow
-                            key={app.id}
-                            className="text-muted-foreground"
-                        >
-                            <TableCell>
+                        <TableRow key={app.id}>
+                            <TableCell className="font-medium">
                                 {app.lastname}, {app.firstname}{" "}
                                 <span className="uppercase">
                                     {app.middlename?.charAt(0)}
