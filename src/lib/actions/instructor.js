@@ -109,3 +109,111 @@ export async function submitRegistration(prevState, formData) {
         formData: null, // Clear form data on success
     };
 }
+
+// Get approved applications for an instructor
+export async function getApprovedApplicationsByInstructor(
+    instructorId,
+    search
+) {
+    if (!instructorId) {
+        return {
+            success: false,
+            error: "Not a valid instructor. Please provide instructor id.",
+        };
+    }
+
+    const supabase = await createClient();
+
+    let query = supabase
+        .from("applicants")
+        .select(
+            `
+            id,
+            approved_at,
+            applied_at,
+            students!inner(
+                id,
+                firstname,
+                middlename,
+                lastname,
+                group_id,
+                groups!inner(
+                    id,
+                    group_name,
+                    ojt_instructor_id
+                )
+            ),
+            companies!inner(
+                id,
+                name
+            )
+            `
+        )
+        .eq("status", "accepted")
+        .not("approved_at", "is", null)
+        .eq("students.groups.ojt_instructor_id", instructorId)
+        .order("approved_at", { ascending: false });
+
+    if (search?.trim()) {
+        const searchTerm = `%${search.trim()}%`;
+        query = query.or(
+            `firstname.ilike.${searchTerm},middlename.ilike.${searchTerm},lastname.ilike.${searchTerm}`,
+            { foreignTable: "students" }
+        );
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+        return { success: false, error: error.message, data: null };
+    }
+
+    // Format and group by company
+    const formattedData = (data ?? []).map((d) => ({
+        id: d.id,
+        approved_at: d.approved_at,
+        applied_at: d.applied_at,
+        student_id: d.students.id,
+        firstname: d.students.firstname,
+        middlename: d.students.middlename,
+        lastname: d.students.lastname,
+
+        group_id: d.students.group_id,
+        group_name: d.students.groups.group_name,
+        company_id: d.companies.id,
+        company_name: d.companies.name,
+    }));
+
+    const groupedByCompany = formattedData.reduce((acc, item) => {
+        const companyId = item.company_id;
+
+        if (!acc[companyId]) {
+            acc[companyId] = {
+                company_id: companyId,
+                company_name: item.company_name,
+                students: [],
+            };
+        }
+
+        acc[companyId].students.push({
+            id: item.id, // application id
+            approved_at: item.approved_at,
+            applied_at: item.applied_at,
+            student_id: item.student_id,
+            firstname: item.firstname,
+            middlename: item.middlename,
+            lastname: item.lastname,
+
+            group_id: item.group_id,
+            group_name: item.group_name,
+        });
+
+        return acc;
+    }, {});
+
+    const result = Object.values(groupedByCompany).sort((a, b) =>
+        a.company_name.localeCompare(b.company_name)
+    );
+
+    return { success: true, error: "", data: result };
+}
