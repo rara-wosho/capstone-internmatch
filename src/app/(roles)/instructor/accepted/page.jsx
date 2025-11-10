@@ -1,3 +1,4 @@
+import SearchField from "@/components/forms/SearchStudent";
 import AcceptedStudentsTable from "@/components/tables/AcceptedStudentsTable";
 import BorderBox from "@/components/ui/BorderBox";
 import ErrorUi from "@/components/ui/ErrorUi";
@@ -6,8 +7,10 @@ import TitleText from "@/components/ui/TitleText";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { getAcceptedApplicationsByInstructor } from "@/lib/actions/instructor";
 import { Building, Building2 } from "lucide-react";
+import { Suspense } from "react";
 
-export default async function AcceptedApplicationsPage() {
+export default async function AcceptedApplicationsPage({ searchParams }) {
+    const search = (await searchParams)?.search_query || "";
     const { user } = await getCurrentUser();
 
     if (!user || !user?.id) {
@@ -15,7 +18,8 @@ export default async function AcceptedApplicationsPage() {
     }
 
     const { success, error, data } = await getAcceptedApplicationsByInstructor(
-        user.id
+        user.id,
+        search
     );
 
     if (!success || error) {
@@ -35,21 +39,38 @@ export default async function AcceptedApplicationsPage() {
                 </p>
             </div>
 
-            {data.map((company) => (
-                <BorderBox
-                    key={company.company_id}
-                    className="border rounded-xl bg-card mb-2 md:mb-3"
-                >
-                    <div className="flex items-center gap-2 mb-3">
-                        <div className="size-4 flex items-center shrink-0">
-                            <Building2 size={16} />
-                        </div>
-                        <TitleText>{company.company_name}</TitleText>
-                    </div>
+            <div className="mb-2 md:mb-3">
+                <Suspense fallback={<p>Loading search field</p>}>
+                    <SearchField
+                        placeholder="Search student here"
+                        actionPath="/instructor/accepted"
+                    />
+                </Suspense>
+            </div>
 
-                    <AcceptedStudentsTable students={company?.students} />
-                </BorderBox>
-            ))}
+            {data?.length === 0 ? (
+                <div>
+                    {search
+                        ? `No result found for "${search}"`
+                        : "No data available yet."}
+                </div>
+            ) : (
+                data.map((company) => (
+                    <BorderBox
+                        key={company.company_id}
+                        className="border rounded-xl bg-card mb-2 md:mb-3"
+                    >
+                        <div className="flex items-center gap-2 mb-3">
+                            <div className="size-4 flex items-center shrink-0">
+                                <Building2 size={16} />
+                            </div>
+                            <TitleText>{company.company_name}</TitleText>
+                        </div>
+
+                        <AcceptedStudentsTable students={company?.students} />
+                    </BorderBox>
+                ))
+            )}
         </div>
     );
 }

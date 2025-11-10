@@ -239,3 +239,78 @@ export async function getAcceptedApplicationsByInstructor(
 
     return { success: true, error: "", data: result };
 }
+
+// Get the result of assessment tests for the instructor
+export async function getInstructorAssessmentResults(instructorId, search) {
+    if (!instructorId) {
+        return {
+            success: false,
+            error: "Invalid instructor ID.",
+            data: [],
+        };
+    }
+
+    const supabase = await createClient();
+
+    let query = supabase
+        .from("assessment_attempt")
+        .select(
+            `
+            id,
+            submitted_at,
+            assessment_score,
+            assessment_total_item,
+            violation,
+            students!inner (
+                id,
+                firstname,
+                lastname,
+                group_id,
+                groups!inner (
+                    id,
+                    group_name,
+                    ojt_instructor_id
+                )
+            ),
+            assessment_test!inner (
+                id,
+                assessment_title
+            )
+            `
+        )
+        .eq("students.groups.ojt_instructor_id", instructorId)
+        .order("submitted_at", { ascending: false });
+
+    if (search?.trim()) {
+        const searchTerm = `%${search.trim()}%`;
+
+        query = query.or(
+            `firstname.ilike.${searchTerm},lastname.ilike.${searchTerm}`,
+            { foreignTable: "students" }
+        );
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+        return { success: false, error: error.message, data: [] };
+    }
+
+    // ✅ Format neatly
+    const formatted = data.map((d) => ({
+        id: d.id,
+        submitted_at: d.submitted_at,
+        violation: d.violation,
+        score: d.assessment_score,
+        total: d.assessment_total_item,
+        student_id: d.students.id,
+        firstname: d.students.firstname,
+        lastname: d.students.lastname,
+        group_id: d.students.groups.id,
+        group_name: d.students.groups.group_name,
+        test_id: d.assessment_test.id,
+        test_title: d.assessment_test.assessment_title,
+    }));
+
+    return { success: true, error: "", data: formatted };
+}

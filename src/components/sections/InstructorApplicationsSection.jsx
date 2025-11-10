@@ -81,10 +81,6 @@ export default function InstructorApplicationsSection({ applications = [] }) {
                                 <p className="font-semibold hover:text-accent-foreground">
                                     {app.firstname} {app.lastname}
                                 </p>
-
-                                <div className="ms-auto text-muted-foreground hover:text-accent-foreground">
-                                    <ChevronRight size={18} />
-                                </div>
                             </Link>
 
                             <div className="p-4 space-y-3">

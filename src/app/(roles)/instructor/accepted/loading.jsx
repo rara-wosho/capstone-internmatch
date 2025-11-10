@@ -15,6 +15,8 @@ export default function AcceptedApplicationLoadingPage() {
                 </p>
             </div>
 
+            <Skeleton className="h-10 rounded-sm w-full mb-2 md:mb-3" />
+
             <BorderBox className="bg-card rounded-xl border">
                 <div className="flex items-center gap-2">
                     <Loader className="animate-spin" size={16} />{" "}
