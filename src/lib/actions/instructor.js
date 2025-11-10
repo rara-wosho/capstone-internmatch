@@ -110,7 +110,7 @@ export async function submitRegistration(prevState, formData) {
     };
 }
 
-// Get approved applications for an instructor
+// Get accepted applications for an instructor
 export async function getAcceptedApplicationsByInstructor(
     instructorId,
     search
@@ -132,6 +132,7 @@ export async function getAcceptedApplicationsByInstructor(
             approved_at,
             approve_status,
             applied_at,
+            status,
             students!inner(
                 id,
                 firstname,
@@ -168,6 +169,21 @@ export async function getAcceptedApplicationsByInstructor(
         return { success: false, error: error.message, data: null };
     }
 
+    // ✅ Get all approved students across all companies
+    const { data: approvedStudents, error: approvedError } = await supabase
+        .from("applicants")
+        .select("student_id, approve_status")
+        .eq("approve_status", "approved");
+
+    if (approvedError) {
+        return { success: false, error: approvedError.message, data: null };
+    }
+
+    // Create a lookup of approved student IDs
+    const approvedStudentIds = new Set(
+        approvedStudents.map((s) => s.student_id)
+    );
+
     // Format and group by company
     const formattedData = (data ?? []).map((d) => ({
         id: d.id,
@@ -178,13 +194,17 @@ export async function getAcceptedApplicationsByInstructor(
         firstname: d.students.firstname,
         middlename: d.students.middlename,
         lastname: d.students.lastname,
-
         group_id: d.students.group_id,
         group_name: d.students.groups.group_name,
         company_id: d.companies.id,
         company_name: d.companies.name,
+        // ✅ Add this flag to check if this student is already approved elsewhere
+        isAlreadyApproved:
+            d.approve_status !== "approved" &&
+            approvedStudentIds.has(d.students.id),
     }));
 
+    // Group by company
     const groupedByCompany = formattedData.reduce((acc, item) => {
         const companyId = item.company_id;
 
@@ -197,7 +217,7 @@ export async function getAcceptedApplicationsByInstructor(
         }
 
         acc[companyId].students.push({
-            id: item.id, // application id
+            id: item.id,
             approved_at: item.approved_at,
             approve_status: item.approve_status,
             applied_at: item.applied_at,
@@ -205,9 +225,9 @@ export async function getAcceptedApplicationsByInstructor(
             firstname: item.firstname,
             middlename: item.middlename,
             lastname: item.lastname,
-
             group_id: item.group_id,
             group_name: item.group_name,
+            isAlreadyApproved: item.isAlreadyApproved,
         });
 
         return acc;

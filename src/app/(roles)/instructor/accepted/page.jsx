@@ -22,6 +22,8 @@ export default async function AcceptedApplicationsPage() {
         return <ErrorUi secondaryMessage={error} />;
     }
 
+    console.log("data: ", data);
+
     return (
         <div>
             <div className="mb-4 md:mb-5">
@@ -36,7 +38,7 @@ export default async function AcceptedApplicationsPage() {
             {data.map((company) => (
                 <BorderBox
                     key={company.company_id}
-                    className="border rounded-xl bg-card"
+                    className="border rounded-xl bg-card mb-2 md:mb-3"
                 >
                     <div className="flex items-center gap-2 mb-3">
                         <div className="size-4 flex items-center shrink-0">

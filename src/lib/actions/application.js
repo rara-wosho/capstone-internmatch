@@ -178,6 +178,7 @@ export async function updateApplication(applicationId, data) {
 }
 
 // Get approved and accepted applications by company (with optional search)
+// This  is for the company
 export async function getApprovedApplicantsByCompany(companyId, search) {
     if (!companyId) {
         return {

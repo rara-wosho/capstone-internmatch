@@ -35,6 +35,14 @@ export default function DashboardHeader({ profileData }) {
     if (pathname.startsWith("/student/e/")) return null;
     if (pathname.startsWith("/student/assessment-test/")) return null;
 
+    // Activity logs path for each role
+    const activityLogsPath =
+        profileData?.role === "student"
+            ? "/student/profile/activities"
+            : profileData?.role === "company"
+              ? "/company/activities"
+              : "/instructor/profile/activities";
+
     return (
         <div className="sticky top-0 left-0 px-3 md:px-5 lg:px-8 h-[60px] flex items-center w-full bg-white border-b z-30 backdrop-blur-2xl dark:bg-background/70">
             <SidebarTrigger />
@@ -135,7 +143,7 @@ export default function DashboardHeader({ profileData }) {
                                 >
                                     <Link
                                         onNavigate={() => setOpen(false)}
-                                        href={`/student/profile/activities`}
+                                        href={activityLogsPath}
                                     >
                                         <Logs />
                                         Activity Logs

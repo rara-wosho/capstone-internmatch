@@ -51,7 +51,7 @@ export default function AcceptedStudentsTable({ students }) {
             return students.filter((s) => s.approved_at);
         }
         if (activeTab === "rejected") {
-            return students.filter((s) => !s.approved_at);
+            return students.filter((s) => s.approve_status === "rejected");
         }
         return students;
     }, [activeTab, students]);
@@ -88,10 +88,10 @@ export default function AcceptedStudentsTable({ students }) {
 
     return (
         <>
-            <div className="flex gap-2 mb-2">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-2">
                 <button
                     className={cn(
-                        "cursor-pointer rounded-sm px-4 py-1.5 bg-secondary text-sm",
+                        "cursor-pointer whitespace-nowrap rounded-sm px-4 py-1.5 bg-secondary text-sm",
                         activeTab === "all"
                             ? "bg-primary text-white"
                             : "bg-secondary"
@@ -102,7 +102,7 @@ export default function AcceptedStudentsTable({ students }) {
                 </button>
                 <button
                     className={cn(
-                        "cursor-pointer rounded-sm px-2 py-1.5 bg-secondary text-sm",
+                        "cursor-pointer whitespace-nowrap rounded-sm px-2 py-1.5 bg-secondary text-sm",
                         activeTab === "approved"
                             ? "bg-primary text-white"
                             : "bg-secondary"
@@ -113,7 +113,7 @@ export default function AcceptedStudentsTable({ students }) {
                 </button>
                 <button
                     className={cn(
-                        "cursor-pointer rounded-sm px-2 py-1.5 bg-secondary text-sm",
+                        "cursor-pointer whitespace-nowrap rounded-sm px-2 py-1.5 bg-secondary text-sm",
                         activeTab === "rejected"
                             ? "bg-primary text-white"
                             : "bg-secondary"
@@ -137,111 +137,140 @@ export default function AcceptedStudentsTable({ students }) {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {filteredApplications?.map((student) => (
-                        <TableRow key={student?.student_id}>
-                            <TableCell className="font-medium">
-                                {student?.lastname}, {student?.firstname}
-                            </TableCell>
+                    {filteredApplications.length === 0 ? (
+                        <TableRow>
                             <TableCell>
-                                {dateFormatter(student?.applied_at)}
-                            </TableCell>
-                            <TableCell>{student?.group_name}</TableCell>
-                            <TableCell className="w-[250px]">
-                                <div className="flex items-center gap-2">
-                                    {student.approve_status !== "approved" && (
-                                        // Show only if approve status is not yet approved
-                                        <AlertDialog>
-                                            <AlertDialogTrigger asChild>
-                                                <Button
-                                                    size="sm"
-                                                    variant="destructive"
-                                                    disabled={
-                                                        student.approve_status ===
-                                                        "rejected"
-                                                    }
-                                                >
-                                                    {student.approve_status ===
-                                                    "rejected"
-                                                        ? "Cannot Proceed"
-                                                        : "Mark as cannot proceed"}
-                                                </Button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent>
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle>
-                                                        Confirm Decision
-                                                    </AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                        If the student cannot
-                                                        proceed with this
-                                                        internship, please
-                                                        provide a short reason
-                                                        below. Note that this
-                                                        action cannot be undone.
-                                                    </AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <div>
-                                                    <FormLabel>
-                                                        Reason
-                                                    </FormLabel>
-                                                    <Textarea
-                                                        value={message}
-                                                        onChange={(e) =>
-                                                            setMessage(
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        placeholder="Explain briefly why the student cannot proceed..."
-                                                    />
-                                                </div>
-                                                <AlertDialogFooter>
-                                                    <AlertDialogCancel>
-                                                        Cancel
-                                                    </AlertDialogCancel>
-                                                    <AlertDialogAction asChild>
-                                                        <Button
-                                                            disabled={
-                                                                student.approve_status ===
-                                                                "rejected"
-                                                            }
-                                                            onClick={() =>
-                                                                handleCannotProceedStatus(
-                                                                    student.id
-                                                                )
-                                                            }
-                                                            size="sm"
-                                                            variant="destructive"
-                                                        >
-                                                            Submit Decision
-                                                        </Button>
-                                                    </AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
-                                    )}
-                                    {student?.approve_status !== "rejected" && (
-                                        <Button
-                                            disabled={
-                                                student?.approve_status ===
-                                                "approved"
-                                            }
-                                            onClick={() =>
-                                                handleApproveApplication(
-                                                    student.id
-                                                )
-                                            }
-                                            size="sm"
-                                        >
-                                            {student?.approve_status ===
-                                            "approved"
-                                                ? "Approved"
-                                                : "Approve"}
-                                        </Button>
-                                    )}
-                                </div>
+                                <p>Nothing is in the list</p>
                             </TableCell>
                         </TableRow>
-                    ))}
+                    ) : (
+                        filteredApplications?.map((student) => (
+                            <TableRow key={student?.student_id}>
+                                <TableCell className="font-medium">
+                                    {student?.lastname}, {student?.firstname}
+                                </TableCell>
+                                <TableCell>
+                                    {dateFormatter(student?.applied_at)}
+                                </TableCell>
+                                <TableCell>{student?.group_name}</TableCell>
+                                <TableCell className="w-[300px]">
+                                    <div className="flex items-center gap-2 relative">
+                                        {/* Ispending indicator  */}
+                                        {isPending && (
+                                            <div className="absolute inset-0 bg-neutral-200/70 z-10 flex items-center justify-center gap-2">
+                                                <Loader
+                                                    className="animate-spin"
+                                                    size={14}
+                                                />
+                                                <p>Please wait</p>
+                                            </div>
+                                        )}
+
+                                        {student.approve_status !==
+                                            "approved" && (
+                                            // Show only if approve status is not yet approved
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="destructive"
+                                                        disabled={
+                                                            student.approve_status ===
+                                                            "rejected"
+                                                        }
+                                                    >
+                                                        {student.approve_status ===
+                                                        "rejected"
+                                                            ? "Cannot Proceed"
+                                                            : "Mark as cannot proceed"}
+                                                    </Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>
+                                                            Confirm Decision
+                                                        </AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            If the student
+                                                            cannot proceed with
+                                                            this internship,
+                                                            please provide a
+                                                            short reason below.
+                                                            Note that this
+                                                            action cannot be
+                                                            undone.
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <div>
+                                                        <FormLabel>
+                                                            Reason
+                                                        </FormLabel>
+                                                        <Textarea
+                                                            value={message}
+                                                            onChange={(e) =>
+                                                                setMessage(
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            placeholder="Explain briefly why the student cannot proceed..."
+                                                        />
+                                                    </div>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>
+                                                            Cancel
+                                                        </AlertDialogCancel>
+                                                        <AlertDialogAction
+                                                            asChild
+                                                        >
+                                                            <Button
+                                                                disabled={
+                                                                    student.approve_status ===
+                                                                    "rejected"
+                                                                }
+                                                                onClick={() =>
+                                                                    handleCannotProceedStatus(
+                                                                        student.id
+                                                                    )
+                                                                }
+                                                                size="sm"
+                                                                variant="destructive"
+                                                            >
+                                                                Submit Decision
+                                                            </Button>
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        )}
+                                        {student?.approve_status !==
+                                            "rejected" && (
+                                            <Button
+                                                disabled={
+                                                    student?.approve_status ===
+                                                        "approved" ||
+                                                    student?.isAlreadyApproved
+                                                }
+                                                onClick={() =>
+                                                    handleApproveApplication(
+                                                        student.id
+                                                    )
+                                                }
+                                                size="sm"
+                                            >
+                                                {student?.approve_status ===
+                                                "approved"
+                                                    ? "Approved"
+                                                    : student?.isAlreadyApproved
+                                                      ? "Already approved elsewhere"
+                                                      : "Approve"}
+                                            </Button>
+                                        )}
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    )}
                 </TableBody>
             </Table>
         </>
