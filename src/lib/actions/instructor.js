@@ -390,6 +390,7 @@ export async function getStudentExamResults(instructorId, search) {
                 id: exam.id,
                 title: exam.exam_title,
                 company: exam.companies?.name || "N/A",
+                company_id: exam.companies?.id,
                 score: exam.score,
                 total_questions: exam.total_questions,
                 completed_at: exam.completed_at,
@@ -408,4 +409,102 @@ export async function getStudentExamResults(instructorId, search) {
     );
 
     return { success: true, data: formattedData, error: "" };
+}
+
+// Update instructor profile
+export async function updateInstructorProfile(prevState, formData) {
+    const supabase = await createClient();
+
+    // Extract form data
+    const firstname = formData.get("firstname")?.trim();
+    const lastname = formData.get("lastname")?.trim();
+    const middlename = formData.get("middlename")?.trim() || null;
+    const age = formData.get("age")?.trim();
+    const gender = formData.get("gender");
+    const school = formData.get("school")?.trim();
+    const barangay = formData.get("barangay")?.trim();
+    const city = formData.get("city")?.trim();
+    const province = formData.get("province")?.trim();
+    const instructorId = formData.get("instructorId");
+
+    // Validation
+    const errors = {};
+
+    if (!firstname || firstname.length < 2) {
+        errors.firstname = "First name must be at least 2 characters";
+    }
+
+    if (!lastname || lastname.length < 2) {
+        errors.lastname = "Last name must be at least 2 characters";
+    }
+
+    if (!age || age < 12 || age > 100) {
+        errors.age = "Age must be between 12 and 100";
+    }
+
+    if (!gender || !["male", "female"].includes(gender)) {
+        errors.gender = "Please select a valid gender";
+    }
+
+    if (!school || school.length < 3) {
+        errors.school = "School name must be at least 3 characters";
+    }
+
+    if (!barangay || barangay.length < 2) {
+        errors.barangay = "Barangay must be at least 2 characters";
+    }
+
+    if (!city || city.length < 2) {
+        errors.city = "City/Municipality must be at least 2 characters";
+    }
+
+    if (!province || province.length < 2) {
+        errors.province = "Province must be at least 2 characters";
+    }
+
+    if (!instructorId) {
+        errors.general = "Invalid instructor ID";
+    }
+
+    // Return validation errors
+    if (Object.keys(errors).length > 0) {
+        return {
+            success: false,
+            errors,
+        };
+    }
+
+    // Update instructor profile
+    const { error } = await supabase
+        .from("ojt_instructors")
+        .update({
+            firstname,
+            lastname,
+            middlename,
+            age,
+            gender,
+            school,
+            barangay,
+            city,
+            province,
+            updated_at: new Date().toISOString(),
+        })
+        .eq("id", instructorId);
+
+    if (error) {
+        return {
+            success: false,
+            errors: {
+                general: "Failed to update profile. Please try again.",
+            },
+        };
+    }
+
+    // Revalidate the page to show updated data
+    revalidatePath("/instructor/profile");
+
+    return {
+        success: true,
+        message: "Profile updated successfully!",
+    };
 }

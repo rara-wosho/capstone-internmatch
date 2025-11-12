@@ -55,7 +55,14 @@ export default function InstructorExamResultsTable({ studentData }) {
                                 </Link>
                             </TableCell>
                             <TableCell>{exam.title}</TableCell>
-                            <TableCell>{exam.company}</TableCell>
+                            <TableCell>
+                                <Link
+                                    className="hover:underline underline-offset-2"
+                                    href={`/instructor/companies/${exam.company_id}`}
+                                >
+                                    {exam.company}{" "}
+                                </Link>
+                            </TableCell>
                             <TableCell className="text-center">
                                 {exam.score !== null
                                     ? `${exam.score}${

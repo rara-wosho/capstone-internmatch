@@ -18,7 +18,10 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "./ui/separator";
 
-export default function UploadAvatar({ currentAvatarUrl }) {
+export default function UploadAvatar({
+    buttonVariant = "default",
+    currentAvatarUrl,
+}) {
     const { user } = useSession();
     const supabase = createClient();
     const router = useRouter();
@@ -133,7 +136,9 @@ export default function UploadAvatar({ currentAvatarUrl }) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="w-full">Update Avatar</Button>
+                <Button variant={buttonVariant} className="w-full">
+                    Update Avatar
+                </Button>
             </DialogTrigger>
 
             <DialogContent className="max-w-sm">

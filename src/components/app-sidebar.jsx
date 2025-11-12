@@ -222,6 +222,20 @@ const navigationConfig = [
                 roles: ["student"],
             },
 
+            // SETTINGS FOR INSTRUCTOR
+            {
+                label: "Settings",
+                icon: <Settings />,
+                roles: ["instructor"],
+                subItems: [
+                    {
+                        href: "/instructor/profile",
+                        icon: <User />,
+                        label: "Edit Profile",
+                    },
+                ],
+            },
+
             // SETTINGS FOR COMPANY
             {
                 label: "Settings",

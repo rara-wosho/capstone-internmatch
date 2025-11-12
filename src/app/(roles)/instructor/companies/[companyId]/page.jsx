@@ -8,6 +8,7 @@ import { Globe, Mail, MapPin, Phone, Link2 } from "lucide-react";
 import { getCompanyById } from "@/lib/actions/company";
 import BorderBox from "@/components/ui/BorderBox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const links = [
     { href: "", label: "Home" },
@@ -76,59 +77,69 @@ export default async function Page({ params }) {
                 )}
             </BorderBox>
 
-            {/* Contact Info */}
-            <BorderBox className="border rounded-xl bg-card">
-                <h2 className="font-semibold mb-3 text-lg">
-                    Contact Information
-                </h2>
-                <div className="grid sm:grid-cols-2 gap-4 text-sm">
-                    <div className="flex items-center gap-2">
-                        <Mail size={16} className="text-muted-foreground" />
-                        <span>{company.email}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <Phone size={16} className="text-muted-foreground" />
-                        <span>{company.phone}</span>
-                    </div>
-                    {company.website && (
+            <div className="border rounded-xl bg-card">
+                {/* Company Description */}
+                <BorderBox>
+                    <h2 className="font-semibold mb-2 text-lg">
+                        Company Overview
+                    </h2>
+                    <p className="text-sm text-muted-foreground whitespace-pre-line">
+                        {company.details || "No company overview provided."}
+                    </p>
+                </BorderBox>
+
+                {/* Contact Info */}
+                <BorderBox>
+                    <h2 className="font-semibold text-lg mb-2">
+                        Contact Information
+                    </h2>
+                    <div className="grid sm:grid-cols-2 gap-4 text-sm">
                         <div className="flex items-center gap-2">
-                            <Globe
+                            <Mail size={16} className="text-muted-foreground" />
+                            <span>{company.email}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Phone
                                 size={16}
                                 className="text-muted-foreground"
                             />
-                            <Link
-                                href={company.website}
-                                target="_blank"
-                                className="text-primary hover:underline"
-                            >
-                                {company.website}
-                            </Link>
+                            <span>{company.phone}</span>
                         </div>
-                    )}
-
-                    <div className="flex items-center gap-2">
-                        <MapPin size={16} className="text-muted-foreground" />
-                        {!company?.barangay ||
-                        !company?.city ||
-                        !company?.province ? (
-                            <p>No address provided</p>
-                        ) : (
-                            <span>
-                                {company.barangay}, {company.city},{" "}
-                                {company.province}
-                            </span>
+                        {company.website && (
+                            <div className="flex items-center gap-2">
+                                <Globe
+                                    size={16}
+                                    className="text-muted-foreground"
+                                />
+                                <Link
+                                    href={company.website}
+                                    target="_blank"
+                                    className="text-primary hover:underline"
+                                >
+                                    {company.website}
+                                </Link>
+                            </div>
                         )}
-                    </div>
-                </div>
-            </BorderBox>
 
-            {/* Company Description */}
-            <BorderBox className="border rounded-xl bg-card">
-                <h2 className="font-semibold mb-3 text-lg">Company Overview</h2>
-                <p className="text-sm text-muted-foreground whitespace-pre-line">
-                    {company.details || "No company overview provided."}
-                </p>
-            </BorderBox>
+                        <div className="flex items-center gap-2">
+                            <MapPin
+                                size={16}
+                                className="text-muted-foreground"
+                            />
+                            {!company?.barangay ||
+                            !company?.city ||
+                            !company?.province ? (
+                                <p>No address provided</p>
+                            ) : (
+                                <span>
+                                    {company.barangay}, {company.city},{" "}
+                                    {company.province}
+                                </span>
+                            )}
+                        </div>
+                    </div>
+                </BorderBox>
+            </div>
 
             {/* Company Offers */}
             <BorderBox className="border rounded-xl bg-card">
