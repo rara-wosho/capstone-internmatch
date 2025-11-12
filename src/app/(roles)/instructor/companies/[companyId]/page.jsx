@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Globe, Mail, MapPin, Phone, Link2 } from "lucide-react";
 import { getCompanyById } from "@/lib/actions/company";
 import BorderBox from "@/components/ui/BorderBox";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const links = [
     { href: "", label: "Home" },
@@ -36,20 +37,15 @@ export default async function Page({ params }) {
             <BreadCrumbs links={links} />
 
             {/* Header */}
-            <div className="flex items-center gap-4 mt-2 mb-5">
-                {company.avatar_url ? (
-                    <Image
-                        src={company.avatar_url}
-                        alt={`${company.name} logo`}
-                        width={80}
-                        height={80}
-                        className="rounded-full border object-cover"
+            <div className="flex items-center gap-4 mb-4">
+                <Avatar className="w-[100px] aspect-square">
+                    <AvatarImage
+                        src={
+                            company?.avatar_url || "/images/default-avatar.jpg"
+                        }
                     />
-                ) : (
-                    <div className="w-20 h-20 flex items-center justify-center bg-muted text-sm rounded-full border">
-                        No Logo
-                    </div>
-                )}
+                    <AvatarFallback>{company?.name?.charAt(0)}</AvatarFallback>
+                </Avatar>
 
                 <div>
                     <SecondaryLabel>{company.name}</SecondaryLabel>
@@ -60,6 +56,25 @@ export default async function Page({ params }) {
                     </p>
                 </div>
             </div>
+
+            {/* Is accepting applicants? */}
+            <BorderBox className="rounded-xl bg-primary">
+                <h2 className="font-semibold text-lg text-white">
+                    {company?.accept_applicants
+                        ? "Currently Accepting Applicants"
+                        : "Not Accepting Applicants at the Moment"}
+                </h2>
+
+                {company?.accept_applicants && (
+                    <p className="text-sm text-neutral-100 mt-1">
+                        {company?.accept_applicants_term === "all"
+                            ? "This company requires applicants to complete all available exams before submitting an application."
+                            : company.accept_applicants_term === "some"
+                              ? "This company allows applicants who have completed at least one of the available exams to apply."
+                              : "This company accepts applications without requiring any exams to be completed beforehand."}
+                    </p>
+                )}
+            </BorderBox>
 
             {/* Contact Info */}
             <BorderBox className="border rounded-xl bg-card">
@@ -90,12 +105,19 @@ export default async function Page({ params }) {
                             </Link>
                         </div>
                     )}
+
                     <div className="flex items-center gap-2">
                         <MapPin size={16} className="text-muted-foreground" />
-                        <span>
-                            {company.barangay}, {company.city},{" "}
-                            {company.province}
-                        </span>
+                        {!company?.barangay ||
+                        !company?.city ||
+                        !company?.province ? (
+                            <p>No address provided</p>
+                        ) : (
+                            <span>
+                                {company.barangay}, {company.city},{" "}
+                                {company.province}
+                            </span>
+                        )}
                     </div>
                 </div>
             </BorderBox>

@@ -165,7 +165,7 @@ export async function getCompanyById(id) {
     const { data, error } = await supabase
         .from("companies")
         .select(
-            "avatar_url, barangay, city, province, details, email, links, name, phone, website, company_offers(offers)"
+            "avatar_url, barangay, city, province, details, email, links, name, phone, website, accept_applicants, accept_applicants_term, company_offers(offers)"
         )
         .eq("id", id)
         .maybeSingle();
@@ -189,6 +189,8 @@ export async function getCompanyById(id) {
         name: data.name || "Unknown Company",
         avatar_url: data.avatar_url || "",
         email: data.email || "No email provided",
+        accept_applicants: data.accept_applicants,
+        accept_applicants_term: data.accept_applicants_term,
         phone: data.phone || "No phone number provided",
         website: data.website || "",
         barangay: data.barangay || "",

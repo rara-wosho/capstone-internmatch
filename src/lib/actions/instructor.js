@@ -314,3 +314,98 @@ export async function getInstructorAssessmentResults(instructorId, search) {
 
     return { success: true, error: "", data: formatted };
 }
+
+//  Fetch all students' exam results under the instructor's supervision.
+//  Optionally filter by a search query (name).
+export async function getStudentExamResults(instructorId, search) {
+    if (!instructorId) {
+        return {
+            success: false,
+            error: "Missing instructor ID.",
+            data: null,
+        };
+    }
+
+    const supabase = await createClient();
+
+    // --- Build the base query ---
+    let query = supabase
+        .from("students")
+        .select(
+            `
+            id,
+            firstname,
+            middlename,
+            lastname,
+            groups!inner(
+                id,
+                group_name,
+                ojt_instructor_id
+            ),
+            exam_attempt(
+                id,
+                exam_id,
+                exam_title,
+                completed_at,
+                score,
+                total_questions,
+                companies(name, id)
+            )
+        `
+        )
+        .eq("groups.ojt_instructor_id", instructorId);
+
+    // --- Apply search filter if provided ---
+    if (search.trim() !== "") {
+        query = query.or(
+            `firstname.ilike.%${search}%,lastname.ilike.%${search}%,middlename.ilike.%${search}%`
+        );
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+        return { success: false, error: error.message, data: null };
+    }
+
+    if (!data || data.length === 0) {
+        return {
+            success: true,
+            data: [],
+            error: "",
+        };
+    }
+
+    // --- Group students by group name ---
+    const groupedData = data.reduce((acc, student) => {
+        const groupName = student.groups?.group_name || "Ungrouped";
+        if (!acc[groupName]) {
+            acc[groupName] = [];
+        }
+
+        acc[groupName].push({
+            id: student.id,
+            name: `${student.firstname} ${student.middlename || ""} ${student.lastname}`.trim(),
+            exams: (student.exam_attempt || []).map((exam) => ({
+                id: exam.id,
+                title: exam.exam_title,
+                company: exam.companies?.name || "N/A",
+                score: exam.score,
+                total_questions: exam.total_questions,
+                completed_at: exam.completed_at,
+            })),
+        });
+
+        return acc;
+    }, {});
+
+    // --- Format grouped data into array for easy frontend rendering ---
+    const formattedData = Object.entries(groupedData).map(
+        ([groupName, students]) => ({
+            group_name: groupName,
+            students,
+        })
+    );
+
+    return { success: true, data: formattedData, error: "" };
+}

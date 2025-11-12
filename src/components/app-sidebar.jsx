@@ -176,6 +176,12 @@ const navigationConfig = [
                 roles: ["instructor"],
             },
             {
+                href: "/instructor/exam-results",
+                icon: <NotepadText />,
+                label: "Exam Results",
+                roles: ["instructor"],
+            },
+            {
                 icon: <FileUser />,
                 label: "Student Applications",
                 roles: ["instructor"],
