@@ -1,18 +1,22 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
-import BreadCrumbs from "@/components/ui/BreadCrumbs";
 import BorderBox from "@/components/ui/BorderBox";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Mail, Phone, MapPin, Building2, User } from "lucide-react";
 import ErrorUi from "@/components/ui/ErrorUi";
 import { getCurrentUser } from "@/lib/actions/auth";
-import { dateFormatter } from "@/utils/date-formatter";
 import Wrapper from "@/components/Wrapper";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UploadAvatar from "@/components/UploadAvatar";
 import InstructorEditProfileForm from "@/components/forms/InstructorEditProfileForm";
+import ChangePasswordForm from "@/components/forms/ChangePasswordForm";
+import { Button } from "@/components/ui/button";
+
+// Page metadata
+export const metadata = {
+    title: "Edit Profile",
+    description: "Edit or Update your profile informations.",
+};
 
 export default async function InstructorProfilePage() {
     const supabase = await createClient();
@@ -79,10 +83,11 @@ export default async function InstructorProfilePage() {
                     <div className="flex items-center gap-2">
                         <div>
                             <UploadAvatar
-                                buttonVariant="outline"
                                 currentAvatarUrl={instructor.avatar_url}
                             />
                         </div>
+
+                        <Button variant="outline">Activity Logs</Button>
                     </div>
                 </BorderBox>
 
@@ -107,7 +112,11 @@ export default async function InstructorProfilePage() {
                                 instructorData={instructor}
                             />
                         </TabsContent>
-                        <TabsContent value="change-password"></TabsContent>
+                        <TabsContent value="change-password">
+                            <BorderBox>
+                                <ChangePasswordForm email={instructor.email} />
+                            </BorderBox>
+                        </TabsContent>
                     </Tabs>
                 </div>
             </Wrapper>

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "../supabase/admin";
 import { createClient } from "../supabase/server";
+import { getCurrentUser } from "./auth";
 
 export async function createInstructor(formData) {
     // get and sanitize formdata
@@ -507,4 +508,30 @@ export async function updateInstructorProfile(prevState, formData) {
         success: true,
         message: "Profile updated successfully!",
     };
+}
+
+// Get instructors activity logs
+export async function getInstructorActivityLogs() {
+    const { user } = await getCurrentUser();
+
+    if (!user || !user?.id) {
+        return { success: false, error: "Unauthorized user.", data: null };
+    }
+
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("ojt_instructors")
+        .select(
+            "created_at, firstname, lastname, groups(group_name, created_at)"
+        )
+        .eq("id", user.id)
+        .eq("groups.ojt_instructor_id", user.id)
+        .maybeSingle();
+
+    if (error) {
+        return { success: false, error: error.message, data: null };
+    }
+
+    return { success: true, error: "", data };
 }

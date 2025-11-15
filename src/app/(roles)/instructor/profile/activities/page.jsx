@@ -1,22 +1,16 @@
 import ErrorUi from "@/components/ui/ErrorUi";
 import IconWrapper from "@/components/ui/IconWrapper";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
-import { getCompanyActivities } from "@/lib/actions/company";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getInstructorActivityLogs } from "@/lib/actions/instructor";
+import { dateFormatter } from "@/utils/date-formatter";
 import { Logs } from "lucide-react";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { dateFormatter } from "@/utils/date-formatter";
-
-export default async function CompanyActivitiesPage() {
-    const { data, error } = await getCompanyActivities();
+export default async function InstructorActivitiesPage() {
+    const { data, error } = await getInstructorActivityLogs();
 
     if (error) {
-        return (
-            <ErrorUi
-                message="Something went wrong while loading activity logs"
-                secondaryMessage={error}
-            />
-        );
+        return <ErrorUi secondaryMessage={error} />;
     }
 
     return (
@@ -32,7 +26,7 @@ export default async function CompanyActivitiesPage() {
                 <div className="border-b mb-3">
                     <TabsList className="h-[55px] space-x-3">
                         <TabsTrigger value="account">Account</TabsTrigger>
-                        <TabsTrigger value="exams">Exams</TabsTrigger>
+                        <TabsTrigger value="group">Groups</TabsTrigger>
                     </TabsList>
                 </div>
 
@@ -45,25 +39,25 @@ export default async function CompanyActivitiesPage() {
                                 : "N/A"}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                            Joined InternMatch.
+                            {data.firstname} {data.lastname} Joined InternMatch.
                         </p>
                     </div>
                 </TabsContent>
 
                 {/* Exam Activity */}
-                <TabsContent value="exams">
-                    {data?.exams?.length === 0 ? (
+                <TabsContent value="group">
+                    {data?.groups?.length === 0 ? (
                         <p className="text-sm text-muted-foreground">
-                            No activity for exams.
+                            No data available.
                         </p>
                     ) : (
-                        data.exams.map((exam, index) => (
+                        data.groups.map((group, index) => (
                             <div key={index} className="mb-3">
-                                <p>{dateFormatter(exam.created_at)}</p>
+                                <p>{dateFormatter(group.created_at)}</p>
                                 <p className="text-sm text-muted-foreground">
-                                    Created an exam:{" "}
+                                    Created group:{" "}
                                     <span className="text-secondary-foreground font-medium">
-                                        {exam.title}
+                                        {group.group_name}
                                     </span>
                                 </p>
                             </div>

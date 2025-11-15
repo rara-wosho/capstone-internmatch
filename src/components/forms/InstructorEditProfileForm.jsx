@@ -74,7 +74,7 @@ export default function InstructorEditProfileForm({ userId, instructorData }) {
                         )}
                     </div>
                     <div>
-                        <FormLabel>Middle Name</FormLabel>
+                        <FormLabel>Middle Name (Optional)</FormLabel>
                         <Input
                             name="middlename"
                             defaultValue={instructorData.middlename}
