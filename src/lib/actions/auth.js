@@ -73,7 +73,7 @@ export async function getCurrentUser() {
     } = await supabase.auth.getSession();
 
     if (!session || error) {
-        console.error(error.message);
+        console.error(error);
         return { error: true, user: null };
     }
 
@@ -143,5 +143,38 @@ export async function updatePassword(formData) {
     return {
         success: true,
         message: "Password updated successfully.",
+    };
+}
+
+// Send an email link to the user's email to reset password
+export async function sendResetPasswordEmail(prev, formData) {
+    const email = formData.get("email") || "";
+
+    if (!email) {
+        return {
+            success: false,
+            error: "No email provided.",
+            message:
+                "Please make sure that you provided a valid email address.",
+        };
+    }
+
+    const supabase = await createClient();
+
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+
+    if (error) {
+        console.log("error sending email: ", error);
+        return {
+            success: false,
+            error: error.message,
+            message: "Something went wrong while sending password reset email.",
+        };
+    }
+
+    return {
+        success: true,
+        error: "",
+        message: "Please check your email for a password reset link.",
     };
 }
