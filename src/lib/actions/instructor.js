@@ -535,3 +535,25 @@ export async function getInstructorActivityLogs() {
 
     return { success: true, error: "", data };
 }
+
+// Get instructors dashboard details
+export async function getStudentOverviewCount(instructorId) {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("students")
+        .select("exam_access, groups!inner(ojt_instructor_id)")
+        .eq("groups.ojt_instructor_id", instructorId);
+
+    if (error) {
+        console.log("error server : ", error);
+        return { success: false, error: error.message, data: null };
+    }
+
+    const formattedData = {
+        totalStudent: data.length,
+        totalStudentWithExamAccess:
+            data.filter((s) => s.exam_access)?.length || 0,
+    };
+    return { success: true, data: formattedData };
+}

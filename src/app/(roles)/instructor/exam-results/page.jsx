@@ -61,7 +61,7 @@ export default async function InstructorExamResultsPage({ searchParams }) {
             </div>
 
             {examData?.length === 0 ? (
-                <div>
+                <div className="flex justify-center py-3 text-muted-foreground">
                     {search
                         ? `No result found for "${search}"`
                         : "No data available yet."}

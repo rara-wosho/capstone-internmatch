@@ -22,6 +22,7 @@ export default function StudentsTable({ students }) {
                         <TableHead>Email</TableHead>
                         <TableHead>Gender</TableHead>
                         <TableHead>Age</TableHead>
+                        <TableHead>Exam Access</TableHead>
                         <TableHead>Group</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -62,6 +63,19 @@ export default function StudentsTable({ students }) {
                                     <p className="text-sm text-muted-foreground opacity-60 pointer-events-none">
                                         -
                                     </p>
+                                )}
+                            </TableCell>
+                            <TableCell>
+                                {student?.exam_access ? (
+                                    <div className="border rounded-full inline-flex items-center px-2 py-[1px] border-green-500 text-green-600">
+                                        <span className="text-xs">Allowed</span>
+                                    </div>
+                                ) : (
+                                    <div className="border rounded-full inline-flex items-center px-2 py-[1px]">
+                                        <span className="text-xs">
+                                            Not allowed
+                                        </span>
+                                    </div>
                                 )}
                             </TableCell>
                             <TableCell>

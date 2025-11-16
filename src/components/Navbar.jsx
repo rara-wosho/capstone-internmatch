@@ -41,7 +41,7 @@ export default function Navbar() {
                     >
                         About
                     </Link>
-                    <Link
+                    {/* <Link
                         className={cn(
                             pathname === "/companies" && "text-primary-text",
                             "py-1 font-semibold relative after:absolute after:h-[2px] after:w-0 hover:after:w-full after:bg-primary-text after:left-0 after:bottom-0 transition-all after:transition-all hover:text-primary-text"
@@ -49,7 +49,7 @@ export default function Navbar() {
                         href="/companies"
                     >
                         Companies
-                    </Link>
+                    </Link> */}
                     <Link
                         className={cn(
                             pathname === "/feedbacks" && "text-primary-text",

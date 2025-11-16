@@ -24,7 +24,7 @@ export default async function Page({ searchParams }) {
     let studentQuery = db
         .from("students")
         .select(
-            `id, firstname,lastname,avatar_url, email,course, gender, age, groups!inner(ojt_instructor_id, group_name, id)`
+            `id, firstname,lastname,avatar_url, exam_access, email,course, gender, age, groups!inner(ojt_instructor_id, group_name, id)`
         )
         .order("created_at", { ascending: false });
 
@@ -70,12 +70,10 @@ export default async function Page({ searchParams }) {
                 {students.length > 0 ? (
                     <StudentsTable students={students} />
                 ) : (
-                    <div className="text-center text-muted-foreground py-8">
-                        {search ? (
-                            <p>No matching students found.</p>
-                        ) : (
-                            <EmptyUi secondaryMessage="No students registered yet." />
-                        )}
+                    <div className="flex justify-center py-3 text-muted-foreground">
+                        {search
+                            ? `No result found for "${search}"`
+                            : "No data available yet."}
                     </div>
                 )}
             </div>

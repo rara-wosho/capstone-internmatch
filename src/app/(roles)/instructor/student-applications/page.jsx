@@ -1,16 +1,11 @@
 import ErrorUi from "@/components/ui/ErrorUi";
-import IconWrapper from "@/components/ui/IconWrapper";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/server";
-import { FileUser } from "lucide-react";
 import { notFound } from "next/navigation";
-import EmptyUi from "@/components/ui/EmptyUi";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Suspense } from "react";
 import SearchField from "@/components/forms/SearchStudent";
 import BorderBox from "@/components/ui/BorderBox";
-import SortDate from "@/components/SortDate";
 import InstructorApplicationsSection from "@/components/sections/InstructorApplicationsSection";
 
 export default async function StudentApplicationsPage({ searchParams }) {
@@ -82,13 +77,11 @@ export default async function StudentApplicationsPage({ searchParams }) {
             {applications?.length > 0 ? (
                 <InstructorApplicationsSection applications={applications} />
             ) : (
-                <EmptyUi
-                    secondaryMessage={
-                        search
-                            ? `We found no result matching '${search}'`
-                            : "No student submits an application yet."
-                    }
-                />
+                <div className="flex justify-center py-3 text-muted-foreground">
+                    {search
+                        ? `No result found for "${search}"`
+                        : "No data available yet."}
+                </div>
             )}
         </div>
     );

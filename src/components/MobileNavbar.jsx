@@ -79,7 +79,7 @@ export default function MobileNavbar() {
                             <CircleQuestionMark size={15} />
                             About
                         </Link>
-                        <Link
+                        {/* <Link
                             onClick={() => setOpen(false)}
                             className={cn(
                                 pathname === "/companies"
@@ -91,7 +91,7 @@ export default function MobileNavbar() {
                         >
                             <Building2 size={15} />
                             Companies
-                        </Link>
+                        </Link> */}
                         <Link
                             onClick={() => setOpen(false)}
                             className={cn(

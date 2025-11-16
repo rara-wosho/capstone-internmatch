@@ -11,6 +11,7 @@ import UploadAvatar from "@/components/UploadAvatar";
 import InstructorEditProfileForm from "@/components/forms/InstructorEditProfileForm";
 import ChangePasswordForm from "@/components/forms/ChangePasswordForm";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 // Page metadata
 export const metadata = {
@@ -87,7 +88,11 @@ export default async function InstructorProfilePage() {
                             />
                         </div>
 
-                        <Button variant="outline">Activity Logs</Button>
+                        <Button variant="outline" asChild>
+                            <Link href="/instructor/profile/activities">
+                                Activity Logs
+                            </Link>
+                        </Button>
                     </div>
                 </BorderBox>
 

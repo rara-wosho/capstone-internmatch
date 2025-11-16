@@ -1,3 +1,3 @@
 export default function Page() {
-    return <div>Feedback page</div>;
+    return <div className="min-h-svh"></div>;
 }
