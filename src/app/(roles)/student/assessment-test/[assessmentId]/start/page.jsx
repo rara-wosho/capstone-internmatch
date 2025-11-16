@@ -1,7 +1,5 @@
 import AssessmentQuestionsSection from "@/components/sections/AssessmentQuestionsSection";
-import BorderBox from "@/components/ui/BorderBox";
 import ErrorUi from "@/components/ui/ErrorUi";
-import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import Wrapper from "@/components/Wrapper";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -21,7 +19,7 @@ export default async function StartAssessmentPage({ params }) {
     const { user } = await getCurrentUser();
 
     if (!user || !user?.id) {
-        redirect("/sign-in");
+        return <ErrorUi secondaryMessage="Unauthorized user." />;
     }
 
     // Check if student already took this test
@@ -35,7 +33,7 @@ export default async function StartAssessmentPage({ params }) {
     // If already took it, redirect away
     if (existingAttempt) {
         redirect(
-            `/student/assessment-result/${assessmentId}?message=already-completed`
+            `/student/assessment-result/${existingAttempt.id}?message=already-completed`
         );
     }
 
@@ -55,7 +53,6 @@ export default async function StartAssessmentPage({ params }) {
         .single();
 
     if (error || !assessment) {
-        console.error(error.message);
         return (
             <ErrorUi secondaryMessage="This assessment test is maybe deleted or doesn't exist." />
         );

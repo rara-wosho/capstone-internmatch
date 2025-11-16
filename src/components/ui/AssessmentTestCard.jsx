@@ -3,6 +3,15 @@ import BorderBox from "./BorderBox";
 import { Button } from "./button";
 import { cn } from "@/lib/utils";
 
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+
 export default function AssessmentTestCard({ assessmentTest }) {
     const questionCount = assessmentTest?.assessment_questions?.length || 0;
 
@@ -33,17 +42,40 @@ export default function AssessmentTestCard({ assessmentTest }) {
             </div>
 
             <div className="pt-4 border-t flex items-end gap-2">
-                <Button disabled={assessmentTest.hasAttempted} asChild>
-                    <Link
-                        href={`/student/assessment-test/${assessmentTest.id}/start`}
-                        className={cn(
-                            assessmentTest.hasAttempted &&
-                                "pointer-events-none opacity-50"
-                        )}
-                    >
-                        Start Test
-                    </Link>
-                </Button>
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button disabled={assessmentTest.hasAttempted}>
+                            View Details
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Start Assessment Test?</DialogTitle>
+                            <DialogDescription>
+                                Before starting the assessment test, make sure
+                                that you read the reminders below.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="py-2">
+                            <p>
+                                Switching tabs is prohibited and may result to
+                                auto submission of the test once violation is
+                                commited.
+                            </p>
+                        </div>
+                        <Button asChild>
+                            <Link
+                                href={`/student/assessment-test/${assessmentTest.id}/start`}
+                                className={cn(
+                                    assessmentTest.hasAttempted &&
+                                        "pointer-events-none opacity-50"
+                                )}
+                            >
+                                Start Test
+                            </Link>
+                        </Button>
+                    </DialogContent>
+                </Dialog>
                 {assessmentTest.hasAttempted && (
                     <Button variant="outline" asChild>
                         <Link

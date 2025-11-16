@@ -134,9 +134,6 @@ export default function AssessmentQuestionsSection({
                             )}
                             Submit Answers
                         </Button>
-                        <Button size="icon" variant="outline">
-                            <Ellipsis />
-                        </Button>
                     </div>
                 )}
             </div>
@@ -179,7 +176,6 @@ export default function AssessmentQuestionsSection({
             {/* lower submit button  */}
             {assessmentQuestions.length > 0 && (
                 <div className="mt-4 flex items-center gap-2 justify-end">
-                    <Button variant="dangerOutline">Forfeit Test</Button>
                     <Button
                         disabled={isPending}
                         onClick={() => setOpenModal(true)}
