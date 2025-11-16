@@ -52,7 +52,7 @@ export default async function Page({ params }) {
     const { data: applicant, error } = await supabase
         .from("applicants")
         .select(
-            "id, applied_at, resume_link, portfolio_link, status, introduction, students!inner(id, firstname, lastname, gender, school, email, avatar_url, barangay, city, province, assessment_attempt(id, submitted_at, assessment_score, assessment_total_item, assessment_test(assessment_title)))"
+            "id, applied_at, approve_status, cannot_proceed_message, resume_link, portfolio_link, status, introduction, students!inner(id, firstname, lastname, gender, school, email, avatar_url, barangay, city, province, assessment_attempt(id, submitted_at, assessment_score, assessment_total_item, assessment_test(assessment_title)))"
         )
         .eq("id", applicantId)
         .eq("company_id", user?.id)
@@ -214,29 +214,70 @@ export default async function Page({ params }) {
                     </div>
                 </BorderBox>
 
-                {applicant.status === "accepted" && (
+                {applicant.approve_status === "approved" && (
                     <BorderBox className="border rounded-xl bg-card shadow-xs mb-3">
-                        <div className="flex items-center gap-2 mb-3 md:mb-4">
-                            <TitleText className="font-medium text-lg">
-                                Instructor Approval Pending
+                        <div className="flex flex-col mb-2 md:mb-3">
+                            <TitleText className="font-medium text-green-600 text-lg">
+                                Application Approved
                             </TitleText>
-                            <InfoPopover
-                                trigger={<Info size={18} />}
-                                textContent="The instructor will review and decide whether the student can officially proceed with the internship. Once approved, the student will be marked as an intern under your company.
-
-In some cases, the student may not be able to proceed if their instructor disapproves the application."
-                            />
                         </div>
 
-                        <div className="p-3 border border-blue-400/25 bg-blue-400/10 rounded-lg shadow-xs">
-                            <p className="text-accent-foreground">
-                                This application has been accepted by your
-                                company and is now awaiting approval from the
-                                student’s OJT instructor.
+                        <div className="p-3 border border-green-400/10 bg-green-400/10 rounded-lg shadow-xs">
+                            <p className="text-green-600">
+                                This student’s application has been approved by
+                                their instructor and is now eligible to proceed
+                                as an intern in your company.
                             </p>
                         </div>
                     </BorderBox>
                 )}
+                {applicant.approve_status === "rejected" && (
+                    <BorderBox className="border rounded-xl bg-card shadow-xs mb-3">
+                        <div className="flex flex-col mb-3 md:mb-4">
+                            <TitleText className="font-medium text-destructive text-lg">
+                                Cannot Proceed
+                            </TitleText>
+
+                            <p className="text-sm text-muted-foreground">
+                                The student's ojt instructor did not approve
+                                this application.
+                            </p>
+                        </div>
+
+                        <div className="p-3 border border-red-400/10 bg-red-400/10 rounded-lg shadow-xs">
+                            <p className="text-destructive">
+                                Reason:{" "}
+                                {applicant?.cannot_proceed_message ||
+                                    "Not provided."}
+                            </p>
+                        </div>
+                    </BorderBox>
+                )}
+                {applicant.status === "accepted" &&
+                    applicant.approve_status !== "rejected" &&
+                    applicant.approve_status !== "approved" && (
+                        <BorderBox className="border rounded-xl bg-card shadow-xs mb-3">
+                            <div className="flex items-center gap-2 mb-3 md:mb-4">
+                                <TitleText className="font-medium text-lg">
+                                    Instructor Approval Pending
+                                </TitleText>
+                                <InfoPopover
+                                    trigger={<Info size={18} />}
+                                    textContent="The instructor will review and decide whether the student can officially proceed with the internship. Once approved, the student will be marked as an intern under your company.
+
+In some cases, the student may not be able to proceed if their instructor disapproves the application."
+                                />
+                            </div>
+
+                            <div className="p-3 border border-blue-400/25 bg-blue-400/10 rounded-lg shadow-xs">
+                                <p className="text-accent-foreground">
+                                    This application has been accepted by your
+                                    company and is now awaiting approval from
+                                    the student’s OJT instructor.
+                                </p>
+                            </div>
+                        </BorderBox>
+                    )}
 
                 {/* Application actions to toggle status  */}
                 <ApplicantActions applicant={applicant} />

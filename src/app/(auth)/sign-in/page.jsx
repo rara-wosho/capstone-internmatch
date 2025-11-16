@@ -64,22 +64,21 @@ export default function Page() {
                         </div>
                         <div>
                             <p className="text-xl font-semibold text-secondary-foreground">
-                                Lorem ipsum dolor sit, amet consectetur
-                                adipisicing elit. Provident, id! Lorem ipsum
-                                dolor sit amet.
+                                I loved the design and the professional look of
+                                the site. It was easy to navigate.
                             </p>
                         </div>
                         <div className="flex items-center mt-6 gap-3">
                             <Avatar className="size-9">
-                                <AvatarImage src="/images/profile.JPG" />
+                                <AvatarImage src="/images/default-avatar.jpg" />
                                 <AvatarFallback>ID</AvatarFallback>
                             </Avatar>
                             <div>
                                 <p className="text-sm font-semibold text-secondary-foreground">
-                                    Israel De Vera
+                                    Michael Monteverde
                                 </p>
                                 <p className="text-xs text-muted-foreground">
-                                    Founder, Internmatch
+                                    Student
                                 </p>
                             </div>
                         </div>

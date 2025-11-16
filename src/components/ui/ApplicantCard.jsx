@@ -42,6 +42,14 @@ export default function ApplicantCard({ applicant }) {
                     </div>
                 )}
             </div>
+
+            {applicant.approve_status === "rejected" && (
+                <p className="font-medium text-destructive">Cannot Proceed</p>
+            )}
+            {applicant.approve_status === "approved" && (
+                <p className="font-medium text-green-600">Approved</p>
+            )}
+
             <p className="font-medium mb-1 text-start">
                 {applicant?.students?.firstname} {applicant?.students?.lastname}
             </p>

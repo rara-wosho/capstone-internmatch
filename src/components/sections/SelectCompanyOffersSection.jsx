@@ -65,11 +65,14 @@ export default function SelectCompanyOffersSection({
                     description: result.error,
                 });
             }
-            toast.success("Your company offers have been successfully saved.");
+            toast.success(
+                isFromSignUp
+                    ? "Your company offers have been successfully saved. Redirecting to dashboard..."
+                    : "Company offers saved successfully."
+            );
+
             if (isFromSignUp) {
                 router.replace("/company");
-            } else {
-                router.back();
             }
         });
     };
@@ -87,7 +90,7 @@ export default function SelectCompanyOffersSection({
                         companyOffers.map((offer, index) => (
                             <div
                                 key={index}
-                                className="rounded-sm ps-3 pe-6 text-sm min-h-10 py-2 text-muted-foreground hover:text-secondary-foreground flex items-center bg-muted relative w-full"
+                                className="ps-3 pe-6 text-sm min-h-9 text-muted-foreground hover:text-secondary-foreground flex items-center bg-muted relative w-full rounded-full"
                             >
                                 {offer}
                                 <button
@@ -142,7 +145,7 @@ export default function SelectCompanyOffersSection({
                                 }
                                 key={index}
                                 className={cn(
-                                    "rounded-sm ps-3 pe-6 text-sm min-h-10 py-2 text-muted-foreground bg-muted cursor-pointer flex items-center",
+                                    "rounded-full ps-3 pe-6 text-sm min-h-9 text-muted-foreground bg-muted cursor-pointer flex items-center",
                                     companyOffers.includes(choice) &&
                                         "opacity-40 pointer-events-none border-transparent"
                                 )}
@@ -158,7 +161,9 @@ export default function SelectCompanyOffersSection({
                             onClick={handleUpsertOffer}
                         >
                             {isPending && <Loader className="animate-spin" />}
-                            {isFromSignUp ? "Finish Setup" : "Save Offers"}
+                            {isFromSignUp
+                                ? "Save and go to dashboard"
+                                : "Save Offers"}
                         </Button>
                     </div>
                 </BorderBox>

@@ -61,12 +61,12 @@ export default function DashboardHeader({ profileData }) {
 
             <div className="ms-auto flex items-center gap-3">
                 <div className="flex gap-2">
-                    <Link href="/notifications">
+                    {/* <Link href="/notifications">
                         <IconWrapper className="relative">
                             <div className="absolute -right-[2px] -top-[2px] size-2 rounded-full bg-primary"></div>
                             <Bell size={16} />
                         </IconWrapper>
-                    </Link>
+                    </Link> */}
                     <div className="border rounded-sm bg-card">
                         <ThemeToggler />
                     </div>

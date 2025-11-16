@@ -45,9 +45,12 @@ export default function Page() {
                             </div>
 
                             <div className="flex items-center justify-between mt-5">
-                                <button className="cursor-pointer px-4 py-2 flex items-center gap-2 rounded-md bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition-colors">
+                                <Link
+                                    href="/create-account/student"
+                                    className="cursor-pointer px-4 py-2 flex items-center gap-2 rounded-md bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition-colors"
+                                >
                                     Student <ChevronRight size={17} />
-                                </button>
+                                </Link>
                             </div>
                         </div>
 

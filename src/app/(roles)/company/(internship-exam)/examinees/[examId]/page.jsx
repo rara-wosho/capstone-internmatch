@@ -11,7 +11,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 // Constants
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 400;
 
 export default async function Page({ params, searchParams }) {
     const examId = (await params)?.examId;
@@ -116,12 +116,12 @@ export default async function Page({ params, searchParams }) {
                     </div>
 
                     <ExamineesTable examId={examId} examinees={examinees} />
-                    <Pagination
+                    {/* <Pagination
                         currentPage={page}
                         totalCount={count}
                         baseUrl={`/company/examinees/${examId}`}
                         pageSize={ITEMS_PER_PAGE}
-                    />
+                    /> */}
                 </>
             )}
         </div>

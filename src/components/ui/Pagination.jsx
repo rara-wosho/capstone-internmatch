@@ -5,6 +5,7 @@ import { Button } from "./button";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import BorderBox from "./BorderBox";
 
 export default function Pagination({
     className,
@@ -85,7 +86,7 @@ export default function Pagination({
                 )}
 
                 {/* Visible page numbers */}
-                <border className="rounded-sm bg-card border">
+                <div className="rounded-sm bg-card border">
                     {visiblePages.map((page) => (
                         <button
                             key={page}
@@ -105,7 +106,7 @@ export default function Pagination({
                             </Link>
                         </button>
                     ))}
-                </border>
+                </div>
 
                 {/* Last page if not visible */}
                 {visiblePages[visiblePages.length - 1] < totalPages && (

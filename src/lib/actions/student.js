@@ -285,7 +285,7 @@ export async function getStudentEditData() {
     const { data, error } = await supabase
         .from("students")
         .select(
-            "id, firstname, lastname, middlename, gender, age, barangay, city, province, school, course, avatar_url"
+            "id, firstname, lastname, middlename, gender, email, age, barangay, city, province, school, course, avatar_url"
         )
         .eq("id", user.id)
         .single();

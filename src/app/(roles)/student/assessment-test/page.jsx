@@ -81,14 +81,14 @@ export default async function AssessmentPage() {
                                                 fundamentals.
                                             </span>
                                         </li>
-                                        <li>
+                                        {/* <li>
                                             <strong>Technical Skills - </strong>
                                             <span>
                                                 Programming, databases,
                                                 networking, or other fields
                                                 related to your chosen track.
                                             </span>
-                                        </li>
+                                        </li> */}
                                         <li>
                                             <strong>
                                                 Problem-solving scenarios -{" "}
@@ -103,18 +103,18 @@ export default async function AssessmentPage() {
                                         How the Test Works
                                     </TertiaryLabel>
                                     <ul className="text-muted-foreground list-disc ps-4 flex flex-col items-start gap-1 mb-5">
-                                        <li>
+                                        {/* <li>
                                             The test is timed to simulate
                                             real-world pressure.
-                                        </li>
+                                        </li> */}
                                         <li>
                                             You may select a difficulty level
-                                            (e.g., Medium or Hard).
+                                            (e.g., Moderate or Difficult).
                                         </li>
-                                        <li>
+                                        {/* <li>
                                             Once you start, the timer will run
                                             until you finish or time runs out.
-                                        </li>
+                                        </li> */}
                                     </ul>
                                     <TertiaryLabel>
                                         Why Take This Test
