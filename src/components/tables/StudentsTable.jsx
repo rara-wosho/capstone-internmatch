@@ -24,6 +24,7 @@ export default function StudentsTable({ students }) {
                         <TableHead>Age</TableHead>
                         <TableHead>Exam Access</TableHead>
                         <TableHead>Group</TableHead>
+                        <TableHead>Status</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -85,6 +86,13 @@ export default function StudentsTable({ students }) {
                                 >
                                     {student?.groups?.group_name}
                                 </Link>
+                            </TableCell>
+                            <TableCell className="font-bold">
+                                {student.is_active ? (
+                                    <p className="text-green-600">Active</p>
+                                ) : (
+                                    <p>Inactive</p>
+                                )}
                             </TableCell>
                         </TableRow>
                     ))}

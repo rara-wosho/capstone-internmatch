@@ -48,7 +48,23 @@ export default async function Page({ params, searchParams }) {
     // ✅ pull search from query params
     const search = (await searchParams)?.search_query || "";
 
-    let memberQuery = db.from("students").select().eq("group_id", groupId);
+    let memberQuery = db
+        .from("students")
+        .select(
+            `
+        id,
+        avatar_url,
+        firstname,
+        lastname,
+        middlename,
+        email,
+        gender,
+        age,
+        created_at,
+        exam_access,
+        is_active`
+        )
+        .eq("group_id", groupId);
 
     // ✅ apply filter if search is provided, chain the additional condition
     if (search) {
