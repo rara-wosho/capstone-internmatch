@@ -9,9 +9,11 @@ import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { sendResetPasswordEmail } from "@/lib/actions/auth";
 import { Loader } from "lucide-react";
 import Form from "next/form";
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 export default function ForgotPasswordPage() {
+    const [redirectLink, setRedirectLink] = useState("");
+
     const [state, formAction, isPending] = useActionState(
         sendResetPasswordEmail,
         {
@@ -22,6 +24,10 @@ export default function ForgotPasswordPage() {
     );
 
     const { success, error, message } = state;
+
+    useEffect(() => {
+        setRedirectLink(window.location.origin);
+    }, []);
 
     return (
         <div className="min-h-svh flex flex-col items-center justify-center p-3 md:p-5 relative">
@@ -37,6 +43,13 @@ export default function ForgotPasswordPage() {
                         </p>
                     </div>
                     <div>
+                        {/* REDIRECTTO LINK  */}
+                        <input
+                            type="hidden"
+                            name="redirect-to"
+                            value={redirectLink}
+                        />
+
                         <FormLabel>Email</FormLabel>
                         <Input
                             name="email"
