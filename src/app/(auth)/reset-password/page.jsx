@@ -125,7 +125,14 @@ export default function ResetPasswordPage() {
                                     : "border-destructive/40 text-destructive bg-destructive/10"
                             }`}
                         >
-                            {status.message}
+                            <p>{status.message}</p>
+                            <p className="text-xs text-muted-foreground mt-2">
+                                Tip: Make sure you open the password reset link
+                                in the same browser or window where you
+                                requested the reset email. Opening the link in a
+                                different browser, device, or incognito window
+                                may cause an “auth session missing” error.
+                            </p>
                         </div>
                     )}
                 </Form>

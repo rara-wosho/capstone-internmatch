@@ -89,6 +89,7 @@ export async function getCurrentUser() {
 }
 
 // UPDATE USER PASSWORD
+// FROM A SIGNED IN USER
 export async function updatePassword(formData) {
     const email = formData.get("email");
     const currentPassword = formData.get("current-password");
@@ -149,15 +150,7 @@ export async function updatePassword(formData) {
 // Send an email link to the user's email to reset password
 export async function sendResetPasswordEmail(prev, formData) {
     const email = formData.get("email") || "";
-    const redirectLink = formData.get("redirect-to") || "";
 
-    if (!redirectLink) {
-        return {
-            success: false,
-            error: "No redirection link.",
-            message: "Please make sure that you have a valid redirection link.",
-        };
-    }
     if (!email) {
         return {
             success: false,
@@ -169,9 +162,7 @@ export async function sendResetPasswordEmail(prev, formData) {
 
     const supabase = await createClient();
 
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${redirectLink}/reset-password`,
-    });
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email);
 
     if (error) {
         console.log("error sending email: ", error);

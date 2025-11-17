@@ -55,6 +55,7 @@ export default function RegistrantsTable({ registrants }) {
                     <TableHeader>
                         <TableRow>
                             <TableHead>Complete Name</TableHead>
+                            <TableHead>Email</TableHead>
                             <TableHead>Documents Link</TableHead>
                             <TableHead>Registration Date</TableHead>
                             <TableHead>School</TableHead>
@@ -74,6 +75,9 @@ export default function RegistrantsTable({ registrants }) {
                             >
                                 <TableCell className="font-semibold">
                                     {reg?.firstname} {reg?.lastname}
+                                </TableCell>
+                                <TableCell className="font-semibold">
+                                    {reg?.email}
                                 </TableCell>
                                 <TableCell className="max-w-[180px]">
                                     <Link

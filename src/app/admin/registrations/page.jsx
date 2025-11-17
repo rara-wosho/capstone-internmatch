@@ -4,6 +4,7 @@ import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import Wrapper from "@/components/Wrapper";
 import { createClient } from "@/lib/supabase/server";
 import RegistrantsTable from "@/components/tables/RegistrantsTable";
+import PasswordChangedEmail from "@/components/email/PasswordChangeEmail";
 
 export default async function AdminRegistrationPage() {
     const supabase = await createClient();
@@ -22,6 +23,7 @@ export default async function AdminRegistrationPage() {
     }
     return (
         <div>
+            <PasswordChangedEmail firstname={"Roseville"} />
             <SecondaryLabel className="mb-3 md:mb-8 border-b py-4 md:py-8">
                 <Wrapper className="flex items-center px-3">
                     Registrations{" "}
