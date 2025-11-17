@@ -20,8 +20,9 @@ import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { dateFormatter } from "@/utils/date-formatter";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { toggleStudentActiveStatus } from "@/lib/actions/instructor";
 
-export default function GroupMembersTable({ members, search }) {
+export default function GroupMembersTable({ members, search, groupId }) {
     const [markedIds, setMarkedIds] = useState([]);
     const [statusFilter, setStatusFilter] = useState("all");
     const [isPending, startTransition] = useTransition();
@@ -83,6 +84,29 @@ export default function GroupMembersTable({ members, search }) {
         setOpen(false);
     };
 
+    const toggleActiveStatus = (newStatus) => {
+        if (markedIds.length === 0) {
+            toast.error("Please select at least one student");
+            return;
+        }
+
+        startTransition(async () => {
+            const { success, error, message } = await toggleStudentActiveStatus(
+                markedIds,
+                newStatus,
+                groupId
+            );
+
+            if (!success) {
+                toast.error(error || "Unable to update student status.");
+                return;
+            }
+
+            toast.success(message || "Student status updated successfully.");
+            setMarkedIds([]);
+        });
+    };
+
     return (
         <>
             {/* ACTION BAR */}
@@ -108,6 +132,7 @@ export default function GroupMembersTable({ members, search }) {
                     <div className="sm:rounded-b-xl overflow-x-auto">
                         <div className="flex items-center gap-2 min-w-max p-3 sm:flex-row-reverse">
                             <Button
+                                className="grow"
                                 variant="success"
                                 disabled={isPending}
                                 onClick={handleAllowAccess}
@@ -116,17 +141,36 @@ export default function GroupMembersTable({ members, search }) {
                             </Button>
 
                             <Button
+                                className="grow"
                                 variant="destructive"
                                 disabled={isPending}
                                 onClick={handleRevokeExam}
                             >
                                 Revoke exam access
                             </Button>
+                        </div>
+                        <div className="flex items-center gap-2 min-w-max px-3 pb-3 sm:flex-row-reverse">
+                            <Button
+                                className="grow"
+                                variant="secondary"
+                                disabled={isPending}
+                                onClick={() => toggleActiveStatus(true)}
+                            >
+                                <span className="text-green-600">
+                                    Mark as Active
+                                </span>
+                            </Button>
 
-                            {/* Temporary comment out, no actions yet  */}
-                            {/* <Button variant="outline">
-                                <Trash />
-                            </Button> */}
+                            <Button
+                                className="grow"
+                                variant="secondary"
+                                disabled={isPending}
+                                onClick={() => toggleActiveStatus(false)}
+                            >
+                                <span className="text-destructive">
+                                    Mark as Inactive
+                                </span>
+                            </Button>
                         </div>
                     </div>
                 </div>
@@ -242,72 +286,92 @@ export default function GroupMembersTable({ members, search }) {
                 </TableHeader>
 
                 <TableBody>
-                    {filteredMembers?.map((member) => (
-                        <TableRow
-                            key={member?.id}
-                            className="text-muted-foreground"
-                        >
-                            <TableCell>
-                                <Checkbox
-                                    checked={markedIds.includes(member?.id)}
-                                    onCheckedChange={() =>
-                                        handleMarkId(member?.id)
-                                    }
-                                />
-                            </TableCell>
-
-                            <TableCell className="font-medium text-secondary-foreground">
-                                <Link
-                                    href={`/instructor/students/${member?.id}`}
-                                    className="hover:underline underline-offset-2 flex items-center gap-2"
-                                >
-                                    <Avatar className="size-6">
-                                        <AvatarImage
-                                            src={
-                                                member?.avatar_url ||
-                                                "/images/default-avatar.jpg"
-                                            }
-                                            alt="student-image"
-                                        />
-                                        <AvatarFallback>
-                                            {member?.lastname?.charAt(0) ?? "?"}
-                                        </AvatarFallback>
-                                    </Avatar>
-                                    {member?.lastname}, {member?.firstname}
-                                </Link>
-                            </TableCell>
-
-                            <TableCell>{member?.email ?? "-"}</TableCell>
-                            <TableCell>{member?.gender ?? "-"}</TableCell>
-                            <TableCell>{member?.age ?? "-"}</TableCell>
-
-                            <TableCell>
-                                {dateFormatter(member?.created_at, true, true)}
-                            </TableCell>
-
-                            <TableCell className="text-center">
-                                {member?.exam_access ? (
-                                    <div className="border rounded-full inline-flex items-center px-2 py-[1px] border-green-500 text-green-600">
-                                        <span className="text-xs">Allowed</span>
-                                    </div>
-                                ) : (
-                                    <div className="border rounded-full inline-flex items-center px-2 py-[1px]">
-                                        <span className="text-xs">
-                                            Not allowed
-                                        </span>
-                                    </div>
-                                )}
-                            </TableCell>
-
-                            <TableCell className="font-bold">
-                                {member.is_active ? (
-                                    <p className="text-green-600">Active</p>
-                                ) : (
-                                    <p>Inactive</p>
-                                )}
+                    {filteredMembers?.length === 0 ? (
+                        <TableRow>
+                            <TableCell
+                                colSpan={8}
+                                className="text-center text-muted-foreground py-8"
+                            >
+                                No {statusFilter !== "all" && statusFilter}{" "}
+                                students found
+                                {search && ` for "${search}"`}
                             </TableCell>
                         </TableRow>
-                    ))}
+                    ) : (
+                        filteredMembers?.map((member) => (
+                            <TableRow
+                                key={member?.id}
+                                className="text-muted-foreground"
+                            >
+                                <TableCell>
+                                    <Checkbox
+                                        checked={markedIds.includes(member?.id)}
+                                        onCheckedChange={() =>
+                                            handleMarkId(member?.id)
+                                        }
+                                    />
+                                </TableCell>
+
+                                <TableCell className="font-medium text-secondary-foreground">
+                                    <Link
+                                        href={`/instructor/students/${member?.id}`}
+                                        className="hover:underline underline-offset-2 flex items-center gap-2"
+                                    >
+                                        <Avatar className="size-6">
+                                            <AvatarImage
+                                                src={
+                                                    member?.avatar_url ||
+                                                    "/images/default-avatar.jpg"
+                                                }
+                                                alt="student-image"
+                                            />
+                                            <AvatarFallback>
+                                                {member?.lastname?.charAt(0) ??
+                                                    "?"}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                        {member?.lastname}, {member?.firstname}
+                                    </Link>
+                                </TableCell>
+
+                                <TableCell>{member?.email ?? "-"}</TableCell>
+                                <TableCell>{member?.gender ?? "-"}</TableCell>
+                                <TableCell>{member?.age ?? "-"}</TableCell>
+
+                                <TableCell>
+                                    {dateFormatter(
+                                        member?.created_at,
+                                        true,
+                                        true
+                                    )}
+                                </TableCell>
+
+                                <TableCell className="text-center">
+                                    {member?.exam_access ? (
+                                        <div className="border rounded-full inline-flex items-center px-2 py-[1px] border-green-500 text-green-600">
+                                            <span className="text-xs">
+                                                Allowed
+                                            </span>
+                                        </div>
+                                    ) : (
+                                        <div className="border rounded-full inline-flex items-center px-2 py-[1px]">
+                                            <span className="text-xs">
+                                                Not allowed
+                                            </span>
+                                        </div>
+                                    )}
+                                </TableCell>
+
+                                <TableCell className="font-bold">
+                                    {member.is_active ? (
+                                        <p className="text-green-600">Active</p>
+                                    ) : (
+                                        <p>Inactive</p>
+                                    )}
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    )}
                 </TableBody>
             </Table>
         </>

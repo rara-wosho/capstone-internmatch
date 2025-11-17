@@ -542,7 +542,7 @@ export async function getStudentOverviewCount(instructorId) {
 
     const { data, error } = await supabase
         .from("students")
-        .select("exam_access, groups!inner(ojt_instructor_id)")
+        .select("exam_access, is_active, groups!inner(ojt_instructor_id)")
         .eq("groups.ojt_instructor_id", instructorId);
 
     if (error) {
@@ -554,6 +554,57 @@ export async function getStudentOverviewCount(instructorId) {
         totalStudent: data.length,
         totalStudentWithExamAccess:
             data.filter((s) => s.exam_access)?.length || 0,
+        activeStudents: data.filter((s) => s.is_active)?.length || 0,
+        inactiveStudents: data.filter((s) => !s.is_active)?.length || 0,
     };
     return { success: true, data: formattedData };
+}
+
+// Toggle students is_active status
+export async function toggleStudentActiveStatus(
+    studentIds,
+    newStatus,
+    groupId
+) {
+    if (!studentIds || studentIds.length === 0) {
+        return {
+            success: false,
+            error: "No students selected",
+        };
+    }
+
+    // Validate newStatus
+    if (typeof newStatus !== "boolean") {
+        return {
+            success: false,
+            error: "Invalid status value",
+        };
+    }
+
+    const supabase = await createClient();
+
+    // Update is_active status for selected students
+    const { error } = await supabase
+        .from("students")
+        .update({
+            is_active: newStatus,
+        })
+        .in("id", studentIds);
+
+    if (error) {
+        console.error("Error updating student status:", error);
+        return {
+            success: false,
+            error: "Failed to update student status",
+        };
+    }
+
+    // Revalidate to refresh the data
+    revalidatePath(`/instructor/manage-groups/${groupId}`);
+
+    return {
+        success: true,
+        error: "",
+        message: `Successfully marked ${studentIds.length} student(s) as ${newStatus ? "active" : "inactive"}`,
+    };
 }

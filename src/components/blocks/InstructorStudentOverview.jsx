@@ -32,11 +32,25 @@ export default async function InstructorStudentOverview({ instructorId }) {
                     label="Total Students"
                     valueText={data.totalStudent}
                     icon={<Users />}
+                    href="/instructor/students"
                 />
                 <DashboardCountBox
                     label="Students With Exam Access"
                     valueText={data.totalStudentWithExamAccess}
                     icon={<Users />}
+                    href="/instructor/students"
+                />
+                <DashboardCountBox
+                    label="Active Students"
+                    valueText={data.activeStudents}
+                    icon={<Users />}
+                    href="/instructor/students?status_filter=active"
+                />
+                <DashboardCountBox
+                    label="Inactive Students"
+                    valueText={data.inactiveStudents}
+                    icon={<Users />}
+                    href="/instructor/students?status_filter=inactive"
                 />
             </div>
         </>

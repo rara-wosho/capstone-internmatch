@@ -5,16 +5,15 @@ import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { Suspense } from "react";
 import ErrorUi from "@/components/ui/ErrorUi";
 import { createClient } from "@/lib/supabase/server";
-import EmptyUi from "@/components/ui/EmptyUi";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
 
 export default async function Page({ searchParams }) {
     const db = await createClient();
 
     // ✅ get search query
     const search = (await searchParams)?.search_query || "";
+
+    // ✅ get status filter query
+    const initialFilter = (await searchParams)?.status_filter || "all";
 
     // get current user
     const {
@@ -68,7 +67,10 @@ export default async function Page({ searchParams }) {
 
             <div>
                 {students.length > 0 ? (
-                    <StudentsTable students={students} />
+                    <StudentsTable
+                        initialFilter={initialFilter}
+                        students={students}
+                    />
                 ) : (
                     <div className="flex justify-center py-3 text-muted-foreground">
                         {search

@@ -85,7 +85,7 @@ export default async function Page({ params, searchParams }) {
     }
 
     return (
-        <div className="mb-20">
+        <div className="mb-28">
             <div className="mb-3 md:mb-5">
                 <BackButton className="flex items-center gap-1">
                     <ChevronLeft />
@@ -117,7 +117,11 @@ export default async function Page({ params, searchParams }) {
                     )}
 
                     {members.length > 0 && (
-                        <GroupMembersTable search={search} members={members} />
+                        <GroupMembersTable
+                            search={search}
+                            members={members}
+                            groupId={groupId}
+                        />
                     )}
 
                     {/* user is searching, empty result  */}
