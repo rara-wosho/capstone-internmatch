@@ -149,7 +149,8 @@ export async function getAcceptedApplicationsByInstructor(
             ),
             companies!inner(
                 id,
-                name
+                name,
+                email
             )
             `
         )
@@ -201,6 +202,7 @@ export async function getAcceptedApplicationsByInstructor(
         group_name: d.students.groups.group_name,
         company_id: d.companies.id,
         company_name: d.companies.name,
+        company_email: d.companies.email,
         // ✅ Add this flag to check if this student is already approved elsewhere
         isAlreadyApproved:
             d.approve_status !== "approved" &&
@@ -215,6 +217,7 @@ export async function getAcceptedApplicationsByInstructor(
             acc[companyId] = {
                 company_id: companyId,
                 company_name: item.company_name,
+                company_email: item.company_email,
                 students: [],
             };
         }

@@ -3,6 +3,7 @@ import AcceptedStudentsTable from "@/components/tables/AcceptedStudentsTable";
 import BorderBox from "@/components/ui/BorderBox";
 import ErrorUi from "@/components/ui/ErrorUi";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
+import { Separator } from "@/components/ui/separator";
 import TitleText from "@/components/ui/TitleText";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { getAcceptedApplicationsByInstructor } from "@/lib/actions/instructor";
@@ -26,6 +27,7 @@ export default async function AcceptedApplicationsPage({ searchParams }) {
         return <ErrorUi secondaryMessage={error} />;
     }
 
+    console.log("data ", data);
     return (
         <div>
             <div className="mb-4 md:mb-5">
@@ -66,6 +68,7 @@ export default async function AcceptedApplicationsPage({ searchParams }) {
                         </div>
 
                         <AcceptedStudentsTable
+                            companyEmail={company?.company_email || ""}
                             students={company?.students}
                             companyName={company?.company_name || ""}
                         />

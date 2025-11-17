@@ -35,7 +35,11 @@ import {
 import { Textarea } from "../ui/textarea";
 import FormLabel from "../ui/FormLabel";
 
-export default function AcceptedStudentsTable({ students, companyName }) {
+export default function AcceptedStudentsTable({
+    students,
+    companyName,
+    companyEmail,
+}) {
     const [activeTab, setActiveTab] = useState("all");
 
     const [isPending, startTransition] = useTransition();
@@ -56,13 +60,19 @@ export default function AcceptedStudentsTable({ students, companyName }) {
         return students;
     }, [activeTab, students]);
 
-    const handleApproveApplication = (applicationId, studentEmail) => {
+    const handleApproveApplication = (
+        applicationId,
+        studentEmail,
+        studentName
+    ) => {
         startTransition(async () => {
-            const { success, error } = await approveStudentApplication(
+            const { success, error } = await approveStudentApplication({
                 applicationId,
+                companyEmail,
                 companyName,
-                studentEmail
-            );
+                studentEmail,
+                studentName,
+            });
 
             if (!success) {
                 toast.error(error);
@@ -260,7 +270,8 @@ export default function AcceptedStudentsTable({ students, companyName }) {
                                                 onClick={() =>
                                                     handleApproveApplication(
                                                         student.id, // This is the student's application id
-                                                        student?.student_email
+                                                        student?.student_email,
+                                                        `${student.firstname} ${student.lastname}`
                                                     )
                                                 }
                                                 size="sm"
