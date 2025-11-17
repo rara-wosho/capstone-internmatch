@@ -6,6 +6,7 @@ import { Resend } from "resend";
 import { getCurrentUser } from "./auth";
 import { ApplicationSuccess } from "@/components/email/ApplicationSuccess";
 import { ApplicationRejected } from "@/components/email/ApplicationRejected";
+import { ApplicationApproved } from "@/components/email/ApplicationApproved";
 
 export async function submitApplication(formData) {
     const supabase = await createClient();
@@ -267,7 +268,11 @@ export async function getApprovedApplicantsByCompany(companyId, search) {
 
 // Approve the application of a student
 // For instructor action
-export async function approveStudentApplication(applicationId) {
+export async function approveStudentApplication(
+    applicationId,
+    companyName,
+    studentEmail
+) {
     const supabase = await createClient();
 
     const { error } = await supabase
@@ -280,6 +285,26 @@ export async function approveStudentApplication(applicationId) {
 
     if (error) {
         return { success: false, error: error.message };
+    }
+
+    if (companyName && studentEmail) {
+        // After successful application approval
+        const resend = new Resend(process.env.RESEND_API_KEY);
+
+        // Send password-change notification
+        const { error: emailError } = await resend.emails.send({
+            from: "InternMatch <no-reply@auth.internmatch.online>",
+            to: studentEmail,
+            subject: `${companyName} | Application Approved`,
+            react: <ApplicationApproved companyName={companyName} />,
+        });
+
+        if (emailError) {
+            console.log(
+                "Error sending email for password change: ",
+                emailError.message
+            );
+        }
     }
 
     revalidatePath("/instructor/accepted", "page");

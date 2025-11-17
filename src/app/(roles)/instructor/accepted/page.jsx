@@ -26,7 +26,7 @@ export default async function AcceptedApplicationsPage({ searchParams }) {
         return <ErrorUi secondaryMessage={error} />;
     }
 
-    console.log("data: ", data);
+    console.log("accepted applications data: ", data);
 
     return (
         <div>
@@ -67,7 +67,10 @@ export default async function AcceptedApplicationsPage({ searchParams }) {
                             <TitleText>{company.company_name}</TitleText>
                         </div>
 
-                        <AcceptedStudentsTable students={company?.students} />
+                        <AcceptedStudentsTable
+                            students={company?.students}
+                            companyName={company?.company_name || ""}
+                        />
                     </BorderBox>
                 ))
             )}

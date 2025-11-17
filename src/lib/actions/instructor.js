@@ -136,6 +136,7 @@ export async function getAcceptedApplicationsByInstructor(
             status,
             students!inner(
                 id,
+                email,
                 firstname,
                 middlename,
                 lastname,
@@ -192,6 +193,7 @@ export async function getAcceptedApplicationsByInstructor(
         approve_status: d.approve_status,
         applied_at: d.applied_at,
         student_id: d.students.id,
+        student_email: d.students.email,
         firstname: d.students.firstname,
         middlename: d.students.middlename,
         lastname: d.students.lastname,
@@ -223,6 +225,7 @@ export async function getAcceptedApplicationsByInstructor(
             approve_status: item.approve_status,
             applied_at: item.applied_at,
             student_id: item.student_id,
+            student_email: item.student_email,
             firstname: item.firstname,
             middlename: item.middlename,
             lastname: item.lastname,

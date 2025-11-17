@@ -28,6 +28,7 @@ export default async function AcceptedStudentsOverview({ instructorId }) {
         lastname,
         applicants!inner(
             applied_at,
+            reviewed_at,
             status,
             companies(id, name)
         ),
@@ -40,8 +41,8 @@ export default async function AcceptedStudentsOverview({ instructorId }) {
         )
         .eq("groups.ojt_instructor_id", instructorId)
         .eq("applicants.status", "accepted")
-        .order("applied_at", {
-            ascending: false,
+        .order("reviewed_at", {
+            ascending: true,
             referencedTable: "applicants",
         })
         .limit(5);
@@ -49,6 +50,8 @@ export default async function AcceptedStudentsOverview({ instructorId }) {
     if (error) {
         return <ErrorUi secondaryMessage={error.message} />;
     }
+
+    console.log(data);
 
     // Format & extract correct application data
     const formattedData = (data ?? []).map((student) => {
