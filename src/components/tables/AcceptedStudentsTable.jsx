@@ -73,11 +73,13 @@ export default function AcceptedStudentsTable({ students, companyName }) {
         });
     };
 
-    const handleCannotProceedStatus = (applicationId) => {
+    const handleCannotProceedStatus = (applicationId, studentEmail) => {
         startTransition(async () => {
             const { success, error } = await submitCannotProceedStatus(
                 applicationId,
-                message
+                message,
+                companyName,
+                studentEmail
             );
 
             if (!success) {
@@ -233,7 +235,8 @@ export default function AcceptedStudentsTable({ students, companyName }) {
                                                                 }
                                                                 onClick={() =>
                                                                     handleCannotProceedStatus(
-                                                                        student.id
+                                                                        student.id,
+                                                                        student?.student_email
                                                                     )
                                                                 }
                                                                 size="sm"

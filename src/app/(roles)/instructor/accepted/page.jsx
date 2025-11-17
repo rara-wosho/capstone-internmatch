@@ -6,7 +6,7 @@ import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import TitleText from "@/components/ui/TitleText";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { getAcceptedApplicationsByInstructor } from "@/lib/actions/instructor";
-import { Building, Building2 } from "lucide-react";
+import { Building2 } from "lucide-react";
 import { Suspense } from "react";
 
 export default async function AcceptedApplicationsPage({ searchParams }) {
@@ -25,8 +25,6 @@ export default async function AcceptedApplicationsPage({ searchParams }) {
     if (!success || error) {
         return <ErrorUi secondaryMessage={error} />;
     }
-
-    console.log("accepted applications data: ", data);
 
     return (
         <div>

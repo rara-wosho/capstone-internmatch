@@ -7,6 +7,7 @@ import { getCurrentUser } from "./auth";
 import { ApplicationSuccess } from "@/components/email/ApplicationSuccess";
 import { ApplicationRejected } from "@/components/email/ApplicationRejected";
 import { ApplicationApproved } from "@/components/email/ApplicationApproved";
+import { ApplicationCannotProceed } from "@/components/email/ApplicationCannotProceed";
 
 export async function submitApplication(formData) {
     const supabase = await createClient();
@@ -312,7 +313,12 @@ export async function approveStudentApplication(
 }
 
 //Reject the accepted application with note
-export async function submitCannotProceedStatus(applicationId, message = "") {
+export async function submitCannotProceedStatus(
+    applicationId,
+    message = "",
+    companyName,
+    studentEmail
+) {
     const supabase = await createClient();
 
     const { error } = await supabase
@@ -323,6 +329,31 @@ export async function submitCannotProceedStatus(applicationId, message = "") {
     if (error) {
         console.log(error);
         return { success: false, error: error.message };
+    }
+
+    if (companyName && studentEmail) {
+        // After successful application approval
+        const resend = new Resend(process.env.RESEND_API_KEY);
+
+        // Send password-change notification
+        const { error: emailError } = await resend.emails.send({
+            from: "InternMatch <no-reply@auth.internmatch.online>",
+            to: studentEmail,
+            subject: `Application Update`,
+            react: (
+                <ApplicationCannotProceed
+                    message={message}
+                    companyName={companyName}
+                />
+            ),
+        });
+
+        if (emailError) {
+            console.log(
+                "Error sending email for password change: ",
+                emailError.message
+            );
+        }
     }
 
     revalidatePath("instructor/accepted");
