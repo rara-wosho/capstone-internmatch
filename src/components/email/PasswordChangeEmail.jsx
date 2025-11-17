@@ -1,4 +1,4 @@
-export default function PasswordChangedEmail({ firstname }) {
+export default function PasswordChangedEmail() {
     return (
         <div
             style={{
@@ -29,9 +29,7 @@ export default function PasswordChangedEmail({ firstname }) {
                 </h1>
 
                 {/* Greeting */}
-                <p style={{ fontSize: "15px", marginBottom: "16px" }}>
-                    Hi <strong>{firstname}</strong>,
-                </p>
+                <p style={{ fontSize: "15px", marginBottom: "16px" }}>Hi!,</p>
 
                 <p
                     style={{
@@ -41,8 +39,7 @@ export default function PasswordChangedEmail({ firstname }) {
                     }}
                 >
                     This is a confirmation that your password on{" "}
-                    <strong>InternMatch</strong>
-                    has been successfully changed.
+                    <strong>InternMatch</strong> has been successfully changed.
                 </p>
 
                 {/* Security Notice */}

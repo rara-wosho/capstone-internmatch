@@ -2,6 +2,8 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "../supabase/server";
+import { Resend } from "resend";
+import PasswordChangedEmail from "@/components/email/PasswordChangeEmail";
 
 export async function signIn(prevState, formData) {
     const email = formData.get("email");
@@ -141,6 +143,24 @@ export async function updatePassword(formData) {
         };
     }
 
+    // After successful password update
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    // Send password-change notification
+    const { error: emailError } = await resend.emails.send({
+        from: "InternMatch <no-reply@auth.internmatch.online>",
+        to: email,
+        subject: "Your InternMatch Password Has Been Changed",
+        react: <PasswordChangedEmail />,
+    });
+
+    if (emailError) {
+        console.log(
+            "Error sending email for password change: ",
+            emailError.message
+        );
+    }
+
     return {
         success: true,
         message: "Password updated successfully.",
@@ -162,7 +182,9 @@ export async function sendResetPasswordEmail(prev, formData) {
 
     const supabase = await createClient();
 
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: "https://internmatch.online/reset-password",
+    });
 
     if (error) {
         console.log("error sending email: ", error);

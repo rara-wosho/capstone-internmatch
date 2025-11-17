@@ -12,6 +12,7 @@ import InstructorEditProfileForm from "@/components/forms/InstructorEditProfileF
 import ChangePasswordForm from "@/components/forms/ChangePasswordForm";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import PasswordChangedEmail from "@/components/email/PasswordChangeEmail";
 
 // Page metadata
 export const metadata = {

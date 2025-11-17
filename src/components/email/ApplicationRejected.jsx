@@ -1,4 +1,4 @@
-export function ApplicationSuccess({ companyName }) {
+export function ApplicationRejected({ companyName }) {
     return (
         <div
             style={{
@@ -16,7 +16,7 @@ export function ApplicationSuccess({ companyName }) {
                 style={{
                     borderRadius: "12px 12px 0 0",
                     padding: "16px 12px",
-                    backgroundColor: "#8967d8",
+                    backgroundColor: "#d87575",
                 }}
             >
                 <h1
@@ -27,7 +27,7 @@ export function ApplicationSuccess({ companyName }) {
                         fontWeight: "bold",
                     }}
                 >
-                    Congratulations!
+                    Application Update
                 </h1>
             </div>
             <div
@@ -37,49 +37,52 @@ export function ApplicationSuccess({ companyName }) {
             >
                 <h2
                     style={{
-                        color: "#8967d8",
+                        color: "#d87575",
                         fontWeight: "700",
                         paddingBlock: "20px",
                     }}
                 >
-                    Your Internship Application Has Been Accepted!
+                    Internship Application Status
                 </h2>
 
                 <p>
-                    Great news! Your application to join{" "}
-                    <strong>{companyName}</strong> as an intern has been
-                    officially{" "}
-                    <strong style={{ color: "#8967d8" }}>accepted</strong>.
+                    We regret to inform you that your application to join{" "}
+                    <strong>{companyName}</strong> is{" "}
+                    <strong style={{ color: "#d87575" }}>rejected</strong> at
+                    this time.
                 </p>
 
                 <p style={{ marginBottom: "12px" }}>
-                    Your dedication, effort, and qualifications truly stood out
-                    during the evaluation process. We're excited for you to take
-                    the next step in your journey!
+                    We understand that this news may be disappointing, and we
+                    want to thank you for the time and effort you put into your
+                    application.
                 </p>
 
                 <p>
-                    <strong>Next Step: Instructor Approval</strong>
+                    <strong>What's Next?</strong>
                     <br />
-                    Your application will now be reviewed for final approval by
-                    your instructor. This is the last step to finalize your
-                    internship journey.
+                    This decision does not reflect on your potential or
+                    capabilities. Internship opportunities are highly
+                    competitive, and selection often depends on many factors
+                    beyond qualifications alone.
                 </p>
 
                 <p>
-                    Please wait while we process this final approval. You will
-                    be notified once your instructor has reviewed and approved
-                    your internship placement.
+                    We encourage you to continue applying for other internship
+                    positions that match your skills and interests. Each
+                    application is a valuable learning experience that brings
+                    you closer to finding the right opportunity.
                 </p>
 
                 <p>
-                    After instructor approval, you will receive further
-                    instructions regarding onboarding requirements, schedules,
-                    and next steps.
+                    Remember that many successful professionals faced rejections
+                    before finding their perfect career path. This is just one
+                    step in your journey.
                 </p>
 
                 <p style={{ marginTop: "24px" }}>
-                    We're looking forward to having you onboard!
+                    We wish you the best in your continued search and future
+                    endeavors.
                 </p>
 
                 <p style={{ fontWeight: "600", marginTop: "4px" }}>

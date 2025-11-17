@@ -16,7 +16,7 @@ export default function ApplicantActions({ applicant }) {
             const result = await updateApplicationStatus({
                 newStatus,
                 applicationId: applicant.id,
-                receiver: "raeldevprojects@gmail.com",
+                receiver: applicant?.students?.email || "",
                 companyName: applicant?.companies?.name,
                 companyEmail: applicant?.companies?.email,
             });

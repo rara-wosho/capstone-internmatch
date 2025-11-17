@@ -1,13 +1,12 @@
 import ApplicantActions from "@/components/blocks/ApplicantActions";
+import { ApplicationRejected } from "@/components/email/ApplicationRejected";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import BorderBox from "@/components/ui/BorderBox";
 import BreadCrumbs from "@/components/ui/BreadCrumbs";
 import { Button } from "@/components/ui/button";
 import ErrorUi from "@/components/ui/ErrorUi";
 import FormLabel from "@/components/ui/FormLabel";
-import IconWrapper from "@/components/ui/IconWrapper";
 import InfoPopover from "@/components/ui/info-popover";
-import { Popover } from "@/components/ui/popover";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { Skeleton } from "@/components/ui/skeleton";
 import TitleText from "@/components/ui/TitleText";
@@ -19,7 +18,6 @@ import { dateFormatter } from "@/utils/date-formatter";
 import {
     File,
     FileText,
-    Hourglass,
     Info,
     Link2,
     Mail,
@@ -52,7 +50,7 @@ export default async function Page({ params }) {
     const { data: applicant, error } = await supabase
         .from("applicants")
         .select(
-            "id, applied_at, approve_status, cannot_proceed_message, resume_link, portfolio_link, status, introduction, students!inner(id, firstname, lastname, gender, school, email, avatar_url, barangay, city, province, assessment_attempt(id, submitted_at, assessment_score, assessment_total_item, assessment_test(assessment_title)))"
+            "id, applied_at, approve_status, cannot_proceed_message, resume_link, portfolio_link, status, introduction, students!inner(id, firstname, lastname, gender, school, email, avatar_url, barangay, city, province, assessment_attempt(id, submitted_at, assessment_score, assessment_total_item, assessment_test(assessment_title))), companies(name, email)"
         )
         .eq("id", applicantId)
         .eq("company_id", user?.id)

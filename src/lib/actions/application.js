@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "../supabase/server";
 import { Resend } from "resend";
 import { getCurrentUser } from "./auth";
+import { ApplicationSuccess } from "@/components/email/ApplicationSuccess";
+import { ApplicationRejected } from "@/components/email/ApplicationRejected";
 
 export async function submitApplication(formData) {
     const supabase = await createClient();
@@ -47,21 +49,39 @@ export async function updateApplicationStatus({
         return { success: false, error: "Unable to update status" };
     }
 
-    // if (newStatus === "accepted" && receiver) {
-    //     const { data, error } = await resend.emails.send({
-    //         from: "InternMatch@resend.dev",
-    //         to: receiver,
-    //         subject: "🎉 Congratulations!",
-    //         react: ApplicationSuccess({ companyName }),
-    //         reply_to: companyEmail,
-    //     });
+    if (newStatus === "accepted" && receiver) {
+        const { data, error } = await resend.emails.send({
+            from: "InternMatch <no-reply@auth.internmatch.online>",
+            to: receiver,
+            subject: `${companyName} | 🎉 Application Accepted!`,
+            react: ApplicationSuccess({ companyName }),
+            reply_to: companyEmail,
+        });
 
-    //     console.log("error: ", error);
-    //     console.log("new status: ", newStatus);
-    //     console.log("receiver : ", receiver);
-    //     console.log("email response: ", data);
-    //     console.log("company email: ", companyEmail);
-    // }
+        if (error) {
+            console.error(
+                'Error sending "Accepted" application status. ',
+                error?.message
+            );
+        }
+    }
+
+    if (newStatus === "rejected" && receiver) {
+        const { data, error } = await resend.emails.send({
+            from: "InternMatch <no-reply@auth.internmatch.online>",
+            to: receiver,
+            subject: `${companyName} | Application Rejected`,
+            react: ApplicationRejected({ companyName }),
+            reply_to: companyEmail,
+        });
+
+        if (error) {
+            console.error(
+                'Error sending "Rejected" application status. ',
+                error?.message
+            );
+        }
+    }
 
     revalidatePath(`/company/applicants/${applicationId}`);
     revalidatePath("/company/applicants");
