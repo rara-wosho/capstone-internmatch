@@ -98,7 +98,11 @@ export default async function Page({ params, searchParams }) {
 
             <div className="grid grid-cols-1 gap-3 md:gap-4 mt-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                    <AboutGroup data={data} memberCount={members?.length} />
+                    <AboutGroup
+                        search={search}
+                        data={data}
+                        memberCount={members?.length}
+                    />
                     <GroupInviteLink
                         groupId={groupId}
                         is_shareable={data?.is_shareable}

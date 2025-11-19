@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Textarea } from "../ui/textarea";
 import FormLabel from "../ui/FormLabel";
+import StatusPill from "../ui/StatusPill";
 
 export default function AcceptedStudentsTable({
     students,
@@ -145,10 +146,15 @@ export default function AcceptedStudentsTable({
                 </TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Student Name</TableHead>
-                        <TableHead>Date Applied</TableHead>
-                        <TableHead>Group</TableHead>
-                        <TableHead>Decision</TableHead>
+                        <TableHead className="font-bold">
+                            Student Name
+                        </TableHead>
+                        <TableHead className="font-bold">
+                            Date Applied
+                        </TableHead>
+                        <TableHead className="font-bold">Group</TableHead>
+                        <TableHead className="font-bold">Decision</TableHead>
+                        <TableHead className="font-bold">Status</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -285,6 +291,21 @@ export default function AcceptedStudentsTable({
                                             </Button>
                                         )}
                                     </div>
+                                </TableCell>
+                                <TableCell>
+                                    {student?.approve_status === "approved" ? (
+                                        <div className="flex">
+                                            <StatusPill
+                                                size="sm"
+                                                variant="success"
+                                                label="Student Intern"
+                                            />
+                                        </div>
+                                    ) : !student.approve_status ? (
+                                        "Waiting for approval"
+                                    ) : (
+                                        ""
+                                    )}
                                 </TableCell>
                             </TableRow>
                         ))

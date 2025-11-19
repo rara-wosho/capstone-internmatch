@@ -14,11 +14,13 @@ export default function InstructorExamResultsTable({ studentData }) {
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead>Student</TableHead>
-                    <TableHead>Exam Title</TableHead>
-                    <TableHead>Company</TableHead>
-                    <TableHead className="text-center">Score</TableHead>
-                    <TableHead className="text-right">Date</TableHead>
+                    <TableHead className="font-bold">Student</TableHead>
+                    <TableHead className="font-bold">Exam Title</TableHead>
+                    <TableHead className="font-bold">Company</TableHead>
+                    <TableHead className="font-bold text-center">
+                        Score
+                    </TableHead>
+                    <TableHead className="font-bold text-left">Date</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -54,8 +56,10 @@ export default function InstructorExamResultsTable({ studentData }) {
                                     {student.name}
                                 </Link>
                             </TableCell>
-                            <TableCell>{exam.title}</TableCell>
-                            <TableCell>
+                            <TableCell className="text-muted-foreground">
+                                {exam.title}
+                            </TableCell>
+                            <TableCell className="text-muted-foreground">
                                 <Link
                                     className="hover:underline underline-offset-2"
                                     href={`/instructor/companies/${exam.company_id}`}
@@ -63,7 +67,7 @@ export default function InstructorExamResultsTable({ studentData }) {
                                     {exam.company}{" "}
                                 </Link>
                             </TableCell>
-                            <TableCell className="text-center">
+                            <TableCell className="text-center text-muted-foreground">
                                 {exam.score !== null
                                     ? `${exam.score}${
                                           exam.total_questions
@@ -72,7 +76,7 @@ export default function InstructorExamResultsTable({ studentData }) {
                                       }`
                                     : "—"}
                             </TableCell>
-                            <TableCell className="text-right text-sm text-muted-foreground">
+                            <TableCell className="text-left text-sm text-muted-foreground">
                                 {exam.completed_at
                                     ? dateFormatter(exam.completed_at)
                                     : "—"}

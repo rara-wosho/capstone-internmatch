@@ -14,8 +14,9 @@ import BorderBox from "../ui/BorderBox";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Info } from "lucide-react";
 import { Button } from "../ui/button";
+import InfoPopover from "../ui/info-popover";
 
 export default function StudentsTable({ students, initialFilter }) {
     // Validate status from url params
@@ -61,60 +62,71 @@ export default function StudentsTable({ students, initialFilter }) {
                         <TableHead>Exam Access</TableHead>
                         <TableHead>Group</TableHead>
                         <TableHead>
-                            <Popover open={open} onOpenChange={setOpen}>
-                                <PopoverTrigger asChild>
-                                    <button className="flex items-center gap-1 cursor-pointer uppercase">
-                                        {statusFilter === "all"
-                                            ? "Status"
-                                            : statusFilter}{" "}
-                                        <ChevronDown size={18} />
-                                    </button>
-                                </PopoverTrigger>
+                            <div className="flex items-center gap-2">
+                                <InfoPopover
+                                    textContent="This indicates whether the student is currently enrolled under your supervision. This is not an online/offline indicator"
+                                    trigger={<Info size={16} />}
+                                />
+                                {/* Buttons for filtering inactive active students  */}
+                                <Popover open={open} onOpenChange={setOpen}>
+                                    <PopoverTrigger asChild>
+                                        <button className="flex items-center gap-1 cursor-pointer uppercase">
+                                            {statusFilter === "all"
+                                                ? "Status"
+                                                : statusFilter}{" "}
+                                            <ChevronDown size={18} />
+                                        </button>
+                                    </PopoverTrigger>
 
-                                <PopoverContent className="w-40 p-2 space-y-1">
-                                    <Button
-                                        variant={
-                                            statusFilter === "all"
-                                                ? "secondary"
-                                                : "ghost"
-                                        }
-                                        className="w-full justify-start"
-                                        onClick={() =>
-                                            handleChangeStatusFilter("all")
-                                        }
-                                    >
-                                        All
-                                    </Button>
+                                    <PopoverContent className="w-40 p-2 space-y-1">
+                                        <Button
+                                            variant={
+                                                statusFilter === "all"
+                                                    ? "secondary"
+                                                    : "ghost"
+                                            }
+                                            className="w-full justify-start"
+                                            onClick={() =>
+                                                handleChangeStatusFilter("all")
+                                            }
+                                        >
+                                            All
+                                        </Button>
 
-                                    <Button
-                                        variant={
-                                            statusFilter === "active"
-                                                ? "secondary"
-                                                : "ghost"
-                                        }
-                                        className="w-full justify-start"
-                                        onClick={() =>
-                                            handleChangeStatusFilter("active")
-                                        }
-                                    >
-                                        Active
-                                    </Button>
+                                        <Button
+                                            variant={
+                                                statusFilter === "active"
+                                                    ? "secondary"
+                                                    : "ghost"
+                                            }
+                                            className="w-full justify-start"
+                                            onClick={() =>
+                                                handleChangeStatusFilter(
+                                                    "active"
+                                                )
+                                            }
+                                        >
+                                            Active
+                                        </Button>
 
-                                    <Button
-                                        variant={
-                                            statusFilter === "inactive"
-                                                ? "secondary"
-                                                : "ghost"
-                                        }
-                                        className="w-full justify-start"
-                                        onClick={() =>
-                                            handleChangeStatusFilter("inactive")
-                                        }
-                                    >
-                                        Inactive
-                                    </Button>
-                                </PopoverContent>
-                            </Popover>
+                                        <Button
+                                            variant={
+                                                statusFilter === "inactive"
+                                                    ? "secondary"
+                                                    : "ghost"
+                                            }
+                                            className="w-full justify-start"
+                                            onClick={() =>
+                                                handleChangeStatusFilter(
+                                                    "inactive"
+                                                )
+                                            }
+                                        >
+                                            Inactive
+                                        </Button>
+                                    </PopoverContent>
+                                </Popover>
+                            </div>
                         </TableHead>
                     </TableRow>
                 </TableHeader>

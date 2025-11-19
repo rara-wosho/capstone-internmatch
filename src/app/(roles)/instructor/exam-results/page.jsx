@@ -15,6 +15,7 @@ import {
 import { getCurrentUser } from "@/lib/actions/auth";
 import { getStudentExamResults } from "@/lib/actions/instructor";
 import { dateFormatter } from "@/utils/date-formatter";
+import { Building2 } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -75,7 +76,7 @@ export default async function InstructorExamResultsPage({ searchParams }) {
                     >
                         {/* Group Header */}
                         <div className="px-3 md:px-5 py-3 border-b">
-                            <TitleText>{group.group_name}</TitleText>
+                            <h1 className="font-bold">{group.group_name}</h1>
                         </div>
 
                         <BorderBox>
