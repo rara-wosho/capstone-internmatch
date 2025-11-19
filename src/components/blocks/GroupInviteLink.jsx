@@ -10,9 +10,7 @@ import { toast } from "sonner";
 import { toggleGroupShareable } from "@/lib/actions/group";
 
 export default function GroupInviteLink({ groupId, is_shareable }) {
-    const inviteUrl = `${
-        process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
-    }/invite/${groupId}`;
+    const inviteUrl = `https://internmatch.online/invite/${groupId}`;
 
     const [copied, setCopied] = useState(false);
     const [shareable, setShareable] = useState(is_shareable);
