@@ -1,5 +1,6 @@
 import AcceptedStudentsOverview from "@/components/blocks/AcceptedStudentsOverview";
 import InstructorStudentOverview from "@/components/blocks/InstructorStudentOverview";
+import CreateFirstGroupModal from "@/components/modals/CreateFirstGroupModal";
 import BorderBox from "@/components/ui/BorderBox";
 import ErrorUi from "@/components/ui/ErrorUi";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
@@ -28,6 +29,8 @@ export default async function InstructorDashboardPage() {
             <BorderBox className="border rounded-xl bg-card">
                 <AcceptedStudentsOverview instructorId={user.id} />
             </BorderBox>
+
+            <CreateFirstGroupModal id={user.id} />
         </div>
     );
 }

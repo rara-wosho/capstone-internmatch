@@ -16,6 +16,9 @@ import {
     Globe,
     Handshake,
     Info,
+    Mail,
+    MapPin,
+    Phone,
     Star,
     UserRoundX,
 } from "lucide-react";
@@ -60,10 +63,6 @@ export default async function Page({ params }) {
                                 <ChevronLeft size={18} />
                                 <span>Back</span>
                             </BackButton>
-
-                            <div className="flex items-center text-muted-foreground">
-                                <Globe size={17} />
-                            </div>
                         </BorderBox>
                         <BorderBox className="flex gap-x-5 gap-y-4 border-b flex-wrap items-center justify-between">
                             {/* mini hero section | left section  */}
@@ -94,15 +93,11 @@ export default async function Page({ params }) {
                                         </p>
                                     )}
 
-                                    <div className="flex items-center gap-2 text-yellow-500/30">
+                                    {/* <div className="flex items-center gap-2 text-yellow-500/30">
                                         <Star size={15} fill="rgb(230,240,0)" />
                                         <Star size={15} fill="rgb(230,240,0)" />
                                         <Star size={15} fill="rgb(230,240,0)" />
-                                    </div>
-
-                                    {/* <p className="text-muted-foreground text-sm font-thin">
-                                    No ratings yet 
-                                </p> */}
+                                    </div> */}
                                 </div>
                             </div>
 
@@ -140,11 +135,11 @@ export default async function Page({ params }) {
                                 <BookOpen className="size-3 md:size-4" /> About{" "}
                                 {data?.name}
                             </TertiaryLabel>
-                            <p className="text-muted-foreground">
+                            <p className="text-muted-foreground whitespace-pre-wrap">
                                 {data?.details}
                             </p>
                         </BorderBox>
-                        <BorderBox className="border-b">
+                        <BorderBox className="">
                             <div className="mb-2 flex items-center gap-2">
                                 <TertiaryLabel>
                                     <Briefcase className="size-3 md:size-4" />
@@ -172,7 +167,7 @@ export default async function Page({ params }) {
                             <div className="flex items-center gap-2 flex-wrap">
                                 {!data?.company_offers ? (
                                     <div className="text-sm text-muted-foreground">
-                                        This company hasn’t listed any
+                                        This company hasn't listed any
                                         internship offers yet. Please check back
                                         soon for available opportunities.
                                     </div>
@@ -193,13 +188,115 @@ export default async function Page({ params }) {
 
                         {/* Get in touch section  */}
                         <BorderBox className="">
-                            <TertiaryLabel className="mb-2">
+                            <TertiaryLabel className="mb-4">
                                 <Handshake className="size-3 md:size-4" />
                                 Get In Touch
                             </TertiaryLabel>
-                            <p className="text-muted-foreground">
-                                {data?.details}
-                            </p>
+
+                            <div className="space-y-4">
+                                {/* Email */}
+                                {data?.email && (
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex items-center justify-center size-8 rounded-full bg-blue-100 dark:bg-blue-900/30">
+                                            <Mail className="size-4 text-blue-600 dark:text-blue-400" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-medium">
+                                                Email
+                                            </p>
+                                            <a
+                                                href={`mailto:${data.email}`}
+                                                className="text-sm text-muted-foreground hover:text-secondary-foreground transition-colors"
+                                            >
+                                                {data.email}
+                                            </a>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Phone */}
+                                {data?.phone && (
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex items-center justify-center size-8 rounded-full bg-green-100 dark:bg-green-900/30">
+                                            <Phone className="size-4 text-green-600 dark:text-green-400" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-medium">
+                                                Phone
+                                            </p>
+                                            <a
+                                                href={`tel:${data.phone}`}
+                                                className="text-sm text-muted-foreground hover:text-secondary-foreground transition-colors"
+                                            >
+                                                {data.phone}
+                                            </a>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Website */}
+                                {data?.website && (
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex items-center justify-center size-8 rounded-full bg-purple-100 dark:bg-purple-900/30">
+                                            <Globe className="size-4 text-purple-600 dark:text-purple-400" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-medium">
+                                                Website
+                                            </p>
+                                            <a
+                                                href={data.website}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-sm text-muted-foreground hover:text-secondary-foreground transition-colors break-all"
+                                            >
+                                                {data.website}
+                                            </a>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Address */}
+                                {(data?.barangay ||
+                                    data?.city ||
+                                    data?.province) && (
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex items-center justify-center size-8 rounded-full bg-orange-100 dark:bg-orange-900/30">
+                                            <MapPin className="size-4 text-orange-600 dark:text-orange-400" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-medium">
+                                                Address
+                                            </p>
+                                            <p className="text-sm text-muted-foreground">
+                                                {[
+                                                    data.barangay,
+                                                    data.city,
+                                                    data.province,
+                                                ]
+                                                    .filter(Boolean)
+                                                    .join(", ")}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* No contact information available */}
+                                {!data?.email &&
+                                    !data?.phone &&
+                                    !data?.website &&
+                                    !data?.barangay &&
+                                    !data?.city &&
+                                    !data?.province && (
+                                        <div className="text-center py-6">
+                                            <Handshake className="size-12 text-muted-foreground/50 mx-auto mb-3" />
+                                            <p className="text-sm text-muted-foreground">
+                                                No contact information available
+                                                for this company.
+                                            </p>
+                                        </div>
+                                    )}
+                            </div>
                         </BorderBox>
                     </section>
                 </div>
