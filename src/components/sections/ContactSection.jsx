@@ -72,9 +72,11 @@ export default function ContactSection() {
 
                         <p className="text-xs text-muted-foreground text-center mt-3 py-2">
                             By submitting the form, you agree to our{" "}
-                            <span className="text-accent-foreground">
-                                terms and conditions.
-                            </span>
+                            <Link href="/terms-conditions">
+                                <span className="text-accent-foreground">
+                                    terms and conditions.
+                                </span>
+                            </Link>
                         </p>
                     </Card>
                 </div>

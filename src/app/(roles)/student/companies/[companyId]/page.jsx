@@ -29,6 +29,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import { notFound } from "next/navigation";
 
 const links = [
     { href: "", label: "Home" },
@@ -48,6 +49,17 @@ export default async function Page({ params }) {
 
     if (error) {
         return <ErrorUi secondaryMessage={error} />;
+    }
+
+    if (!data) {
+        return (
+            <ErrorUi
+                message="Company not found"
+                secondaryMessage={
+                    "This company may not exist or may have been removed from our platform."
+                }
+            />
+        );
     }
 
     return (

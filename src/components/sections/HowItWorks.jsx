@@ -28,11 +28,9 @@ export default function HowItWorks() {
                         Company
                     </h4>
                     <p className="text-muted-foreground ">
-                        Companies post available internship opportunities and
-                        create skill-based exams to evaluate applicants. They
-                        review the results after students complete the exams and
-                        decide whether to accept or decline candidates, helping
-                        ensure they select the best fit for their organization.
+                        Find qualified IT students by creating customized exams
+                        and evaluating applicants based on your specific
+                        requirements and standards.
                     </p>
                 </Card>
                 <Card className="hover:-translate-y-2 transition-transform duration-300 p-3 md:p-5">
@@ -43,13 +41,9 @@ export default function HowItWorks() {
                         Student
                     </h4>
                     <p className="text-muted-foreground ">
-                        Students create an account, complete their profile, and
-                        browse internship opportunities from partner companies.
-                        When they find a suitable company, they take the
-                        company’s prepared exam to demonstrate their skills.
-                        After the exam, students can view their results and wait
-                        for the company’s decision on whether they are accepted
-                        for the internship.
+                        Discover internship opportunities that match your skills
+                        and career goals. Take company-administered exams to
+                        showcase your capabilities.
                     </p>
                 </Card>
                 <Card className="hover:-translate-y-2 transition-transform duration-300 p-3 md:p-5">
@@ -60,12 +54,8 @@ export default function HowItWorks() {
                         OJT Instructor
                     </h4>
                     <p className="text-muted-foreground">
-                        OJT instructors manage and organize students under their
-                        supervision, ensuring profiles are complete and ready
-                        for applications. They track student progress with
-                        different companies, provide guidance, and coordinate
-                        with company representatives to help match students with
-                        the right opportunities.
+                        Manage student groups, track progress, and ensure your
+                        students are well-prepared for their internship journey.
                     </p>
                 </Card>
             </Wrapper>

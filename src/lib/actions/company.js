@@ -236,6 +236,14 @@ export async function getCompanyDataAndExams(companyId) {
         };
     }
 
+    // Early return if there is no company data
+    if (!data) {
+        return {
+            data: null,
+            error: "",
+        };
+    }
+
     // Add question_count to each exam
     const examsWithCount =
         data?.exams?.map((exam) => {

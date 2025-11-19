@@ -6,8 +6,10 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
+import { Loader } from "lucide-react";
 
 export default function QuestionForm() {
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -37,13 +39,21 @@ export default function QuestionForm() {
             return;
         }
 
-        // Reset form after submit
-        setFormData({
-            name: "",
-            email: "",
-            subject: "",
-            question: "",
-        });
+        setLoading(true);
+
+        setTimeout(() => {
+            toast.success("Submitted successfully");
+
+            // Reset form after submit
+            setFormData({
+                name: "",
+                email: "",
+                subject: "",
+                question: "",
+            });
+
+            setLoading(false);
+        }, 1500);
     };
 
     return (
@@ -89,8 +99,9 @@ export default function QuestionForm() {
                     onChange={handleChange}
                 />
             </div>
-            <Button type="submit" className="mb-2">
-                Send Question
+            <Button disabled={loading} type="submit" className="mb-2">
+                {loading && <Loader className="animate-spin" />}
+                {loading ? "Please wait" : "Submit Form"}
             </Button>
         </form>
     );
