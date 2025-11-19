@@ -44,13 +44,11 @@ export async function createInstructor(formData) {
 
 // submit registration details
 export async function submitRegistration(prevState, formData) {
-    const supabase = await createClient();
-
     // Extract form data
     const registrationData = {
         firstname: formData.get("firstName"),
         lastname: formData.get("lastName"),
-        email: formData.get("email"),
+        email: formData.get("email")?.trim() || "",
         school: formData.get("school"),
         barangay: formData.get("barangay"),
         city: formData.get("city"),
@@ -72,7 +70,8 @@ export async function submitRegistration(prevState, formData) {
         return {
             success: false,
             error: "All fields are required.",
-            formData: registrationData, // Return the extracted data object
+            time: new Date().getMilliseconds(),
+            formData: registrationData,
         };
     }
 
@@ -81,12 +80,40 @@ export async function submitRegistration(prevState, formData) {
         return {
             success: false,
             error: "Document link is invalid.",
+            time: new Date().getMilliseconds(),
             formData: registrationData,
         };
     }
 
-    // Insert into Supabase
-    const { error } = await supabase
+    // 🔍 Check if email already exists in Supabase Auth users
+    const { data: users, error: listError } =
+        await supabaseAdmin.auth.admin.listUsers();
+
+    if (listError) {
+        console.error("Error checking existing users:", listError);
+        return {
+            success: false,
+            error: "Unable to verify email. Please try again.",
+            time: new Date().getMilliseconds(),
+            formData: registrationData,
+        };
+    }
+
+    const emailExists = users.users.some(
+        (u) => u.email?.toLowerCase() === registrationData.email.toLowerCase()
+    );
+
+    if (emailExists) {
+        return {
+            success: false,
+            error: "This email is already registered. Please sign in instead or use another email.",
+            time: new Date().getMilliseconds(),
+            formData: registrationData,
+        };
+    }
+
+    // Insert the new registration request
+    const { error } = await supabaseAdmin
         .from("registrations")
         .insert([registrationData]);
 
@@ -96,18 +123,20 @@ export async function submitRegistration(prevState, formData) {
             success: false,
             error:
                 error.code === "23505"
-                    ? "This email you provided is already associated with a pending registration."
+                    ? "The email you provided is already associated with a pending registration."
                     : "Something went wrong while submitting the form.",
+            time: new Date().getMilliseconds(),
             formData: registrationData,
         };
     }
 
-    // Revalidate and redirect on success
     revalidatePath("/create-account/instructor");
+
     return {
         success: true,
         error: "",
-        formData: null, // Clear form data on success
+        time: new Date().getMilliseconds(),
+        formData: null,
     };
 }
 

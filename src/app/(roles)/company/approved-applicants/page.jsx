@@ -37,7 +37,10 @@ export default async function ApprovedApplicantsPage({ searchParams }) {
             </div>
             <BorderBox className="border rounded-xl bg-card mb-3">
                 <Suspense fallback={<p>Loading search field...</p>}>
-                    <SearchField actionPath="/company/approved-applicants" />
+                    <SearchField
+                        actionPath="/company/approved-applicants"
+                        placeholder="Search applicant"
+                    />
                 </Suspense>
             </BorderBox>
             {approvedApplicants?.length === 0 ? (

@@ -43,7 +43,7 @@ export default function ChangeExamAccessModal({ currentAccess, studentId }) {
                 return;
             }
 
-            toast.success("Exam access granted successfully.");
+            toast.success("Exam access revoked successfully.");
             setOpen(false);
             router.refresh();
         });
@@ -51,8 +51,12 @@ export default function ChangeExamAccessModal({ currentAccess, studentId }) {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger className="text-accent-foreground">
-                Change
+            <DialogTrigger
+                disabled={isPending}
+                className="text-accent-foreground flex gap-1 items-center"
+            >
+                {isPending && <Loader size={16} className="animate-spin" />}{" "}
+                <span>Change</span>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
@@ -65,7 +69,7 @@ export default function ChangeExamAccessModal({ currentAccess, studentId }) {
                 <p>
                     {currentAccess
                         ? "Student currently has access to exams."
-                        : "Exam access is currently disabled."}
+                        : "Exam access is currently disabled"}
                 </p>
                 {currentAccess ? (
                     <Button

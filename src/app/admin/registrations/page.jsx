@@ -23,7 +23,6 @@ export default async function AdminRegistrationPage() {
     }
     return (
         <div>
-            <PasswordChangedEmail firstname={"Roseville"} />
             <SecondaryLabel className="mb-3 md:mb-8 border-b py-4 md:py-8">
                 <Wrapper className="flex items-center px-3">
                     Registrations{" "}

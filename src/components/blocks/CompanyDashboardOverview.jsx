@@ -5,12 +5,14 @@ import {
     SquareCheckBig,
     UserRoundCheck,
     UserRoundX,
+    Users,
 } from "lucide-react";
 import DashboardCountBox from "../ui/DashboardCountBox";
 import { getCompanyDashboardOverview } from "@/lib/actions/company";
 import TitleText from "../ui/TitleText";
 import SecondaryLabel from "../ui/SecondaryLabel";
 import StatusPill from "../ui/StatusPill";
+import Link from "next/link";
 
 export default async function CompanyDashboardOverview({ userId }) {
     const { data, error, success } = await getCompanyDashboardOverview(userId);
@@ -59,17 +61,21 @@ export default async function CompanyDashboardOverview({ userId }) {
                         <p className="text-sm text-secondary-foreground">
                             Currently :
                         </p>
-                        <StatusPill
-                            label={
-                                data.accept_applicants
-                                    ? "Accepting Applicants"
-                                    : "Not Accepting  Applicants"
-                            }
-                            size="md"
-                            variant={
-                                data.accept_applicants ? "success" : "danger"
-                            }
-                        />
+                        <Link href="/company/applicants">
+                            <StatusPill
+                                label={
+                                    data.accept_applicants
+                                        ? "Accepting Applicants"
+                                        : "Not Accepting  Applicants"
+                                }
+                                size="md"
+                                variant={
+                                    data.accept_applicants
+                                        ? "success"
+                                        : "danger"
+                                }
+                            />
+                        </Link>
                     </div>
                 </div>
                 <div className="flex items-center flex-wrap gap-2 mt-2">
@@ -83,7 +89,7 @@ export default async function CompanyDashboardOverview({ userId }) {
                         href="/company/applicants"
                         icon={<FileUser />}
                         valueText={applicants.length}
-                        label={"Applicants"}
+                        label={"Total Applicants"}
                     />
                     <DashboardCountBox
                         href="/company/applicants?status=accepted"
@@ -95,7 +101,7 @@ export default async function CompanyDashboardOverview({ userId }) {
                         href="/company/applicants?status=reviewed"
                         icon={<ClipboardCheck />}
                         valueText={reviewedApplicants.length}
-                        label={"Reviewed Applicants"}
+                        label={"Reviewed Applications"}
                     />
                     <DashboardCountBox
                         href="/company/applicants?status=rejected"
@@ -126,7 +132,7 @@ export default async function CompanyDashboardOverview({ userId }) {
                     <DashboardCountBox
                         href="/company/examinees"
                         color="bg-emerald-400/90"
-                        icon={<FileText />}
+                        icon={<Users />}
                         valueText={data?.exam_attempt?.length}
                         label={"All Examinees"}
                     />

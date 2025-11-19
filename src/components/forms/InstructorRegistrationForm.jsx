@@ -7,7 +7,7 @@ import Form from "next/form";
 import FormLabel from "../ui/FormLabel";
 import { Input } from "../ui/input";
 import TertiaryLabel from "../ui/TertiaryLabel";
-import { Loader } from "lucide-react";
+import { AlertCircle, FileWarning, Loader } from "lucide-react";
 import { toast } from "sonner";
 
 export default function InstructorRegistrationForm() {
@@ -16,6 +16,7 @@ export default function InstructorRegistrationForm() {
     const [state, formAction, isPending] = useActionState(submitRegistration, {
         success: false,
         error: "",
+        time: 0,
         formData: null,
     });
 
@@ -28,13 +29,14 @@ export default function InstructorRegistrationForm() {
 
             toast.error(state.error);
         }
-    }, [state.success, state.error]);
+    }, [state.time]);
 
     return (
         <>
             {state.error && (
-                <div className="mb-3 border border-red-500/30 bg-red-500/5 p-3 text-red-700 dark:text-red-400">
-                    {state.error}
+                <div className="mb-3 border gap-2 flex items-center rounded-lg border-red-500/30 bg-red-500/5 p-3 text-red-700 dark:text-red-400">
+                    <AlertCircle size={17} className="shrink-0" />{" "}
+                    <p>{state.error}</p>
                 </div>
             )}
             <Form
@@ -153,6 +155,9 @@ export default function InstructorRegistrationForm() {
                             required
                             disabled={isPending}
                         />
+                        <p className="text-sm text-muted-foreground mt-1">
+                            For pilot testing, just type "https://"
+                        </p>
                     </div>
 
                     <div className="mt-4 md:mt-6 flex sm:justify-end gap-2 flex-wrap">

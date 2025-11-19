@@ -1,9 +1,8 @@
 import { getStudentOverviewCount } from "@/lib/actions/instructor";
-import ErrorUi from "../ui/ErrorUi";
-import TitleText from "../ui/TitleText";
 import DashboardCountBox from "../ui/DashboardCountBox";
 import { Users } from "lucide-react";
 import Link from "next/link";
+import TertiaryLabel from "../ui/TertiaryLabel";
 
 export default async function InstructorStudentOverview({ instructorId }) {
     const { success, error, data } =
@@ -16,7 +15,7 @@ export default async function InstructorStudentOverview({ instructorId }) {
     return (
         <>
             <div className="flex items-center gap-2 justify-between mb-2">
-                <TitleText>Overview</TitleText>
+                <TertiaryLabel>Overview</TertiaryLabel>
 
                 {data.length > 0 && (
                     <Link

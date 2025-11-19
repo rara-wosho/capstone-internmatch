@@ -14,9 +14,9 @@ import {
 import ErrorUi from "../ui/ErrorUi";
 import { dateFormatter } from "@/utils/date-formatter";
 import Link from "next/link";
+import TertiaryLabel from "../ui/TertiaryLabel";
 
 export default async function AcceptedStudentsOverview({ instructorId }) {
-    console.log("ins id ", instructorId);
     const supabase = await createClient();
 
     const { data, error } = await supabase
@@ -41,11 +41,12 @@ export default async function AcceptedStudentsOverview({ instructorId }) {
         )
         .eq("groups.ojt_instructor_id", instructorId)
         .eq("applicants.status", "accepted")
-        .order("reviewed_at", {
-            ascending: true,
-            referencedTable: "applicants",
-        })
+        .is("applicants.approve_status", null)
         .limit(5);
+    // .order("reviewed_at", {
+    //     ascending: true,
+    //     referencedTable: "applicants",
+    // })
 
     if (error) {
         return <ErrorUi secondaryMessage={error.message} />;
@@ -63,16 +64,19 @@ export default async function AcceptedStudentsOverview({ instructorId }) {
             company_name: app?.companies?.name || "Unknown company",
             company_id: app?.companies?.id,
             applied_at: app?.applied_at,
+            reviewed_at: app?.reviewed_at,
         };
     });
 
     return (
         <>
             <div className="mb-2 flex items-center gap-2 justify-between">
-                <TitleText>Recently accepted student applications</TitleText>
+                <TertiaryLabel>
+                    Student applications awaiting approval
+                </TertiaryLabel>
                 {data?.length > 0 && (
                     <Link
-                        className="text-muted-foreground hover:text-secondary-foreground"
+                        className="text-accent-foreground text-sm"
                         href="/instructor/accepted"
                     >
                         View All
@@ -90,14 +94,18 @@ export default async function AcceptedStudentsOverview({ instructorId }) {
                         <TableHead>Student Name</TableHead>
                         <TableHead>Company</TableHead>
                         <TableHead>Applied At</TableHead>
+                        <TableHead>Accepted At</TableHead>
                     </TableRow>
                 </TableHeader>
 
                 <TableBody>
                     {formattedData.length === 0 ? (
                         <TableRow>
-                            <TableCell colSpan={3} className="text-center py-4">
-                                No recently accepted applications.
+                            <TableCell
+                                colSpan={3}
+                                className="text-start text-muted-foreground"
+                            >
+                                No data available yet.
                             </TableCell>
                         </TableRow>
                     ) : (
@@ -124,6 +132,11 @@ export default async function AcceptedStudentsOverview({ instructorId }) {
                                 <TableCell>
                                     {student.applied_at
                                         ? dateFormatter(student.applied_at)
+                                        : "—"}
+                                </TableCell>
+                                <TableCell>
+                                    {student.reviewed_at
+                                        ? dateFormatter(student.reviewed_at)
                                         : "—"}
                                 </TableCell>
                             </TableRow>
