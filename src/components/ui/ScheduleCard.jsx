@@ -1,0 +1,292 @@
+"use client";
+
+import { dateFormatter } from "@/utils/date-formatter";
+import { getScheduleStatus } from "@/utils/get-schedule-status";
+import {
+    Calendar,
+    Clock,
+    MapPin,
+    FileText,
+    User,
+    Building2,
+    MoreVertical,
+    Edit,
+    Trash2,
+    Loader,
+} from "lucide-react";
+import { Button } from "./button";
+import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+import { useTransition } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+
+export default function ScheduleCard({
+    schedule,
+    onEdit,
+    onDelete,
+    viewType = "company",
+}) {
+    const status = getScheduleStatus(schedule.date, schedule.time);
+    const isPast = status === "past";
+    const isToday = status === "today";
+
+    const [isPending, startTransition] = useTransition();
+    const router = useRouter();
+
+    // Type badge colors
+    const typeColors = {
+        interview:
+            "bg-green-100 dark:bg-green-500/10 text-green-500 border-green-200 dark:border-green-500/20",
+        orientation:
+            "bg-blue-100 dark:bg-blue-500/10 text-blue-500 border-blue-200 dark:border-blue-500/20",
+        meeting: "bg-purple-100 text-purple-600 border-purple-200",
+        training: "bg-green-100 text-green-600 border-green-200",
+        evaluation: "bg-orange-100 text-orange-600 border-orange-200",
+    };
+
+    // Format time helper
+    const formatTime = (timeString) => {
+        if (!timeString) return null;
+        const [hours, minutes] = timeString.split(":");
+        const date = new Date();
+        date.setHours(parseInt(hours), parseInt(minutes));
+        return date.toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+        });
+    };
+
+    const handleDeleteSchedule = () => {
+        startTransition(async () => {
+            const supabase = createClient();
+
+            const { error } = await supabase
+                .from("schedules")
+                .delete()
+                .eq("id", schedule.id);
+
+            if (error) {
+                toast.error("Unable to delete schedule");
+                return;
+            }
+
+            toast.success(
+                "Deleted schedule successfully. Please wait a moment."
+            );
+            router.refresh();
+        });
+    };
+
+    return (
+        <div
+            className={`bg-card rounded-xl border shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden ${isPast ? "opacity-75" : ""}`}
+        >
+            {/* Header */}
+            <div className="p-4 sm:p-5 border-b">
+                <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                        {/* Type Badge */}
+                        <div className="flex items-center gap-2 mb-2">
+                            <span
+                                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${typeColors[schedule.type] || typeColors.meeting}`}
+                            >
+                                {schedule.type.charAt(0).toUpperCase() +
+                                    schedule.type.slice(1)}
+                            </span>
+                            {isToday && (
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 border border-red-200 animate-pulse">
+                                    Today
+                                </span>
+                            )}
+                            {isPast && (
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                                    Completed
+                                </span>
+                            )}
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="text-lg font-semibold     truncate">
+                            {schedule.title}
+                        </h3>
+                    </div>
+
+                    {/* Actions Dropdown */}
+                    {!isPast && (
+                        <div className="relative group">
+                            <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                                <MoreVertical className="w-5 h-5 text-gray-500" />
+                            </button>
+
+                            {/* Dropdown Menu */}
+                            <div className="absolute right-0 top-full mt-1 w-48 bg-neutral-50 overflow-hidden rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+                                {/* <button
+                                    onClick={onEdit}
+                                    className="cursor-pointer w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                                >
+                                    <Edit className="w-4 h-4" />
+                                    Edit Schedule
+                                </button> */}
+                                <button
+                                    onClick={handleDeleteSchedule}
+                                    className="cursor-pointer w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors rounded-b-lg"
+                                >
+                                    {isPending ? (
+                                        <Loader className="animate-spin w-4 h-4" />
+                                    ) : (
+                                        <Trash2 className="w-4 h-4" />
+                                    )}
+                                    Delete Schedule
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Body */}
+            <div className="p-4 sm:p-5 space-y-4">
+                {/* Date & Time */}
+                <div className="grid sm:grid-cols-2 gap-3">
+                    <div className="flex items-start gap-3">
+                        <div
+                            className={`p-2 rounded-lg ${isToday ? "bg-red-100 dark:bg-red-500/10" : "bg-blue-50 dark:bg-blue-500/10"}`}
+                        >
+                            <Calendar
+                                className={`w-5 h-5 ${isToday ? "text-red-600" : "text-blue-600"}`}
+                            />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <p className="text-xs text-muted-foreground mb-0.5">
+                                Date
+                            </p>
+                            <p className="text-sm font-medium">
+                                {dateFormatter(schedule.date)}
+                            </p>
+                        </div>
+                    </div>
+
+                    {schedule.time && (
+                        <div className="flex items-start gap-3">
+                            <div
+                                className={`p-2 rounded-lg ${isToday ? "bg-red-100 dark:bg-red-500/10 " : "bg-purple-50 dark:bg-purple-500/10"}`}
+                            >
+                                <Clock
+                                    className={`w-5 h-5 ${isToday ? "text-red-600" : "text-purple-600"}`}
+                                />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-xs text-muted-foreground mb-0.5">
+                                    Time
+                                </p>
+                                <p className="text-sm font-medium">
+                                    {formatTime(schedule.time)}
+                                </p>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Location */}
+                <div className="flex items-start gap-3">
+                    <div className="p-2 bg-green-50 dark:bg-green-500/10 rounded-lg shrink-0">
+                        <MapPin className="w-5 h-5 text-green-600" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                        <p className="text-xs text-muted-foreground mb-0.5">
+                            Location
+                        </p>
+                        <p className="text-sm font-medium break-words">
+                            {schedule.location}
+                        </p>
+                    </div>
+                </div>
+
+                {/* Details */}
+                <div className="flex items-start gap-3">
+                    <div className="p-2 bg-orange-50 dark:bg-orange-500/10 rounded-lg shrink-0">
+                        <FileText className="w-5 h-5 text-orange-600" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                        <p className="text-xs text-muted-foreground mb-0.5">
+                            Details
+                        </p>
+                        <p className="text-sm line-clamp-3">
+                            {schedule.details}
+                        </p>
+                    </div>
+                </div>
+
+                {/* Additional Notes */}
+                {schedule.additional_notes && (
+                    <div className="bg-amber-50  dark:bg-amber-300/10 border border-amber-200 dark:border-amber-300/10 rounded-lg p-3">
+                        <p className="text-xs font-medium text-amber-800 dark:text-amber-300 mb-1">
+                            📝 Additional Notes
+                        </p>
+                        <p className="text-sm text-amber-900 dark:text-amber-300">
+                            {schedule.additional_notes}
+                        </p>
+                    </div>
+                )}
+
+                {/* Participant Info */}
+                <div className="pt-3 border-t">
+                    <div className="flex items-center justify-between gap-4 flex-wrap">
+                        {viewType === "company" ? (
+                            <div className="flex items-center gap-2">
+                                <Avatar className="w-[30px] aspect-square">
+                                    <AvatarImage
+                                        src={
+                                            schedule?.students?.avatar_url ||
+                                            "/images/default-avatar.jpg"
+                                        }
+                                        alt="image"
+                                    />
+                                    <AvatarFallback>?</AvatarFallback>
+                                </Avatar>
+                                <div>
+                                    <p className="text-xs text-muted-foreground">
+                                        Student
+                                    </p>
+                                    <p className="text-sm font-medium text-secondary-foreground">
+                                        {schedule.students.firstname}{" "}
+                                        {schedule.students.lastname}
+                                    </p>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex items-center gap-2">
+                                <div className="p-1.5 bg-gray-100 rounded-full">
+                                    <Building2 className="w-4 h-4 text-gray-600" />
+                                </div>
+                                <div>
+                                    <p className="text-xs text-gray-500">
+                                        Company
+                                    </p>
+                                    <p className="text-sm font-medium text-gray-900">
+                                        {schedule.companies.name}
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* <Button
+                            className={`${
+                                isPast
+                                    ? "bg-gray-100 text-gray-600 cursor-not-allowed"
+                                    : isToday
+                                      ? "bg-red-600 text-white hover:bg-red-700"
+                                      : "bg-blue-600 text-white hover:bg-blue-700"
+                            }`}
+                            disabled={isPast}
+                        >
+                            {isPast ? "Completed" : "View Details"}
+                        </Button> */}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}

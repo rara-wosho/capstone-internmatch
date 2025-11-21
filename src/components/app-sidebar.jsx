@@ -144,6 +144,10 @@ const navigationConfig = [
                         href: "/company/approved-applicants",
                         label: "Approved",
                     },
+                    {
+                        href: "/company/schedules",
+                        label: "Schedules",
+                    },
                 ],
             },
             {

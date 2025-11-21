@@ -13,6 +13,7 @@ import TitleText from "../ui/TitleText";
 import SecondaryLabel from "../ui/SecondaryLabel";
 import StatusPill from "../ui/StatusPill";
 import Link from "next/link";
+import TertiaryLabel from "../ui/TertiaryLabel";
 
 export default async function CompanyDashboardOverview({ userId }) {
     const { data, error, success } = await getCompanyDashboardOverview(userId);
@@ -34,9 +35,9 @@ export default async function CompanyDashboardOverview({ userId }) {
     const acceptedApplicants = data?.applicants?.filter(
         (e) => e.status === "accepted"
     );
-    const rejectedApplicants = data?.applicants?.filter(
-        (e) => e.status === "rejected"
-    );
+    // const rejectedApplicants = data?.applicants?.filter(
+    //     (e) => e.status === "rejected"
+    // );
     const reviewedApplicants = data?.applicants?.filter(
         (e) => e.status === "reviewed"
     );
@@ -56,7 +57,7 @@ export default async function CompanyDashboardOverview({ userId }) {
             </div>
             <div className="grow rounded-xl bg-card p-3 sm:p-4 border md:p-5 mb-2 sm:mb-3 md:mb-4">
                 <div className="flex items-center justify-between gap-2 mb-3 flex-wrap">
-                    <TitleText>Applicants</TitleText>
+                    <TertiaryLabel>Applicants</TertiaryLabel>
                     <div className="flex items-center gap-1">
                         <p className="text-sm text-secondary-foreground">
                             Currently :
@@ -103,17 +104,17 @@ export default async function CompanyDashboardOverview({ userId }) {
                         valueText={reviewedApplicants.length}
                         label={"Reviewed Applications"}
                     />
-                    <DashboardCountBox
+                    {/* <DashboardCountBox
                         href="/company/applicants?status=rejected"
                         icon={<UserRoundX />}
                         valueText={rejectedApplicants.length}
                         label={"Rejected Applicants"}
-                    />
+                    /> */}
                 </div>
             </div>
 
             <div className="rounded-xl bg-card p-3 sm:p-4 border md:p-5 mb-2 sm:mb-3 md:mb-4">
-                <TitleText>Exams</TitleText>
+                <TertiaryLabel>Exams</TertiaryLabel>
                 <div className="flex items-center flex-wrap gap-2 mt-2">
                     <DashboardCountBox
                         href="/company/manage-exam"

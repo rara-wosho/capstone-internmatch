@@ -220,12 +220,19 @@ export async function getApprovedApplicantsByCompany(companyId, search) {
             id,
             approved_at,
             applied_at,
+            approve_status,
+            status,
             students!inner(
                 firstname,
                 middlename,
                 lastname,
                 school,
-                course
+                course,
+                avatar_url,
+                barangay,
+                city,
+                province,
+                email
             )
             `
         )
@@ -253,19 +260,7 @@ export async function getApprovedApplicantsByCompany(companyId, search) {
         return { success: false, error: error.message, data: null };
     }
 
-    // ✅ Format returned data cleanly
-    const formattedData = (data ?? []).map((d) => ({
-        id: d.id,
-        approved_at: d.approved_at,
-        applied_at: d.applied_at,
-        firstname: d.students.firstname,
-        middlename: d.students.middlename,
-        lastname: d.students.lastname,
-        school: d.students.school,
-        course: d.students.course,
-    }));
-
-    return { success: true, error: "", data: formattedData };
+    return { success: true, error: "", data };
 }
 
 // Approve the application of a student

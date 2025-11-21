@@ -1,5 +1,6 @@
 import SearchField from "@/components/forms/SearchStudent";
 import ApprovedApplicantsTable from "@/components/tables/ApprovedApplicantsTable";
+import ApplicantCard from "@/components/ui/ApplicantCard";
 import BorderBox from "@/components/ui/BorderBox";
 import EmptyUi from "@/components/ui/EmptyUi";
 import ErrorUi from "@/components/ui/ErrorUi";
@@ -25,6 +26,8 @@ export default async function ApprovedApplicantsPage({ searchParams }) {
     if (!success || error) {
         return <ErrorUi secondaryMessage={error} />;
     }
+
+    console.log("approved", approvedApplicants);
 
     return (
         <div>
@@ -57,9 +60,17 @@ export default async function ApprovedApplicantsPage({ searchParams }) {
                     }
                 />
             ) : (
-                <>
-                    <ApprovedApplicantsTable applicants={approvedApplicants} />
-                </>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {/* <ApprovedApplicantsTable applicants={approvedApplicants} />  */}
+
+                    {approvedApplicants?.map((applicant) => (
+                        <ApplicantCard
+                            type="approved"
+                            key={applicant.id}
+                            applicant={applicant}
+                        />
+                    ))}
+                </div>
             )}
         </div>
     );

@@ -1,10 +1,11 @@
-import { Mail, MapPin } from "lucide-react";
+import { ChevronRight, Mail, MapPin } from "lucide-react";
 import { Button } from "./button";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-export default function ApplicantCard({ applicant }) {
+export default function ApplicantCard({ applicant, type = "default" }) {
+    const student = applicant?.students;
     return (
         <div className="rounded-xl shadow bg-card p-3 md:p-4 lg:p-5 border flex flex-col items-start">
             <div className="w-full flex items-start justify-between">
@@ -12,14 +13,14 @@ export default function ApplicantCard({ applicant }) {
                     <Avatar className="w-24 aspect-square">
                         <AvatarImage
                             src={
-                                applicant?.students?.avatar_url ||
+                                student?.avatar_url ||
                                 "/images/default-avatar.jpg"
                             }
                             alt="applicant-image"
                         />
 
                         <AvatarFallback>
-                            {applicant?.students?.firstname.charAt(0)}
+                            {student?.firstname.charAt(0)}
                         </AvatarFallback>
                     </Avatar>
                 </div>
@@ -51,37 +52,54 @@ export default function ApplicantCard({ applicant }) {
             )}
 
             <p className="font-medium mb-1 text-start">
-                {applicant?.students?.firstname} {applicant?.students?.lastname}
+                {student?.firstname} {student?.lastname}
             </p>
             <p className="text-sm text-muted-foreground text-start">
-                {applicant?.students?.school || "School not set"}
+                {student?.school || "School not set"}
             </p>
 
             <div className="flex flex-col gap-2 items-start w-full py-3">
-                <div className="flex items-center gap-1 text-muted-foreground">
-                    <MapPin size={14} />
-                    <p className="text-sm">
-                        {applicant?.students?.barangay},{" "}
-                        {applicant?.students?.city},{" "}
-                        {applicant?.students?.province}
-                    </p>
-                </div>
+                {student?.barangay && student?.city && student?.province && (
+                    <div className="flex items-center gap-1 text-muted-foreground">
+                        <MapPin size={14} />
+                        <p className="text-sm">
+                            {student?.barangay}, {student?.city},{" "}
+                            {student?.province}
+                        </p>
+                    </div>
+                )}
                 <div className="flex items-center gap-1 text-muted-foreground">
                     <Mail size={14} />
-                    <p className="text-sm">{applicant?.students?.email}</p>
+                    <p className="text-sm">{student?.email}</p>
                 </div>
             </div>
-
-            <Button
-                className="w-full mt-2"
-                size="sm"
-                variant="outlineWhite"
-                asChild
-            >
-                <Link href={`/company/applicants/${applicant?.id}`}>
-                    View Details
-                </Link>
-            </Button>
+            <div className="w-full mt-auto pt-2">
+                {type === "default" ? (
+                    <Button
+                        className="w-full"
+                        size="sm"
+                        variant="outlineWhite"
+                        asChild
+                    >
+                        <Link href={`/company/applicants/${applicant?.id}`}>
+                            View Details
+                        </Link>
+                    </Button>
+                ) : (
+                    <Button
+                        className="w-full"
+                        size="sm"
+                        variant="outlineWhite"
+                        asChild
+                    >
+                        <Link
+                            href={`/company/approved-applicants/${applicant?.id}`}
+                        >
+                            Next Steps <ChevronRight />
+                        </Link>
+                    </Button>
+                )}
+            </div>
         </div>
     );
 }

@@ -11,8 +11,6 @@ import {
 } from "@/components/ui/table";
 import { dateFormatter } from "@/utils/date-formatter";
 import BorderBox from "../ui/BorderBox";
-import { Suspense } from "react";
-import SearchField from "../forms/SearchStudent";
 
 export default function ApprovedApplicantsTable({ applicants }) {
     return (

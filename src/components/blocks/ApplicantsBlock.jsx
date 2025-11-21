@@ -3,6 +3,9 @@ import ErrorUi from "../ui/ErrorUi";
 import BorderBox from "../ui/BorderBox";
 import TitleText from "../ui/TitleText";
 import BarChart from "../charts/BarChart";
+import TertiaryLabel from "../ui/TertiaryLabel";
+import { Input } from "../ui/input";
+import FormLabel from "../ui/FormLabel";
 
 export default async function ApplicantsBlock({ userId }) {
     const supabase = await createClient();
@@ -63,12 +66,13 @@ export default async function ApplicantsBlock({ userId }) {
     return (
         <div>
             <div className="border rounded-xl bg-card shadow-xs">
-                <div className="px-3 md:px-5 py-3 border-b flex items-center gap-2">
-                    <TitleText>Total applicants</TitleText>
+                <div className="px-3 md:px-5 py-3 border-b flex flex-wrap items-center gap-2">
+                    <TertiaryLabel>Total applicants</TertiaryLabel>
                     <div className="size-6 flex items-center justify-center bg-muted border rounded sm">
                         <p className="tabular-nums">{data?.length || 0}</p>
                     </div>
                 </div>
+
                 <BorderBox>
                     <BarChart
                         data={chartData}

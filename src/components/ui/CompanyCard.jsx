@@ -2,15 +2,10 @@
 
 import Image from "next/image";
 import { Button } from "./button";
-import {
-    ArrowUpRight,
-    Briefcase,
-    BriefcaseBusiness,
-    MapPin,
-} from "lucide-react";
+import { ArrowUpRight, MapPin } from "lucide-react";
 import Link from "next/link";
-import Logo from "./Logo";
 import { usePathname } from "next/navigation";
+import Logo from "./Logo";
 
 export default function CompanyCard({ company }) {
     const pathname = usePathname();

@@ -1,4 +1,5 @@
 import ErrorUi from "@/components/ui/ErrorUi";
+import Logo from "@/components/ui/Logo";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import TitleText from "@/components/ui/TitleText";
 import { createClient } from "@/lib/supabase/server";
