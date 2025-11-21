@@ -1,5 +1,7 @@
 import ApplicantsBlock from "@/components/blocks/ApplicantsBlock";
 import CompanyDashboardOverview from "@/components/blocks/CompanyDashboardOverview";
+import CompanyScheduleOverview from "@/components/blocks/CompanyScheduleOverview";
+import BorderBox from "@/components/ui/BorderBox";
 import DashboardCountBox from "@/components/ui/DashboardCountBox";
 import ErrorUi from "@/components/ui/ErrorUi";
 import { getCurrentUser } from "@/lib/actions/auth";
@@ -19,6 +21,10 @@ export default async function Page() {
         <div>
             <CompanyDashboardOverview userId={user.id} />
             <ApplicantsBlock userId={user.id} />
+
+            <BorderBox className="border rounded-xl bg-card mt-3">
+                <CompanyScheduleOverview id={user.id} />
+            </BorderBox>
         </div>
     );
 }

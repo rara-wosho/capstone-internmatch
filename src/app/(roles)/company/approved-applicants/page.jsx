@@ -1,5 +1,4 @@
 import SearchField from "@/components/forms/SearchStudent";
-import ApprovedApplicantsTable from "@/components/tables/ApprovedApplicantsTable";
 import ApplicantCard from "@/components/ui/ApplicantCard";
 import BorderBox from "@/components/ui/BorderBox";
 import EmptyUi from "@/components/ui/EmptyUi";
