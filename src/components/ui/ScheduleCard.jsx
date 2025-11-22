@@ -20,6 +20,7 @@ import { useTransition } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import TertiaryLabel from "./TertiaryLabel";
 
 export default function ScheduleCard({
     schedule,
@@ -65,7 +66,7 @@ export default function ScheduleCard({
             const { error } = await supabase
                 .from("schedules")
                 .delete()
-                .eq("id", schedule.id);
+                .eq("id", schedule.schedule_id);
 
             if (error) {
                 toast.error("Unable to delete schedule");
@@ -233,29 +234,35 @@ export default function ScheduleCard({
 
                 {/* Participant Info */}
                 <div className="pt-3 border-t">
-                    <div className="flex items-center justify-between gap-4 flex-wrap">
+                    <div className="flex flex-col gap-4">
+                        <TertiaryLabel>Participants</TertiaryLabel>
                         {viewType === "company" ? (
-                            <div className="flex items-center gap-2">
-                                <Avatar className="w-[30px] aspect-square">
-                                    <AvatarImage
-                                        src={
-                                            schedule?.students?.avatar_url ||
-                                            "/images/default-avatar.jpg"
-                                        }
-                                        alt="image"
-                                    />
-                                    <AvatarFallback>?</AvatarFallback>
-                                </Avatar>
-                                <div>
-                                    <p className="text-xs text-muted-foreground">
-                                        Student
-                                    </p>
-                                    <p className="text-sm font-medium text-secondary-foreground">
-                                        {schedule.students.firstname}{" "}
-                                        {schedule.students.lastname}
-                                    </p>
+                            schedule?.students?.map((student) => (
+                                <div
+                                    key={student.id}
+                                    className="flex items-center gap-2"
+                                >
+                                    <Avatar className="w-[30px] aspect-square">
+                                        <AvatarImage
+                                            src={
+                                                student?.avatar_url ||
+                                                "/images/default-avatar.jpg"
+                                            }
+                                            alt="image"
+                                        />
+                                        <AvatarFallback>?</AvatarFallback>
+                                    </Avatar>
+                                    <div>
+                                        <p className="text-xs text-muted-foreground">
+                                            Student
+                                        </p>
+                                        <p className="text-sm font-medium text-secondary-foreground">
+                                            {student.firstname}{" "}
+                                            {student.lastname}
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
+                            ))
                         ) : (
                             <div className="flex items-center gap-2">
                                 <div className="p-1.5 bg-gray-100 rounded-full">

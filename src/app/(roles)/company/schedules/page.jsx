@@ -26,7 +26,7 @@ export default async function SchedulesPage() {
                 <div className="space-y-3">
                     {data.map((sched) => (
                         <ScheduleCard
-                            key={sched.id}
+                            key={sched.schedule_id}
                             schedule={sched}
                             viewType="company"
                         />

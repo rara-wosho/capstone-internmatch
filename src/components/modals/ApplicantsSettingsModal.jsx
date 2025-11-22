@@ -24,14 +24,18 @@ import { Loader, Settings } from "lucide-react";
 import { Switch } from "../ui/switch";
 import { useState, useTransition, useEffect } from "react";
 import { useSession } from "@/context/SessionContext";
-import { notFound } from "next/navigation";
+import { notFound, useSearchParams } from "next/navigation";
 import { updateApplicationSettings } from "@/lib/actions/company";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
 
 export default function ApplicantsSettingsModal() {
+    const searchParams = useSearchParams();
+
+    const openSettings = searchParams.get("open");
+
     const { userData } = useSession();
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(openSettings === "true");
     const [isFetching, setIsFetching] = useState(false);
     const [isPending, startTransition] = useTransition();
 
@@ -148,14 +152,14 @@ export default function ApplicantsSettingsModal() {
                                         <SelectValue placeholder="Choose settings" />
                                     </SelectTrigger>
                                     <SelectContent>
+                                        <SelectItem value="anytime">
+                                            Anytime (No examinations required)
+                                        </SelectItem>
                                         <SelectItem value="all">
                                             After completing all exams
                                         </SelectItem>
                                         <SelectItem value="some">
                                             After completing at least one exam
-                                        </SelectItem>
-                                        <SelectItem value="anytime">
-                                            Anytime
                                         </SelectItem>
                                     </SelectContent>
                                 </Select>

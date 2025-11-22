@@ -50,7 +50,7 @@ export default async function Page({ params }) {
     const { data: applicant, error } = await supabase
         .from("applicants")
         .select(
-            "id, applied_at, approve_status, cannot_proceed_message, resume_link, portfolio_link, status, introduction, students!inner(id, firstname, lastname, gender, school, email, avatar_url, barangay, city, province, assessment_attempt(id, submitted_at, assessment_score, assessment_total_item, assessment_test(assessment_title))), companies(name, email)"
+            "id, applied_at, approve_status, cannot_proceed_message, resume_link, portfolio_link, status, introduction, students!inner(id, firstname, lastname, gender, school, email, avatar_url, barangay, city, province, interests(interest), assessment_attempt(id, submitted_at, assessment_score, assessment_total_item, assessment_test(assessment_title))), companies(name, email)"
         )
         .eq("id", applicantId)
         .eq("company_id", user?.id)
@@ -72,6 +72,7 @@ export default async function Page({ params }) {
 
     const student = applicant?.students || [];
     const assessmentAttempt = applicant?.students?.assessment_attempt || [];
+    const studentInterests = applicant?.students?.interests?.interest || [];
 
     return (
         <div>
@@ -87,7 +88,11 @@ export default async function Page({ params }) {
                 {/* ======= ABOUT THE STUDENT SECTION ============= */}
                 <BorderBox className="rounded-xl border bg-card shadow-xs mb-3">
                     <div className="flex items-center justify-between flex-wrap">
-                        <Link href={student?.avatar_url || "#"} target="_blank">
+                        <Link
+                            href={student?.avatar_url || "#"}
+                            target="_blank"
+                            className={`${!student?.avatar_url && "pointer-events-none"}`}
+                        >
                             <Avatar className="w-20 sm:w-28 aspect-square mb-4">
                                 <AvatarImage
                                     alt="avatar"
@@ -204,12 +209,30 @@ export default async function Page({ params }) {
                         )}
                     </div>
 
-                    <div className="border-t pt-4">
+                    {/* INTRODUCTION SECTION  */}
+                    <div className="border-y py-4">
                         <FormLabel>Introduction</FormLabel>
                         <p className="text-sm text-neutral-700 dark:text-neutral-300 whitespace-pre-wrap">
                             {applicant?.introduction}
                         </p>
                     </div>
+
+                    {/* INTERESTS SECTION  */}
+                    {studentInterests?.length > 0 && (
+                        <div className="mt-3">
+                            <FormLabel className="mb-1">Interests</FormLabel>
+                            <div className="flex items-center gap-2 flex-wrap">
+                                {studentInterests?.map((i, index) => (
+                                    <div
+                                        key={index}
+                                        className="px-3 py-1 text-sm rounded-full bg-secondary"
+                                    >
+                                        {i}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </BorderBox>
 
                 {applicant.approve_status === "approved" && (

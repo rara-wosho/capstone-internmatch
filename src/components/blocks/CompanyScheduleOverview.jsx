@@ -15,8 +15,7 @@ export default async function CompanyScheduleOverview({ id }) {
             date,
             time,
             location,
-            details,
-            students!inner(firstname,lastname)
+            details
         `
         )
         .eq("company_id", id)
@@ -42,8 +41,7 @@ export default async function CompanyScheduleOverview({ id }) {
                     No Upcoming Schedules
                 </h3>
                 <p className="text-muted-foreground text-sm">
-                    You don't have any upcoming interviews or orientations
-                    scheduled.
+                    You don't have any upcoming schedules.
                 </p>
             </div>
         );
@@ -78,11 +76,11 @@ export default async function CompanyScheduleOverview({ id }) {
     const getScheduleColor = (type) => {
         switch (type) {
             case "interview":
-                return "bg-blue-100 text-blue-800 border-blue-200";
+                return "bg-blue-100 dark:bg-blue-500/10 text-blue-600 border-blue-200";
             case "orientation":
-                return "bg-green-100 text-green-800 border-green-200";
-            case "document_review":
-                return "bg-purple-100 text-purple-800 border-purple-200";
+                return "bg-green-100 dark:bg-green-500/10 text-green-800 dark:text-green-400 border-green-200";
+            case "training":
+                return "bg-purple-100 dark:bg-purple-500/10 text-purple-600 border-purple-200";
             default:
                 return "bg-gray-100 text-gray-800 border-gray-200";
         }
@@ -153,7 +151,7 @@ export default async function CompanyScheduleOverview({ id }) {
                         className="border rounded-lg p-4 hover:shadow-md transition-shadow duration-200"
                     >
                         <div className="flex items-start justify-between mb-2">
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
                                 <div
                                     className={`p-1 rounded-full ${getScheduleColor(schedule.type)}`}
                                 >
@@ -170,17 +168,6 @@ export default async function CompanyScheduleOverview({ id }) {
                         <h4 className="font-semibold text-sm mb-2 line-clamp-1">
                             {schedule.title}
                         </h4>
-
-                        {/* Student Info */}
-                        {schedule.students && (
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                                <Users className="h-3 w-3" />
-                                <span>
-                                    {schedule.students.firstname}{" "}
-                                    {schedule.students.lastname}
-                                </span>
-                            </div>
-                        )}
 
                         {/* Schedule Details */}
                         <div className="space-y-2">
@@ -212,7 +199,7 @@ export default async function CompanyScheduleOverview({ id }) {
             </div>
 
             {/* View All Link */}
-            {schedules.length >= 5 && (
+            {schedules.length >= 4 && (
                 <div className="pt-2 border-t">
                     <button className="text-sm text-primary hover:text-primary/80 font-medium">
                         View all schedules →

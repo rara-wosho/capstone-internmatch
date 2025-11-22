@@ -223,6 +223,7 @@ export async function getApprovedApplicantsByCompany(companyId, search) {
             approve_status,
             status,
             students!inner(
+            id,
                 firstname,
                 middlename,
                 lastname,

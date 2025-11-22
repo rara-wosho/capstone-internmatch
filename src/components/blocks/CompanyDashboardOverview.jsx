@@ -62,7 +62,7 @@ export default async function CompanyDashboardOverview({ userId }) {
                         <p className="text-sm text-secondary-foreground">
                             Currently :
                         </p>
-                        <Link href="/company/applicants">
+                        <Link href="/company/applicants?open=true">
                             <StatusPill
                                 label={
                                     data.accept_applicants

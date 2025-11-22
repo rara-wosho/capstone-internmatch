@@ -26,8 +26,6 @@ export default async function ApprovedApplicantsPage({ searchParams }) {
         return <ErrorUi secondaryMessage={error} />;
     }
 
-    console.log("approved", approvedApplicants);
-
     return (
         <div>
             <div className="mb-3">

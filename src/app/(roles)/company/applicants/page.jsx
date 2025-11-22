@@ -81,7 +81,9 @@ export default async function ApplicantsPage({ searchParams }) {
                 </SecondaryLabel>
 
                 <div className="ms-auto">
-                    <ApplicantsSettingsModal />
+                    <Suspense fallback={null}>
+                        <ApplicantsSettingsModal />
+                    </Suspense>
                 </div>
             </div>
 
