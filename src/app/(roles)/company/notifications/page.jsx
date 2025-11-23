@@ -1,137 +1,79 @@
+// app/notifications/page.jsx
 "use client";
 
+import { StudentApplicationSubmitted } from "@/components/email/StudentApplicationSubmitted";
+import { Button } from "@/components/ui/button";
 import NotificationCard from "@/components/ui/NotificationCard";
-import SecondaryLabel from "@/components/ui/SecondaryLabel";
-import { getNotificationsByUser } from "@/lib/actions/notification";
-import { createClient } from "@/lib/supabase/client";
-import { Bell } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import Wrapper from "@/components/Wrapper";
+import { useNotifications } from "@/context/NotificationContext";
+import { CheckCircle2, Bell } from "lucide-react";
 
-export default function CompanyNotificationsPage() {
-    const [notifications, setNotifications] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const router = useRouter();
-
-    // Fetch notifications on component mount
-    useEffect(() => {
-        const fetchNotifications = async () => {
-            try {
-                const { data, error } = await getNotificationsByUser();
-                if (error) {
-                    console.error("Error fetching notifications:", error);
-                    return;
-                }
-                setNotifications(data || []);
-            } catch (error) {
-                console.error("Error:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchNotifications();
-    }, []);
-
-    const handleMarkAsRead = async (notificationId) => {
-        try {
-            // Update in database
-            const supabase = createClient();
-            const { error } = await supabase
-                .from("notifications")
-                .update({ is_read: true })
-                .eq("id", notificationId);
-
-            if (error) throw error;
-
-            // Update local state
-            setNotifications(
-                notifications.map((notif) =>
-                    notif.id === notificationId
-                        ? { ...notif, is_read: true }
-                        : notif
-                )
-            );
-        } catch (error) {
-            console.error("Error marking as read:", error);
-        }
-    };
-
-    const handleDelete = async (notificationId) => {
-        try {
-            // Delete from database
-            const supabase = createClient();
-            const { error } = await supabase
-                .from("notifications")
-                .delete()
-                .eq("id", notificationId);
-
-            if (error) throw error;
-
-            // Update local state
-            setNotifications(
-                notifications.filter((notif) => notif.id !== notificationId)
-            );
-        } catch (error) {
-            console.error("Error deleting notification:", error);
-        }
-    };
-
-    const unreadCount = notifications.filter((notif) => !notif.is_read).length;
+export default function NotificationsPage() {
+    const { notifications, loading, unreadCount, markAllAsRead } =
+        useNotifications();
 
     if (loading) {
         return (
-            <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                    <div className="h-6 w-32 bg-gray-200 rounded animate-pulse" />
-                    <div className="h-6 w-6 bg-gray-200 rounded-full animate-pulse" />
+            <Wrapper size="sm">
+                <div className="space-y-3">
+                    <Skeleton className="h-8 rounded-sm w-1/4"></Skeleton>
+                    {[...Array(5)].map((_, i) => (
+                        <Skeleton
+                            className="h-24 rounded-sm"
+                            key={i}
+                        ></Skeleton>
+                    ))}
                 </div>
-                {[...Array(3)].map((_, i) => (
-                    <div
-                        key={i}
-                        className="border rounded-lg p-4 animate-pulse"
-                    >
-                        <div className="flex gap-3">
-                            <div className="w-8 h-8 bg-gray-200 rounded-full" />
-                            <div className="flex-1 space-y-2">
-                                <div className="h-4 bg-gray-200 rounded w-3/4" />
-                                <div className="h-3 bg-gray-200 rounded w-full" />
-                                <div className="h-3 bg-gray-200 rounded w-2/3" />
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
+            </Wrapper>
         );
     }
 
     return (
-        <div className="space-y-3">
-            <div className="flex items-center justify-between">
-                <SecondaryLabel>Notifications</SecondaryLabel>
+        <Wrapper size="sm">
+            <div className="flex items-center justify-between mb-3">
+                <div>
+                    <h1 className="text-2xl font-bold">Notifications</h1>
+                    <p className="text-muted-foreground">
+                        {unreadCount > 0
+                            ? `${unreadCount} unread notification${unreadCount !== 1 ? "s" : ""}`
+                            : "All caught up!"}
+                    </p>
+                </div>
+
                 {unreadCount > 0 && (
-                    <div className="bg-primary text-primary-foreground px-2 rounded-full">
-                        {unreadCount} unread
-                    </div>
+                    <Button
+                        onClick={markAllAsRead}
+                        variant="outline"
+                        className="flex items-center gap-2"
+                    >
+                        <CheckCircle2 className="h-4 w-4" />
+                        Mark all as read
+                    </Button>
                 )}
             </div>
 
             {notifications.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                    <Bell className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>No notifications</p>
-                    <p className="text-sm mt-1">You're all caught up!</p>
+                <div className="text-center py-12">
+                    <Bell className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-muted-foreground mb-2">
+                        No notifications
+                    </h3>
+                    <p className="text-muted-foreground">
+                        You're all caught up! Check back later for new
+                        notifications.
+                    </p>
                 </div>
             ) : (
-                notifications.map((notification) => (
-                    <NotificationCard
-                        key={notification.id}
-                        notification={notification}
-                        onMarkAsRead={handleMarkAsRead}
-                        onDelete={handleDelete}
-                    />
-                ))
+                <div className="space-y-4">
+                    {notifications.map((notification) => (
+                        <NotificationCard
+                            key={notification.id}
+                            notification={notification}
+                        />
+                    ))}
+                </div>
             )}
-        </div>
+        </Wrapper>
     );
 }

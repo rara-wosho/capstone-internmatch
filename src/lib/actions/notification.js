@@ -54,6 +54,36 @@ export async function getNotificationsByUser(options = {}) {
     return { data: notifications, error: null };
 }
 
+// Function to get notification count (useful for header indicator)
+export async function getNotificationCount(filter = "all") {
+    const { user } = await getCurrentUser();
+
+    if (!user || !user?.id) {
+        return { count: 0, error: "Unauthorized user." };
+    }
+
+    const supabase = await createClient();
+
+    let query = supabase
+        .from("notifications")
+        .select("*", { count: "exact", head: true })
+        .eq("recipient_id", user.id);
+
+    if (filter === "unread") {
+        query = query.eq("is_read", false);
+    } else if (filter === "read") {
+        query = query.eq("is_read", true);
+    }
+
+    const { count, error } = await query;
+
+    if (error) {
+        return { count: 0, error: error.message };
+    }
+
+    return { count: count || 0, error: null };
+}
+
 // Server action for marking as read
 export async function markNotificationAsRead(notificationId) {
     const { user } = await getCurrentUser();

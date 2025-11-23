@@ -23,45 +23,17 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useNotifications } from "@/context/NotificationContext";
 
-export default function NotificationCard({
-    notification,
-    onMarkAsRead,
-    onDelete,
-}) {
-    const [isRead, setIsRead] = useState(notification?.is_read || false);
-    const [isDeleted, setIsDeleted] = useState(false);
-
-    if (isDeleted) {
-        return null;
-    }
+export default function NotificationCard({ notification }) {
+    const { markAsRead, deleteNotification } = useNotifications();
 
     const handleMarkAsRead = () => {
-        setIsRead(true);
-        onMarkAsRead?.(notification.id);
+        markAsRead(notification.id);
     };
 
     const handleDelete = () => {
-        setIsDeleted(true);
-        onDelete?.(notification.id);
-    };
-
-    // Get icon based on notification type
-    const getNotificationIcon = () => {
-        switch (notification.type) {
-            case "schedule":
-                return <Calendar className="h-4 w-4" />;
-            case "application":
-                return <User className="h-4 w-4" />;
-            case "exam":
-                return <FileText className="h-4 w-4" />;
-            case "message":
-                return <Mail className="h-4 w-4" />;
-            case "alert":
-                return <AlertCircle className="h-4 w-4" />;
-            default:
-                return <Bell className="h-4 w-4" />;
-        }
+        deleteNotification(notification.id);
     };
 
     // Format timestamp
@@ -91,7 +63,7 @@ export default function NotificationCard({
         <div
             className={cn(
                 "p-3 transition-all duration-200 hover:shadow-md rounded-sm bg-card",
-                isRead ? "" : ""
+                notification.is_read ? "" : ""
             )}
         >
             <div className="flex items-start justify-between">
@@ -99,26 +71,26 @@ export default function NotificationCard({
                     <div
                         className={cn(
                             "p-2 rounded-full mt-1",
-                            isRead
+                            notification.is_read
                                 ? "bg-secondary text-foreground"
                                 : "bg-primary text-white"
                         )}
                     >
-                        {getNotificationIcon()}
+                        <Bell />
                     </div>
                     <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                             <h3
                                 className={cn(
                                     "font-semibold text-sm",
-                                    isRead
+                                    notification.is_read
                                         ? "text-muted-foreground"
                                         : "text-secondary-foreground"
                                 )}
                             >
                                 {notification.title}
                             </h3>
-                            {!isRead && (
+                            {!notification.is_read && (
                                 <div className="bg-primary rounded-full px-1 text-primary-foreground text-xs">
                                     New
                                 </div>
@@ -127,7 +99,7 @@ export default function NotificationCard({
                         <p
                             className={cn(
                                 "text-sm",
-                                isRead
+                                notification.is_read
                                     ? "text-muted-foreground"
                                     : "text-secondary-foreground"
                             )}
@@ -149,7 +121,7 @@ export default function NotificationCard({
                                 <span className="text-sm text-gray-500">
                                     {formatTime(notification.created_at)}
                                 </span>
-                                {isRead && (
+                                {notification.is_read && (
                                     <CheckCircle2
                                         size={14}
                                         className="text-green-500"
@@ -171,7 +143,7 @@ export default function NotificationCard({
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
-                        {!isRead && (
+                        {!notification.is_read && (
                             <DropdownMenuItem
                                 onClick={handleMarkAsRead}
                                 className="flex items-center gap-2 cursor-pointer"

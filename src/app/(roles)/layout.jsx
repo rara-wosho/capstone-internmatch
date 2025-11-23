@@ -7,6 +7,7 @@ import { getCurrentUser } from "@/lib/actions/auth";
 import ErrorUi from "@/components/ui/ErrorUi";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { NotificationProvider } from "@/context/NotificationContext";
 
 export default async function DashboardLayout({ children }) {
     const supabase = await createClient();
@@ -78,16 +79,20 @@ export default async function DashboardLayout({ children }) {
 
     return (
         <SessionProvider initialSession={session} profileData={profileData}>
-            <SidebarProvider>
-                <AppSidebar profileData={profileData} />
-                <main className="w-full">
-                    <div className="min-h-screen">
-                        <DashboardHeader profileData={profileData} />
-                        <div className="p-3 md:p-5 lg:p-8 mb-5">{children}</div>
-                    </div>
-                    <PrivateFooter />
-                </main>
-            </SidebarProvider>
+            <NotificationProvider>
+                <SidebarProvider>
+                    <AppSidebar profileData={profileData} />
+                    <main className="w-full">
+                        <div className="min-h-screen">
+                            <DashboardHeader profileData={profileData} />
+                            <div className="p-3 md:p-5 lg:p-8 mb-5">
+                                {children}
+                            </div>
+                        </div>
+                        <PrivateFooter />
+                    </main>
+                </SidebarProvider>
+            </NotificationProvider>
         </SessionProvider>
     );
 }

@@ -30,7 +30,12 @@ import { submitApplication } from "@/lib/actions/application";
 import { toast } from "sonner";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
-export default function ApplyModal({ companyId, accept_applicants, term }) {
+export default function ApplyModal({
+    companyEmail,
+    companyId,
+    accept_applicants,
+    term,
+}) {
     const { userData } = useSession();
     const [isPending, startTransition] = useTransition();
 
@@ -74,8 +79,10 @@ export default function ApplyModal({ companyId, accept_applicants, term }) {
         startTransition(async () => {
             const { success, error } = await submitApplication({
                 ...formData,
+                companyEmail,
                 company_id: companyId,
                 student_id: userData.id,
+                student_name: `${userData.firstname} ${userData.lastname}`,
                 status: "pending",
             });
 
@@ -157,7 +164,7 @@ export default function ApplyModal({ companyId, accept_applicants, term }) {
                     {applied ? "Applied" : "Apply"}
                 </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="sm:max-w-3xl">
                 <DialogHeader>
                     <DialogTitle className="text-left">
                         <SecondaryLabel>Apply for Internship</SecondaryLabel>
@@ -168,7 +175,7 @@ export default function ApplyModal({ companyId, accept_applicants, term }) {
                         the company can review your application.
                     </DialogDescription>
                 </DialogHeader>
-                <ScrollArea className="max-w-[600px] mx-auto w-full max-h-[60svh]">
+                <ScrollArea className="mx-auto w-full max-h-[60svh]">
                     {error && <ErrorUi secondaryMessage={error} />}
 
                     {loading ? (

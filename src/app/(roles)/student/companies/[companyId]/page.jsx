@@ -29,7 +29,6 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { notFound } from "next/navigation";
 
 const links = [
     { href: "", label: "Home" },
@@ -123,6 +122,7 @@ export default async function Page({ params }) {
                                 </Button>
                                 <div className="order-1 sm:order-2">
                                     <ApplyModal
+                                        companyEmail={data?.email}
                                         companyId={companyId}
                                         accept_applicants={
                                             data?.accept_applicants

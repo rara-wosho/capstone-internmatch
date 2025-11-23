@@ -46,6 +46,8 @@ export default function NextStepSection({ applicants, studentId }) {
         return selectedApplicants.some((student) => student.id === studentId);
     };
 
+    const hasNoApplicants = applicants?.length == 0;
+
     return (
         <div>
             <div className="flex items-center gap-1.5 sm:gap-2 mt-4 flex-wrap mb-4">
@@ -183,18 +185,31 @@ export default function NextStepSection({ applicants, studentId }) {
                 </BorderBox>
             )}
 
-            {/* Empty State when no applicants selected */}
-            {selectedApplicants.length === 0 && (
+            {/* Empty State when no applicants in the list */}
+            {hasNoApplicants ? (
                 <div className="text-center py-8 border-2 border-dashed border-muted rounded-lg">
-                    <Handshake className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
                     <h3 className="font-medium text-lg mb-2">
-                        No Applicants Selected
+                        No Approved Applicants
                     </h3>
                     <p className="text-muted-foreground text-sm max-w-md mx-auto">
-                        Select applicants from the list above to create
-                        schedules or request additional documents.
+                        You can only create schedule or request an additional
+                        document if there are approved applicants from the list.
                     </p>
                 </div>
+            ) : (
+                //  Empty State when no applicants selected
+                selectedApplicants.length === 0 && (
+                    <div className="text-center py-8 border-2 border-dashed border-muted rounded-lg">
+                        <Handshake className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                        <h3 className="font-medium text-lg mb-2">
+                            No Applicants Selected
+                        </h3>
+                        <p className="text-muted-foreground text-sm max-w-md mx-auto">
+                            Select applicants from the list above to create
+                            schedules or request additional documents.
+                        </p>
+                    </div>
+                )
             )}
         </div>
     );

@@ -9,18 +9,59 @@ import { ApplicationRejected } from "@/components/email/ApplicationRejected";
 import { ApplicationApproved } from "@/components/email/ApplicationApproved";
 import { ApplicationCannotProceed } from "@/components/email/ApplicationCannotProceed";
 import { CompanyStudentApproved } from "@/components/email/CompanyStudentApproved";
+import { StudentApplicationSubmitted } from "@/components/email/StudentApplicationSubmitted";
 
 export async function submitApplication(formData) {
     const supabase = await createClient();
+
+    // Extract data from formData
+    const {
+        student_name,
+        companyEmail,
+        resume_link,
+        portfolio_link,
+        introduction,
+        company_id,
+        student_id,
+        status,
+    } = formData;
 
     if (!formData.resume_link) {
         return { Success: false, error: "Please provide resume link." };
     }
 
-    const { error } = await supabase.from("applicants").insert(formData);
+    const formatData = {
+        resume_link,
+        portfolio_link,
+        introduction,
+        company_id,
+        student_id,
+        status,
+    };
+
+    const { error } = await supabase.from("applicants").insert(formatData);
 
     if (error) {
         return { success: false, error: error.message };
+    }
+
+    if (companyEmail) {
+        const resend = new Resend(process.env.RESEND_API_KEY);
+
+        const { data, error } = await resend.emails.send({
+            from: "InternMatch <donotreply@auth.internmatch.online>",
+            to: companyEmail,
+            subject: "New Application",
+            react: StudentApplicationSubmitted({ student_name }),
+            reply_to: companyEmail,
+        });
+
+        if (error) {
+            console.error(
+                "Error sending new application email to company. ",
+                error?.message
+            );
+        }
     }
 
     return { success: true, error: null };
