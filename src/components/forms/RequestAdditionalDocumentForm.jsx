@@ -1,13 +1,36 @@
+"use client";
+
+import { useState } from "react";
 import { Button } from "../ui/button";
 import FormLabel from "../ui/FormLabel";
 import { Input } from "../ui/input";
 import SecondaryLabel from "../ui/SecondaryLabel";
 import TertiaryLabel from "../ui/TertiaryLabel";
 import { Textarea } from "../ui/textarea";
+import { toast } from "sonner";
+import { Loader } from "lucide-react";
+import Form from "next/form";
 
-export default function RequestAdditionalDocumentForm() {
+export default function RequestAdditionalDocumentForm({
+    selectedApplicants,
+    setSelectedApplicants,
+}) {
+    const [loading, setLoading] = useState();
+
+    const submit = (e) => {
+        e.preventDefault();
+
+        setLoading(true);
+        setTimeout(() => {
+            toast.success("Successfully submitted request form.");
+            setLoading(false);
+            setSelectedApplicants([]);
+            e.target.reset();
+        }, 1300);
+    };
+
     return (
-        <div>
+        <Form onSubmit={submit}>
             <div className="mb-6">
                 <TertiaryLabel>Request additional documents</TertiaryLabel>
                 <p className="text-sm text-muted-foreground">
@@ -22,6 +45,7 @@ export default function RequestAdditionalDocumentForm() {
                 <div>
                     <FormLabel>Subject</FormLabel>
                     <Input
+                        required
                         defaultValue="Requesting for additional documents"
                         name="subject"
                     />
@@ -29,13 +53,17 @@ export default function RequestAdditionalDocumentForm() {
                 <div>
                     <FormLabel>Content</FormLabel>
                     <Textarea
+                        required
                         name="content"
                         placeholder="Enter content here..."
                     />
                 </div>
             </div>
 
-            <Button>Send Request</Button>
-        </div>
+            <Button disabled={loading}>
+                {loading && <Loader className="animate-spin" />}
+                Send Request
+            </Button>
+        </Form>
     );
 }

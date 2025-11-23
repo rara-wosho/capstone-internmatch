@@ -179,6 +179,7 @@ export default function NextStepSection({ applicants, studentId }) {
                     )}
                     {activeTab === "documents" && (
                         <RequestAdditionalDocumentsForm
+                            setSelectedApplicants={setSelectedApplicants}
                             selectedApplicants={selectedApplicants}
                         />
                     )}
