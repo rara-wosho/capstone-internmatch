@@ -14,14 +14,11 @@ import {
     Trash2,
     Loader,
 } from "lucide-react";
-import { Button } from "./button";
+
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
-import { useTransition } from "react";
-import { createClient } from "@/lib/supabase/client";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import TertiaryLabel from "./TertiaryLabel";
 import DeleteScheduleModal from "../modals/DeleteScheduleModal";
+import EditScheduleModal from "../modals/EditScheduleModal";
 
 export default function ScheduleCard({
     schedule,
@@ -89,24 +86,24 @@ export default function ScheduleCard({
                         <h3 className="text-lg font-semibold truncate">
                             {schedule.title}
                         </h3>
+
+                        {schedule?.updated_at && (
+                            <p className="text-xs text-muted-foreground">
+                                Updated: {dateFormatter(schedule.updated_at)}
+                            </p>
+                        )}
                     </div>
 
                     {/* Actions Dropdown */}
                     {!isPast && (
                         <div className="relative group">
-                            <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                            <button className="p-2 hover:bg-secondary rounded-lg transition-colors">
                                 <MoreVertical className="w-5 h-5 text-gray-500" />
                             </button>
 
                             {/* Dropdown Menu */}
                             <div className="absolute right-0 top-full mt-1 w-48 bg-neutral-50 overflow-hidden rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
-                                {/* <button
-                                    onClick={onEdit}
-                                    className="cursor-pointer w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                                >
-                                    <Edit className="w-4 h-4" />
-                                    Edit Schedule
-                                </button> */}
+                                <EditScheduleModal editData={schedule} />
 
                                 <DeleteScheduleModal
                                     scheduleId={schedule.schedule_id}

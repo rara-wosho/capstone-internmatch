@@ -21,7 +21,7 @@ export async function getCompanySchedules() {
     const { data: schedules, error } = await supabase
         .from("schedules")
         .select(
-            "id, title, details, time, date, additional_notes, location, type, schedule_student_ids(id, students(id, firstname, lastname, email, school))"
+            "id, title, details, updated_at, time, date, additional_notes, location, type, schedule_student_ids(id, students(id, firstname, lastname, email, school))"
         )
         .eq("company_id", user.id)
         .order("date", { ascending: false })
@@ -51,6 +51,7 @@ export async function getCompanySchedules() {
             title: schedule.title,
             details: schedule.details,
             time: schedule.time,
+            updated_at: schedule?.updated_at,
             date: schedule.date,
             additional_notes: schedule.additional_notes,
             location: schedule.location,
@@ -361,6 +362,80 @@ export async function createSchedule(prevState, formData) {
         return {
             success: true,
             message: "Schedule created successfully.",
+            time: Date.now(),
+        };
+    } catch (error) {
+        console.error("Unexpected error:", error);
+        return { error: "An unexpected error occurred: " + error.message };
+    }
+}
+
+// Update the schedule details
+
+export async function updateSchedule(prevState, formData) {
+    const supabase = await createClient();
+    const { user } = await getCurrentUser();
+
+    if (!user || !user?.id) {
+        return { error: "Unauthorized user" };
+    }
+
+    const rawData = Object.fromEntries(formData);
+    const {
+        schedule_id,
+        title,
+        details,
+        date,
+        time,
+        location,
+        type,
+        additional_notes,
+    } = rawData;
+
+    // Validation
+    const errors = {};
+    if (!title?.trim()) errors.title = "Schedule name is required";
+    if (!details?.trim()) errors.details = "Details are required";
+    if (!date) errors.date = "Date is required";
+    if (!time) errors.time = "Time is required";
+    if (!location?.trim()) errors.location = "Location is required";
+    if (!type) errors.type = "Schedule type is required";
+    if (!schedule_id) errors.schedule_id = "Schedule ID is required";
+
+    if (Object.keys(errors).length > 0) {
+        return { errors, formData: rawData };
+    }
+
+    try {
+        const updateData = {
+            title: title.trim(),
+            details: details.trim(),
+            date,
+            time,
+            location: location.trim(),
+            type,
+            additional_notes: additional_notes?.trim() || null,
+            updated_at: new Date().toISOString(),
+        };
+
+        const { data, error } = await supabase
+            .from("schedules")
+            .update(updateData)
+            .eq("id", schedule_id)
+            .eq("company_id", user.id) // Security: ensure user owns this schedule
+            .select()
+            .single();
+
+        if (error) {
+            console.error("Schedule update error:", error);
+            return { error: "Failed to update schedule: " + error.message };
+        }
+
+        revalidatePath("/company/schedules");
+
+        return {
+            success: true,
+            message: "Schedule updated successfully",
             time: Date.now(),
         };
     } catch (error) {
