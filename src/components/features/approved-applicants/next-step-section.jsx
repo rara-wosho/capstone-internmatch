@@ -3,10 +3,9 @@
 import CreateScheduleForm from "@/components/forms/CreateScheduleForm";
 import RequestAdditionalDocumentsForm from "@/components/forms/RequestAdditionalDocumentForm";
 import BorderBox from "@/components/ui/BorderBox";
-import { Button } from "@/components/ui/button";
 import TitleText from "@/components/ui/TitleText";
 import { cn } from "@/lib/utils";
-import { Calendar, FileText, Handshake, Check } from "lucide-react";
+import { Calendar, FileText, Handshake, Check, X } from "lucide-react";
 import { useState } from "react";
 
 const tabs = [
@@ -47,9 +46,6 @@ export default function NextStepSection({ applicants, studentId }) {
         return selectedApplicants.some((student) => student.id === studentId);
     };
 
-    console.log("applicants", applicants);
-    console.log("selected", selectedApplicants);
-
     return (
         <div>
             <div className="flex items-center gap-1.5 sm:gap-2 mt-4 flex-wrap mb-4">
@@ -70,15 +66,25 @@ export default function NextStepSection({ applicants, studentId }) {
                 ))}
             </div>
 
-            <TitleText className="mb-4">Approved Applicants</TitleText>
+            <TitleText className="mb-4 text-sm">
+                {activeTab === "create-schedule"
+                    ? "Select participants for the schedule"
+                    : "Select applicants for your document request."}
+            </TitleText>
 
             {/* Selected Applicants Counter */}
             {selectedApplicants.length > 0 && (
-                <div className="mb-4 p-3 bg-primary/10 border border-primary/20 rounded-lg">
+                <div className="mb-4 px-3 bg-primary/10 border border-primary/20 rounded-lg flex items-center justify-between gap-2">
                     <p className="text-sm text-primary font-medium">
                         {selectedApplicants.length} applicant
                         {selectedApplicants.length !== 1 ? "s" : ""} selected
                     </p>
+                    <button
+                        className="p-3 cursor-pointer text-muted-foreground transition-colors hover:text-secondary-foreground"
+                        onClick={() => setSelectedApplicants([])}
+                    >
+                        <X size={20} />
+                    </button>
                 </div>
             )}
 
@@ -167,7 +173,6 @@ export default function NextStepSection({ applicants, studentId }) {
                     {activeTab === "create-schedule" && (
                         <CreateScheduleForm
                             selectedApplicants={selectedApplicants}
-                            studentId={studentId}
                         />
                     )}
                     {activeTab === "documents" && (

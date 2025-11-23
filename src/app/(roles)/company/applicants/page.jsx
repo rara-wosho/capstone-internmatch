@@ -72,7 +72,7 @@ export default async function ApplicantsPage({ searchParams }) {
     return (
         <div>
             {/* Header */}
-            <div className="flex items-center pb-5 md:pb-7 border-b mb-5 md:mb-8 mt-2 md:mt-0 flex-wrap gap-x-10 gap-y-2">
+            <div className="flex items-center pb-5 md:pb-7 mt-2 md:mt-0 flex-wrap gap-x-10 gap-y-2">
                 <SecondaryLabel className="gap-2">
                     <IconWrapper className="hidden md:inline-block">
                         <FileUser size={16} />

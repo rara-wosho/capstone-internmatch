@@ -52,8 +52,6 @@ export default async function AcceptedStudentsOverview({ instructorId }) {
         return <ErrorUi secondaryMessage={error.message} />;
     }
 
-    console.log(data);
-
     // Format & extract correct application data
     const formattedData = (data ?? []).map((student) => {
         const app = student.applicants?.[0]; // applicants!inner always returns an array

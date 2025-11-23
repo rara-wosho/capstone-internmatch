@@ -5,6 +5,7 @@ import { createClient } from "../supabase/server";
 import { getCurrentUser } from "./auth";
 import { revalidatePath } from "next/cache";
 import { Resend } from "resend";
+import { ScheduleNotificationEmail } from "@/components/email/ScheduleNotificationEmail";
 
 // Get company schedules
 export async function getCompanySchedules() {
@@ -258,6 +259,8 @@ export async function createSchedule(prevState, formData) {
         type,
         notes,
         student_ids, // This is now a comma-separated string of student IDs
+        student_emails, // This is now a comma-separated string of student emails
+        company_name,
     } = rawData;
 
     // Validation
@@ -271,6 +274,9 @@ export async function createSchedule(prevState, formData) {
 
     // Validate student IDs
     const studentIds = student_ids?.split(",").filter((id) => id.trim()) || [];
+    const studentEmails =
+        student_emails?.split(",").filter((email) => email.trim()) || [];
+
     if (studentIds.length === 0) {
         errors.student_ids = "At least one student must be selected";
     }
@@ -327,6 +333,29 @@ export async function createSchedule(prevState, formData) {
                     "Failed to assign students to schedule: " +
                     junctionError.message,
             };
+        }
+
+        if (studentEmails.length > 0 && company_name) {
+            const resend = new Resend(process.env.RESEND_API_KEY);
+
+            const formatResendData = studentEmails?.map((email) => ({
+                from: "InternMatch <donotreply@auth.internmatch.online>",
+                to: [email],
+                subject: `${company_name} set a schedule`,
+                react: ScheduleNotificationEmail({
+                    scheduleData,
+                    companyName: company_name,
+                }),
+            }));
+
+            const { error } = await resend.batch.send(formatResendData);
+
+            if (error) {
+                console.error(
+                    "Error sending email to schedule participants: ",
+                    error.message
+                );
+            }
         }
 
         return {

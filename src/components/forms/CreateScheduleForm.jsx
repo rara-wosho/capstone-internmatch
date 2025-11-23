@@ -17,11 +17,14 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
+import { useSession } from "@/context/SessionContext";
 
 export default function CreateScheduleForm({ selectedApplicants }) {
     const [state, formAction, isPending] = useActionState(createSchedule, null);
     const formRef = useRef(null);
     const router = useRouter();
+
+    const { userData } = useSession();
 
     useEffect(() => {
         if (state?.success) {
@@ -39,6 +42,10 @@ export default function CreateScheduleForm({ selectedApplicants }) {
     const selectedStudentIds =
         selectedApplicants?.map((applicant) => applicant?.id).join(",") || "";
 
+    const selectedStudentEmails =
+        selectedApplicants?.map((applicant) => applicant?.email).join(",") ||
+        "";
+
     return (
         <>
             <Form action={formAction} className="space-y-4" ref={formRef}>
@@ -47,6 +54,18 @@ export default function CreateScheduleForm({ selectedApplicants }) {
                     type="hidden"
                     name="student_ids"
                     value={selectedStudentIds}
+                />
+                {/* Hidden input for multiple student emails */}
+                <input
+                    type="hidden"
+                    name="student_emails"
+                    value={selectedStudentEmails}
+                />
+
+                <input
+                    type="hidden"
+                    name="company_name"
+                    value={userData?.name || ""}
                 />
 
                 <div className="space-y-3">

@@ -27,7 +27,6 @@ export default async function AcceptedApplicationsPage({ searchParams }) {
         return <ErrorUi secondaryMessage={error} />;
     }
 
-    console.log("data ", data);
     return (
         <div>
             <div className="mb-4 md:mb-5">

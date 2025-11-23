@@ -67,8 +67,6 @@ export default async function Page({ params }) {
         return { is_intern: false };
     });
 
-    console.log("applicants", applications);
-
     return (
         <div>
             {/* Header */}

@@ -11,7 +11,7 @@ export default function RequestAdditionalDocumentForm() {
             <div className="mb-6">
                 <TertiaryLabel>Request additional documents</TertiaryLabel>
                 <p className="text-sm text-muted-foreground">
-                    This will send directly to the student's email address.
+                    This will be sent directly to the student's email address.
                 </p>
             </div>
 

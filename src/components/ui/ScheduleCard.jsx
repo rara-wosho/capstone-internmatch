@@ -21,6 +21,7 @@ import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import TertiaryLabel from "./TertiaryLabel";
+import DeleteScheduleModal from "../modals/DeleteScheduleModal";
 
 export default function ScheduleCard({
     schedule,
@@ -31,9 +32,6 @@ export default function ScheduleCard({
     const status = getScheduleStatus(schedule.date, schedule.time);
     const isPast = status === "past";
     const isToday = status === "today";
-
-    const [isPending, startTransition] = useTransition();
-    const router = useRouter();
 
     // Type badge colors
     const typeColors = {
@@ -56,27 +54,6 @@ export default function ScheduleCard({
             hour: "numeric",
             minute: "2-digit",
             hour12: true,
-        });
-    };
-
-    const handleDeleteSchedule = () => {
-        startTransition(async () => {
-            const supabase = createClient();
-
-            const { error } = await supabase
-                .from("schedules")
-                .delete()
-                .eq("id", schedule.schedule_id);
-
-            if (error) {
-                toast.error("Unable to delete schedule");
-                return;
-            }
-
-            toast.success(
-                "Deleted schedule successfully. Please wait a moment."
-            );
-            router.refresh();
         });
     };
 
@@ -109,7 +86,7 @@ export default function ScheduleCard({
                         </div>
 
                         {/* Title */}
-                        <h3 className="text-lg font-semibold     truncate">
+                        <h3 className="text-lg font-semibold truncate">
                             {schedule.title}
                         </h3>
                     </div>
@@ -130,17 +107,10 @@ export default function ScheduleCard({
                                     <Edit className="w-4 h-4" />
                                     Edit Schedule
                                 </button> */}
-                                <button
-                                    onClick={handleDeleteSchedule}
-                                    className="cursor-pointer w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors rounded-b-lg"
-                                >
-                                    {isPending ? (
-                                        <Loader className="animate-spin w-4 h-4" />
-                                    ) : (
-                                        <Trash2 className="w-4 h-4" />
-                                    )}
-                                    Delete Schedule
-                                </button>
+
+                                <DeleteScheduleModal
+                                    scheduleId={schedule.schedule_id}
+                                />
                             </div>
                         </div>
                     )}
@@ -214,7 +184,7 @@ export default function ScheduleCard({
                         <p className="text-xs text-muted-foreground mb-0.5">
                             Details
                         </p>
-                        <p className="text-sm line-clamp-3">
+                        <p className="text-sm whitespace-pre-wrap">
                             {schedule.details}
                         </p>
                     </div>

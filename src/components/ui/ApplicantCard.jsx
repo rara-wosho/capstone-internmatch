@@ -92,9 +92,7 @@ export default function ApplicantCard({ applicant, type = "default" }) {
                         variant="outlineWhite"
                         asChild
                     >
-                        <Link
-                            href={`/company/approved-applicants/${student?.id}`}
-                        >
+                        <Link href={`/company/approved-applicants/next-steps`}>
                             Next Steps <ChevronRight />
                         </Link>
                     </Button>
