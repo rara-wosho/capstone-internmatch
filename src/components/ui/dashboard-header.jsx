@@ -26,6 +26,7 @@ import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { useState } from "react";
 import { Separator } from "./separator";
+import NotificationIcon from "./NotificationIcon";
 
 export default function DashboardHeader({ profileData }) {
     // for profile popover
@@ -61,12 +62,7 @@ export default function DashboardHeader({ profileData }) {
 
             <div className="ms-auto flex items-center gap-3">
                 <div className="flex gap-2">
-                    {/* <Link href="/notifications">
-                        <IconWrapper className="relative">
-                            <div className="absolute -right-[2px] -top-[2px] size-2 rounded-full bg-primary"></div>
-                            <Bell size={16} />
-                        </IconWrapper>
-                    </Link> */}
+                    <NotificationIcon role={profileData?.role} />
                     <div className="border rounded-sm bg-card">
                         <ThemeToggler />
                     </div>

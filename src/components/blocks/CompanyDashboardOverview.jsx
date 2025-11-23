@@ -26,9 +26,7 @@ export default async function CompanyDashboardOverview({ userId }) {
         );
     }
 
-    const unpublishedExams = data?.exams?.filter(
-        (e) => e.is_published === false
-    );
+    const publishedExams = data?.exams?.filter((e) => e.is_published === true);
 
     const applicants = data?.applicants;
 
@@ -120,15 +118,15 @@ export default async function CompanyDashboardOverview({ userId }) {
                         href="/company/manage-exam"
                         icon={<FileText />}
                         valueText={data?.exams?.length}
-                        label={"Total Exams"}
+                        label={`Total Exam${data?.exams?.length > 1 ? "s" : ""}`}
                         color="bg-emerald-400/90"
                     />
                     <DashboardCountBox
                         href="/company/manage-exam"
                         color="bg-emerald-400/90"
                         icon={<FileText />}
-                        valueText={unpublishedExams.length}
-                        label={"Unpublished Exams"}
+                        valueText={publishedExams.length}
+                        label={`Published Exam${publishedExams?.length > 1 ? "s" : ""}`}
                     />
                     <DashboardCountBox
                         href="/company/examinees"

@@ -29,6 +29,7 @@ export default function ScheduleCard({
     const status = getScheduleStatus(schedule.date, schedule.time);
     const isPast = status === "past";
     const isToday = status === "today";
+    const isUpcoming = status === "upcoming";
 
     // Type badge colors
     const typeColors = {
@@ -80,10 +81,15 @@ export default function ScheduleCard({
                                     Completed
                                 </span>
                             )}
+                            {isUpcoming && (
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                                    Upcoming
+                                </span>
+                            )}
                         </div>
 
                         {/* Title */}
-                        <h3 className="text-lg font-semibold truncate">
+                        <h3 className="text-lg font-semibold">
                             {schedule.title}
                         </h3>
 
@@ -115,7 +121,7 @@ export default function ScheduleCard({
             </div>
 
             {/* Body */}
-            <div className="p-4 sm:p-5 space-y-4">
+            <div className="p-4 sm:p-5 space-y-3">
                 {/* Date & Time */}
                 <div className="grid sm:grid-cols-2 gap-3">
                     <div className="flex items-start gap-3">

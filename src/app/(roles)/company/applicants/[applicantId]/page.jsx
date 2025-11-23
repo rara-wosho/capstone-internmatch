@@ -322,32 +322,40 @@ In some cases, the student may not be able to proceed if their instructor disapp
                         />
                     </div>
                     <div className="space-y-2">
-                        {assessmentAttempt.map((assessment) => (
-                            <div
-                                key={assessment.id}
-                                className="flex items-center gap-2"
-                            >
-                                <div className="text-blue-500 bg-blue-500/10 p-2 rounded-sm border-blue-500/10">
-                                    <FileText size={18} />
-                                </div>
-                                <div className="flex flex-col w-full">
-                                    <p className="text-sm">
-                                        {
-                                            assessment.assessment_test
-                                                ?.assessment_title
-                                        }
-                                    </p>
-                                    <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
-                                        <p>
-                                            Score :{" "}
-                                            {assessment.assessment_score}/
-                                            {assessment?.assessment_total_item}
+                        {assessmentAttempt?.length > 0 ? (
+                            assessmentAttempt.map((assessment) => (
+                                <div
+                                    key={assessment.id}
+                                    className="flex items-center gap-2"
+                                >
+                                    <div className="text-blue-500 bg-blue-500/10 p-2 rounded-sm border-blue-500/10">
+                                        <FileText size={18} />
+                                    </div>
+                                    <div className="flex flex-col w-full">
+                                        <p className="text-sm">
+                                            {
+                                                assessment.assessment_test
+                                                    ?.assessment_title
+                                            }
                                         </p>
-                                        {/* <p>{dateFormatter(attempt.completed_at)}</p>  */}
+                                        <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+                                            <p>
+                                                Score :{" "}
+                                                {assessment.assessment_score}/
+                                                {
+                                                    assessment?.assessment_total_item
+                                                }
+                                            </p>
+                                            {/* <p>{dateFormatter(attempt.completed_at)}</p>  */}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))
+                        ) : (
+                            <p className="text-sm text-muted-foreground">
+                                No assessment test taken.
+                            </p>
+                        )}
                     </div>
                 </BorderBox>
             </Wrapper>

@@ -1,13 +1,23 @@
-// Check if schedule is upcoming, today, or past
+// Simpler version that only compares dates (ignores time)
 export function getScheduleStatus(date, time) {
-    const now = new Date();
-    const scheduleDateTime = new Date(`${date}T${time || "00:00"}`);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const scheduleDate = new Date(date);
-    scheduleDate.setHours(0, 0, 0, 0);
+    if (!date) return "unknown";
 
-    if (scheduleDateTime < now) return "past";
-    if (scheduleDate.getTime() === today.getTime()) return "today";
-    return "upcoming";
+    const now = new Date();
+    const scheduleDate = new Date(date);
+
+    // Normalize both dates to start of day for comparison
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const scheduleDay = new Date(
+        scheduleDate.getFullYear(),
+        scheduleDate.getMonth(),
+        scheduleDate.getDate()
+    );
+
+    if (scheduleDay < today) {
+        return "past";
+    } else if (scheduleDay.getTime() === today.getTime()) {
+        return "today";
+    } else {
+        return "upcoming";
+    }
 }

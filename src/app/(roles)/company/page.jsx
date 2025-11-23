@@ -20,11 +20,10 @@ export default async function Page() {
     return (
         <div>
             <CompanyDashboardOverview userId={user.id} />
-            <ApplicantsBlock userId={user.id} />
-
-            <BorderBox className="border rounded-xl bg-card mt-3">
+            <BorderBox className="border rounded-xl bg-card mt-3 mb-2 sm:mb-3 md:mb-4">
                 <CompanyScheduleOverview id={user.id} />
             </BorderBox>
+            <ApplicantsBlock userId={user.id} />
         </div>
     );
 }
