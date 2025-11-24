@@ -29,7 +29,7 @@ export function NotificationProvider({ children }) {
     // Fetch all notifications
     const fetchAllNotifications = async () => {
         try {
-            setLoading(true);
+            // setLoading(true);
             const { data, error } = await getNotificationsByUser({
                 filter: "all",
             });

@@ -27,45 +27,113 @@ export async function submitApplication(formData) {
         status,
     } = formData;
 
-    if (!formData.resume_link) {
-        return { Success: false, error: "Please provide resume link." };
+    // Validation
+    if (!resume_link) {
+        return { success: false, error: "Please provide resume link." };
+    }
+
+    // URL validation
+    try {
+        const url = new URL(resume_link);
+        if (url.protocol !== "https:") {
+            return { success: false, error: "Resume link must use HTTPS." };
+        }
+    } catch {
+        return { success: false, error: "Invalid resume link format." };
+    }
+
+    if (!company_id) {
+        return { success: false, error: "Company ID is required." };
+    }
+
+    if (!student_id) {
+        return { success: false, error: "Student ID is required." };
     }
 
     const formatData = {
         resume_link,
-        portfolio_link,
-        introduction,
+        portfolio_link: portfolio_link || null,
+        introduction: introduction || null,
         company_id,
         student_id,
-        status,
+        status: status || "pending", // Default status
     };
 
-    const { error } = await supabase.from("applicants").insert(formatData);
+    const notificationData = {
+        link_url: "/company/applicants",
+        recipient_id: company_id,
+        type: "application",
+        title: "New Internship Application",
+        message: student_name
+            ? `${student_name} has submitted a new application to your company. Review the details to proceed with the next steps.`
+            : "A new application has been submitted to your company. Review the details to proceed with the next steps.",
+    };
 
-    if (error) {
-        return { success: false, error: error.message };
-    }
+    try {
+        // 1. Fast DB operations in parallel
+        const [applicationResult, notificationResult] = await Promise.all([
+            supabase
+                .from("applicants")
+                .insert(formatData)
+                .select("id")
+                .single(),
+            supabase.from("notifications").insert(notificationData),
+        ]);
 
-    if (companyEmail) {
-        const resend = new Resend(process.env.RESEND_API_KEY);
-
-        const { data, error } = await resend.emails.send({
-            from: "InternMatch <donotreply@auth.internmatch.online>",
-            to: companyEmail,
-            subject: "New Application",
-            react: StudentApplicationSubmitted({ student_name }),
-            reply_to: companyEmail,
-        });
-
-        if (error) {
+        // Check for application error (critical)
+        if (applicationResult.error) {
             console.error(
-                "Error sending new application email to company. ",
-                error?.message
+                "Application submission error:",
+                applicationResult.error
+            );
+            return {
+                success: false,
+                error: "Failed to submit application. Please try again.",
+            };
+        }
+
+        const application = applicationResult.data;
+
+        // 2. Fire-and-forget email (don't await)
+        if (companyEmail) {
+            sendEmailAsync(companyEmail, student_name, application.id).catch(
+                (error) => {
+                    console.error("Email failed (non-blocking):", error);
+                }
             );
         }
-    }
 
-    return { success: true, error: null };
+        // 3. Revalidate relevant paths
+        revalidatePath("/company/applicants");
+        revalidatePath(`/student/companies/${company_id}`);
+
+        return {
+            success: true,
+            applicationId: application.id,
+            message: "Application submitted successfully!",
+        };
+    } catch (error) {
+        console.error("Unexpected error during application submission:", error);
+        return {
+            success: false,
+            error: "An unexpected error occurred. Please try again.",
+        };
+    }
+}
+
+// Fire-and-forget email function
+async function sendEmailAsync(companyEmail, student_name, applicationId) {
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    await resend.emails.send({
+        from: "InternMatch <donotreply@auth.internmatch.online>",
+        to: companyEmail,
+        subject: "New Application Received",
+        react: StudentApplicationSubmitted({
+            student_name: student_name || "A student",
+            application_id: applicationId,
+        }),
+    });
 }
 
 // update application status

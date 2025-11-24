@@ -1,4 +1,4 @@
-export function StudentApplicationSubmitted({ student_name }) {
+export function StudentApplicationSubmitted({ student_name, application_id }) {
     return (
         <div
             style={{
@@ -66,6 +66,23 @@ export function StudentApplicationSubmitted({ student_name }) {
                         documents
                     </li>
                 </ul>
+
+                <br />
+
+                {application_id && (
+                    <p>
+                        You can view the application in our website. Just{" "}
+                        <a
+                            style={{
+                                color: "blue",
+                                textDecoration: "underline",
+                            }}
+                            href={`/company/applicants/${application_id}`}
+                        >
+                            click here.
+                        </a>
+                    </p>
+                )}
 
                 <p style={{ marginTop: "18px" }}>
                     Thank you for partnering with InternMatch and supporting

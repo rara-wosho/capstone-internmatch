@@ -1,5 +1,4 @@
 import ApplicantActions from "@/components/blocks/ApplicantActions";
-import { ApplicationRejected } from "@/components/email/ApplicationRejected";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import BorderBox from "@/components/ui/BorderBox";
 import BreadCrumbs from "@/components/ui/BreadCrumbs";
