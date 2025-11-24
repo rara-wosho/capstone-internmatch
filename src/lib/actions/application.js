@@ -50,27 +50,54 @@ export async function submitApplication(formData) {
         return { success: false, error: "Student ID is required." };
     }
 
-    const formatData = {
-        resume_link,
-        portfolio_link: portfolio_link || null,
-        introduction: introduction || null,
-        company_id,
-        student_id,
-        status: status || "pending", // Default status
-    };
-
-    const notificationData = {
-        link_url: "/company/applicants",
-        recipient_id: company_id,
-        type: "application",
-        title: "New Internship Application",
-        message: student_name
-            ? `${student_name} has submitted a new application to your company. Review the details to proceed with the next steps.`
-            : "A new application has been submitted to your company. Review the details to proceed with the next steps.",
-    };
-
     try {
-        // 1. Fast DB operations in parallel
+        // 1. Check for existing application (SINGLE QUERY - OPTIMIZED)
+        const { data: existingApplication, error: checkError } = await supabase
+            .from("applicants")
+            .select("id, status")
+            .eq("student_id", student_id)
+            .eq("company_id", company_id)
+            .maybeSingle(); // Use maybeSingle() instead of single() to avoid errors when no match
+
+        if (checkError) {
+            console.error("Error checking existing application:", checkError);
+            return {
+                success: false,
+                error: "Failed to verify application status. Please try again.",
+            };
+        }
+
+        if (existingApplication) {
+            // Application already exists
+            return {
+                success: false,
+                error: "You have already submitted an application to this company.",
+                applicationId: existingApplication.id,
+                existingStatus: existingApplication.status,
+            };
+        }
+
+        // 2. Prepare data for insertion
+        const formatData = {
+            resume_link,
+            portfolio_link: portfolio_link || null,
+            introduction: introduction || null,
+            company_id,
+            student_id,
+            status: status || "pending",
+        };
+
+        const notificationData = {
+            link_url: "/company/applicants",
+            recipient_id: company_id,
+            type: "application",
+            title: "New Internship Application",
+            message: student_name
+                ? `${student_name} has submitted a new application to your company. Review the details to proceed with the next steps.`
+                : "A new application has been submitted to your company. Review the details to proceed with the next steps.",
+        };
+
+        // 3. Insert application and notification in parallel
         const [applicationResult, notificationResult] = await Promise.all([
             supabase
                 .from("applicants")
@@ -86,6 +113,15 @@ export async function submitApplication(formData) {
                 "Application submission error:",
                 applicationResult.error
             );
+
+            // Handle duplicate key error (race condition edge case)
+            if (applicationResult.error.code === "23505") {
+                return {
+                    success: false,
+                    error: "You have already submitted an application to this company.",
+                };
+            }
+
             return {
                 success: false,
                 error: "Failed to submit application. Please try again.",
@@ -94,7 +130,15 @@ export async function submitApplication(formData) {
 
         const application = applicationResult.data;
 
-        // 2. Fire-and-forget email (don't await)
+        // Log notification error but don't fail operation
+        if (notificationResult.error) {
+            console.error(
+                "Notification creation failed:",
+                notificationResult.error
+            );
+        }
+
+        // 4. Fire-and-forget email (don't await)
         if (companyEmail) {
             sendEmailAsync(companyEmail, student_name, application.id).catch(
                 (error) => {
@@ -103,9 +147,10 @@ export async function submitApplication(formData) {
             );
         }
 
-        // 3. Revalidate relevant paths
+        // 5. Revalidate relevant paths
         revalidatePath("/company/applicants");
         revalidatePath(`/student/companies/${company_id}`);
+        revalidatePath("/student/applications"); // Student's applications list
 
         return {
             success: true,
@@ -374,10 +419,74 @@ export async function getApprovedApplicantsByCompany(companyId, search) {
     return { success: true, error: "", data };
 }
 
+// // Approve the application of a student
+// // For instructor action
+// export async function approveStudentApplication({
+//     applicationId,
+//     companyName,
+//     companyEmail,
+//     studentName,
+//     studentEmail,
+// }) {
+//     const supabase = await createClient();
+
+//     const { error } = await supabase
+//         .from("applicants")
+//         .update({
+//             approved_at: new Date().toISOString(),
+//             approve_status: "approved",
+//         })
+//         .eq("id", applicationId);
+
+//     if (error) {
+//         return { success: false, error: error.message };
+//     }
+
+//     // After successful application approval
+//     const resend = new Resend(process.env.RESEND_API_KEY);
+
+//     if (companyName && studentEmail) {
+//         // Send password-change notification
+//         const { error: emailError } = await resend.emails.send({
+//             from: "InternMatch <no-reply@auth.internmatch.online>",
+//             to: studentEmail,
+//             subject: `${companyName} | Application Approved`,
+//             react: <ApplicationApproved companyName={companyName} />,
+//         });
+
+//         if (emailError) {
+//             console.log(
+//                 "Error sending email for password change: ",
+//                 emailError.message
+//             );
+//         }
+//     }
+
+//     if (companyEmail) {
+//         const { error: emailError } = await resend.emails.send({
+//             from: "InternMatch <no-reply@auth.internmatch.online>",
+//             to: companyEmail,
+//             subject: "Application Approved",
+//             react: <CompanyStudentApproved studentName={studentName} />,
+//         });
+
+//         if (emailError) {
+//             console.log(
+//                 "Error sending email for password change: ",
+//                 emailError.message
+//             );
+//         }
+//     }
+
+//     revalidatePath("/instructor/accepted", "page");
+//     return { success: true, error: "" };
+// }
+
 // Approve the application of a student
 // For instructor action
 export async function approveStudentApplication({
     applicationId,
+    companyId,
     companyName,
     companyEmail,
     studentName,
@@ -385,56 +494,150 @@ export async function approveStudentApplication({
 }) {
     const supabase = await createClient();
 
-    const { error } = await supabase
-        .from("applicants")
-        .update({
-            approved_at: new Date().toISOString(),
-            approve_status: "approved",
-        })
-        .eq("id", applicationId);
-
-    if (error) {
-        return { success: false, error: error.message };
+    // Validation
+    if (!applicationId) {
+        return { success: false, error: "Application ID is required." };
     }
 
-    // After successful application approval
+    if (!companyId) {
+        return { success: false, error: "Company ID is required." };
+    }
+
+    try {
+        const approvalTimestamp = new Date().toISOString();
+
+        // Prepare notification data for company
+        const notificationData = {
+            recipient_id: companyId,
+            type: "application_approved",
+            title: "Application Approved by Instructor",
+            message: studentName
+                ? `${studentName}'s application has been approved by the OJT instructor. You can now proceed with onboarding.`
+                : "A student application has been approved by the OJT instructor. You can now proceed with onboarding.",
+            link_url: `/company/applicants/${applicationId}`,
+        };
+
+        // 1. Update application and create notification in parallel (fast DB operations)
+        const [updateResult, notificationResult] = await Promise.all([
+            supabase
+                .from("applicants")
+                .update({
+                    approved_at: approvalTimestamp,
+                    approve_status: "approved",
+                })
+                .eq("id", applicationId)
+                .select("id")
+                .single(),
+            supabase
+                .from("notifications")
+                .insert(notificationData)
+                .select("id")
+                .single(),
+        ]);
+
+        // Check for update error (critical)
+        if (updateResult.error) {
+            console.error("Application approval error:", updateResult.error);
+            return {
+                success: false,
+                error: "Failed to approve application. Please try again.",
+            };
+        }
+
+        // Log notification error but don't fail operation
+        if (notificationResult.error) {
+            console.error(
+                "Notification creation error:",
+                notificationResult.error
+            );
+        }
+
+        // 2. Send emails asynchronously (fire-and-forget, non-blocking)
+        if (studentEmail || companyEmail) {
+            sendApprovalEmails({
+                studentEmail,
+                companyEmail,
+                companyName,
+                studentName,
+            }).catch((error) => {
+                console.error("Email sending failed (non-blocking):", error);
+            });
+        }
+
+        // 3. Revalidate relevant paths
+        revalidatePath("/instructor/accepted");
+        revalidatePath("/instructor/student-applications");
+        revalidatePath("/company/applicants");
+        revalidatePath(`/student/applications`);
+
+        return {
+            success: true,
+            error: null,
+            message: "Application approved successfully!",
+        };
+    } catch (error) {
+        console.error("Unexpected error during application approval:", error);
+        return {
+            success: false,
+            error: "An unexpected error occurred. Please try again.",
+        };
+    }
+}
+
+// Fire-and-forget email function
+async function sendApprovalEmails({
+    studentEmail,
+    companyEmail,
+    companyName,
+    studentName,
+}) {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
-    if (companyName && studentEmail) {
-        // Send password-change notification
-        const { error: emailError } = await resend.emails.send({
-            from: "InternMatch <no-reply@auth.internmatch.online>",
-            to: studentEmail,
-            subject: `${companyName} | Application Approved`,
-            react: <ApplicationApproved companyName={companyName} />,
-        });
+    // Send both emails in parallel
+    const emailPromises = [];
 
-        if (emailError) {
-            console.log(
-                "Error sending email for password change: ",
-                emailError.message
-            );
-        }
-    }
-    if (companyEmail) {
-        // Send password-change notification
-        const { error: emailError } = await resend.emails.send({
-            from: "InternMatch <no-reply@auth.internmatch.online>",
-            to: companyEmail,
-            subject: "Application Approved",
-            react: <CompanyStudentApproved studentName={studentName} />,
-        });
-
-        if (emailError) {
-            console.log(
-                "Error sending email for password change: ",
-                emailError.message
-            );
-        }
+    // Email to student
+    if (studentEmail && companyName) {
+        emailPromises.push(
+            resend.emails
+                .send({
+                    from: "InternMatch <no-reply@auth.internmatch.online>",
+                    to: studentEmail,
+                    subject: `${companyName} | Application Approved`,
+                    react: ApplicationApproved({ companyName }),
+                })
+                .catch((error) => {
+                    console.error(
+                        "Error sending approval email to student:",
+                        error.message
+                    );
+                })
+        );
     }
 
-    revalidatePath("/instructor/accepted", "page");
-    return { success: true, error: "" };
+    // Email to company
+    if (companyEmail && studentName) {
+        emailPromises.push(
+            resend.emails
+                .send({
+                    from: "InternMatch <no-reply@auth.internmatch.online>",
+                    to: companyEmail,
+                    subject: "Student Application Approved",
+                    react: CompanyStudentApproved({ studentName }),
+                })
+                .catch((error) => {
+                    console.error(
+                        "Error sending approval email to company:",
+                        error.message
+                    );
+                })
+        );
+    }
+
+    // Wait for all emails to complete (but don't block the main operation)
+    if (emailPromises.length > 0) {
+        await Promise.allSettled(emailPromises);
+    }
 }
 
 //Reject the accepted application with note

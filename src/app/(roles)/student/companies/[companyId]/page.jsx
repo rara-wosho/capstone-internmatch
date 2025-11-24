@@ -81,7 +81,10 @@ export default async function Page({ params }) {
                                 {/* company picture  */}
                                 <div className="relative size-24 shrink-0 overflow-hidden rounded-sm">
                                     <Image
-                                        src="https://i.pinimg.com/1200x/5f/33/c7/5f33c741560bb71ebedb831267603c1b.jpg"
+                                        src={
+                                            data?.avatar_url ||
+                                            "/images/default-avatar.jpg"
+                                        }
                                         alt="comapny img"
                                         fill
                                         className="object-cover"

@@ -40,6 +40,7 @@ export default function AcceptedStudentsTable({
     students,
     companyName,
     companyEmail,
+    companyId,
 }) {
     const [activeTab, setActiveTab] = useState("all");
 
@@ -70,6 +71,7 @@ export default function AcceptedStudentsTable({
             const { success, error } = await approveStudentApplication({
                 applicationId,
                 companyEmail,
+                companyId,
                 companyName,
                 studentEmail,
                 studentName,

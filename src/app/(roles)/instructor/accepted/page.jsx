@@ -4,6 +4,7 @@ import BorderBox from "@/components/ui/BorderBox";
 import ErrorUi from "@/components/ui/ErrorUi";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { Separator } from "@/components/ui/separator";
+import TertiaryLabel from "@/components/ui/TertiaryLabel";
 import TitleText from "@/components/ui/TitleText";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { getAcceptedApplicationsByInstructor } from "@/lib/actions/instructor";
@@ -55,23 +56,27 @@ export default async function AcceptedApplicationsPage({ searchParams }) {
                 </div>
             ) : (
                 data.map((company) => (
-                    <BorderBox
+                    <div
                         key={company.company_id}
                         className="border rounded-xl bg-card mb-2 md:mb-3"
                     >
-                        <div className="flex items-center gap-2 mb-3">
+                        <div className="flex items-center gap-2 py-3 border-b px-3 md:px-5">
                             <div className="size-4 flex items-center shrink-0">
                                 <Building2 size={16} />
                             </div>
-                            <TitleText>{company.company_name}</TitleText>
+                            <TertiaryLabel>
+                                {company.company_name}
+                            </TertiaryLabel>
                         </div>
-
-                        <AcceptedStudentsTable
-                            companyEmail={company?.company_email || ""}
-                            students={company?.students}
-                            companyName={company?.company_name || ""}
-                        />
-                    </BorderBox>
+                        <BorderBox>
+                            <AcceptedStudentsTable
+                                companyId={company?.company_id}
+                                companyEmail={company?.company_email || ""}
+                                students={company?.students}
+                                companyName={company?.company_name || ""}
+                            />
+                        </BorderBox>
+                    </div>
                 ))
             )}
         </div>
