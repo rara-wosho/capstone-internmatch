@@ -14,7 +14,9 @@ export default function NotificationIcon({ role }) {
             <Link href={`/${role}/notifications`}>
                 <IconWrapper className="relative">
                     {unreadCount > 0 && (
-                        <div className="absolute -right-[2px] -top-[2px] size-2 rounded-full bg-primary"></div>
+                        <div className="absolute -right-[4px] -top-[4px] size-4 flex items-center justify-center rounded-full bg-primary text-[10px] tabular-nums text-white">
+                            {unreadCount > 9 ? "9+" : unreadCount}
+                        </div>
                     )}
                     <Bell size={16} />
                 </IconWrapper>

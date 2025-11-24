@@ -11,6 +11,7 @@ import { ApplicationCannotProceed } from "@/components/email/ApplicationCannotPr
 import { CompanyStudentApproved } from "@/components/email/CompanyStudentApproved";
 import { StudentApplicationSubmitted } from "@/components/email/StudentApplicationSubmitted";
 
+// Student action to submit their applications
 export async function submitApplication(formData) {
     const supabase = await createClient();
 

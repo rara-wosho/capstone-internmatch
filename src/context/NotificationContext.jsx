@@ -58,7 +58,7 @@ export function NotificationProvider({ children }) {
 
             if (error) throw error;
 
-            // Optimistic update - no need to refetch
+            // Note: Real-time will handle the update, but we do optimistic update for better UX
             setNotifications((prev) =>
                 prev.map((notif) =>
                     notif.id === notificationId
@@ -93,7 +93,7 @@ export function NotificationProvider({ children }) {
 
             if (error) throw error;
 
-            // Optimistic update - no need to refetch
+            // Real-time will handle updates, but optimistic update for better UX
             setNotifications((prev) =>
                 prev.map((notif) => ({ ...notif, is_read: true }))
             );
@@ -121,12 +121,11 @@ export function NotificationProvider({ children }) {
 
             if (error) throw error;
 
-            // Optimistic update - no need to refetch
+            // Real-time will handle updates, but optimistic update for better UX
             setNotifications((prev) =>
                 prev.filter((notif) => notif.id !== notificationId)
             );
 
-            // Decrease count if it was unread
             if (notificationToDelete && !notificationToDelete.is_read) {
                 setUnreadCount((prev) => Math.max(0, prev - 1));
             }
@@ -143,7 +142,36 @@ export function NotificationProvider({ children }) {
         await refreshAll();
     };
 
-    // Initial data fetch - only once when app loads
+    // Set up real-time subscription
+    useEffect(() => {
+        const supabase = createClient();
+
+        // Subscribe to notifications table changes
+        const subscription = supabase
+            .channel("notifications-changes")
+            .on(
+                "postgres_changes",
+                {
+                    event: "*", // INSERT, UPDATE, DELETE
+                    schema: "public",
+                    table: "notifications",
+                },
+                (payload) => {
+                    console.log("Real-time notification update:", payload);
+
+                    // Refresh data when notifications change
+                    refreshAll();
+                }
+            )
+            .subscribe();
+
+        // Cleanup subscription on unmount
+        return () => {
+            subscription.unsubscribe();
+        };
+    }, []);
+
+    // Initial data fetch
     useEffect(() => {
         refreshAll();
     }, []);
