@@ -15,6 +15,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { dateFormatter } from "@/utils/date-formatter";
 import {
+    ChevronRight,
     File,
     FileText,
     Info,
@@ -144,20 +145,34 @@ export default async function Page({ params }) {
                             </p>
                         </div>
 
-                        <div
-                            className={cn(
-                                "px-6 py-2 rounded-full text-center text-sm flex gap-2 justify-center items-center grow sm:grow-0",
-                                applicant?.status === "pending" &&
-                                    "bg-neutral-500/15 text-neutral-700 dark:text-neutral-200 border-neutral-500/50",
-                                applicant?.status === "accepted" &&
-                                    "bg-green-500/15 text-green-600 dark:text-green-500 border-green-500/50",
-                                applicant?.status === "rejected" &&
-                                    "bg-red-500/10 text-red-600 dark:text-red-400 border-red-400/50",
-                                applicant?.status === "reviewed" &&
-                                    "bg-sky-500/15 text-sky-600 dark:text-sky-500 border-sky-500/50"
+                        <div className="flex items-center gap-2">
+                            <div
+                                className={cn(
+                                    "px-6 py-2 rounded-full text-center text-sm flex gap-2 justify-center items-center grow sm:grow-0",
+                                    applicant?.status === "pending" &&
+                                        "bg-neutral-500/15 text-neutral-700 dark:text-neutral-200 border-neutral-500/50",
+                                    applicant?.status === "accepted" &&
+                                        "bg-green-500/15 text-green-600 dark:text-green-500 border-green-500/50",
+                                    applicant?.status === "rejected" &&
+                                        "bg-red-500/10 text-red-600 dark:text-red-400 border-red-400/50",
+                                    applicant?.status === "reviewed" &&
+                                        "bg-sky-500/15 text-sky-600 dark:text-sky-500 border-sky-500/50"
+                                )}
+                            >
+                                <p className="capitalize">
+                                    {applicant?.status}
+                                </p>
+                            </div>
+
+                            {applicant?.approve_status === "approved" && (
+                                <div
+                                    className={cn(
+                                        "px-6 py-2 rounded-full text-center text-sm flex gap-2 justify-center items-center grow sm:grow-0 bg-green-600 text-white border-green-500/50"
+                                    )}
+                                >
+                                    <p className="capitalize">Approved</p>
+                                </div>
                             )}
-                        >
-                            <p className="capitalize">{applicant?.status}</p>
                         </div>
                     </div>
                     <div className="mt-4 flex flex-col gap-2 mb-5">
@@ -242,13 +257,19 @@ export default async function Page({ params }) {
                             </TitleText>
                         </div>
 
-                        <div className="p-3 border border-green-400/10 bg-green-400/10 rounded-lg shadow-xs">
+                        <div className="p-3 border mb-3 border-green-400/10 bg-green-400/10 rounded-lg shadow-xs">
                             <p className="text-green-600">
                                 This student’s application has been approved by
                                 their instructor and is now eligible to proceed
                                 as an intern in your company.
                             </p>
                         </div>
+
+                        <Button asChild>
+                            <Link href="/company/approved-applicants/next-steps">
+                                Proceed to next steps <ChevronRight />
+                            </Link>
+                        </Button>
                     </BorderBox>
                 )}
                 {applicant.approve_status === "rejected" && (

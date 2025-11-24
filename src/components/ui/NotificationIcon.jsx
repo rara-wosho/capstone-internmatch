@@ -5,12 +5,15 @@ import Link from "next/link";
 import { Bell } from "lucide-react";
 import { useNotifications } from "@/context/NotificationContext";
 import IconWrapper from "./IconWrapper";
+import { Skeleton } from "./skeleton";
 
 export default function NotificationIcon({ role }) {
     const { unreadCount, loading } = useNotifications();
 
-    return (
-        !loading && (
+    return loading ? (
+        <Skeleton className="size-7 rounded-sm" />
+    ) : (
+        <>
             <Link href={`/${role}/notifications`}>
                 <IconWrapper className="relative">
                     {unreadCount > 0 && (
@@ -21,6 +24,6 @@ export default function NotificationIcon({ role }) {
                     <Bell size={16} />
                 </IconWrapper>
             </Link>
-        )
+        </>
     );
 }

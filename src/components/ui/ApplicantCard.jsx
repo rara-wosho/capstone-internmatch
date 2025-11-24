@@ -1,8 +1,9 @@
-import { ChevronRight, Mail, MapPin } from "lucide-react";
+import { Calendar, ChevronRight, Mail, MapPin } from "lucide-react";
 import { Button } from "./button";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { dateFormatter } from "@/utils/date-formatter";
 
 export default function ApplicantCard({ applicant, type = "default" }) {
     const student = applicant?.students;
@@ -71,6 +72,12 @@ export default function ApplicantCard({ applicant, type = "default" }) {
                 <div className="flex items-center gap-1 text-muted-foreground">
                     <Mail size={14} />
                     <p className="text-sm">{student?.email}</p>
+                </div>
+                <div className="flex items-center gap-1 text-muted-foreground">
+                    <Calendar size={14} />
+                    <p className="text-sm">
+                        Applied at: {dateFormatter(applicant?.applied_at)}
+                    </p>
                 </div>
             </div>
             <div className="w-full mt-auto pt-2">

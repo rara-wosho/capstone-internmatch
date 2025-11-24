@@ -71,13 +71,14 @@ export function StudentApplicationSubmitted({ student_name, application_id }) {
 
                 {application_id && (
                     <p>
-                        You can view the application in our website. Just{" "}
+                        You can see the full application details in our website.
+                        Just{" "}
                         <a
                             style={{
                                 color: "blue",
                                 textDecoration: "underline",
                             }}
-                            href={`/company/applicants/${application_id}`}
+                            href={`https://internmatch.online/company/applicants/${application_id}`}
                         >
                             click here.
                         </a>
