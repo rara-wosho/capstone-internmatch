@@ -139,7 +139,7 @@ const navigationConfig = [
                 label: "Applicants",
                 roles: ["company"],
                 subItems: [
-                    { href: "/company/applicants", label: "Manage" },
+                    { href: "/company/applicants", label: "Manage Applicants" },
                     {
                         href: "/company/approved-applicants",
                         label: "Approved",

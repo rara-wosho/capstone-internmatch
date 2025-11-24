@@ -21,7 +21,9 @@ export default async function Page({ params }) {
     const supabase = await createClient();
     const { data, error } = await supabase
         .from("groups")
-        .select("id, is_shareable, group_name, ojt_instructors(school)")
+        .select(
+            "id, is_shareable, group_name, ojt_instructors(school, firstname, lastname)"
+        )
         .eq("id", groupId)
         .maybeSingle();
 
@@ -85,6 +87,12 @@ export default async function Page({ params }) {
                             <p className="max-w-md text-center">
                                 You are invited to join the group{" "}
                                 <strong>{data.group_name}</strong>
+                            </p>
+
+                            <p className="text-sm text-muted-foreground">
+                                Group creator :{" "}
+                                {data?.ojt_instructors?.firstname}{" "}
+                                {data?.ojt_instructors?.lastname}
                             </p>
                         </div>
 

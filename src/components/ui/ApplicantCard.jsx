@@ -62,7 +62,7 @@ export default function ApplicantCard({ applicant, type = "default" }) {
             <div className="flex flex-col gap-2 items-start w-full py-3">
                 {student?.barangay && student?.city && student?.province && (
                     <div className="flex items-center gap-1 text-muted-foreground">
-                        <MapPin size={14} />
+                        <MapPin className="shrink-0" size={14} />
                         <p className="text-sm">
                             {student?.barangay}, {student?.city},{" "}
                             {student?.province}
@@ -70,11 +70,11 @@ export default function ApplicantCard({ applicant, type = "default" }) {
                     </div>
                 )}
                 <div className="flex items-center gap-1 text-muted-foreground">
-                    <Mail size={14} />
+                    <Mail className="shrink-0" size={14} />
                     <p className="text-sm">{student?.email}</p>
                 </div>
                 <div className="flex items-center gap-1 text-muted-foreground">
-                    <Calendar size={14} />
+                    <Calendar className="shrink-0" size={14} />
                     <p className="text-sm">
                         Applied at: {dateFormatter(applicant?.applied_at)}
                     </p>
