@@ -62,6 +62,7 @@ export default function AcceptedStudentsTable({
         return students;
     }, [activeTab, students]);
 
+    // Approve application
     const handleApproveApplication = (
         applicationId,
         studentEmail,
@@ -86,6 +87,7 @@ export default function AcceptedStudentsTable({
         });
     };
 
+    // mark as cannot proceed
     const handleCannotProceedStatus = (applicationId, studentEmail) => {
         startTransition(async () => {
             const { success, error } = await submitCannotProceedStatus(

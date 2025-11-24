@@ -50,7 +50,7 @@ export default async function Page({ params }) {
     const { data: applicant, error } = await supabase
         .from("applicants")
         .select(
-            "id, applied_at, approve_status, cannot_proceed_message, resume_link, portfolio_link, status, introduction, students!inner(id, firstname, lastname, gender, school, email, avatar_url, barangay, city, province, interests(interest), assessment_attempt(id, submitted_at, assessment_score, assessment_total_item, assessment_test(assessment_title))), companies(name, email)"
+            "id, applied_at, approve_status, cannot_proceed_message, resume_link, portfolio_link, status, introduction, students!inner(id, firstname, lastname, gender, school, email, avatar_url, barangay, city, province, ojt_instructor_id, interests(interest), assessment_attempt(id, submitted_at, assessment_score, assessment_total_item, assessment_test(assessment_title))), companies(name, email)"
         )
         .eq("id", applicantId)
         .eq("company_id", user?.id)

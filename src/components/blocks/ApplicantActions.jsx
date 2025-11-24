@@ -17,8 +17,10 @@ export default function ApplicantActions({ applicant }) {
                 newStatus,
                 applicationId: applicant.id,
                 receiver: applicant?.students?.email || "",
+                studentName: `${applicant?.students?.firstname} ${applicant?.students?.lastname}`,
                 companyName: applicant?.companies?.name,
                 companyEmail: applicant?.companies?.email,
+                instructorId: applicant?.students?.ojt_instructor_id,
             });
 
             if (!result.success) {
@@ -29,6 +31,8 @@ export default function ApplicantActions({ applicant }) {
             toast.success("Status updated successfully.");
         });
     };
+
+    console.log("applicant", applicant);
 
     return (
         <div className="border rounded-xl bg-card shadow-xs mb-3">

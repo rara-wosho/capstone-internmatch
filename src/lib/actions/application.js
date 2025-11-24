@@ -188,6 +188,8 @@ export async function updateApplicationStatus({
     receiver,
     companyName,
     companyEmail,
+    instructorId,
+    studentName,
 }) {
     const supabase = await createClient();
     const resend = new Resend(process.env.RESEND_API_KEY);
@@ -205,6 +207,24 @@ export async function updateApplicationStatus({
 
     if (error) {
         return { success: false, error: "Unable to update status" };
+    }
+
+    // If instructor id is available, insert notification that a student is acccepted
+    if (instructorId && newStatus === "accepted") {
+        const { error } = await supabase.from("notifications").insert({
+            title: "Student application accepted",
+            message: `Your student ${studentName}'s application has been accepted and is now awaiting your approval.`,
+            recipient_id: instructorId,
+            type: "application_accepted",
+            link_url: "/instructor/accepted",
+        });
+
+        if (error) {
+            console.error(
+                "Error inserting notification about accepted application: ",
+                error.message
+            );
+        }
     }
 
     if (newStatus === "accepted" && receiver) {
