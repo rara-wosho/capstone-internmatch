@@ -68,6 +68,7 @@ export async function createStudentAccount(formData, groupId) {
             course: formData.course,
             group_id: groupId,
             role: "student",
+            ojt_instructor_id: formData?.ojt_instructor_id,
         },
     ]);
 

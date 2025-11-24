@@ -294,6 +294,7 @@ export default async function Page({ params }) {
                         </div>
                     </BorderBox>
                 )}
+
                 {applicant.status === "accepted" &&
                     applicant.approve_status !== "rejected" &&
                     applicant.approve_status !== "approved" && (

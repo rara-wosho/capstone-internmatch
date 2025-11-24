@@ -12,7 +12,11 @@ import { ArrowRight } from "lucide-react";
 import { createStudentAccount } from "@/lib/actions/student";
 import { useRouter } from "next/navigation";
 
-export default function CreateStudentAccountForm9({ groupId, school }) {
+export default function CreateStudentAccountForm9({
+    instructorId,
+    groupId,
+    school,
+}) {
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -22,6 +26,7 @@ export default function CreateStudentAccountForm9({ groupId, school }) {
         email: "",
         password: "",
         confirmPassword: "",
+        ojt_instructor_id: instructorId,
     });
 
     const router = useRouter();
