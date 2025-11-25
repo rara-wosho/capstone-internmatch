@@ -1,13 +1,14 @@
 import ManageExamCard from "@/components/exam/ManageExamCard";
 import { Button } from "@/components/ui/button";
 import IconWrapper from "@/components/ui/IconWrapper";
-import { FileText, PlusCircle } from "lucide-react";
+import { CircleQuestionMark, FileText, PlusCircle } from "lucide-react";
 import Link from "next/link";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import { createClient } from "@/lib/supabase/server";
 import ErrorUi from "@/components/ui/ErrorUi";
 import { getCurrentUser } from "@/lib/actions/auth";
 import { redirect } from "next/navigation";
+import InfoPopover from "@/components/ui/info-popover";
 
 export default async function Page() {
     const supabase = await createClient();
@@ -44,7 +45,7 @@ export default async function Page() {
                     <span>Manage Exams</span>
                 </SecondaryLabel>
 
-                <div className="ms-auto">
+                <div className="ms-auto flex items-center gap-2">
                     <Button asChild>
                         <Link href="/company/create-exam">
                             <span className="flex gap-1.5 items-center">
@@ -53,6 +54,15 @@ export default async function Page() {
                             </span>
                         </Link>
                     </Button>
+
+                    <InfoPopover
+                        textContent="Company exams are optional but it can help you to better understand each student’s capabilities. Create customized questions that help you evaluate who aligns best with your internship requirements"
+                        trigger={
+                            <IconWrapper>
+                                <CircleQuestionMark />
+                            </IconWrapper>
+                        }
+                    />
                 </div>
             </div>
 
@@ -64,9 +74,16 @@ export default async function Page() {
                     ))}
                 </div>
             ) : (
-                <p className="text-center text-muted-foreground py-10">
-                    No exams yet. Create your first exam to get started.
-                </p>
+                <div className="py-12">
+                    <p className="text-center text-muted-foreground">
+                        No exams yet. Create your first exam to get started.
+                    </p>
+
+                    <p className="mt-2 text-center text-xs text-muted-foreground">
+                        Note: Company exams are optional but it can help you
+                        understand each student's capabilities
+                    </p>
+                </div>
             )}
         </>
     );

@@ -6,7 +6,10 @@ export default function InfoPopover({ trigger, textContent }) {
             <PopoverTrigger className="cursor-pointer">
                 {trigger}
             </PopoverTrigger>
-            <PopoverContent className="p-3 text-sm text-muted-foreground">
+            <PopoverContent
+                align="end"
+                className="p-3 text-sm text-muted-foreground"
+            >
                 <p>{textContent}</p>
             </PopoverContent>
         </Popover>

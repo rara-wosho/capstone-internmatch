@@ -24,7 +24,7 @@ import { Loader, Settings } from "lucide-react";
 import { Switch } from "../ui/switch";
 import { useState, useTransition, useEffect } from "react";
 import { useSession } from "@/context/SessionContext";
-import { notFound, useSearchParams } from "next/navigation";
+import { notFound, useRouter, useSearchParams } from "next/navigation";
 import { updateApplicationSettings } from "@/lib/actions/company";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
@@ -38,6 +38,8 @@ export default function ApplicantsSettingsModal() {
     const [open, setOpen] = useState(openSettings === "true");
     const [isFetching, setIsFetching] = useState(false);
     const [isPending, startTransition] = useTransition();
+
+    const router = useRouter();
 
     // Form states
     const [acceptApplicants, setAcceptApplicants] = useState(false);
@@ -66,6 +68,7 @@ export default function ApplicantsSettingsModal() {
             } else {
                 setAcceptApplicants(data.accept_applicants ?? false);
                 setAcceptCondition(data.accept_applicants_term ?? "");
+                router.refresh();
             }
         } catch (err) {
             toast.error("An unexpected error occurred.");

@@ -117,7 +117,7 @@ export default function NotificationCard({ notification }) {
                                 </Link>
                             )}
 
-                            <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-1 translate-x-4">
                                 <span className="text-sm text-gray-500">
                                     {formatTime(notification.created_at)}
                                 </span>

@@ -57,14 +57,11 @@ export default async function CompanyDashboardOverview({ userId }) {
                 <div className="flex items-center justify-between gap-2 mb-3 flex-wrap">
                     <TertiaryLabel>Applicants</TertiaryLabel>
                     <div className="flex items-center gap-1">
-                        <p className="text-sm text-secondary-foreground">
-                            Currently :
-                        </p>
                         <Link href="/company/applicants?open=true">
                             <StatusPill
                                 label={
                                     data.accept_applicants
-                                        ? "Accepting Applicants"
+                                        ? "Currently Accepting Applicants"
                                         : "Not Accepting  Applicants"
                                 }
                                 size="md"
@@ -74,6 +71,13 @@ export default async function CompanyDashboardOverview({ userId }) {
                                         : "danger"
                                 }
                             />
+                        </Link>
+
+                        <Link
+                            href="/company/applicants?open=true"
+                            className="text-accent-foreground ms-2"
+                        >
+                            <p className="text-sm">Change</p>
                         </Link>
                     </div>
                 </div>
