@@ -7,7 +7,6 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "./auth";
 
 // Function for creating student account in authentication and table
-
 export async function createStudentAccount(formData, groupId) {
     const supabase = await createClient();
 
@@ -544,3 +543,45 @@ export async function getRecentAssessmentTest(studentId) {
 //         };
 //     }
 // }
+
+// Get student schedules
+export async function getScheduleByStudent(studentId) {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("schedules")
+        .select(
+            `
+            *,
+            companies!inner(name),
+            schedule_student_ids!inner(student_id)
+            `
+        )
+        .eq("schedule_student_ids.student_id", studentId)
+        .eq("is_deleted", false)
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        return {
+            data: null,
+            error: error.message || "Failed to load schedules",
+        };
+    }
+
+    const formattedData = data?.map((d) => ({
+        id: d.id,
+        created_at: d.created_at,
+        type: d.type,
+        location: d.location,
+        additional_notes: d.additional_notes,
+        company_name: d.companies?.name || "Unknown company",
+        company_id: d.company_id,
+        details: d.details,
+        date: d.date,
+        title: d.title,
+        time: d.time,
+        updated_at: d.updated_at || null,
+    }));
+
+    return { data: formattedData, error: "" };
+}

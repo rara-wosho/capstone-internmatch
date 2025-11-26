@@ -2,6 +2,7 @@ import ExamScoresGraph from "@/components/blocks/ExamScoresGraph";
 import StudentActivityLog from "@/components/blocks/StudentActivityLog";
 import { StudentDashboardDetails } from "@/components/blocks/StudentDashboardDetails";
 import StudentDashboardOverview from "@/components/blocks/StudentDashboardOverview";
+import StudentUpcomingSchedules from "@/components/blocks/StudentUpcomingSchedules";
 import BorderBox from "@/components/ui/BorderBox";
 import DashboardCountBox from "@/components/ui/DashboardCountBox";
 import TitleText from "@/components/ui/TitleText";
@@ -26,20 +27,12 @@ export default async function StudentDashboardPage() {
 
             {/* ============ RIGHT SECTION ================= */}
             <div className="flex flex-wrap gap-3 md:gap-4 animation-show">
+                <div className="rounded-xl border bg-card grow basis-[320px]">
+                    <StudentUpcomingSchedules userId={user.id} />
+                </div>
                 <div className="rounded-xl grow border bg-card basis-[300px]">
                     <BorderBox>
                         <ExamScoresGraph userId={user.id} />
-                    </BorderBox>
-                </div>
-                <div className="rounded-xl border bg-card grow basis-auto">
-                    <BorderBox className="border-b">
-                        <TitleText>Recent Notifications</TitleText>
-                    </BorderBox>
-
-                    <BorderBox>
-                        <p className="text-sm text-muted-foreground">
-                            No notifications yet. Stay tune for more updates.
-                        </p>
                     </BorderBox>
                 </div>
                 <div className="rounded-xl border bg-card grow basis-auto h-auto">
@@ -48,7 +41,7 @@ export default async function StudentDashboardPage() {
 
                         <Link
                             href="/student/profile/activities"
-                            className="hover:text-accent-foreground transition-colors font-light"
+                            className="hover:text-accent-foreground transition-colors font-light text-sm"
                         >
                             <span>See all</span>
                         </Link>

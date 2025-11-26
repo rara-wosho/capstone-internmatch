@@ -138,15 +138,29 @@ export async function updateCompanyDetails(formData) {
 }
 
 // fetch all list of companies
-export async function getCompanies() {
+// with optional search
+export async function getCompanies(search) {
     const supabase = await createClient();
 
-    const { data, error } = await supabase
+    // Start with base query
+    let query = supabase
         .from("companies")
         .select(
-            "id, name, details, barangay, province, city, company_offers(offers)"
-        )
-        .order("created_at", { ascending: true });
+            "id, name, avatar_url, details, barangay, province, city, company_offers(offers)"
+        );
+
+    // Add search filter if provided
+    if (search && search.trim() !== "") {
+        const searchTerm = `%${search.trim()}%`;
+        query = query.or(
+            `name.ilike.${searchTerm},details.ilike.${searchTerm},barangay.ilike.${searchTerm},province.ilike.${searchTerm},city.ilike.${searchTerm}`
+        );
+    }
+
+    // Add ordering
+    query = query.order("created_at", { ascending: true });
+
+    const { data, error } = await query;
 
     if (error) {
         return {

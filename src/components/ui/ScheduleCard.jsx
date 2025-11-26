@@ -100,23 +100,24 @@ export default function ScheduleCard({
                         )}
                     </div>
 
-                    {/* Actions Dropdown */}
-                    {!isPast && (
-                        <div className="relative group">
-                            <button className="p-2 hover:bg-secondary rounded-lg transition-colors">
-                                <MoreVertical className="w-5 h-5 text-gray-500" />
-                            </button>
+                    {viewType === "company" &&
+                        // Actions Dropdown
+                        !isPast && (
+                            <div className="relative group">
+                                <button className="p-2 hover:bg-secondary rounded-lg transition-colors">
+                                    <MoreVertical className="w-5 h-5 text-gray-500" />
+                                </button>
 
-                            {/* Dropdown Menu */}
-                            <div className="absolute right-0 top-full mt-1 w-48 bg-neutral-50 overflow-hidden rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
-                                <EditScheduleModal editData={schedule} />
+                                {/* Dropdown Menu */}
+                                <div className="absolute right-0 top-full mt-1 w-48 bg-neutral-50 overflow-hidden rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+                                    <EditScheduleModal editData={schedule} />
 
-                                <DeleteScheduleModal
-                                    scheduleId={schedule.schedule_id}
-                                />
+                                    <DeleteScheduleModal
+                                        scheduleId={schedule.schedule_id}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
                 </div>
             </div>
 
@@ -238,15 +239,15 @@ export default function ScheduleCard({
                             ))
                         ) : (
                             <div className="flex items-center gap-2">
-                                <div className="p-1.5 bg-gray-100 rounded-full">
-                                    <Building2 className="w-4 h-4 text-gray-600" />
+                                <div className="p-1.5 bg-secondary rounded-full">
+                                    <Building2 className="w-4 h-4 text-secondary-foreground" />
                                 </div>
                                 <div>
-                                    <p className="text-xs text-gray-500">
+                                    <p className="text-xs text-muted-foreground">
                                         Company
                                     </p>
-                                    <p className="text-sm font-medium text-gray-900">
-                                        {schedule.companies.name}
+                                    <p className="text-sm font-medium text-secondary-foreground">
+                                        {schedule.company_name}
                                     </p>
                                 </div>
                             </div>

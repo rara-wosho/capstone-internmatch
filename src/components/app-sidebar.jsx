@@ -162,6 +162,12 @@ const navigationConfig = [
                 label: "Assessment Test",
                 roles: ["student"],
             },
+            {
+                href: "/student/schedules",
+                icon: <Calendar />,
+                label: "Schedules",
+                roles: ["student"],
+            },
         ],
     },
     {

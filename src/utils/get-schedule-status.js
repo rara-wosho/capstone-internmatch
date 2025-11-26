@@ -1,5 +1,5 @@
 // Simpler version that only compares dates (ignores time)
-export function getScheduleStatus(date, time) {
+export function getScheduleStatus(date) {
     if (!date) return "unknown";
 
     const now = new Date();
@@ -21,3 +21,33 @@ export function getScheduleStatus(date, time) {
         return "upcoming";
     }
 }
+
+// /**
+//  * Returns whether a date is past, today, or upcoming
+//  * @param {Date|string} date - The date to check
+//  * @returns {string} - 'past', 'today', or 'upcoming'
+//  */
+// export function getDateStatus(date) {
+//     const inputDate = new Date(date);
+//     const today = new Date();
+
+//     // Reset times to compare only dates
+//     const inputDateOnly = new Date(
+//         inputDate.getFullYear(),
+//         inputDate.getMonth(),
+//         inputDate.getDate()
+//     );
+//     const todayOnly = new Date(
+//         today.getFullYear(),
+//         today.getMonth(),
+//         today.getDate()
+//     );
+
+//     if (inputDateOnly < todayOnly) {
+//         return "past";
+//     } else if (inputDateOnly.getTime() === todayOnly.getTime()) {
+//         return "today";
+//     } else {
+//         return "upcoming";
+//     }
+// }
