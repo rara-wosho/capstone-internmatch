@@ -44,7 +44,10 @@ export default async function ApplicationsPage() {
             </SecondaryLabel>
 
             {applicationsData.length === 0 ? (
-                <EmptyUi message="No Applications" />
+                <EmptyUi
+                    message="No Applications"
+                    secondaryMessage="You don't have any submitted applications yet."
+                />
             ) : (
                 <ApplicationsSection applications={applicationsData} />
             )}

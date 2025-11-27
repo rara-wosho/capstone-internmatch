@@ -12,7 +12,7 @@ export default function EmptyUi({ message, secondaryMessage, action }) {
                     alt="empty-image"
                 />
             </div>
-            <SecondaryLabel className="mb-1">
+            <SecondaryLabel className="mb-1 max-w-[300px] text-center">
                 {message ? message : "No Results"}
             </SecondaryLabel>
             <p className="text-center max-w-[300px] text-muted-foreground mb-2.5">

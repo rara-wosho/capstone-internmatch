@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Button } from "./button";
-import { ArrowUpRight, MapPin } from "lucide-react";
+import { ArrowUpRight, Briefcase, MapPin } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "./Logo";
@@ -49,11 +49,15 @@ export default function CompanyCard({ company }) {
                         </p>
                     </div>
                 )}
-                <div className="text-muted-foreground mb-4">
-                    <p className="text-xs truncate">
-                        {company?.company_offers?.offers.join(", ")}
-                    </p>
-                </div>
+
+                {company?.company_offers?.offers?.length > 0 && (
+                    <div className="text-muted-foreground mb-4 flex items-center gap-1.5">
+                        <Briefcase className="shrink-0" size={14} />
+                        <p className="text-xs truncate">
+                            {company?.company_offers?.offers.join(", ")}
+                        </p>
+                    </div>
+                )}
                 <div className="flex items-center gap-2 mt-auto mb-0.5">
                     <Button
                         size="sm"

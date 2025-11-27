@@ -158,7 +158,7 @@ export async function getCompanies(search) {
     }
 
     // Add ordering
-    query = query.order("created_at", { ascending: true });
+    query = query.order("created_at", { ascending: false });
 
     const { data, error } = await query;
 

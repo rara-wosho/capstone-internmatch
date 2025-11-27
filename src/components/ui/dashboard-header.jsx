@@ -99,6 +99,13 @@ export default function DashboardHeader({ profileData }) {
                         align="end"
                         className="w-fit p-0 rounded-sm"
                     >
+                        <div className="p-3 border-b inline-block md:hidden">
+                            <p className="text-sm text-secondary-foreground font-medium truncate max-w-[200px]">
+                                {profileData?.firstname} {profileData?.lastname}
+                                {profileData?.name}
+                            </p>
+                        </div>
+
                         <SidebarMenu className="text-secondary-foreground/80 p-1">
                             <SidebarMenuItem>
                                 <SidebarMenuButton

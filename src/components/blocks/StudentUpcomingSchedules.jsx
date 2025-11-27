@@ -2,9 +2,8 @@ import { getScheduleByStudent } from "@/lib/actions/student";
 import BorderBox from "../ui/BorderBox";
 import TitleText from "../ui/TitleText";
 import { getScheduleStatus } from "@/utils/get-schedule-status";
-import IconWrapper from "../ui/IconWrapper";
-import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import SchedulesCalendar from "../features/schedules/schedules-calendar";
 
 export default async function StudentUpcomingSchedules({ userId }) {
     const { data, error } = await getScheduleByStudent(userId);
@@ -23,6 +22,8 @@ export default async function StudentUpcomingSchedules({ userId }) {
             (schedule) => getScheduleStatus(schedule.date) === "upcoming"
         ) || [];
 
+    const dates = upcomingSchedules.map((date) => date?.date);
+
     return (
         <>
             <BorderBox className="border-b flex items-center gap-2 justify-between">
@@ -38,7 +39,7 @@ export default async function StudentUpcomingSchedules({ userId }) {
                 )}
             </BorderBox>
 
-            <BorderBox>
+            <BorderBox className="space-y-3">
                 {upcomingSchedules.length === 0 ? (
                     <p className="text-sm text-muted-foreground">
                         No upcoming schedules. Stay tuned for more updates.
@@ -65,6 +66,11 @@ export default async function StudentUpcomingSchedules({ userId }) {
                         ))}
                     </div>
                 )}
+
+                <SchedulesCalendar
+                    schedules={upcomingSchedules}
+                    dates={dates}
+                />
             </BorderBox>
         </>
     );
