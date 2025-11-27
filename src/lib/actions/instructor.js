@@ -643,3 +643,94 @@ export async function toggleStudentActiveStatus(
         message: `Successfully marked ${studentIds.length} student(s) as ${newStatus ? "active" : "inactive"}`,
     };
 }
+
+// Get students schedules by instructor id
+export async function getStudentSchedulesByInstructor() {
+    const { user } = await getCurrentUser();
+
+    if (!user?.id) {
+        return { data: null, error: "Invalid Session." };
+    }
+
+    const supabase = await createClient();
+
+    try {
+        // Single optimized query using joins
+        const { data: schedules, error } = await supabase
+            .from("schedules")
+            .select(
+                `
+                id,
+                title,
+                date,
+                time,
+                location,
+                details,
+                type,
+                additional_notes,
+                companies!inner(name),
+                schedule_student_ids!inner(
+                    students!inner(
+                        id,
+                        firstname,
+                        lastname,
+                        ojt_instructor_id
+                    )
+                )
+            `
+            )
+            .eq("is_deleted", false)
+            .eq("schedule_student_ids.students.ojt_instructor_id", user.id)
+            .order("date", { ascending: false });
+
+        if (error) {
+            console.error("Error fetching instructor schedules:", error);
+            return {
+                data: null,
+                error: "Failed to fetch schedules. Please try again.",
+            };
+        }
+
+        if (!schedules || schedules.length === 0) {
+            return { data: [], error: null };
+        }
+
+        // Transform the data to the desired format
+        const formattedData = schedules.map((schedule) => {
+            // Extract unique students (avoid duplicates if same student has multiple entries)
+            const studentsMap = new Map();
+
+            schedule.schedule_student_ids?.forEach((entry) => {
+                const student = entry.students;
+                if (student && !studentsMap.has(student.id)) {
+                    studentsMap.set(student.id, {
+                        id: student.id,
+                        firstname: student.firstname,
+                        lastname: student.lastname,
+                    });
+                }
+            });
+
+            return {
+                id: schedule.id,
+                title: schedule.title,
+                details: schedule.details,
+                date: schedule.date,
+                time: schedule.time,
+                additional_notes: schedule.additional_notes,
+                location: schedule.location,
+                type: schedule.type,
+                company_name: schedule.companies?.name || "Unknown Company",
+                students: Array.from(studentsMap.values()),
+            };
+        });
+
+        return { data: formattedData, error: null };
+    } catch (error) {
+        console.error("Unexpected error fetching schedules:", error);
+        return {
+            data: null,
+            error: "An unexpected error occurred. Please try again.",
+        };
+    }
+}

@@ -4,6 +4,7 @@ import TitleText from "../ui/TitleText";
 import { getScheduleStatus } from "@/utils/get-schedule-status";
 import Link from "next/link";
 import SchedulesCalendar from "../features/schedules/schedules-calendar";
+import { dateFormatter } from "@/utils/date-formatter";
 
 export default async function StudentUpcomingSchedules({ userId }) {
     const { data, error } = await getScheduleByStudent(userId);
@@ -55,10 +56,7 @@ export default async function StudentUpcomingSchedules({ userId }) {
                                     {schedule.title || "Schedule"}
                                 </h4>
                                 <p className="text-xs text-muted-foreground mt-1">
-                                    {new Date(
-                                        schedule.date
-                                    ).toLocaleDateString()}{" "}
-                                    •
+                                    {dateFormatter(schedule.date)} •
                                     {schedule.company_name &&
                                         ` with ${schedule.company_name}`}
                                 </p>
@@ -67,10 +65,7 @@ export default async function StudentUpcomingSchedules({ userId }) {
                     </div>
                 )}
 
-                <SchedulesCalendar
-                    schedules={upcomingSchedules}
-                    dates={dates}
-                />
+                <SchedulesCalendar dates={dates} />
             </BorderBox>
         </>
     );

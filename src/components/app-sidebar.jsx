@@ -208,6 +208,12 @@ const navigationConfig = [
                     },
                 ],
             },
+            {
+                href: "/instructor/schedules",
+                icon: <Calendar />,
+                label: "Student Schedules",
+                roles: ["instructor"],
+            },
         ],
     },
     {
