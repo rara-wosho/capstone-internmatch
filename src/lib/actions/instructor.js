@@ -376,7 +376,8 @@ export async function getStudentExamResults(instructorId, search) {
             groups!inner(
                 id,
                 group_name,
-                ojt_instructor_id
+                ojt_instructor_id,
+                created_at
             ),
             exam_attempt(
                 id,
@@ -389,7 +390,8 @@ export async function getStudentExamResults(instructorId, search) {
             )
         `
         )
-        .eq("groups.ojt_instructor_id", instructorId);
+        .eq("groups.ojt_instructor_id", instructorId)
+        .order("groups(created_at)", { ascending: false });
 
     // --- Apply search filter if provided ---
     if (search.trim() !== "") {

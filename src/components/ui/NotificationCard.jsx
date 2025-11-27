@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -14,19 +14,16 @@ import {
     CheckCircle2,
     Trash2,
     MoreVertical,
-    Calendar,
-    User,
-    FileText,
-    Mail,
-    AlertCircle,
     CheckCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 import { useNotifications } from "@/context/NotificationContext";
+import { useRouter } from "nextjs-toploader/app";
 
 export default function NotificationCard({ notification }) {
     const { markAsRead, deleteNotification } = useNotifications();
+    const router = useRouter();
+    const [isPending, startTransition] = useTransition();
 
     const handleMarkAsRead = () => {
         markAsRead(notification.id);
@@ -34,6 +31,19 @@ export default function NotificationCard({ notification }) {
 
     const handleDelete = () => {
         deleteNotification(notification.id);
+    };
+
+    const handleCardClick = (e) => {
+        e.stopPropagation();
+
+        if (notification.link_url) {
+            // Simple approach - mark as read and navigate immediately
+            if (!notification.is_read) {
+                markAsRead(notification.id);
+            }
+
+            router.push(notification.link_url);
+        }
     };
 
     // Format timestamp
@@ -61,8 +71,9 @@ export default function NotificationCard({ notification }) {
 
     return (
         <div
+            onClick={handleCardClick}
             className={cn(
-                "p-3 transition-all duration-200 hover:shadow-md rounded-sm bg-card",
+                "p-3 transition-all duration-200 hover:shadow-md rounded-sm bg-card cursor-pointer",
                 notification.is_read ? "" : ""
             )}
         >
@@ -107,27 +118,16 @@ export default function NotificationCard({ notification }) {
                             {notification.message}
                         </p>
 
-                        <div className="flex items-center justify-between gap-2">
-                            {notification.link_url && (
-                                <Link
-                                    href={notification.link_url}
-                                    className="text-sm text-accent-foreground"
-                                >
-                                    View details
-                                </Link>
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-500">
+                                {formatTime(notification.created_at)}
+                            </span>
+                            {notification.is_read && (
+                                <CheckCircle2
+                                    size={14}
+                                    className="text-green-500"
+                                />
                             )}
-
-                            <div className="flex items-center gap-1 translate-x-4">
-                                <span className="text-sm text-gray-500">
-                                    {formatTime(notification.created_at)}
-                                </span>
-                                {notification.is_read && (
-                                    <CheckCircle2
-                                        size={14}
-                                        className="text-green-500"
-                                    />
-                                )}
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -138,6 +138,7 @@ export default function NotificationCard({ notification }) {
                             variant="ghost"
                             size="sm"
                             className="h-8 w-8 p-0 opacity-60 hover:opacity-100"
+                            onClick={(e) => e.stopPropagation()} // Prevent card click when clicking menu
                         >
                             <MoreVertical className="h-4 w-4" />
                         </Button>
@@ -145,7 +146,10 @@ export default function NotificationCard({ notification }) {
                     <DropdownMenuContent align="end" className="w-48">
                         {!notification.is_read && (
                             <DropdownMenuItem
-                                onClick={handleMarkAsRead}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleMarkAsRead();
+                                }}
                                 className="flex items-center gap-2 cursor-pointer"
                             >
                                 <CheckCircle className="h-4 w-4" />
@@ -153,7 +157,10 @@ export default function NotificationCard({ notification }) {
                             </DropdownMenuItem>
                         )}
                         <DropdownMenuItem
-                            onClick={handleDelete}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleDelete();
+                            }}
                             className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive"
                         >
                             <Trash2 className="h-4 w-4 text-destructive" />

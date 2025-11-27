@@ -72,7 +72,7 @@ export default async function InstructorExamResultsPage({ searchParams }) {
                 examData?.map((group, groupIndex) => (
                     <div
                         key={groupIndex}
-                        className="border rounded-xl bg-card mb-6"
+                        className="border rounded-xl bg-card mb-3"
                     >
                         {/* Group Header */}
                         <div className="px-3 md:px-5 py-3 border-b">
