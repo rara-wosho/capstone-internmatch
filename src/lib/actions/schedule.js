@@ -358,6 +358,9 @@ export async function createSchedule(prevState, formData) {
             }
         }
 
+        revalidatePath("/student/schedules");
+        revalidatePath("/instructor/schedules");
+
         return {
             success: true,
             message: "Schedule created successfully.",
@@ -370,7 +373,6 @@ export async function createSchedule(prevState, formData) {
 }
 
 // Update the schedule details
-
 export async function updateSchedule(prevState, formData) {
     const supabase = await createClient();
     const { user } = await getCurrentUser();
@@ -431,6 +433,7 @@ export async function updateSchedule(prevState, formData) {
         }
 
         revalidatePath("/company/schedules");
+        revalidatePath("/student/schedules");
 
         return {
             success: true,

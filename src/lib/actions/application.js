@@ -151,6 +151,7 @@ export async function submitApplication(formData) {
         revalidatePath("/company/applicants");
         revalidatePath(`/student/companies/${company_id}`);
         revalidatePath("/student/applications"); // Student's applications list
+        revalidatePath("/instructor/student-applications");
 
         return {
             success: true,
@@ -263,6 +264,9 @@ export async function updateApplicationStatus({
 
     revalidatePath(`/company/applicants/${applicationId}`);
     revalidatePath("/company/applicants");
+    revalidatePath("/student/applications");
+    revalidatePath("/instructor/student-applications");
+    revalidatePath("/instructor/accepted");
     return { success: true };
 }
 
@@ -289,6 +293,8 @@ export async function cancelApplication(applicationId) {
         }
 
         revalidatePath("/student/applications");
+        revalidatePath("/company/applicants");
+
         return { success: true };
     } catch (error) {
         console.error("Unexpected error:", error);
@@ -588,6 +594,7 @@ export async function approveStudentApplication({
         revalidatePath("/instructor/accepted");
         revalidatePath("/instructor/student-applications");
         revalidatePath("/company/applicants");
+        revalidatePath("/company/approved-applicants");
         revalidatePath(`/student/applications`);
 
         return {
@@ -704,6 +711,8 @@ export async function submitCannotProceedStatus(
         }
     }
 
-    revalidatePath("instructor/accepted");
+    revalidatePath("/instructor/accepted");
+    revalidatePath("/company/applicants");
+
     return { success: true, error: "" };
 }
