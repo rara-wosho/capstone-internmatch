@@ -8,6 +8,14 @@ import { getStudentSchedulesByInstructor } from "@/lib/actions/instructor";
 import { dateFormatter } from "@/utils/date-formatter";
 import { getScheduleStatus } from "@/utils/get-schedule-status";
 
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion";
+import { ChevronDown } from "lucide-react";
+
 export default async function StudentSchedulesPage() {
     const { data, error } = await getStudentSchedulesByInstructor();
 
@@ -59,88 +67,101 @@ export default async function StudentSchedulesPage() {
                         statusColors[scheduleStatus] || statusColors.upcoming;
 
                     return (
-                        <div
-                            className="border bg-card rounded-xl mb-3"
+                        <Accordion
                             key={s.id}
+                            type="single"
+                            collapsible
+                            className="border bg-card rounded-xl mb-3"
                         >
-                            <BorderBox className="border-b flex items-center gap-3 justify-between">
-                                <div>
-                                    <TertiaryLabel>{s.title}</TertiaryLabel>
+                            <AccordionItem value="item-1">
+                                <AccordionTrigger>
+                                    <BorderBox className="border-b flex flex-wrap items-center gap-3 justify-between w-full">
+                                        <div>
+                                            <TertiaryLabel>
+                                                {s.title}
+                                            </TertiaryLabel>
+                                            <p className="text-sm text-muted-foreground">
+                                                Company : {s.company_name}
+                                            </p>
+                                        </div>
+
+                                        <div className="flex items-center gap-2">
+                                            <div className="capitalize rounded-full text-sm py-2 px-3 text-green-600 border-green-500/30 border">
+                                                {s.type}
+                                            </div>
+                                            <div
+                                                className={`capitalize rounded-full text-sm py-2 px-3 border ${statusColor}`}
+                                            >
+                                                {scheduleStatus}
+                                            </div>
+                                            <div className="size-9 rounded-full border bg-muted flex items-center justify-center">
+                                                <ChevronDown className="[data-state=open]:rotate-180" />
+                                            </div>
+                                        </div>
+                                    </BorderBox>
+                                </AccordionTrigger>
+                                <AccordionContent>
+                                    <BorderBox>
+                                        <div className="mb-3">
+                                            <p className="text-xs text-muted-foreground">
+                                                Details
+                                            </p>
+                                            <p className="whitespace-pre-wrap ">
+                                                {s.details}
+                                            </p>
+                                        </div>
+
+                                        {s.additional_notes && (
+                                            <div className="mb-3">
+                                                <p className="text-xs text-muted-foreground">
+                                                    Additional Notes
+                                                </p>
+                                                <p className="whitespace-pre-wrap ">
+                                                    {s.additional_notes}
+                                                </p>
+                                            </div>
+                                        )}
+
+                                        <div className="flex items-center gap-3 flex-wrap">
+                                            <div className="bg-muted px-3 py-2 rounded-sm">
+                                                <p className="text-sm">
+                                                    {dateFormatter(s.date)}
+                                                </p>
+                                                <p className="text-xs text-muted-foreground">
+                                                    Date
+                                                </p>
+                                            </div>
+                                            <div className="bg-muted px-3 py-2 rounded-sm">
+                                                <p className="text-sm">
+                                                    {formatTime(s.time)}
+                                                </p>
+                                                <p className="text-xs text-muted-foreground">
+                                                    Time
+                                                </p>
+                                            </div>
+                                            <div className="bg-muted px-3 py-2 rounded-sm">
+                                                <p className="text-sm max-w-[300px] truncate">
+                                                    {s.location}
+                                                </p>
+                                                <p className="text-xs text-muted-foreground">
+                                                    Location
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </BorderBox>
+                                </AccordionContent>
+                                <div className="px-3 md:px-5 py-3 space-y-2">
                                     <p className="text-sm text-muted-foreground">
-                                        Company : {s.company_name}
+                                        Participants ({s.students?.length})
                                     </p>
+                                    {s.students.map((s) => (
+                                        <p key={s.id}>
+                                            {s.firstname} {s.lastname}
+                                        </p>
+                                    ))}
                                 </div>
-
-                                <div className="flex items-center gap-2">
-                                    <div className="capitalize rounded-full text-sm py-2 px-3 text-green-600 border-green-500/30 border">
-                                        {s.type}
-                                    </div>
-                                    <div
-                                        className={`capitalize rounded-full text-sm py-2 px-3 border ${statusColor}`}
-                                    >
-                                        {scheduleStatus}
-                                    </div>
-                                </div>
-                            </BorderBox>
-                            <BorderBox>
-                                <div className="mb-3">
-                                    <p className="text-xs text-muted-foreground">
-                                        Details
-                                    </p>
-                                    <p className="whitespace-pre-wrap ">
-                                        {s.details}
-                                    </p>
-                                </div>
-
-                                {s.additional_notes && (
-                                    <div className="mb-3">
-                                        <p className="text-xs text-muted-foreground">
-                                            Additional Notes
-                                        </p>
-                                        <p className="whitespace-pre-wrap ">
-                                            {s.additional_notes}
-                                        </p>
-                                    </div>
-                                )}
-
-                                <div className="flex items-center gap-3 flex-wrap">
-                                    <div className="bg-muted px-3 py-2 rounded-sm">
-                                        <p className="text-sm">
-                                            {dateFormatter(s.date)}
-                                        </p>
-                                        <p className="text-xs text-muted-foreground">
-                                            Date
-                                        </p>
-                                    </div>
-                                    <div className="bg-muted px-3 py-2 rounded-sm">
-                                        <p className="text-sm">
-                                            {formatTime(s.time)}
-                                        </p>
-                                        <p className="text-xs text-muted-foreground">
-                                            Time
-                                        </p>
-                                    </div>
-                                    <div className="bg-muted px-3 py-2 rounded-sm">
-                                        <p className="text-sm max-w-[300px] truncate">
-                                            {s.location}
-                                        </p>
-                                        <p className="text-xs text-muted-foreground">
-                                            Location
-                                        </p>
-                                    </div>
-                                </div>
-                            </BorderBox>
-                            <div className="px-3 md:px-5 border-t py-3 space-y-2">
-                                <p className="text-sm text-muted-foreground">
-                                    Participants ({s.students?.length})
-                                </p>
-                                {s.students.map((s) => (
-                                    <p key={s.id}>
-                                        {s.firstname} {s.lastname}
-                                    </p>
-                                ))}
-                            </div>
-                        </div>
+                            </AccordionItem>
+                        </Accordion>
                     );
                 })
             )}
