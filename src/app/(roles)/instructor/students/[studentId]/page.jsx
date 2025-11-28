@@ -100,15 +100,16 @@ export default async function Page({ params }) {
                 </div>
             </div>
 
-            {applications?.map((app) =>
-                app.is_intern ? (
-                    <div
-                        key={app.id}
-                        className="p-3 inline-flex border border-green-500/30 bg-green-500/10 rounded-xl mb-3  font-bold tracking-wider uppercase text-green-600"
-                    >
-                        A student intern at {app.company}
-                    </div>
-                ) : null
+            {applications?.map(
+                (app, index) =>
+                    app.is_intern && (
+                        <div
+                            key={index}
+                            className="p-3 inline-flex border border-green-500/30 bg-green-500/10 rounded-xl mb-3  font-bold tracking-wider uppercase text-green-600"
+                        >
+                            A student intern at {app.company}
+                        </div>
+                    )
             )}
 
             {/* Student Info Section */}

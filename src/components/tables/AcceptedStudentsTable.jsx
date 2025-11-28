@@ -18,7 +18,7 @@ import {
     submitCannotProceedStatus,
 } from "@/lib/actions/application";
 import { toast } from "sonner";
-import { Check, Loader } from "lucide-react";
+import { ChevronDown, Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import {
@@ -32,9 +32,17 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
+
 import { Textarea } from "../ui/textarea";
 import FormLabel from "../ui/FormLabel";
 import StatusPill from "../ui/StatusPill";
+import Link from "next/link";
 
 export default function AcceptedStudentsTable({
     students,
@@ -156,6 +164,9 @@ export default function AcceptedStudentsTable({
                         <TableHead className="font-bold">
                             Date Applied
                         </TableHead>
+                        <TableHead className="font-bold">
+                            Date Accepted
+                        </TableHead>
                         <TableHead className="font-bold">Group</TableHead>
                         <TableHead className="font-bold">Decision</TableHead>
                         <TableHead className="font-bold">Status</TableHead>
@@ -172,12 +183,69 @@ export default function AcceptedStudentsTable({
                         filteredApplications?.map((student) => (
                             <TableRow key={student?.student_id}>
                                 <TableCell className="font-medium">
-                                    {student?.lastname}, {student?.firstname}
+                                    <Popover>
+                                        <PopoverTrigger className="cursor-pointer">
+                                            <div className="flex items-center gap-1.5">
+                                                <ChevronDown size={18} />
+                                                <p>
+                                                    {student?.lastname},{" "}
+                                                    {student?.firstname}
+                                                </p>
+                                            </div>
+                                        </PopoverTrigger>
+                                        <PopoverContent
+                                            align="start"
+                                            className="p-3 space-y-2"
+                                        >
+                                            <div className="flex text-secondary-foreground items-center text-sm gap-2">
+                                                <p className="font-medium text-muted-foreground">
+                                                    Company :
+                                                </p>
+                                                <p>{companyName} </p>
+                                            </div>
+                                            {student?.approved_at && (
+                                                <div className="flex text-secondary-foreground items-center text-sm gap-2">
+                                                    <p className="font-medium text-muted-foreground">
+                                                        Approved At :
+                                                    </p>
+                                                    <p>
+                                                        {dateFormatter(
+                                                            student?.approved_at
+                                                        )}
+                                                    </p>
+                                                </div>
+                                            )}
+
+                                            <div className="pt-2 mt-2 border-t">
+                                                <Button
+                                                    asChild
+                                                    variant="secondary"
+                                                    size="sm"
+                                                >
+                                                    <Link
+                                                        href={`/instructor/students/${student?.student_id}`}
+                                                    >
+                                                        View Profile
+                                                    </Link>
+                                                </Button>
+                                            </div>
+                                        </PopoverContent>
+                                    </Popover>
                                 </TableCell>
                                 <TableCell>
                                     {dateFormatter(student?.applied_at)}
                                 </TableCell>
-                                <TableCell>{student?.group_name}</TableCell>
+                                <TableCell>
+                                    {dateFormatter(student?.reviewed_at)}
+                                </TableCell>
+                                <TableCell>
+                                    <Link
+                                        className="hover:underline underline-offset-2"
+                                        href={`/instructor/manage-groups/${student?.group_id}`}
+                                    >
+                                        {student?.group_name}
+                                    </Link>
+                                </TableCell>
                                 <TableCell className="w-[300px]">
                                     <div className="flex items-center gap-2 relative">
                                         {/* Ispending indicator  */}

@@ -2,11 +2,8 @@ import ApplicantsBlock from "@/components/blocks/ApplicantsBlock";
 import CompanyDashboardOverview from "@/components/blocks/CompanyDashboardOverview";
 import CompanyScheduleOverview from "@/components/blocks/CompanyScheduleOverview";
 import BorderBox from "@/components/ui/BorderBox";
-import DashboardCountBox from "@/components/ui/DashboardCountBox";
 import ErrorUi from "@/components/ui/ErrorUi";
 import { getCurrentUser } from "@/lib/actions/auth";
-import { User } from "lucide-react";
-import { notFound } from "next/navigation";
 
 export default async function Page() {
     const { user } = await getCurrentUser();

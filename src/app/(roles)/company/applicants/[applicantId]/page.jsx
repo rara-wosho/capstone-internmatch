@@ -216,7 +216,7 @@ export default async function Page({ params }) {
                                 <div>
                                     <Link2 size={15} />
                                 </div>
-                                <p className="text-sm">
+                                <p className="text-sm truncate max-w-[300px] hover:max-w-[700px]">
                                     Portfolio: {applicant?.portfolio_link}
                                 </p>
                             </Link>

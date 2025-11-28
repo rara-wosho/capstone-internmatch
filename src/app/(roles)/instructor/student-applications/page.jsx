@@ -29,7 +29,7 @@ export default async function StudentApplicationsPage({ searchParams }) {
             lastname,
             avatar_url,
             group_id,
-            groups!inner(ojt_instructor_id),
+            groups!inner(ojt_instructor_id, group_name),
             applicants!inner(
               id,
               student_id,
@@ -40,6 +40,7 @@ export default async function StudentApplicationsPage({ searchParams }) {
         `
         )
         .eq("groups.ojt_instructor_id", user.id)
+        .eq("is_active", true)
         .order("applied_at", {
             ascending: sort === "asc",
             referencedTable: "applicants",
@@ -60,9 +61,13 @@ export default async function StudentApplicationsPage({ searchParams }) {
 
     return (
         <div>
-            <SecondaryLabel className="mb-4 md:mb-5">
-                Student Applications
-            </SecondaryLabel>
+            <div className="mb-4 md:mb-5">
+                <SecondaryLabel>Student Applications Overview</SecondaryLabel>
+                <p className="text-sm text-muted-foreground">
+                    Track your student application updates with ease. Note: Only
+                    active students will be shown here.
+                </p>
+            </div>
 
             <BorderBox className="border rounded-xl bg-card shadow-xs mb-4">
                 <Suspense fallback={<p>Loading...</p>}>

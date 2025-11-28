@@ -78,9 +78,14 @@ export default function InstructorApplicationsSection({ applications = [] }) {
                                     />
                                     <AvatarFallback>?</AvatarFallback>
                                 </Avatar>
-                                <p className="font-semibold hover:text-accent-foreground">
-                                    {app.firstname} {app.lastname}
-                                </p>
+                                <div>
+                                    <p className="font-semibold hover:text-accent-foreground">
+                                        {app.firstname} {app.lastname}
+                                    </p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Group: {app?.groups?.group_name}
+                                    </p>
+                                </div>
                             </Link>
 
                             <div className="p-4 space-y-3">

@@ -4,12 +4,10 @@ import {
     FileUser,
     SquareCheckBig,
     UserRoundCheck,
-    UserRoundX,
     Users,
 } from "lucide-react";
 import DashboardCountBox from "../ui/DashboardCountBox";
 import { getCompanyDashboardOverview } from "@/lib/actions/company";
-import TitleText from "../ui/TitleText";
 import SecondaryLabel from "../ui/SecondaryLabel";
 import StatusPill from "../ui/StatusPill";
 import Link from "next/link";
@@ -49,8 +47,7 @@ export default async function CompanyDashboardOverview({ userId }) {
             <div className="mb-3 md:mb-5">
                 <SecondaryLabel>Dashboard</SecondaryLabel>
                 <p className="text-sm text-muted-foreground">
-                    Here’s where you can keep track of your applicants, exams,
-                    and company updates.
+                    Keep track of your applicants, exams, and company updates.
                 </p>
             </div>
             <div className="grow rounded-xl bg-card p-3 sm:p-4 border md:p-5 mb-2 sm:mb-3 md:mb-4">
