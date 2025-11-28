@@ -1,6 +1,7 @@
 import AboutGroup from "@/components/blocks/AboutGroup";
 import GroupInviteLink from "@/components/blocks/GroupInviteLink";
 import SearchField from "@/components/forms/SearchStudent";
+import { TransferStudentModal } from "@/components/modals/TransferStudentModal";
 import GroupMembersTable from "@/components/tables/GroupMembersTable";
 import BackButton from "@/components/ui/BackButton";
 import BorderBox from "@/components/ui/BorderBox";
@@ -86,14 +87,18 @@ export default async function Page({ params, searchParams }) {
 
     return (
         <div className="mb-28">
-            <div className="mb-3 md:mb-5">
-                <BackButton className="flex items-center gap-1">
-                    <ChevronLeft />
-                    <SecondaryLabel className="text-left">
-                        {data?.group_name ?? "Unknown group"}
-                    </SecondaryLabel>
-                </BackButton>
-                <BreadCrumbs links={links} />
+            <div className="mb-3 md:mb-5 flex items-center gap-2 justify-between flex-wrap">
+                <div>
+                    <BackButton className="flex items-center gap-1">
+                        <ChevronLeft />
+                        <SecondaryLabel className="text-left">
+                            {data?.group_name ?? "Unknown group"}
+                        </SecondaryLabel>
+                    </BackButton>
+                    <BreadCrumbs links={links} />
+                </div>
+
+                {/* <TransferStudentModal groupId={groupId} />  */}
             </div>
 
             <div className="grid grid-cols-1 gap-3 md:gap-4 mt-4">

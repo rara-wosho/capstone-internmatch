@@ -1,7 +1,6 @@
 import BorderBox from "@/components/ui/BorderBox";
 import EmptyUi from "@/components/ui/EmptyUi";
 import ErrorUi from "@/components/ui/ErrorUi";
-import FormLabel from "@/components/ui/FormLabel";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import TertiaryLabel from "@/components/ui/TertiaryLabel";
 import { getStudentSchedulesByInstructor } from "@/lib/actions/instructor";
@@ -22,8 +21,6 @@ export default async function StudentSchedulesPage() {
     if (error) {
         return <ErrorUi secondaryMessage={error} />;
     }
-
-    console.log(data);
 
     const formatTime = (timeString) => {
         if (!timeString) return "";

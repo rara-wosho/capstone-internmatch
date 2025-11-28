@@ -4,7 +4,6 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 
 export default function ExamCard({ exam }) {
-    console.log("exams: ", exam);
     return (
         <BorderBox className="border rounded-xl bg-card shadow-xs flex flex-col">
             <h1 className="font-semibold mb-[2px]">{exam?.title}</h1>
@@ -18,7 +17,7 @@ export default function ExamCard({ exam }) {
                     : "No description provided."}
             </p>
             {exam?.isAnswered ? (
-                <p className="text-sm text-green-600">Already answered</p>
+                <p className="text-sm text-green-600 mb-1">Already answered</p>
             ) : (
                 <div className="flex items-center gap-3">
                     <p className="flex items-center gap-1 text-muted-foreground text-xs">

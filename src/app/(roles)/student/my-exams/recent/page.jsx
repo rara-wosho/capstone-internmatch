@@ -28,7 +28,12 @@ export default async function Page() {
 
     return (
         <div>
-            <SecondaryLabel className="mb-3">Recent Exams</SecondaryLabel>
+            <div className="mb-3">
+                <SecondaryLabel>Recent Exams</SecondaryLabel>
+                <p className="text-sm text-muted-foreground">
+                    View your recent exam results
+                </p>
+            </div>
 
             {data.length > 0 ? (
                 <RecentExamsTable data={data} />

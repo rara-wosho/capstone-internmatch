@@ -10,6 +10,7 @@ import {
     Hash,
     Info,
     LayoutList,
+    AlertCircle,
 } from "lucide-react";
 
 import {
@@ -35,9 +36,95 @@ import {
 import ExamReminders from "@/components/exam/ExamReminders";
 import { useSession } from "@/context/SessionContext";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ExaminationSection({ companyExams }) {
     const { userData } = useSession();
+    const [loading, setLoading] = useState(true);
+    const [hasTakenAssessment, setHasTakenAssessment] = useState(false);
+    const [assessmentLoading, setAssessmentLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    // Check whether student already took the assessment test before allowing to start the exam
+    useEffect(() => {
+        const checkAssessmentAttempt = async () => {
+            const supabase = createClient();
+
+            try {
+                setAssessmentLoading(true);
+                setError("");
+
+                const { data: attempt, error } = await supabase
+                    .from("assessment_attempt")
+                    .select("id, assessment_test!inner(id)")
+                    .eq("student_id", userData.id)
+                    .eq("assessment_test.is_deleted", false)
+                    .limit(3);
+
+                if (error) {
+                    setError(error.message);
+                    console.error("Error checking assessment:", error);
+                    return;
+                }
+
+                console.log("Assessment data:", attempt);
+
+                // If we have at least one completed assessment
+                if (attempt?.length > 0) {
+                    setHasTakenAssessment(true);
+                } else {
+                    setHasTakenAssessment(false);
+                }
+            } catch (error) {
+                console.error("Error in assessment check:", error);
+                setError("Failed to check assessment status");
+                setHasTakenAssessment(false);
+            } finally {
+                setAssessmentLoading(false);
+                setLoading(false);
+            }
+        };
+
+        if (userData?.id) {
+            checkAssessmentAttempt();
+        } else {
+            setAssessmentLoading(false);
+            setLoading(false);
+        }
+    }, [userData?.id]);
+
+    // Show error state
+    if (error) {
+        return (
+            <div>
+                <div className="flex items-center justify-between mb-6 pb-3 border-b">
+                    <TertiaryLabel>Examinations</TertiaryLabel>
+                </div>
+                <div className="p-4 border border-red-200 bg-red-50 rounded-md">
+                    <p className="text-red-700 text-sm">
+                        Error loading exams: {error}
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
+    // Show loading state
+    if (loading || assessmentLoading) {
+        return (
+            <div>
+                <div className="flex items-center justify-between mb-6 pb-3 border-b">
+                    <TertiaryLabel>Examinations</TertiaryLabel>
+                </div>
+                <div className="animate-pulse">
+                    <Skeleton className="h-4 rounded w-3/4 mb-2"></Skeleton>
+                    <Skeleton className="h-4 rounded w-1/2"></Skeleton>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -127,31 +214,87 @@ export default function ExaminationSection({ companyExams }) {
                                 </p>
                             )}
 
+                            {/* Assessment requirement warning */}
+                            {!hasTakenAssessment && (
+                                <div className="mb-4 p-3 border border-amber-600/40 bg-amber-500/5 rounded-sm">
+                                    <div className="flex items-start gap-2">
+                                        <AlertCircle
+                                            size={16}
+                                            className="text-amber-600 mt-0.5 flex-shrink-0"
+                                        />
+                                        <div>
+                                            <p className="text-sm text-amber-600 font-medium mb-1">
+                                                Assessment Required
+                                            </p>
+                                            <p className="text-xs text-amber-600/80 mb-3">
+                                                You must complete the assessment
+                                                test before taking company
+                                                exams.
+                                            </p>
+                                            <Button
+                                                asChild
+                                                variant="outline"
+                                                size="sm"
+                                                className="text-amber-700 border-amber-600/40 hover:bg-amber-500/10"
+                                            >
+                                                <Link href="/student/assessment-test">
+                                                    Take Assessment Test
+                                                </Link>
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Instructor access warning */}
                             {!userData.exam_access && (
-                                <p className="text-sm text-yellow-600 mb-4 border border-yellow-600/40 bg-yellow-500/5 rounded-sm p-2">
-                                    <span>
-                                        You can’t take this exam yet. Your
-                                        instructor hasn’t granted you access.
-                                    </span>
-                                </p>
+                                <div className="mb-4 p-3 border border-yellow-600/40 bg-yellow-500/5 rounded-sm">
+                                    <div className="flex items-start gap-2">
+                                        <AlertCircle
+                                            size={16}
+                                            className="text-yellow-600 mt-0.5 flex-shrink-0"
+                                        />
+                                        <div>
+                                            <p className="text-sm text-yellow-600">
+                                                You can't take this exam yet.
+                                                Your instructor hasn't granted
+                                                you access.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                             )}
 
                             <div className="mt-auto flex items-center mb-1">
                                 <Dialog>
-                                    {userData.exam_access && (
-                                        <DialogTrigger
-                                            asChild
-                                            className="w-full"
-                                        >
-                                            <Button
-                                                disabled={exam?.hasAttempted}
+                                    {userData.exam_access &&
+                                        hasTakenAssessment && (
+                                            <DialogTrigger
+                                                asChild
+                                                className="w-full"
                                             >
-                                                {exam?.hasAttempted
-                                                    ? "Already answered"
-                                                    : "View exam details"}
-                                            </Button>
-                                        </DialogTrigger>
+                                                <Button
+                                                    disabled={
+                                                        exam?.hasAttempted
+                                                    }
+                                                >
+                                                    {exam?.hasAttempted
+                                                        ? "Already answered"
+                                                        : "Take Exam"}
+                                                </Button>
+                                            </DialogTrigger>
+                                        )}
+
+                                    {/* Show disabled button if requirements not met */}
+                                    {(!userData.exam_access ||
+                                        !hasTakenAssessment) && (
+                                        <Button disabled className="w-full">
+                                            {!hasTakenAssessment
+                                                ? "Complete Assessment First"
+                                                : "Waiting for Permission"}
+                                        </Button>
                                     )}
+
                                     <DialogContent className="sm:max-w-2xl">
                                         <DialogHeader>
                                             <DialogTitle>
@@ -216,11 +359,11 @@ export default function ExaminationSection({ companyExams }) {
                                             </DialogClose>
                                             <Button asChild>
                                                 <Link
-                                                    className="sm:w-1/2"
+                                                    className="sm:w-1/2 flex items-center justify-center gap-2"
                                                     href={`/student/e/${exam?.id}`}
                                                 >
-                                                    I aggree and start
-                                                    <ArrowUpRight />
+                                                    I agree and start
+                                                    <ArrowUpRight size={16} />
                                                 </Link>
                                             </Button>
                                         </DialogFooter>

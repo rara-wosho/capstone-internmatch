@@ -32,8 +32,6 @@ export default function ApplicantActions({ applicant }) {
         });
     };
 
-    console.log("applicant", applicant);
-
     return (
         <div className="border rounded-xl bg-card shadow-xs mb-3">
             <div className="py-3 px-3 md:px-5 border-b flex items-center justify-between gap-2 flex-wrap">

@@ -25,6 +25,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import Link from "next/link";
 
 export default function ExamQuestionForm({ examinationData }) {
     const [isExpired, setIsExpired] = useState(false);
@@ -200,12 +201,12 @@ export default function ExamQuestionForm({ examinationData }) {
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <button
+                        <Link
+                            href="/student/my-exams/recent"
                             className="text-white bg-green-600/80 px-3 py-2 rounded-sm"
-                            onClick={() => router.replace("/student/exams")}
                         >
-                            Back to Exams
-                        </button>
+                            View Result
+                        </Link>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>

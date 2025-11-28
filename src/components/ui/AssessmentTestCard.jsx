@@ -17,7 +17,9 @@ export default function AssessmentTestCard({ assessmentTest }) {
 
     return (
         <BorderBox className="border rounded-xl bg-card shadow-xs flex flex-col">
-            <p className="mb-1">{assessmentTest.assessment_title}</p>
+            <div className="mb-1">
+                <p>{assessmentTest.assessment_title}</p>
+            </div>
 
             <p className="text-sm text-muted-foreground mb-3">
                 {assessmentTest.assessment_description

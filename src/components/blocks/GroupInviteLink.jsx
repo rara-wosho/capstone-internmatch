@@ -54,7 +54,8 @@ export default function GroupInviteLink({ groupId, is_shareable }) {
             </div>
 
             <p className="text-xs text-muted-foreground mb-2">
-                Invite students to create an account for this group
+                Student can only join InternMatch with your invitation link.
+                Once joined, they will be a member of this group.
             </p>
 
             <div className="flex items-center gap-2">
