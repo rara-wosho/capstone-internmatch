@@ -12,7 +12,7 @@ export default async function AdminRegistrationPage() {
     const { data, error } = await supabase
         .from("registrations")
         .select(
-            "firstname, lastname, registered_at, documents_link, school, email, barangay, city, province, status, id"
+            "firstname, lastname, registered_at, valid_id_url, credential_url, school, email, barangay, city, province, status, id"
         )
         .order("registered_at", { ascending: false });
 

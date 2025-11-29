@@ -59,10 +59,9 @@ export default function DeleteExamModal({ examId, type = "button" }) {
                 <AlertDialogHeader>
                     <AlertDialogTitle>Delete Exam?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This action is permanent and cannot be undone. Deleting
-                        this exam will remove all its questions and examinee
-                        data. If you only want to hide it, consider unpublishing
-                        instead.
+                        Deleting this exam will remove all its questions and
+                        examinee data. If you only want to hide it, consider
+                        unpublishing instead.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
 

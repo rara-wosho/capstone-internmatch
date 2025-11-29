@@ -55,8 +55,9 @@ export default function RegistrantsTable({ registrants }) {
                     <TableHeader>
                         <TableRow>
                             <TableHead>Complete Name</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Documents Link</TableHead>
+                            {/* <TableHead>Email</TableHead>  */}
+                            <TableHead>Valid ID</TableHead>
+                            <TableHead>Credential</TableHead>
                             <TableHead>Registration Date</TableHead>
                             <TableHead>School</TableHead>
                             <TableHead className="text-center">
@@ -76,24 +77,41 @@ export default function RegistrantsTable({ registrants }) {
                                 <TableCell className="font-semibold">
                                     {reg?.firstname} {reg?.lastname}
                                 </TableCell>
-                                <TableCell className="font-semibold">
+                                {/* <TableCell className="font-semibold">
                                     {reg?.email}
+                                </TableCell> */}
+                                <TableCell className="max-w-[180px]">
+                                    {reg?.valid_id_url && (
+                                        <Link
+                                            target="_blank"
+                                            href={reg?.valid_id_url}
+                                            className="block max-w-[300px] truncate hover:text-accent-foreground hover:underline underline-offset-2"
+                                        >
+                                            {reg?.valid_id_url}
+                                        </Link>
+                                    )}
                                 </TableCell>
                                 <TableCell className="max-w-[180px]">
-                                    <Link
-                                        target="_blank"
-                                        href={reg?.documents_link}
-                                        className="block max-w-[300px] truncate hover:text-accent-foreground hover:underline underline-offset-2"
-                                    >
-                                        {reg?.documents_link}
-                                    </Link>
+                                    {reg?.credential_url && (
+                                        <Link
+                                            target="_blank"
+                                            href={reg?.credential_url}
+                                            className="block max-w-[300px] truncate hover:text-accent-foreground hover:underline underline-offset-2"
+                                        >
+                                            {reg?.credential_url}
+                                        </Link>
+                                    )}
                                 </TableCell>
                                 <TableCell>
                                     <p className="text-xs">
                                         {dateFormatter(reg?.registered_at)}
                                     </p>
                                 </TableCell>
-                                <TableCell>{reg?.school}</TableCell>
+                                <TableCell>
+                                    <p className="max-w-[200px] truncate">
+                                        {reg?.school}
+                                    </p>
+                                </TableCell>
 
                                 <TableCell>
                                     <div

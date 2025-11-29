@@ -234,6 +234,8 @@ export async function submitRegistration(prevState, formData) {
     }
 
     revalidatePath("/create-account/instructor");
+    revalidatePath("/admin/registrations");
+    revalidatePath("/admin");
 
     return {
         success: true,
