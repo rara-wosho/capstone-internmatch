@@ -21,14 +21,13 @@ import SecondaryLabel from "../ui/SecondaryLabel";
 import { ScrollArea } from "../ui/scroll-area";
 import FormLabel from "../ui/FormLabel";
 import { Input } from "../ui/input";
-import { Check, Info, Loader } from "lucide-react";
+import { Check, Info, Loader, Upload, X } from "lucide-react";
 import { Separator } from "../ui/separator";
 import Link from "next/link";
 import { Textarea } from "../ui/textarea";
 import { createClient } from "@/lib/supabase/client";
 import { submitApplication } from "@/lib/actions/application";
 import { toast } from "sonner";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 export default function ApplyModal({
     companyEmail,
@@ -47,13 +46,20 @@ export default function ApplyModal({
     // loading states
     const [loading, setLoading] = useState(true);
     const [checkingApply, setCheckingApply] = useState(true);
+    const [uploadingResume, setUploadingResume] = useState(false);
+    const [uploadingCoverLetter, setUploadingCoverLetter] = useState(false);
 
     // form Data
     const [formData, setFormData] = useState({
-        resume_link: "",
+        resume_url: "",
+        cover_letter_url: "",
         portfolio_link: "",
         introduction: "",
     });
+
+    // file states
+    const [resumeFile, setResumeFile] = useState(null);
+    const [coverLetterFile, setCoverLetterFile] = useState(null);
 
     if (!userData) {
         return (
@@ -62,23 +68,141 @@ export default function ApplyModal({
     }
 
     const resetForm = () => {
-        setFormData({ resume_link: "", portfolio_link: "", introduction: "" });
+        setFormData({
+            resume_url: "",
+            cover_letter_url: "",
+            portfolio_link: "",
+            introduction: "",
+        });
+        setResumeFile(null);
+        setCoverLetterFile(null);
     };
 
-    const handleSubmit = async () => {
-        if (!formData.resume_link) {
-            toast.error("Please provide your resume link.");
+    const uploadFileToSupabase = async (file, fileType) => {
+        try {
+            const supabase = createClient();
+            const fileExt = file.name.split(".").pop();
+            const fileName = `${fileType}/${userData.id}/${fileType}_${Date.now()}.${fileExt}`;
+
+            const { data, error } = await supabase.storage
+                .from("files")
+                .upload(fileName, file, {
+                    cacheControl: "3600",
+                    upsert: false,
+                });
+
+            if (error) throw error;
+
+            // Get public URL
+            const {
+                data: { publicUrl },
+            } = supabase.storage.from("files").getPublicUrl(fileName);
+
+            return { url: publicUrl, error: null };
+        } catch (err) {
+            return { url: null, error: err.message };
+        }
+    };
+
+    const handleResumeUpload = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        // Validate file type
+        const allowedTypes = [
+            "application/pdf",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ];
+        if (!allowedTypes.includes(file.type)) {
+            toast.error(
+                "Please upload a PDF or Word document for your resume."
+            );
             return;
         }
 
-        if (!formData.resume_link.startsWith("http")) {
-            toast.error("Invalid resume link.");
+        // Validate file size (5MB max)
+        if (file.size > 5 * 1024 * 1024) {
+            toast.error("Resume file must be less than 5MB.");
+            return;
+        }
+
+        setUploadingResume(true);
+        const { url, error } = await uploadFileToSupabase(file, "resume");
+        setUploadingResume(false);
+
+        if (error) {
+            setResumeFile(null);
+            toast.error("Failed to upload resume.", { description: error });
+            return;
+        }
+
+        setResumeFile(file);
+        setFormData((prev) => ({ ...prev, resume_url: url }));
+        toast.success("Resume uploaded successfully!");
+    };
+
+    const handleCoverLetterUpload = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        // Validate file type
+        const allowedTypes = [
+            "application/pdf",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ];
+        if (!allowedTypes.includes(file.type)) {
+            toast.error(
+                "Please upload a PDF or Word document for your cover letter."
+            );
+            return;
+        }
+
+        // Validate file size (5MB max)
+        if (file.size > 5 * 1024 * 1024) {
+            toast.error("Cover letter file must be less than 5MB.");
+            return;
+        }
+
+        setUploadingCoverLetter(true);
+        const { url, error } = await uploadFileToSupabase(file, "cover_letter");
+        setUploadingCoverLetter(false);
+
+        if (error) {
+            toast.error("Failed to upload cover letter.", {
+                description: error,
+            });
+            return;
+        }
+
+        setCoverLetterFile(file);
+        setFormData((prev) => ({ ...prev, cover_letter_url: url }));
+        toast.success("Cover letter uploaded successfully!");
+    };
+
+    const removeResume = () => {
+        setResumeFile(null);
+        setFormData((prev) => ({ ...prev, resume_url: "" }));
+    };
+
+    const removeCoverLetter = () => {
+        setCoverLetterFile(null);
+        setFormData((prev) => ({ ...prev, cover_letter_url: "" }));
+    };
+
+    const handleSubmit = async () => {
+        if (!formData.resume_url) {
+            toast.error("Please upload your resume.");
             return;
         }
 
         startTransition(async () => {
             const { success, error } = await submitApplication({
-                ...formData,
+                resume_link: formData.resume_url,
+                cover_letter_url: formData.cover_letter_url,
+                portfolio_link: formData.portfolio_link,
+                introduction: formData.introduction,
                 companyEmail,
                 company_id: companyId,
                 student_id: userData.id,
@@ -104,7 +228,6 @@ export default function ApplyModal({
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
@@ -140,7 +263,6 @@ export default function ApplyModal({
         }
 
         setIsEligible(eligible);
-
         setLoading(false);
     };
 
@@ -164,7 +286,7 @@ export default function ApplyModal({
                     {applied ? "Applied" : "Apply"}
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-3xl">
+            <DialogContent className="sm:max-w-4xl">
                 <DialogHeader>
                     <DialogTitle className="text-left">
                         <SecondaryLabel>Apply for Internship</SecondaryLabel>
@@ -187,7 +309,7 @@ export default function ApplyModal({
                         <div className="flex flex-col">
                             <div className="border-sky-600/50 border rounded-sm p-3 bg-accent mb-7">
                                 <p className="text-sm text-accent-foreground mb-2">
-                                    We’ll use the information from your profile
+                                    We'll use the information from your profile
                                     for this application. Make sure your account
                                     profile is up to date.
                                 </p>
@@ -203,43 +325,149 @@ export default function ApplyModal({
                             </div>
                             <Separator className="mb-5" />
 
+                            {/* Resume Upload */}
                             <div className="mb-3">
-                                <div className="flex items-center gap-1.5">
-                                    <FormLabel>Resume link</FormLabel>
-                                    <Popover>
-                                        <PopoverTrigger className="mb-1">
-                                            <Info size={16} />
-                                        </PopoverTrigger>
-                                        <PopoverContent className="p-2 text-sm text-muted-foreground">
-                                            <p className="font-semibold">
-                                                USING GOOGLE DRIVE.
-                                            </p>
-                                            <ul className="list-decimal ps-3 mt-2">
-                                                <li>Upload to Google Drive</li>
-                                                <li>Click "Share"</li>
-                                                <li>
-                                                    Under General access, select
-                                                    “Anyone with the link”
-                                                </li>
-                                                <li>
-                                                    Click "Copy link" then paste
-                                                    here
-                                                </li>
-                                            </ul>
-                                        </PopoverContent>
-                                    </Popover>
+                                <FormLabel>Resume</FormLabel>
+                                <div className="flex items-center gap-1 text-muted-foreground">
+                                    <Info size={12} className="shrink-0" />
+                                    <p className="text-xs">
+                                        You will not be able to change or update
+                                        your resume once application is
+                                        submitted.
+                                    </p>
                                 </div>
-                                <Input
-                                    disabled={applied}
-                                    value={formData.resume_link}
-                                    name="resume_link"
-                                    onChange={handleChange}
-                                    placeholder="Enter a valid link to your resume."
-                                />
-                                <p className="text-xs text-muted-foreground mt-1 text-right">
-                                    A Google Drive link is preferred.
-                                </p>
+                                <div className="mt-1">
+                                    {!resumeFile ? (
+                                        <label className="flex items-center justify-center w-full h-32 px-4 transition border-2 border-dashed rounded-md appearance-none cursor-pointer hover:border-primary focus:outline-none">
+                                            <div className="flex flex-col items-center space-y-2">
+                                                <Upload className="w-6 h-6 text-muted-foreground" />
+                                                <span className="text-sm text-muted-foreground">
+                                                    {uploadingResume ? (
+                                                        <span className="flex items-center gap-2">
+                                                            <Loader
+                                                                className="animate-spin"
+                                                                size={16}
+                                                            />
+                                                            Uploading...
+                                                        </span>
+                                                    ) : (
+                                                        "Click to upload resume (PDF or Word)"
+                                                    )}
+                                                </span>
+                                                <span className="text-xs text-muted-foreground">
+                                                    Max 5MB
+                                                </span>
+                                            </div>
+                                            <input
+                                                type="file"
+                                                className="hidden"
+                                                accept=".pdf,.doc,.docx"
+                                                onChange={handleResumeUpload}
+                                                disabled={
+                                                    uploadingCoverLetter ||
+                                                    uploadingResume ||
+                                                    applied
+                                                }
+                                            />
+                                        </label>
+                                    ) : (
+                                        <div className="flex items-center justify-between p-3 border rounded-md bg-accent">
+                                            <div className="flex items-center gap-2">
+                                                <Check
+                                                    className="text-green-500"
+                                                    size={20}
+                                                />
+
+                                                <p className="text-sm max-w-[300px] truncate">
+                                                    {resumeFile.name}
+                                                </p>
+                                            </div>
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={removeResume}
+                                                disabled={applied}
+                                            >
+                                                <X size={16} />
+                                            </Button>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
+
+                            {/* Cover Letter Upload */}
+                            <div className="mb-3">
+                                <FormLabel>Cover Letter (Optional)</FormLabel>
+                                <div className="flex items-center gap-1 text-muted-foreground">
+                                    <Info size={12} className="shrink-0" />
+                                    <p className="text-xs">
+                                        You will not be able to change or update
+                                        your cover letter once application is
+                                        submitted.
+                                    </p>
+                                </div>
+                                <div className="mt-1">
+                                    {!coverLetterFile ? (
+                                        <label className="flex items-center justify-center w-full h-32 px-4 transition border-2 border-dashed rounded-md appearance-none cursor-pointer hover:border-primary focus:outline-none">
+                                            <div className="flex flex-col items-center space-y-2">
+                                                <Upload className="w-6 h-6 text-muted-foreground" />
+                                                <span className="text-sm text-muted-foreground">
+                                                    {uploadingCoverLetter ? (
+                                                        <span className="flex items-center gap-2">
+                                                            <Loader
+                                                                className="animate-spin"
+                                                                size={16}
+                                                            />
+                                                            Uploading...
+                                                        </span>
+                                                    ) : (
+                                                        "Click to upload cover letter (PDF or Word)"
+                                                    )}
+                                                </span>
+                                                <span className="text-xs text-muted-foreground">
+                                                    Max 5MB
+                                                </span>
+                                            </div>
+                                            <input
+                                                type="file"
+                                                className="hidden"
+                                                accept=".pdf,.doc,.docx"
+                                                onChange={
+                                                    handleCoverLetterUpload
+                                                }
+                                                disabled={
+                                                    uploadingResume ||
+                                                    uploadingCoverLetter ||
+                                                    applied
+                                                }
+                                            />
+                                        </label>
+                                    ) : (
+                                        <div className="flex items-center justify-between p-3 border rounded-md bg-accent">
+                                            <div className="flex items-center gap-2">
+                                                <Check
+                                                    className="text-green-500"
+                                                    size={20}
+                                                />
+                                                <span className="text-sm max-w-[300px] truncate">
+                                                    {coverLetterFile.name}
+                                                </span>
+                                            </div>
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={removeCoverLetter}
+                                                disabled={applied}
+                                            >
+                                                <X size={16} />
+                                            </Button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
                             <div className="mb-3">
                                 <FormLabel>Portfolio link (Optional)</FormLabel>
                                 <Input
@@ -299,7 +527,9 @@ export default function ApplyModal({
                             !isEligible ||
                             applied ||
                             isPending ||
-                            !formData.resume_link
+                            !formData.resume_url ||
+                            uploadingResume ||
+                            uploadingCoverLetter
                         }
                     >
                         {isPending && <Loader className="animate-spin" />}

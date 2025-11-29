@@ -135,14 +135,18 @@ export default function ApplicationSectionCard({ application }) {
                         <div className="mb-4 flex flex-col">
                             <FormLabel required>Resume Link</FormLabel>
                             <Input
+                                disabled
                                 type="url"
                                 value={applicationForm.resume_link}
-                                onChange={(e) =>
-                                    setApplicationForm({
-                                        ...applicationForm,
-                                        resume_link: e.target.value,
-                                    })
-                                }
+                                placeholder="https://..."
+                            />
+                        </div>
+                        <div className="mb-4 flex flex-col">
+                            <FormLabel>Cover Letter Link (Optional)</FormLabel>
+                            <Input
+                                disabled
+                                type="url"
+                                value={applicationForm.cover_letter_url}
                                 placeholder="https://..."
                             />
                         </div>
@@ -184,6 +188,16 @@ export default function ApplicationSectionCard({ application }) {
                                 className="text-muted-foreground text-sm hover:text-accent-foreground hover:underline underline-offset-2 line-clamp-2"
                             >
                                 {application?.resume_link}
+                            </Link>
+                        </div>
+                        <div className="mb-4 flex flex-col">
+                            <FormLabel>Cover Letter Link</FormLabel>
+                            <Link
+                                target="_blank"
+                                href={application?.cover_letter_url}
+                                className="text-muted-foreground text-sm hover:text-accent-foreground hover:underline underline-offset-2 line-clamp-2"
+                            >
+                                {application?.cover_letter_url}
                             </Link>
                         </div>
                         {application?.portfolio_link && (

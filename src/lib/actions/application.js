@@ -22,6 +22,7 @@ export async function submitApplication(formData) {
         resume_link,
         portfolio_link,
         introduction,
+        cover_letter_url,
         company_id,
         student_id,
         status,
@@ -83,6 +84,7 @@ export async function submitApplication(formData) {
             portfolio_link: portfolio_link || null,
             introduction: introduction || null,
             company_id,
+            cover_letter_url,
             student_id,
             status: status || "pending",
         };
