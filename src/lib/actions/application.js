@@ -15,7 +15,7 @@ import { StudentApplicationSubmitted } from "@/components/email/StudentApplicati
 export async function submitApplication(formData) {
     const supabase = await createClient();
 
-    // Extract data from formData
+    // Extract and destructure data
     const {
         student_name,
         companyEmail,
@@ -25,40 +25,35 @@ export async function submitApplication(formData) {
         cover_letter_url,
         company_id,
         student_id,
-        status,
+        status = "pending",
     } = formData;
 
-    // Validation
+    // === VALIDATION ===
+    // Required fields validation
     if (!resume_link) {
-        return { success: false, error: "Please provide resume link." };
+        return { success: false, error: "Please upload a resume." };
     }
 
-    // URL validation
-    try {
-        const url = new URL(resume_link);
-        if (url.protocol !== "https:") {
-            return { success: false, error: "Resume link must use HTTPS." };
-        }
-    } catch {
-        return { success: false, error: "Invalid resume link format." };
+    if (!company_id || !student_id) {
+        return {
+            success: false,
+            error: "Missing required information. Please try again.",
+        };
     }
 
-    if (!company_id) {
-        return { success: false, error: "Company ID is required." };
-    }
-
-    if (!student_id) {
-        return { success: false, error: "Student ID is required." };
+    // URL validation (resume_link should already be a valid Supabase URL from upload)
+    if (!resume_link.startsWith("https://")) {
+        return { success: false, error: "Invalid resume URL." };
     }
 
     try {
-        // 1. Check for existing application (SINGLE QUERY - OPTIMIZED)
+        // === STEP 1: Check for duplicate application ===
         const { data: existingApplication, error: checkError } = await supabase
             .from("applicants")
             .select("id, status")
             .eq("student_id", student_id)
             .eq("company_id", company_id)
-            .maybeSingle(); // Use maybeSingle() instead of single() to avoid errors when no match
+            .maybeSingle();
 
         if (checkError) {
             console.error("Error checking existing application:", checkError);
@@ -69,7 +64,6 @@ export async function submitApplication(formData) {
         }
 
         if (existingApplication) {
-            // Application already exists
             return {
                 success: false,
                 error: "You have already submitted an application to this company.",
@@ -78,46 +72,29 @@ export async function submitApplication(formData) {
             };
         }
 
-        // 2. Prepare data for insertion
-        const formatData = {
+        // === STEP 2: Prepare data for insertion ===
+        const applicationData = {
+            student_id,
+            company_id,
             resume_link,
+            cover_letter_url: cover_letter_url || null,
             portfolio_link: portfolio_link || null,
             introduction: introduction || null,
-            company_id,
-            cover_letter_url,
-            student_id,
-            status: status || "pending",
+            status,
         };
 
-        const notificationData = {
-            link_url: "/company/applicants",
-            recipient_id: company_id,
-            type: "application",
-            title: "New Internship Application",
-            message: student_name
-                ? `${student_name} has submitted a new application to your company. Review the details to proceed with the next steps.`
-                : "A new application has been submitted to your company. Review the details to proceed with the next steps.",
-        };
+        // === STEP 3: Insert application (CRITICAL - must succeed) ===
+        const { data: application, error: applicationError } = await supabase
+            .from("applicants")
+            .insert(applicationData)
+            .select("id")
+            .single();
 
-        // 3. Insert application and notification in parallel
-        const [applicationResult, notificationResult] = await Promise.all([
-            supabase
-                .from("applicants")
-                .insert(formatData)
-                .select("id")
-                .single(),
-            supabase.from("notifications").insert(notificationData),
-        ]);
+        if (applicationError) {
+            console.error("Application submission error:", applicationError);
 
-        // Check for application error (critical)
-        if (applicationResult.error) {
-            console.error(
-                "Application submission error:",
-                applicationResult.error
-            );
-
-            // Handle duplicate key error (race condition edge case)
-            if (applicationResult.error.code === "23505") {
+            // Handle race condition duplicate
+            if (applicationError.code === "23505") {
                 return {
                     success: false,
                     error: "You have already submitted an application to this company.",
@@ -130,17 +107,18 @@ export async function submitApplication(formData) {
             };
         }
 
-        const application = applicationResult.data;
+        // === STEP 4: Create notification (NON-CRITICAL - fire and forget) ===
+        const notificationData = {
+            recipient_id: company_id,
+            type: "application",
+            title: "New Internship Application",
+            message: student_name
+                ? `${student_name} has submitted a new application to your company. Review the details to proceed with the next steps.`
+                : "A new application has been submitted to your company. Review the details to proceed with the next steps.",
+            link_url: `/company/applicants/${application.id}`,
+        };
 
-        // Log notification error but don't fail operation
-        if (notificationResult.error) {
-            console.error(
-                "Notification creation failed:",
-                notificationResult.error
-            );
-        }
-
-        // 4. Fire-and-forget email (don't await)
+        // === STEP 5: Send email notification (NON-CRITICAL - fire and forget) ===
         if (companyEmail) {
             sendEmailAsync(companyEmail, student_name, application.id).catch(
                 (error) => {
@@ -149,10 +127,13 @@ export async function submitApplication(formData) {
             );
         }
 
-        // 5. Revalidate relevant paths
+        // Fire notification creation without blocking
+        await supabase.from("notifications").insert(notificationData);
+
+        // === STEP 6: Revalidate paths ===
         revalidatePath("/company/applicants");
         revalidatePath(`/student/companies/${company_id}`);
-        revalidatePath("/student/applications"); // Student's applications list
+        revalidatePath("/student/applications");
         revalidatePath("/instructor/student-applications");
 
         return {

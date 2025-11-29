@@ -18,6 +18,7 @@ import {
     ChevronRight,
     File,
     FileText,
+    FileUser,
     Info,
     Link2,
     Mail,
@@ -50,7 +51,7 @@ export default async function Page({ params }) {
     const { data: applicant, error } = await supabase
         .from("applicants")
         .select(
-            "id, applied_at, approve_status, cannot_proceed_message, resume_link, portfolio_link, status, introduction, students!inner(id, firstname, lastname, gender, school, email, avatar_url, barangay, city, province, ojt_instructor_id, interests(interest), assessment_attempt(id, submitted_at, assessment_score, assessment_total_item, assessment_test(assessment_title))), companies(name, email)"
+            "id, applied_at, approve_status, cannot_proceed_message, cover_letter_url, resume_link, portfolio_link, status, introduction, students!inner(id, firstname, lastname, gender, school, email, avatar_url, barangay, city, province, ojt_instructor_id, interests(interest), assessment_attempt(id, submitted_at, assessment_score, assessment_total_item, assessment_test(assessment_title))), companies(name, email)"
         )
         .eq("id", applicantId)
         .eq("company_id", user?.id)
@@ -130,12 +131,12 @@ export default async function Page({ params }) {
                     <div className="flex items-center gap-y-3 gap-x-10 justify-between flex-wrap">
                         <div>
                             <div className="flex items-end">
-                                <h1 className="font-medium">
+                                <TitleText>
                                     {student?.firstname} {student?.lastname}
-                                </h1>
+                                </TitleText>
 
                                 {student?.gender && (
-                                    <p className="text-muted-foreground ms-2">
+                                    <p className="text-muted-foreground text-sm ms-2">
                                         - {student?.gender}
                                     </p>
                                 )}
@@ -182,7 +183,7 @@ export default async function Page({ params }) {
                             </div>
                             <p className="text-sm">{student?.school}</p>
                         </div>
-                        <div className="flex items-center text-muted-foreground gap-2">
+                        <div className="flex items-center text-muted-foreground gap-2 mb-3">
                             <div>
                                 <MapPin size={14} />
                             </div>
@@ -191,6 +192,8 @@ export default async function Page({ params }) {
                                 {student?.province}
                             </p>
                         </div>
+
+                        <TitleText>Application Attachments</TitleText>
 
                         {applicant?.resume_link && (
                             <Link
@@ -203,7 +206,28 @@ export default async function Page({ params }) {
                                 </div>
 
                                 <p className="text-sm truncate max-w-[300px] hover:max-w-[700px]">
-                                    Resume Link: {applicant?.resume_link}
+                                    <span className="text-secondary-foreground">
+                                        Resume
+                                    </span>{" "}
+                                    : {applicant?.resume_link}
+                                </p>
+                            </Link>
+                        )}
+                        {applicant?.cover_letter_url && (
+                            <Link
+                                target="_blank"
+                                href={`${applicant?.cover_letter_url}`}
+                                className="flex items-center text-muted-foreground gap-2 transition-colors hover:text-accent-foreground"
+                            >
+                                <div className="shrink-0">
+                                    <FileUser size={14} />
+                                </div>
+
+                                <p className="text-sm truncate max-w-[300px] hover:max-w-[700px]">
+                                    <span className="text-secondary-foreground">
+                                        Cover Letter
+                                    </span>{" "}
+                                    : {applicant?.cover_letter_url}
                                 </p>
                             </Link>
                         )}
@@ -217,7 +241,11 @@ export default async function Page({ params }) {
                                     <Link2 size={15} />
                                 </div>
                                 <p className="text-sm truncate max-w-[300px] hover:max-w-[700px]">
-                                    Portfolio: {applicant?.portfolio_link}
+                                    <span className="text-secondary-foreground">
+                                        Portfolio
+                                    </span>
+                                    {" : "}
+                                    {applicant?.portfolio_link}
                                 </p>
                             </Link>
                         )}
