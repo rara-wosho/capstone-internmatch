@@ -42,6 +42,104 @@ export async function createInstructor(formData) {
     return { success: true, data: data.user };
 }
 
+// // submit registration details
+// export async function submitRegistration(prevState, formData) {
+//     // Extract form data
+//     const registrationData = {
+//         firstname: formData.get("firstName"),
+//         lastname: formData.get("lastName"),
+//         email: formData.get("email")?.trim() || "",
+//         school: formData.get("school"),
+//         barangay: formData.get("barangay"),
+//         city: formData.get("city"),
+//         province: formData.get("province"),
+//         documents_link: formData.get("documentsLink"),
+//     };
+
+//     // Validate required fields
+//     if (
+//         !registrationData.firstname ||
+//         !registrationData.lastname ||
+//         !registrationData.email ||
+//         !registrationData.school ||
+//         !registrationData.barangay ||
+//         !registrationData.city ||
+//         !registrationData.province ||
+//         !registrationData.documents_link
+//     ) {
+//         return {
+//             success: false,
+//             error: "All fields are required.",
+//             time: new Date().getMilliseconds(),
+//             formData: registrationData,
+//         };
+//     }
+
+//     // Validate link
+//     if (!registrationData.documents_link.startsWith("https")) {
+//         return {
+//             success: false,
+//             error: "Document link is invalid.",
+//             time: new Date().getMilliseconds(),
+//             formData: registrationData,
+//         };
+//     }
+
+//     // 🔍 Check if email already exists in Supabase Auth users
+//     const { data: users, error: listError } =
+//         await supabaseAdmin.auth.admin.listUsers();
+
+//     if (listError) {
+//         console.error("Error checking existing users:", listError);
+//         return {
+//             success: false,
+//             error: "Unable to verify email. Please try again.",
+//             time: new Date().getMilliseconds(),
+//             formData: registrationData,
+//         };
+//     }
+
+//     const emailExists = users.users.some(
+//         (u) => u.email?.toLowerCase() === registrationData.email.toLowerCase()
+//     );
+
+//     if (emailExists) {
+//         return {
+//             success: false,
+//             error: "This email is already registered. Please sign in instead or use another email.",
+//             time: new Date().getMilliseconds(),
+//             formData: registrationData,
+//         };
+//     }
+
+//     // Insert the new registration request
+//     const { error } = await supabaseAdmin
+//         .from("registrations")
+//         .insert([registrationData]);
+
+//     if (error) {
+//         console.error("Error submitting registration:", error);
+//         return {
+//             success: false,
+//             error:
+//                 error.code === "23505"
+//                     ? "The email you provided is already associated with a pending registration."
+//                     : "Something went wrong while submitting the form.",
+//             time: new Date().getMilliseconds(),
+//             formData: registrationData,
+//         };
+//     }
+
+//     revalidatePath("/create-account/instructor");
+
+//     return {
+//         success: true,
+//         error: "",
+//         time: new Date().getMilliseconds(),
+//         formData: null,
+//     };
+// }
+
 // submit registration details
 export async function submitRegistration(prevState, formData) {
     // Extract form data
@@ -53,7 +151,8 @@ export async function submitRegistration(prevState, formData) {
         barangay: formData.get("barangay"),
         city: formData.get("city"),
         province: formData.get("province"),
-        documents_link: formData.get("documentsLink"),
+        valid_id_url: formData.get("validIdUrl"),
+        credential_url: formData.get("credentialUrl"),
     };
 
     // Validate required fields
@@ -65,7 +164,8 @@ export async function submitRegistration(prevState, formData) {
         !registrationData.barangay ||
         !registrationData.city ||
         !registrationData.province ||
-        !registrationData.documents_link
+        !registrationData.valid_id_url ||
+        !registrationData.credential_url
     ) {
         return {
             success: false,
@@ -75,11 +175,14 @@ export async function submitRegistration(prevState, formData) {
         };
     }
 
-    // Validate link
-    if (!registrationData.documents_link.startsWith("https")) {
+    // Validate URLs
+    if (
+        !registrationData.valid_id_url.startsWith("https") ||
+        !registrationData.credential_url.startsWith("https")
+    ) {
         return {
             success: false,
-            error: "Document link is invalid.",
+            error: "Document URLs are invalid.",
             time: new Date().getMilliseconds(),
             formData: registrationData,
         };
