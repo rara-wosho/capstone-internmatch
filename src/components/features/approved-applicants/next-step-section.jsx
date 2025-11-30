@@ -11,7 +11,6 @@ import { Calendar, Handshake, Check, X } from "lucide-react";
 import { useState } from "react";
 
 import { useRouter } from "nextjs-toploader/app";
-import { Button } from "@/components/ui/button";
 
 const tabs = [
     {

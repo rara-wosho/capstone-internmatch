@@ -50,7 +50,7 @@ export default function EditScheduleModal({ editData }) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <button className="cursor-pointer w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                <button className="cursor-pointer w-full flex items-center hover:bg-muted rounded-sm gap-2 px-4 py-2.5 text-sm text-muted-foreground transition-colors">
                     <Edit className="size-4" />
                     Edit Schedule Details
                 </button>

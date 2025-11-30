@@ -13,12 +13,16 @@ import {
     Edit,
     Trash2,
     Loader,
+    UserPlus,
 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import TertiaryLabel from "./TertiaryLabel";
 import DeleteScheduleModal from "../modals/DeleteScheduleModal";
 import EditScheduleModal from "../modals/EditScheduleModal";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import { Button } from "./button";
+import AddParticipantModal from "../modals/AddParticipantModal";
 
 export default function ScheduleCard({
     schedule,
@@ -103,20 +107,29 @@ export default function ScheduleCard({
                     {viewType === "company" &&
                         // Actions Dropdown
                         !isPast && (
-                            <div className="relative group">
-                                <button className="p-2 hover:bg-secondary rounded-lg transition-colors">
-                                    <MoreVertical className="w-5 h-5 text-gray-500" />
-                                </button>
+                            <>
+                                <AddParticipantModal
+                                    scheduleId={schedule.schedule_id}
+                                />
 
-                                {/* Dropdown Menu */}
-                                <div className="absolute right-0 top-full mt-1 w-48 bg-neutral-50 overflow-hidden rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
-                                    <EditScheduleModal editData={schedule} />
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <Button variant="secondary" size="sm">
+                                            <MoreVertical className="w-5 h-5 text-muted-foreground" />
+                                        </Button>
+                                    </PopoverTrigger>
 
-                                    <DeleteScheduleModal
-                                        scheduleId={schedule.schedule_id}
-                                    />
-                                </div>
-                            </div>
+                                    <PopoverContent className="p-1" align="end">
+                                        <EditScheduleModal
+                                            editData={schedule}
+                                        />
+
+                                        <DeleteScheduleModal
+                                            scheduleId={schedule.schedule_id}
+                                        />
+                                    </PopoverContent>
+                                </Popover>
+                            </>
                         )}
                 </div>
             </div>
