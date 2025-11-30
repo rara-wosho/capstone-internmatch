@@ -69,6 +69,7 @@ export default function GroupMembersTable({ members, search, groupId }) {
 
     const handleRevokeExam = () => {
         if (markedIds.length === 0) return;
+
         startTransition(async () => {
             const { success } = await revokeExamAccess(markedIds);
             if (!success) return toast.error("Unable to revoke exam access.");

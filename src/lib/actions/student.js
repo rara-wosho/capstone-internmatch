@@ -87,12 +87,24 @@ export async function allowExamAccess(studentIds = []) {
     const { error } = await supabase
         .from("students")
         .update({ exam_access: true })
+        .eq("exam_access", false)
         .in("id", studentIds);
 
     if (error) {
         console.error("Error allowing exam access:", error);
         return { success: false };
     }
+
+    // Add notification to students
+    const notificationData = studentIds?.map((id) => ({
+        recipient_id: id,
+        title: "Exam Access Granted",
+        type: "exam_access",
+        message:
+            "Your OJT Instructor has approved your exam access. You may now proceed to take company examination.",
+    }));
+
+    await supabase.from("notifications").insert(notificationData);
 
     return { success: true };
 }
@@ -104,12 +116,24 @@ export async function revokeExamAccess(studentIds = []) {
     const { error } = await supabase
         .from("students")
         .update({ exam_access: false })
+        .eq("exam_access", true)
         .in("id", studentIds);
 
     if (error) {
         console.error("Error revoking exam access:", error);
         return { success: false };
     }
+
+    // Add notification to students
+    const notificationData = studentIds?.map((id) => ({
+        recipient_id: id,
+        title: "Exam Access Revoked",
+        type: "exam_access",
+        message:
+            "Access to company examination has been revoked by your OJT Instructor.",
+    }));
+
+    await supabase.from("notifications").insert(notificationData);
 
     return { success: true };
 }

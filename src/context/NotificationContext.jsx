@@ -157,8 +157,6 @@ export function NotificationProvider({ children }) {
                     table: "notifications",
                 },
                 (payload) => {
-                    console.log("Real-time notification update:", payload);
-
                     // Refresh data when notifications change
                     refreshAll();
                 }
