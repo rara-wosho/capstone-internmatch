@@ -17,8 +17,8 @@ const links = [
     { href: "", label: "Next Steps" },
 ];
 
-export default async function Page({ params }) {
-    const applicantId = (await params)?.applicantId || "";
+export default async function Page({ searchParams }) {
+    const dateRangeOption = (await searchParams)?.range || "all";
 
     const { user } = await getCurrentUser();
 
@@ -35,7 +35,8 @@ export default async function Page({ params }) {
         )
         .eq("approve_status", "approved")
         .eq("status", "accepted")
-        .eq("company_id", user.id);
+        .eq("company_id", user.id)
+        .order("approved_at", { ascending: false });
 
     if (error) {
         return <ErrorUi secondaryMessage={error.message} />;
@@ -45,9 +46,7 @@ export default async function Page({ params }) {
         <div>
             <Wrapper size="sm">
                 <div className="mb-3">
-                    <SecondaryLabel>
-                        Schedule Activities or Request Documents
-                    </SecondaryLabel>
+                    <SecondaryLabel>Schedule Activities</SecondaryLabel>
                     <BreadCrumbs links={links} />
                 </div>
 
@@ -86,7 +85,6 @@ export default async function Page({ params }) {
                     // studentId={student.id}
                     // studentEmail={student.email}
                     // hasExistingSchedule={!!existingSchedule}
-                    studentId={applicantId}
                     applicants={applicants}
                 />
             </Wrapper>
