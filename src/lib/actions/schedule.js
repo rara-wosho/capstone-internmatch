@@ -20,11 +20,11 @@ export async function getCompanySchedules() {
     const { data: schedules, error } = await supabase
         .from("schedules")
         .select(
-            "id, title, details, updated_at, time, date, additional_notes, location, type, schedule_student_ids(id, students(id, firstname, lastname, email, school))"
+            "id, title, status, postpone_date, details, updated_at, time, date, additional_notes, location, type, schedule_student_ids(id, students(id, firstname, lastname, email, school, ojt_instructor_id))"
         )
         .eq("company_id", user.id)
-        .order("date", { ascending: false })
-        .order("time", { ascending: false });
+        .eq("is_deleted", false)
+        .order("date", { ascending: true });
 
     if (error) {
         console.error("Error fetching schedules:", error);
@@ -41,11 +41,14 @@ export async function getCompanySchedules() {
                 lastname: junction.students?.lastname,
                 email: junction.students?.email,
                 school: junction.students?.school,
+                ojt_instructor_id: junction?.students?.ojt_instructor_id,
                 fullname:
                     `${junction.students?.firstname || ""} ${junction.students?.lastname || ""}`.trim(),
             })) || [];
 
         return {
+            status: schedule.status,
+            postpone_date: schedule.postpone_date,
             schedule_id: schedule.id,
             title: schedule.title,
             details: schedule.details,
@@ -373,75 +376,198 @@ export async function createSchedule(prevState, formData) {
 }
 
 // Update the schedule details
-export async function updateSchedule(prevState, formData) {
-    const supabase = await createClient();
+// export async function updateSchedule(prevState, formData) {
+//     const supabase = await createClient();
+//     const { user } = await getCurrentUser();
+
+//     if (!user || !user?.id) {
+//         return { error: "Unauthorized user" };
+//     }
+
+//     const rawData = Object.fromEntries(formData);
+//     const {
+//         schedule_id,
+//         title,
+//         details,
+//         date,
+//         time,
+//         location,
+//         type,
+//         additional_notes,
+//     } = rawData;
+
+//     // Validation
+//     const errors = {};
+//     if (!title?.trim()) errors.title = "Schedule name is required";
+//     if (!details?.trim()) errors.details = "Details are required";
+//     if (!date) errors.date = "Date is required";
+//     if (!time) errors.time = "Time is required";
+//     if (!location?.trim()) errors.location = "Location is required";
+//     if (!type) errors.type = "Schedule type is required";
+//     if (!schedule_id) errors.schedule_id = "Schedule ID is required";
+
+//     if (Object.keys(errors).length > 0) {
+//         return { errors, formData: rawData };
+//     }
+
+//     try {
+//         const updateData = {
+//             title: title.trim(),
+//             details: details.trim(),
+//             date,
+//             time,
+//             location: location.trim(),
+//             type,
+//             additional_notes: additional_notes?.trim() || null,
+//             updated_at: new Date().toISOString(),
+//         };
+
+//         const { data, error } = await supabase
+//             .from("schedules")
+//             .update(updateData)
+//             .eq("id", schedule_id)
+//             .eq("company_id", user.id) // Security: ensure user owns this schedule
+//             .select()
+//             .single();
+
+//         if (error) {
+//             console.error("Schedule update error:", error);
+//             return { error: "Failed to update schedule: " + error.message };
+//         }
+
+//         revalidatePath("/company/schedules");
+//         revalidatePath("/student/schedules");
+
+//         return {
+//             success: true,
+//             message: "Schedule updated successfully",
+//             time: Date.now(),
+//         };
+//     } catch (error) {
+//         console.error("Unexpected error:", error);
+//         return { error: "An unexpected error occurred: " + error.message };
+//     }
+// }
+
+// Update the schedule details
+export async function updateSchedule(formData) {
     const { user } = await getCurrentUser();
 
     if (!user || !user?.id) {
-        return { error: "Unauthorized user" };
-    }
-
-    const rawData = Object.fromEntries(formData);
-    const {
-        schedule_id,
-        title,
-        details,
-        date,
-        time,
-        location,
-        type,
-        additional_notes,
-    } = rawData;
-
-    // Validation
-    const errors = {};
-    if (!title?.trim()) errors.title = "Schedule name is required";
-    if (!details?.trim()) errors.details = "Details are required";
-    if (!date) errors.date = "Date is required";
-    if (!time) errors.time = "Time is required";
-    if (!location?.trim()) errors.location = "Location is required";
-    if (!type) errors.type = "Schedule type is required";
-    if (!schedule_id) errors.schedule_id = "Schedule ID is required";
-
-    if (Object.keys(errors).length > 0) {
-        return { errors, formData: rawData };
-    }
-
-    try {
-        const updateData = {
-            title: title.trim(),
-            details: details.trim(),
-            date,
-            time,
-            location: location.trim(),
-            type,
-            additional_notes: additional_notes?.trim() || null,
-            updated_at: new Date().toISOString(),
-        };
-
-        const { data, error } = await supabase
-            .from("schedules")
-            .update(updateData)
-            .eq("id", schedule_id)
-            .eq("company_id", user.id) // Security: ensure user owns this schedule
-            .select()
-            .single();
-
-        if (error) {
-            console.error("Schedule update error:", error);
-            return { error: "Failed to update schedule: " + error.message };
-        }
-
-        revalidatePath("/company/schedules");
-        revalidatePath("/student/schedules");
-
         return {
-            success: true,
-            message: "Schedule updated successfully",
+            success: false,
+            error: "Expired session token.",
             time: Date.now(),
         };
-    } catch (error) {
-        console.error("Unexpected error:", error);
-        return { error: "An unexpected error occurred: " + error.message };
     }
+
+    const supabase = await createClient();
+
+    // Extract form data
+    const schedule_id = formData.get("schedule_id");
+    const title = formData.get("title")?.trim();
+    const date = formData.get("date")?.trim();
+    const type = formData.get("type")?.trim();
+    const details = formData.get("details")?.trim();
+    const notes = formData.get("additional_notes")?.trim();
+    const time = formData.get("time")?.trim();
+    const location = formData.get("location")?.trim();
+
+    // Parse instructor and student IDs from JSON strings
+    let instructorIds = [];
+    let studentIds = [];
+    try {
+        instructorIds = JSON.parse(formData.get("instructor_ids") || "[]");
+        studentIds = JSON.parse(formData.get("student_ids") || "[]");
+    } catch (e) {
+        console.error("Error parsing IDs:", e);
+        return {
+            success: false,
+            error: "Invalid data format.",
+            time: Date.now(),
+        };
+    }
+
+    // Validate required fields
+    if (!schedule_id || !title || !date) {
+        return {
+            success: false,
+            error: "Missing required fields.",
+            time: Date.now(),
+        };
+    }
+
+    // Update schedule in database
+    const { error: updateError } = await supabase
+        .from("schedules")
+        .update({
+            title,
+            date,
+            type,
+            details,
+            additional_notes: notes || null,
+            time: time || null,
+            location,
+            updated_at: new Date().toISOString(),
+        })
+        .eq("id", schedule_id)
+        .eq("company_id", user.id);
+
+    if (updateError) {
+        console.error("Error updating schedule:", updateError);
+        return {
+            success: false,
+            error: "Failed to update schedule. Please try again.",
+            time: Date.now(),
+        };
+    }
+
+    // Create notifications for OJT instructors
+    const instructorNotifications = instructorIds
+        .filter((id) => id !== null && id !== undefined) // Filter out null/undefined
+        .map((instructorId) => ({
+            title: "Student Schedule Updated",
+            message: `The schedule "${title}" for your student(s) has been updated by the company. Please review the new details.`,
+            recipient_id: instructorId,
+            type: "schedule_update",
+            link_url: "/instructor/schedules",
+        }));
+
+    // Create notifications for students
+    const studentNotifications = studentIds.map((studentId) => ({
+        title: "Schedule Updated",
+        message: `Your ${type} schedule "${title}" has been updated. Please check the new details.`,
+        recipient_id: studentId,
+        type: "schedule_update",
+        link_url: "/student/schedules",
+    }));
+
+    // Combine all notifications
+    const allNotifications = [
+        ...instructorNotifications,
+        ...studentNotifications,
+    ];
+
+    // Insert all notifications
+    if (allNotifications.length > 0) {
+        const { error: notificationError } = await supabase
+            .from("notifications")
+            .insert(allNotifications);
+
+        if (notificationError) {
+            console.error("Error creating notifications:", notificationError);
+            // Don't fail the schedule update if notifications fail
+            // but log the error
+        }
+    }
+
+    revalidatePath("/company/schedules");
+    revalidatePath("/instructor/schedules");
+    revalidatePath("/student/schedules");
+
+    return {
+        success: true,
+        message: "Schedule updated successfully.",
+        time: Date.now(),
+    };
 }

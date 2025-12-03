@@ -32,7 +32,8 @@ export default async function CompanyActivitiesPage() {
                 <div className="border-b mb-3">
                     <TabsList className="h-[55px] space-x-3">
                         <TabsTrigger value="account">Account</TabsTrigger>
-                        <TabsTrigger value="exams">Exams</TabsTrigger>
+                        <TabsTrigger value="exams">Exam</TabsTrigger>
+                        <TabsTrigger value="schedule">Schedule</TabsTrigger>
                     </TabsList>
                 </div>
 
@@ -64,6 +65,26 @@ export default async function CompanyActivitiesPage() {
                                     Created an exam:{" "}
                                     <span className="text-secondary-foreground font-medium">
                                         {exam.title}
+                                    </span>
+                                </p>
+                            </div>
+                        ))
+                    )}
+                </TabsContent>
+
+                <TabsContent value="schedule">
+                    {data?.schedules?.length === 0 ? (
+                        <p className="text-sm text-muted-foreground">
+                            No activity for schedules.
+                        </p>
+                    ) : (
+                        data.schedules.map((sched, index) => (
+                            <div key={index} className="mb-3">
+                                <p>{dateFormatter(sched.created_at)}</p>
+                                <p className="text-sm text-muted-foreground">
+                                    Created a schedule:{" "}
+                                    <span className="text-secondary-foreground font-medium">
+                                        {sched.title}
                                     </span>
                                 </p>
                             </div>

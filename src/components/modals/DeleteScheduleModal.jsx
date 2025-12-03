@@ -13,35 +13,50 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { createClient } from "@/lib/supabase/client";
-import { Loader, Trash2 } from "lucide-react";
+import { Loader, Trash2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
 
-export default function DeleteScheduleModal({ scheduleId }) {
+export default function DeleteScheduleModal({
+    scheduleTitle,
+    students,
+    scheduleId,
+}) {
     const [isPending, startTransition] = useTransition();
 
     const [open, setOpen] = useState(false);
 
     const router = useRouter();
 
-    const handleDeleteSchedule = () => {
+    const handleCancelSchedule = () => {
+        const notificationData = students?.map((s) => ({
+            title: "Schedule Update",
+            message: `The schedule "${scheduleTitle}" has been cancelled by the company and is no longer scheduled to happen.`,
+            link_url: "/student/schedules",
+            type: "cancelled_schedule",
+            recipient_id: s.id,
+        }));
+
         startTransition(async () => {
             const supabase = createClient();
 
             const { error } = await supabase
                 .from("schedules")
-                .delete()
+                .update({ status: "cancelled" })
                 .eq("id", scheduleId);
 
             if (error) {
-                toast.error("Unable to delete schedule");
+                toast.error("Unable to cancel schedule");
                 return;
             }
 
+            // Notify student that the schedule is no longer happening
+            await supabase.from("notifications").insert(notificationData);
+
             toast.success(
-                "Schedule deleted successfully. Please wait a moment while we refresh the page."
+                "Schedule cancelled successfully. Please wait a moment while we refresh the page."
             );
             setOpen(false);
             router.refresh();
@@ -52,33 +67,33 @@ export default function DeleteScheduleModal({ scheduleId }) {
         <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogTrigger asChild>
                 <button className="cursor-pointer w-full flex items-center gap-2 px-4 py-2.5 text-sm text-destructive hover:bg-red-500/10 transition-colors rounded-sm">
-                    <Trash2 className="w-4 h-4" />
-                    <span>Delete Schedule</span>
+                    <X size={16} />
+                    <span>Cancel Schedule</span>
                 </button>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>
-                        Are you sure to delete this schedule?
+                        Confirm Schedule Cancellation
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                        Deleting a schedule will notify participants that it is
-                        now cancelled.
+                        If cancelled, we will notify participants that this
+                        schedule will no longer take place.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel>Close</AlertDialogCancel>
                     <Button
                         disabled={isPending}
                         variant="destructive"
-                        onClick={handleDeleteSchedule}
+                        onClick={handleCancelSchedule}
                     >
                         {isPending ? (
                             <Loader className="animate-spin w-4 h-4" />
                         ) : (
-                            <Trash2 className="w-4 h-4" />
+                            <X className="w-4 h-4" />
                         )}
-                        {isPending ? "Deleting Schedule" : " Delete Schedule"}
+                        {isPending ? "Canceling Schedule" : " Cancel Schedule"}
                     </Button>
                 </AlertDialogFooter>
             </AlertDialogContent>

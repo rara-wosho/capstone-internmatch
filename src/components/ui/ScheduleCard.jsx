@@ -23,6 +23,7 @@ import EditScheduleModal from "../modals/EditScheduleModal";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Button } from "./button";
 import AddParticipantModal from "../modals/AddParticipantModal";
+import PostponeScheduleModal from "../modals/PostPoneScheduleModal";
 
 export default function ScheduleCard({
     schedule,
@@ -59,14 +60,16 @@ export default function ScheduleCard({
         });
     };
 
+    const students = schedule?.students ?? [];
+
     return (
         <div
             className={`bg-card rounded-xl border shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden ${isPast ? "opacity-75" : ""}`}
         >
             {/* Header */}
             <div className="p-4 sm:p-5 border-b">
-                <div className="flex items-start justify-between gap-3">
-                    <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-3 flex-wrap">
+                    <div className="flex flex-col-reverse gap-1">
                         {/* Type Badge */}
                         <div className="flex items-center gap-2 mb-2">
                             <span
@@ -75,20 +78,31 @@ export default function ScheduleCard({
                                 {schedule.type.charAt(0).toUpperCase() +
                                     schedule.type.slice(1)}
                             </span>
-                            {isToday && (
+
+                            {schedule.status === "rescheduled" && !isPast && (
                                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 border border-red-200 animate-pulse">
-                                    Today
+                                    Rescheduled
                                 </span>
                             )}
-                            {isPast && (
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
-                                    Completed
-                                </span>
-                            )}
-                            {isUpcoming && (
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
-                                    Upcoming
-                                </span>
+
+                            {schedule?.status !== "cancelled" && (
+                                <>
+                                    {isToday && (
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 border border-red-200 animate-pulse">
+                                            Today
+                                        </span>
+                                    )}
+                                    {isPast && (
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                                            Completed
+                                        </span>
+                                    )}
+                                    {isUpcoming && (
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                                            Upcoming
+                                        </span>
+                                    )}
+                                </>
                             )}
                         </div>
 
@@ -96,45 +110,63 @@ export default function ScheduleCard({
                         <h3 className="text-lg font-semibold">
                             {schedule.title}
                         </h3>
-
-                        {schedule?.updated_at && (
-                            <p className="text-xs text-muted-foreground">
-                                Updated: {dateFormatter(schedule.updated_at)}
-                            </p>
-                        )}
                     </div>
 
-                    {viewType === "company" &&
-                        // Actions Dropdown
-                        !isPast && (
-                            <>
-                                <AddParticipantModal
-                                    scheduleId={schedule.schedule_id}
-                                />
+                    {/* Actions dropdown  */}
+                    <div className="flex items-center gap-2">
+                        {viewType === "company" &&
+                            schedule?.status !== "cancelled" &&
+                            // Actions Dropdown
+                            !isPast && (
+                                <>
+                                    <AddParticipantModal
+                                        scheduleId={schedule.schedule_id}
+                                    />
 
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <Button variant="secondary" size="sm">
-                                            <MoreVertical className="w-5 h-5 text-muted-foreground" />
-                                        </Button>
-                                    </PopoverTrigger>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <Button
+                                                variant="secondary"
+                                                size="sm"
+                                            >
+                                                <MoreVertical className="w-5 h-5 text-muted-foreground" />
+                                            </Button>
+                                        </PopoverTrigger>
 
-                                    <PopoverContent className="p-1" align="end">
-                                        <EditScheduleModal
-                                            editData={schedule}
-                                        />
+                                        <PopoverContent
+                                            className="p-1"
+                                            align="end"
+                                        >
+                                            <EditScheduleModal
+                                                editData={schedule}
+                                            />
 
-                                        <DeleteScheduleModal
-                                            scheduleId={schedule.schedule_id}
-                                        />
-                                    </PopoverContent>
-                                </Popover>
-                            </>
-                        )}
+                                            {/* <PostponeScheduleModal
+                                                schedule={schedule}
+                                                students={students}
+                                            /> */}
+
+                                            <DeleteScheduleModal
+                                                scheduleTitle={schedule?.title}
+                                                students={students}
+                                                scheduleId={
+                                                    schedule.schedule_id
+                                                }
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                </>
+                            )}
+                    </div>
                 </div>
             </div>
 
             {/* Body */}
+            {schedule.status === "cancelled" && (
+                <div className="py-3 px-4 sm:px-5 bg-red-500/10">
+                    This schedule is cancelled and will no longer take place
+                </div>
+            )}
             <div className="p-4 sm:p-5 space-y-3">
                 {/* Date & Time */}
                 <div className="grid sm:grid-cols-2 gap-3">
@@ -222,9 +254,9 @@ export default function ScheduleCard({
                 {/* Participant Info */}
                 <div className="pt-3 border-t">
                     <div className="flex flex-col gap-4">
-                        <TertiaryLabel>Participants</TertiaryLabel>
+                        <h3 className="text-muted-foreground">Participants</h3>
                         {viewType === "company" ? (
-                            schedule?.students?.map((student) => (
+                            students?.map((student) => (
                                 <div
                                     key={student.id}
                                     className="flex items-center gap-2"

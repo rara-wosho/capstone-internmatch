@@ -50,9 +50,9 @@ export default async function SchedulesPage() {
             </div>
 
             <Tabs defaultValue="upcoming" className="w-full">
-                <TabsList className="h-[35px] space-x-2 mb-2">
+                <TabsList className="h-[35px] space-x-2 mb-2 overflow-x-hidden">
                     <TabsTrigger value="all">
-                        All Schedules ({allSchedules.length})
+                        All ({allSchedules.length})
                     </TabsTrigger>
                     <TabsTrigger value="upcoming">
                         Upcoming ({upcomingSchedules.length})

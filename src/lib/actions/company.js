@@ -488,7 +488,8 @@ export async function getCompanyActivities() {
         .select(
             `
             created_at,
-            exams(created_at, title)
+            exams(created_at, title),
+            schedules(created_at, title)
         `
         )
         .eq("id", user.id)
@@ -501,6 +502,7 @@ export async function getCompanyActivities() {
     const formattedData = {
         created_at: data?.created_at ?? null,
         exams: data?.exams ?? [],
+        schedules: data?.schedules ?? [],
     };
 
     return { success: true, error: "", data: formattedData };

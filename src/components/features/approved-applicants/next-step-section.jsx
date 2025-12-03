@@ -153,7 +153,7 @@ export default function NextStepSection({ applicants }) {
                                             "flex items-center justify-center size-3 shrink-0 border rounded-full transition-colors",
                                             isSelected
                                                 ? "bg-primary border-primary text-white"
-                                                : "border-gray-300 bg-white"
+                                                : "border-neutral-400 bg-white dark:bg-neutral-800"
                                         )}
                                     >
                                         {isSelected && <Check size={10} />}
@@ -167,7 +167,7 @@ export default function NextStepSection({ applicants }) {
                                             )}
                                             <h3
                                                 className={cn(
-                                                    "font-medium text-sm",
+                                                    "text-sm",
                                                     isSelected
                                                         ? "text-primary"
                                                         : "text-foreground"

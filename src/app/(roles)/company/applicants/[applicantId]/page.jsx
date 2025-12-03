@@ -255,7 +255,11 @@ export default async function Page({ params }) {
                     <div className="border-y py-4">
                         <FormLabel>Introduction</FormLabel>
                         <p className="text-sm text-neutral-700 dark:text-neutral-300 whitespace-pre-wrap">
-                            {applicant?.introduction}
+                            {applicant?.introduction || (
+                                <span className="text-muted-foreground italic">
+                                    No introduction included.
+                                </span>
+                            )}
                         </p>
                     </div>
 

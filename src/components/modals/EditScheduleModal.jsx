@@ -10,7 +10,16 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { Edit, Calendar, Clock, MapPin, FileText, Loader } from "lucide-react";
+import {
+    Edit,
+    Calendar,
+    Clock,
+    MapPin,
+    FileText,
+    Loader,
+    Info,
+    Bell,
+} from "lucide-react";
 import Form from "next/form";
 import FormLabel from "../ui/FormLabel";
 import { Input } from "../ui/input";
@@ -29,23 +38,53 @@ import { toast } from "sonner";
 
 export default function EditScheduleModal({ editData }) {
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    // Get all instructor Ids
+    const instructorIds =
+        editData?.students?.map((s) => s.ojt_instructor_id) || [];
+
+    // Get unique instructor Ids
+    const uniqueIds = [...new Set(instructorIds)];
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        const formData = new FormData(e.currentTarget);
+
+        // Add instructor IDs and student IDs as JSON strings
+        formData.append("instructor_ids", JSON.stringify(uniqueIds));
+        formData.append(
+            "student_ids",
+            JSON.stringify(editData?.students?.map((s) => s.id) || [])
+        );
+
+        try {
+            setLoading(true);
+            const { success, error } = await updateSchedule(formData);
+
+            if (error || !success) {
+                toast.error(state.error);
+                return;
+            }
+
+            setOpen(false);
+            toast.success("Schedule updated successfully!");
+        } catch (error) {
+            console.error(
+                "Something went wrong. Please try again.",
+                error?.message
+            );
+            toast.error("Something went wrong. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    }
 
     // Format date for input field (YYYY-MM-DD)
     const formattedDate = editData?.date
         ? new Date(editData.date).toISOString().split("T")[0]
         : "";
-
-    const [state, formAction, isPending] = useActionState(updateSchedule, null);
-
-    useEffect(() => {
-        if (state?.success) {
-            setOpen(false);
-            toast.success("Schedule updated successfully!");
-            // Dialog will close automatically if you're using the form action
-        } else if (state?.error) {
-            toast.error(state.error);
-        }
-    }, [state]);
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -65,7 +104,7 @@ export default function EditScheduleModal({ editData }) {
                     </DialogDescription>
                 </DialogHeader>
 
-                <Form action={formAction} className="space-y-4">
+                <Form onSubmit={handleSubmit} className="space-y-4">
                     {/* Hidden field for schedule ID */}
                     <input
                         type="hidden"
@@ -124,6 +163,20 @@ export default function EditScheduleModal({ editData }) {
                         />
                     </div>
 
+                    {/* Location */}
+                    <div>
+                        <FormLabel className="flex items-center gap-2">
+                            <MapPin className="size-4" />
+                            Location
+                        </FormLabel>
+                        <Input
+                            name="location"
+                            required
+                            defaultValue={editData?.location}
+                            placeholder="Physical address or online meeting link"
+                        />
+                    </div>
+
                     {/* Date and Time Row */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {/* Date */}
@@ -139,6 +192,11 @@ export default function EditScheduleModal({ editData }) {
                                 defaultValue={formattedDate}
                                 min={new Date().toISOString().split("T")[0]}
                             />
+
+                            {/* <p className="text-xs text-amber-600 mt-1">
+                                Click "Reschedule" instead if you want to update
+                                the date and time.
+                            </p> */}
                         </div>
 
                         {/* Time */}
@@ -156,20 +214,6 @@ export default function EditScheduleModal({ editData }) {
                         </div>
                     </div>
 
-                    {/* Location */}
-                    <div>
-                        <FormLabel className="flex items-center gap-2">
-                            <MapPin className="size-4" />
-                            Location
-                        </FormLabel>
-                        <Input
-                            name="location"
-                            required
-                            defaultValue={editData?.location}
-                            placeholder="Physical address or online meeting link"
-                        />
-                    </div>
-
                     {/* Additional Notes */}
                     <div>
                         <FormLabel>Additional Notes (Optional)</FormLabel>
@@ -181,11 +225,19 @@ export default function EditScheduleModal({ editData }) {
                         />
                     </div>
 
+                    <div className="p-3 rounded-sm border border-accent bg-accent text-accent-foreground flex items-center gap-1.5">
+                        <Bell size={14} />
+                        <p className="text-xs">
+                            We will notify participants about the changes you
+                            made.
+                        </p>
+                    </div>
+
                     {/* Students Information (Read-only) */}
                     {editData?.students && editData.students.length > 0 && (
                         <div className="border rounded-lg p-4 bg-muted/20">
                             <FormLabel className="text-sm font-medium mb-3">
-                                Associated Students ({editData.students.length})
+                                Participants ({editData.students.length})
                             </FormLabel>
                             <div className="space-y-2 max-h-32 overflow-y-auto">
                                 {editData.students.map((student) => (
@@ -204,8 +256,9 @@ export default function EditScheduleModal({ editData }) {
                                 ))}
                             </div>
                             <p className="text-xs text-muted-foreground mt-2">
-                                Students cannot be modified in this view. Create
-                                a new schedule to add or remove students.
+                                Participants cannot be modified in this view.
+                                Create a new schedule to add or remove
+                                participants.
                             </p>
                         </div>
                     )}
@@ -218,8 +271,8 @@ export default function EditScheduleModal({ editData }) {
                                 Close
                             </Button>
                         </DialogClose>
-                        <Button disabled={isPending} type="submit">
-                            {isPending && <Loader className="animate-spin" />}
+                        <Button disabled={loading} type="submit">
+                            {loading && <Loader className="animate-spin" />}
                             Update Schedule
                         </Button>
                     </DialogFooter>
