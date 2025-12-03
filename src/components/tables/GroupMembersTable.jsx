@@ -13,7 +13,7 @@ import Link from "next/link";
 import { useMemo, useState, useTransition } from "react";
 import { Checkbox } from "../ui/checkbox";
 import { Button } from "../ui/button";
-import { ChevronDown, Info, Loader, Trash, X } from "lucide-react";
+import { ChevronDown, Ellipsis, Info, Loader, Trash, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { allowExamAccess, revokeExamAccess } from "@/lib/actions/student";
 import { toast } from "sonner";
@@ -186,7 +186,7 @@ export default function GroupMembersTable({ members, search, groupId }) {
                         : "Group members"}{" "}
                 </TertiaryLabel>
 
-                <div
+                {/* <div
                     onClick={handleMarkAll}
                     className="text-sm hover:text-accent-foreground flex items-center gap-2 cursor-pointer"
                 >
@@ -200,7 +200,7 @@ export default function GroupMembersTable({ members, search, groupId }) {
                     {markedIds.length === filteredMembers.length
                         ? "Deselect all"
                         : "Select all"}
-                </div>
+                </div> */}
             </div>
 
             {/* TABLE */}
@@ -226,7 +226,6 @@ export default function GroupMembersTable({ members, search, groupId }) {
                         <TableHead className="font-bold text-center">
                             Exam Access
                         </TableHead>
-
                         {/* STATUS FILTER */}
                         <TableHead className="font-bold ">
                             <div className="flex items-center gap-2">

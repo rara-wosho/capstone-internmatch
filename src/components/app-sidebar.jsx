@@ -86,15 +86,15 @@ const navigationConfig = [
                 roles: ["student"],
             },
             {
-                href: "/instructor/companies",
-                icon: <Building2 />,
-                label: "Companies",
-                roles: ["instructor"],
-            },
-            {
                 href: "/instructor/manage-groups",
                 icon: <Users />,
                 label: "Groups",
+                roles: ["instructor"],
+            },
+            {
+                href: "/instructor/companies",
+                icon: <Building2 />,
+                label: "Companies",
                 roles: ["instructor"],
             },
 

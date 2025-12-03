@@ -5,7 +5,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useMemo, useState } from "react";
 import { dateFormatter } from "@/utils/date-formatter";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { ArrowUpRight, ChevronRight } from "lucide-react";
+import { Button } from "../ui/button";
 
 const TABS = [
     { label: "all" },
@@ -64,29 +65,39 @@ export default function InstructorApplicationsSection({ applications = [] }) {
                             key={app.id}
                             className="border rounded-xl bg-card shadow-xs"
                         >
-                            <Link
-                                href={`/instructor/students/${app.id}`}
-                                className="flex items-center gap-2 p-4 border-b"
-                            >
-                                <Avatar className="size-6 aspect-square">
-                                    <AvatarImage
-                                        src={
-                                            app.avatar_url ||
-                                            "/images/default-avatar.jpg"
-                                        }
-                                        alt="Avatar"
-                                    />
-                                    <AvatarFallback>?</AvatarFallback>
-                                </Avatar>
-                                <div>
-                                    <p className="font-semibold hover:text-accent-foreground">
-                                        {app.firstname} {app.lastname}
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        Group: {app?.groups?.group_name}
-                                    </p>
+                            <div className="flex items-center justify-between gap-2 p-4 border-b">
+                                <div className="flex items-center gap-2">
+                                    <Avatar className="size-7 aspect-square">
+                                        <AvatarImage
+                                            src={
+                                                app.avatar_url ||
+                                                "/images/default-avatar.jpg"
+                                            }
+                                            alt="Avatar"
+                                        />
+                                        <AvatarFallback>?</AvatarFallback>
+                                    </Avatar>
+                                    <div>
+                                        <p className="font-semibold hover:text-accent-foreground">
+                                            {app.firstname} {app.lastname}
+                                        </p>
+                                        <p className="text-sm text-muted-foreground">
+                                            Group: {app?.groups?.group_name}
+                                        </p>
+                                    </div>
                                 </div>
-                            </Link>
+
+                                <Button variant="secondary" size="sm" asChild>
+                                    <Link
+                                        href={`/instructor/student-applications/${app?.id}`}
+                                    >
+                                        <span className="hidden sm:inline-block">
+                                            View Full Details
+                                        </span>{" "}
+                                        <ArrowUpRight />
+                                    </Link>
+                                </Button>
+                            </div>
 
                             <div className="p-4 space-y-3">
                                 {app.applicants?.map(
