@@ -133,7 +133,9 @@ export default function ExaminationSection({ companyExams }) {
                 id="exams"
                 className="flex items-center justify-between mb-6 pb-3 border-b"
             >
-                <TertiaryLabel>Examinations</TertiaryLabel>
+                <div>
+                    <TertiaryLabel>Company Examinations</TertiaryLabel>
+                </div>
                 <Popover>
                     <PopoverTrigger className="cursor-pointer">
                         <Info size={18} />
@@ -157,7 +159,7 @@ export default function ExaminationSection({ companyExams }) {
             {companyExams.length === 0 ? (
                 <div>
                     <p className="text-sm text-muted-foreground italic">
-                        No examinations posted.
+                        No examination posted.
                     </p>
                 </div>
             ) : (

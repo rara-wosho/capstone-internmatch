@@ -14,16 +14,13 @@ export default async function StudentEditAccountPage({ searchParams }) {
     const onboarding = (await searchParams)?.onboarding || "";
     const isOnboarding = onboarding === "yes";
 
-    const {
-        success,
-        percentage,
-        data: studentData,
-        error,
-    } = await getStudentEditData();
+    const { success, data: studentData, error } = await getStudentEditData();
 
     if (!success) {
         return <ErrorUi secondaryMessage={error} />;
     }
+
+    console.log("edit student data:", studentData);
 
     return (
         <Wrapper size="sm">
@@ -49,7 +46,7 @@ export default async function StudentEditAccountPage({ searchParams }) {
                 </div>
             </SecondaryLabel>
 
-            {percentage !== 100 && (
+            {studentData?.percentage !== 100 && (
                 <div className="w-full mb-3">
                     <ProfilePercentage />
                 </div>

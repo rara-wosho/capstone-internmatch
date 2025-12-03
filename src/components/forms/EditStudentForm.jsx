@@ -13,6 +13,14 @@ import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import ChangePasswordForm from "./ChangePasswordForm";
 
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+
 export default function EditStudentForm({ isOnboarding, studentData }) {
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
@@ -115,13 +123,25 @@ export default function EditStudentForm({ isOnboarding, studentData }) {
                                         </div>
                                         <div className="grow basis-[200px]">
                                             <FormLabel>Gender</FormLabel>
-                                            <Input
-                                                required
+                                            <Select
                                                 name="gender"
+                                                required
                                                 defaultValue={
-                                                    studentData.gender || ""
+                                                    studentData?.gender
                                                 }
-                                            />
+                                            >
+                                                <SelectTrigger className="w-full">
+                                                    <SelectValue placeholder="Select gender" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="male">
+                                                        Male
+                                                    </SelectItem>
+                                                    <SelectItem value="female">
+                                                        Female
+                                                    </SelectItem>
+                                                </SelectContent>
+                                            </Select>
                                         </div>
                                     </div>
                                 </div>
@@ -143,7 +163,7 @@ export default function EditStudentForm({ isOnboarding, studentData }) {
                                         />
                                     </div>
                                     <div>
-                                        <FormLabel>City</FormLabel>
+                                        <FormLabel>City/Municipality</FormLabel>
                                         <Input
                                             name="city"
                                             required

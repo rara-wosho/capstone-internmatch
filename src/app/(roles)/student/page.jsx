@@ -30,11 +30,11 @@ export default async function StudentDashboardPage() {
                 <div className="rounded-xl border bg-card grow basis-[320px]">
                     <StudentUpcomingSchedules userId={user.id} />
                 </div>
-                <div className="rounded-xl grow border bg-card basis-[300px]">
+                {/* <div className="rounded-xl grow border bg-card basis-[300px]">
                     <BorderBox>
                         <ExamScoresGraph userId={user.id} />
                     </BorderBox>
-                </div>
+                </div> */}
                 <div className="rounded-xl border bg-card grow basis-auto h-auto">
                     <BorderBox className="border-b flex items-center justify-between">
                         <TitleText>Activity Logs</TitleText>

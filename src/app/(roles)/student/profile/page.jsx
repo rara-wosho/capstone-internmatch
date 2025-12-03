@@ -13,14 +13,14 @@ import {
 } from "@/lib/actions/student";
 import { dateFormatter } from "@/utils/date-formatter";
 import {
+    Edit2Icon,
     FileText,
     GraduationCap,
     Mail,
     MapPin,
     NotepadText,
     PencilLine,
-    Settings,
-    ShieldCheck,
+    PenLine,
     User,
     Users,
 } from "lucide-react";
@@ -123,10 +123,6 @@ export default async function StudentProfilePage() {
                                 <Users />
                                 Group
                             </TabsTrigger>
-                            <TabsTrigger value="credentials">
-                                <ShieldCheck />
-                                Credentials
-                            </TabsTrigger>
                         </TabsList>
                     </div>
 
@@ -167,13 +163,13 @@ export default async function StudentProfilePage() {
                         </div>
 
                         {/* ===== INTERESTS ===== */}
-                        <div className="flex items-center mb-2 justify-between">
+                        <div className="flex items-center mb-2">
                             <TitleText>Interests</TitleText>
                             <Link
                                 href="/student/interests"
                                 className="p-2 hover:text-accent-foreground"
                             >
-                                <Settings size={16} />
+                                <PenLine size={14} />
                             </Link>
                         </div>
 
@@ -208,13 +204,6 @@ export default async function StudentProfilePage() {
                         <Suspense fallback={null}>
                             <AssessmentTaken studentId={user.id} />
                         </Suspense>
-                    </TabsContent>
-
-                    {/* ===== CREDENTIALS TAB ===== */}
-                    <TabsContent value="credentials">
-                        <p className="text-muted-foreground">
-                            Change your password here.
-                        </p>
                     </TabsContent>
 
                     {/* ===== GROUP TAB ===== */}

@@ -74,6 +74,12 @@ const navigationConfig = [
                 roles: ["company"],
             },
             {
+                href: "/student/assessment-test",
+                icon: <FileText />,
+                label: "Assessment Test",
+                roles: ["student"],
+            },
+            {
                 href: "/student/companies",
                 icon: <Building2 />,
                 label: "Companies",
@@ -92,12 +98,12 @@ const navigationConfig = [
                 roles: ["instructor"],
             },
 
-            {
-                href: "/student/exams",
-                icon: <NotepadText />,
-                label: "Browse Exams",
-                roles: ["student"],
-            },
+            // {
+            //     href: "/student/exams",
+            //     icon: <NotepadText />,
+            //     label: "Browse Exams",
+            //     roles: ["student"],
+            // },
 
             {
                 icon: <ClipboardPen />,
@@ -156,12 +162,7 @@ const navigationConfig = [
                 label: "Applications",
                 roles: ["student"],
             },
-            {
-                href: "/student/assessment-test",
-                icon: <FileText />,
-                label: "Assessment Test",
-                roles: ["student"],
-            },
+
             {
                 href: "/student/schedules",
                 icon: <Calendar />,

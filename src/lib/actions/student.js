@@ -290,18 +290,16 @@ export async function getStudentActivityLogs(limit) {
         };
     }
 }
-
-// get student details for profile  editing
-// and percentage of empty fields.
+// Get student details for profile editing
+// Returns: { success, error, data, percentage, missingFields }
 export async function getStudentEditData() {
     const { user } = await getCurrentUser();
-
-    if (!user || !user?.id) {
-        return {
-            success: false,
-            error: "Unable to verify user. Please refresh the page and try again.",
-            data: null,
-        };
+    if (!user?.id) {
+        return formatResponse(
+            false,
+            "Unable to verify user. Please refresh the page.",
+            null
+        );
     }
 
     const supabase = await createClient();
@@ -309,16 +307,30 @@ export async function getStudentEditData() {
     const { data, error } = await supabase
         .from("students")
         .select(
-            "id, firstname, lastname, middlename, gender, email, age, barangay, city, province, school, course, avatar_url"
+            `
+            id,
+            firstname,
+            lastname,
+            middlename,
+            gender,
+            email,
+            age,
+            barangay,
+            city,
+            province,
+            school,
+            course,
+            avatar_url
+        `
         )
         .eq("id", user.id)
         .single();
 
     if (error) {
-        return { success: false, error: error.message, data: null };
+        return formatResponse(false, error.message, null);
     }
 
-    // list of fields to check for missing values.
+    // fields to check for completeness
     const fieldsToCheck = [
         "firstname",
         "lastname",
@@ -332,10 +344,25 @@ export async function getStudentEditData() {
         "avatar_url",
     ];
 
-    const filledCount = fieldsToCheck.filter((field) => !!data[field]).length;
+    // Determine missing fields
+    const missingFields = fieldsToCheck.filter((field) => {
+        const value = data[field];
+        return !value || value === "" || value === null;
+    });
+
+    const filledCount = fieldsToCheck.length - missingFields.length;
     const percentage = Math.round((filledCount / fieldsToCheck.length) * 100);
 
-    return { success: true, error: null, data, percentage };
+    return formatResponse(true, null, {
+        ...data,
+        percentage,
+        missingFields,
+    });
+}
+
+// Helper formatter
+function formatResponse(success, error, data) {
+    return { success, error, data };
 }
 
 // Update student details
