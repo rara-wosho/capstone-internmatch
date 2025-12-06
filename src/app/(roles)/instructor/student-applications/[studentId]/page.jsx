@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import ErrorUi from "@/components/ui/ErrorUi";
 import EmptyUi from "@/components/ui/EmptyUi";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Link as LinkIcon, User } from "lucide-react";
+import { User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
