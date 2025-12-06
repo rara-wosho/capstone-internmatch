@@ -53,7 +53,7 @@ function InfoItem({ icon: Icon, label, value, className = "" }) {
                 <p className="text-sm font-medium text-muted-foreground">
                     {label}
                 </p>
-                <p className="text-base font-semibold mt-0.5">
+                <p className="text-base font-semibold mt-0.5 truncate">
                     {value || "N/A"}
                 </p>
             </div>
@@ -84,7 +84,7 @@ export default async function Page({ params }) {
             exam_access,
             avatar_url,
             groups(id, group_name),
-            assessment_attempt(assessment_score, assessment_total_item, assessment_test(assessment_title)),
+            assessment_attempt(submitted_at, assessment_score, assessment_total_item, assessment_test(assessment_title)),
             exam_attempt(exam_title, completed_at, score, total_questions),
             applicants(id,approve_status, cover_letter_url, resume_link, applied_at, introduction, companies(name))
             `
@@ -104,6 +104,8 @@ export default async function Page({ params }) {
             />
         );
     }
+
+    console.log("studentdata", studentData);
 
     const applications = studentData?.applicants?.map((app) => {
         if (app?.approve_status === "approved") {
@@ -333,6 +335,65 @@ export default async function Page({ params }) {
                 </BorderBox>
             </div>
 
+            {/* Assessment test History */}
+            <BorderBox className="border rounded-xl bg-card">
+                <div className="flex items-center gap-2 mb-6">
+                    <div className="p-2 rounded-lg bg-amber-500/10">
+                        <Award className="h-5 w-5 text-amber-600" />
+                    </div>
+                    <div className="flex-1">
+                        <h2 className="text-xl font-semibold">
+                            Assessment Test Taken
+                        </h2>
+                        <p className="text-sm text-muted-foreground">
+                            {studentData?.assessment_attempt?.length || 0}{" "}
+                            Assessment tests completed
+                        </p>
+                    </div>
+                </div>
+
+                {studentData?.exam_attempt?.length === 0 ? (
+                    <div className="text-center py-8">
+                        <div className="p-3 rounded-full bg-muted inline-flex mb-3">
+                            <BookOpen className="h-6 w-6 text-muted-foreground" />
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                            No assessment test taken yet
+                        </p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {studentData?.assessment_attempt?.map((test) => (
+                            <div
+                                key={test.assessment_test?.assessment_title}
+                                className="p-4 rounded-lg border bg-background hover:shadow-sm transition-shadow"
+                            >
+                                <div className="flex items-start justify-between mb-2">
+                                    <h3 className="font-semibold truncate">
+                                        {
+                                            test?.assessment_test
+                                                ?.assessment_title
+                                        }
+                                    </h3>
+                                    {test.assessment_score !== undefined &&
+                                        test.assessment_total_item && (
+                                            <div className="flex-shrink-0 ml-2">
+                                                <div className="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
+                                                    {test.assessment_score}/
+                                                    {test.assessment_total_item}
+                                                </div>
+                                            </div>
+                                        )}
+                                </div>
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                    <Calendar className="h-3.5 w-3.5" />
+                                    {dateFormatter(test?.submitted_at)}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </BorderBox>
             {/* Exam History */}
             <BorderBox className="border rounded-xl bg-card">
                 <div className="flex items-center gap-2 mb-6">
