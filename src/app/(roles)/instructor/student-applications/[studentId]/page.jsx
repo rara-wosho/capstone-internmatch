@@ -4,22 +4,9 @@ import { createClient } from "@/lib/supabase/server";
 import ErrorUi from "@/components/ui/ErrorUi";
 import EmptyUi from "@/components/ui/EmptyUi";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-    Building2,
-    FileText,
-    Link as LinkIcon,
-    Mail,
-    CheckCircle,
-    XCircle,
-    Clock,
-    ExternalLink,
-    User,
-    Check,
-} from "lucide-react";
+import { Link as LinkIcon, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { dateFormatter } from "@/utils/date-formatter";
 import Link from "next/link";
 import BorderBox from "@/components/ui/BorderBox";
 import ApplicationCard from "@/components/cards/ApplicationCard";

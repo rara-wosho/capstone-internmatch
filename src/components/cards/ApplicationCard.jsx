@@ -6,18 +6,16 @@ import {
     Check,
     CheckCircle,
     XCircle,
-    FileQuestion,
     CircleQuestionMark,
-    Info,
 } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
-const { Avatar, AvatarImage, AvatarFallback } = require("../ui/avatar");
-const { default: BorderBox } = require("../ui/BorderBox");
-const { dateFormatter } = require("@/utils/date-formatter");
-const { Badge } = require("../ui/badge");
-const { Button } = require("../ui/button");
-const { default: Link } = require("next/link");
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Badge } from "../ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import BorderBox from "../ui/BorderBox";
+import { dateFormatter } from "@/utils/date-formatter";
+import Link from "next/link";
+import { Button } from "../ui/button";
 
 /**
  * Get status badge styling
