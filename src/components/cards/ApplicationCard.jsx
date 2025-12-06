@@ -251,7 +251,7 @@ export default function ApplicationCard({ application }) {
                             >
                                 <div className="flex items-center gap-2">
                                     <div className="p-1.5 rounded-md bg-emerald-50 dark:bg-emerald-500/10">
-                                        <LinkIcon className="h-3.5 w-3.5 text-emerald-600" />
+                                        <ExternalLink className="h-3.5 w-3.5 text-emerald-600" />
                                     </div>
                                     <div className="text-left">
                                         <p className="text-xs font-medium">
