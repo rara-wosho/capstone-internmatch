@@ -1,4 +1,5 @@
 import AcceptedStudentsOverview from "@/components/blocks/AcceptedStudentsOverview";
+import InstructorScheduleOverview from "@/components/blocks/InstructorScheduleOverview";
 import InstructorStudentOverview from "@/components/blocks/InstructorStudentOverview";
 import CreateFirstGroupModal from "@/components/modals/CreateFirstGroupModal";
 import BorderBox from "@/components/ui/BorderBox";
@@ -29,6 +30,8 @@ export default async function InstructorDashboardPage() {
             <BorderBox className="border rounded-xl bg-card">
                 <AcceptedStudentsOverview instructorId={user.id} />
             </BorderBox>
+
+            <InstructorScheduleOverview />
 
             <CreateFirstGroupModal id={user.id} />
         </div>

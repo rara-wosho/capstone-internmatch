@@ -5,13 +5,13 @@ import BreadCrumbs from "@/components/ui/BreadCrumbs";
 import { Button } from "@/components/ui/button";
 import ErrorUi from "@/components/ui/ErrorUi";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
-import TertiaryLabel from "@/components/ui/TertiaryLabel";
-import TitleText from "@/components/ui/TitleText";
+
 import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { dateFormatter } from "@/utils/date-formatter";
@@ -33,6 +33,8 @@ import {
     GraduationCap,
 } from "lucide-react";
 import Link from "next/link";
+
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 
 const links = [
     { href: "", label: "Home" },
@@ -470,6 +472,14 @@ export default async function Page({ params }) {
                     </div>
                 </div>
             )}
+
+            {/* <BorderBox className="mt-6 border rounded-xl bg-card">
+                <SecondaryLabel>Schedules</SecondaryLabel>
+                <CalendarComponent
+                    mode="multiple"
+                    className="rounded-md w-full"
+                />
+            </BorderBox> */}
         </div>
     );
 }
