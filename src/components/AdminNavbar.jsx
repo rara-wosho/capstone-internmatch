@@ -7,7 +7,7 @@ import Logo from "./ui/Logo";
 
 const NavLinks = [
     { href: "/admin", label: "Dashboard" },
-    { href: "/admin/users", label: "Users" },
+    // { href: "/admin/users", label: "Users" },
     { href: "/admin/registrations", label: "Registrations" },
 ];
 

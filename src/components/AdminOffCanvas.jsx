@@ -30,11 +30,11 @@ import { cn } from "@/lib/utils";
 
 const Links = [
     { icon: <LayoutDashboard size={15} />, href: "/admin", label: "Dashboard" },
-    {
-        icon: <UsersRound size={15} />,
-        href: "/admin/users",
-        label: "Users",
-    },
+    // {
+    //     icon: <UsersRound size={15} />,
+    //     href: "/admin/users",
+    //     label: "Users",
+    // },
     {
         icon: <NotebookPen size={15} />,
         href: "/admin/registrations",

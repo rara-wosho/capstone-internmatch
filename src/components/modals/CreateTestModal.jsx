@@ -87,6 +87,16 @@ export const CreateTestModal = () => {
                             placeholder="Assessment description"
                         />
                     </div>
+                    <div className="mb-3">
+                        <FormLabel>
+                            Time Limit in Minutes (default : 40)
+                        </FormLabel>
+                        <Input
+                            defaultValue={40}
+                            name="time-limit"
+                            placeholder="Default is 40 mins"
+                        />
+                    </div>
                     <div className="mb-6">
                         <FormLabel>Difficulty</FormLabel>
                         <Select name="assessment-difficulty" required>

@@ -9,7 +9,7 @@ import Wrapper from "@/components/Wrapper";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { dateFormatter } from "@/utils/date-formatter";
-import { Calendar, ChevronLeft, Gauge, Trash } from "lucide-react";
+import { Calendar, ChevronLeft, Clock, Gauge, Trash } from "lucide-react";
 import { notFound } from "next/navigation";
 
 export default async function Page({ params }) {
@@ -24,7 +24,7 @@ export default async function Page({ params }) {
     const { data, error } = await db
         .from("assessment_test")
         .select(
-            "id, created_at, updated_at, assessment_title, assessment_description, assessment_difficulty, assessment_questions(id, assessment_question_text, assessment_choices(id, is_correct, assessment_choice_text))"
+            "id, created_at, updated_at, time_limit, assessment_title, assessment_description, assessment_difficulty, assessment_questions(id, assessment_question_text, assessment_choices(id, is_correct, assessment_choice_text))"
         )
         .eq("id", assessmentId)
         .eq("is_deleted", false)
@@ -77,11 +77,15 @@ export default async function Page({ params }) {
                 </div>
                 <div
                     className={cn(
-                        "capitalize text-sm my-1 flex items-center gap-2",
+                        "capitalize text-sm my-1 flex items-center gap-2 text-muted-foreground",
                         data.assessment_difficulty
                     )}
                 >
-                    <Gauge size={14} /> {data.assessment_difficulty}
+                    <Gauge size={14} /> Difficulty :{" "}
+                    {data.assessment_difficulty}
+                </div>
+                <div className="capitalize text-sm my-1 flex items-center gap-2 text-muted-foreground">
+                    <Clock size={14} /> Time limit : {data.time_limit} minutes
                 </div>
                 <p className="text-sm text-muted-foreground font-normal flex items-center gap-2 mb-1">
                     <Calendar size={13} />

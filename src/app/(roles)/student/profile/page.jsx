@@ -20,6 +20,7 @@ import {
     NotepadText,
     PencilLine,
     PenLine,
+    Phone,
     User,
     Users,
 } from "lucide-react";
@@ -136,6 +137,18 @@ export default async function StudentProfilePage() {
                                 </div>
                                 <p className="text-muted-foreground text-sm sm:text-base">
                                     {studentData?.email}
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="size-5 flex items-center justify-center shrink-0">
+                                    <Phone size={16} />
+                                </div>
+                                <p className="text-muted-foreground text-sm sm:text-base">
+                                    {studentData?.phone || (
+                                        <span className="italic opacity-60">
+                                            No phone number
+                                        </span>
+                                    )}
                                 </p>
                             </div>
                             <div className="flex items-center gap-2">

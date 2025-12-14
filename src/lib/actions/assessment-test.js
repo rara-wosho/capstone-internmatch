@@ -8,6 +8,7 @@ export async function createAssessmentTest(formData) {
     const assessment_title = formData.get("assessment-title") || "";
     const assessment_description = formData.get("assessment-description") || "";
     const assessment_difficulty = formData.get("assessment-difficulty") || "";
+    const time_limit = formData.get("time-limit") || 40; // default time limit 40
 
     if (!assessment_title || !assessment_difficulty) {
         return { success: false, error: "Please fill in all required fields." };
@@ -21,6 +22,7 @@ export async function createAssessmentTest(formData) {
             assessment_title,
             assessment_description,
             assessment_difficulty,
+            time_limit,
         })
         .select("id")
         .single();
@@ -39,6 +41,7 @@ export async function updateAssessmentTest(assessmentId, formData) {
     const assessment_title = formData.get("assessment_title") || "";
     const assessment_description = formData.get("assessment_description") || "";
     const assessment_difficulty = formData.get("assessment_difficulty") || "";
+    const time_limit = formData.get("time-limit") || 40;
 
     if (!assessmentId || !assessment_difficulty || !assessment_title) {
         return { success: false, error: "Please fill in all required fields." };
@@ -50,6 +53,7 @@ export async function updateAssessmentTest(assessmentId, formData) {
         assessment_title,
         assessment_description,
         assessment_difficulty,
+        time_limit,
     };
 
     const { error } = await supabase

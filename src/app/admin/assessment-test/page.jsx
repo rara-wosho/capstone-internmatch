@@ -6,7 +6,13 @@ import IconWrapper from "@/components/ui/IconWrapper";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import Wrapper from "@/components/Wrapper";
 import { createClient } from "@/lib/supabase/server";
-import { FileText } from "lucide-react";
+import {
+    ArrowUpRight,
+    ChevronRight,
+    Clock,
+    FileText,
+    Gauge,
+} from "lucide-react";
 import Link from "next/link";
 
 export default async function AdminAssessmentTestPage() {
@@ -14,7 +20,9 @@ export default async function AdminAssessmentTestPage() {
 
     const { data, error } = await supabase
         .from("assessment_test")
-        .select("id, assessment_title, created_at, assessment_difficulty")
+        .select(
+            "id, assessment_title, time_limit, created_at, assessment_difficulty"
+        )
         .eq("is_deleted", false)
         .order("created_at", { ascending: false });
 
@@ -49,13 +57,29 @@ export default async function AdminAssessmentTestPage() {
                             >
                                 <Link
                                     href={`/admin/assessment-test/${ass.id}`}
-                                    className="p-4 flex flex-col"
+                                    className="p-4 flex flex-col group"
                                 >
-                                    {ass.assessment_title}
+                                    <div className="flex items-center gap-3 justify-between mb-2">
+                                        <p className="capitalize">
+                                            {ass.assessment_title}
+                                        </p>
 
-                                    <p className="text-sm text-muted-foreground mt-1 capitalize">
-                                        {ass.assessment_difficulty}
-                                    </p>
+                                        <ArrowUpRight
+                                            size={18}
+                                            className="text-muted-foreground group-hover:rotate-45 transition-transform"
+                                        />
+                                    </div>
+
+                                    <div className="flex items-center gap-3 flex-wrap">
+                                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                            <Gauge size={14} />
+                                            <p>{ass.assessment_difficulty}</p>
+                                        </div>
+                                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                            <Clock size={14} />
+                                            <p>{ass.time_limit} minutes</p>
+                                        </div>
+                                    </div>
                                 </Link>
                             </div>
                         ))}

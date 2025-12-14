@@ -111,6 +111,17 @@ export default function EditStudentForm({ isOnboarding, studentData }) {
                                     </div>
                                     <div className="flex flex-wrap gap-2">
                                         <div className="grow basis-[200px]">
+                                            <FormLabel>Phone</FormLabel>
+                                            <Input
+                                                required
+                                                name="phone"
+                                                type="number"
+                                                defaultValue={
+                                                    studentData.phone || ""
+                                                }
+                                            />
+                                        </div>
+                                        <div className="grow basis-[200px]">
                                             <FormLabel>Age</FormLabel>
                                             <Input
                                                 required

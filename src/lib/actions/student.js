@@ -313,6 +313,7 @@ export async function getStudentEditData() {
             lastname,
             middlename,
             gender,
+            phone,
             email,
             age,
             barangay,
@@ -335,6 +336,7 @@ export async function getStudentEditData() {
         "firstname",
         "lastname",
         "gender",
+        "phone",
         "age",
         "barangay",
         "city",
@@ -374,6 +376,7 @@ export async function updateStudentDetails(formData) {
         const middlename = formData.get("middlename");
         const lastname = formData.get("lastname");
         const age = formData.get("age");
+        const phone = formData.get("phone");
         const gender = formData.get("gender");
         const barangay = formData.get("barangay");
         const city = formData.get("city");
@@ -417,6 +420,7 @@ export async function updateStudentDetails(formData) {
                 firstname,
                 middlename: middlename || null,
                 lastname,
+                phone: phone ? parseInt(phone) : null,
                 age: age ? parseInt(age) : null,
                 gender: gender || null,
                 barangay: barangay || null,

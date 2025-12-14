@@ -88,6 +88,14 @@ export default function EditAssessmentModal({ assessment }) {
                         />
                     </div>
                     <div className="mb-3">
+                        <FormLabel>Time Limit in Minutes</FormLabel>
+                        <Input
+                            name="time-limit"
+                            defaultValue={assessment?.time_limit}
+                            placeholder="Time limit in minutes"
+                        />
+                    </div>
+                    <div className="mb-3">
                         <FormLabel>Difficulty</FormLabel>
                         <Select
                             name="assessment_difficulty"
