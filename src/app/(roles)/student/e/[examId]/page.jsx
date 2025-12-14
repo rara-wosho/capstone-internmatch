@@ -50,17 +50,13 @@ export default async function Page({ params }) {
             <div className="py-10 px-3 flex flex-col items-center justify-center">
                 <TertiaryLabel>You already answered the exam.</TertiaryLabel>
                 <p className="text-center mb-6 mt-2">
-                    You can check your examination results now or browse other
-                    exams.
+                    You can check your recent examination results instead.
                 </p>
                 <div className="flex flex-col gap-2">
-                    <Button variant="secondary" asChild>
+                    <Button asChild>
                         <Link href="/student/my-exams/recent">
                             View Recent Exams
                         </Link>
-                    </Button>
-                    <Button variant="ghost" asChild>
-                        <Link href="/student/exams">Browse Exams</Link>
                     </Button>
                 </div>
             </div>
@@ -102,10 +98,6 @@ export default async function Page({ params }) {
                             )}
                             <p className="text-xs text-muted-foreground">
                                 Auto submit when time expires.
-                            </p>
-                            <p className="text-xs text-amber-600 dark:text-amber-400/90">
-                                Switching tabs or leaving the window will result
-                                in immediate forfeit.
                             </p>
 
                             <p className="text-xs text-amber-600 dark:text-amber-400/90">

@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 import { CircleCheck, Ellipsis, Loader } from "lucide-react";
 import { submitAssessmentAnswers } from "@/lib/actions/assessment-test";
 import { toast } from "sonner";
+import TimeRemaining from "../exam/TimeRemaining"; // Import TimeRemaining
 
 import {
     AlertDialog,
@@ -27,11 +28,13 @@ export default function AssessmentQuestionsSection({
     description,
     assessmentId,
     studentId,
+    durationMinutes = 40,
 }) {
     const [answers, setAnswers] = useState([]);
     const [isPending, startTransition] = useTransition();
     const [violation, setViolation] = useState("");
     const [openModal, setOpenModal] = useState(false);
+    const [isExpired, setIsExpired] = useState(false);
 
     // select choices then store to answers variable
     const handleSelectChoice = useCallback(
@@ -84,7 +87,19 @@ export default function AssessmentQuestionsSection({
                     description: result.error,
                 });
             }
+
+            // const key = `exam_${assessmentId}_${studentId}_start`;
+
+            // setTimeout(() => {
+            //     localStorage.removeItem(key);
+            // }, 500);
         });
+    };
+
+    // Handle time expiration
+    const handleExpire = () => {
+        setIsExpired(true);
+        setViolation("Time expired.");
     };
 
     useEffect(() => {
@@ -120,11 +135,20 @@ export default function AssessmentQuestionsSection({
                         {description}
                     </p>
                 </div>
-                {assessmentQuestions.length > 0 && (
-                    <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2">
+                    {durationMinutes && (
+                        <TimeRemaining
+                            variation="timeOnly"
+                            examId={assessmentId}
+                            userId={studentId}
+                            durationMinutes={durationMinutes}
+                            onExpire={handleSubmitAnswers}
+                        />
+                    )}
+                    {assessmentQuestions.length > 0 && (
                         <Button
                             size=""
-                            disabled={isPending}
+                            disabled={isPending || isExpired}
                             onClick={() => setOpenModal(true)}
                         >
                             {isPending ? (
@@ -132,13 +156,15 @@ export default function AssessmentQuestionsSection({
                             ) : (
                                 <CircleCheck />
                             )}
-                            Submit Answers
+                            {isPending
+                                ? "Submitting Answers"
+                                : "Submit Answers"}
                         </Button>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
 
-            {/* quetions list  */}
+            {/* questions list */}
             {assessmentQuestions.map((question, index) => (
                 <BorderBox
                     key={question?.id}
@@ -173,11 +199,11 @@ export default function AssessmentQuestionsSection({
                 </BorderBox>
             ))}
 
-            {/* lower submit button  */}
+            {/* lower submit button */}
             {assessmentQuestions.length > 0 && (
                 <div className="mt-4 flex items-center gap-2 justify-end">
                     <Button
-                        disabled={isPending}
+                        disabled={isPending || isExpired}
                         onClick={() => setOpenModal(true)}
                     >
                         {isPending ? (
@@ -190,7 +216,7 @@ export default function AssessmentQuestionsSection({
                 </div>
             )}
 
-            {/* Alert Dialog if violation is commited or to confirm submission  */}
+            {/* Alert Dialog if violation is committed or to confirm submission */}
             <AlertDialog
                 open={openModal || violation !== ""}
                 onOpenChange={setOpenModal}
@@ -213,8 +239,9 @@ export default function AssessmentQuestionsSection({
                     <div className="text-sm text-muted-foreground">
                         {violation && (
                             <p className="text-destructive">
-                                You lost focus or switch tab which immediately
-                                forfeits your assessment test.
+                                {violation === "Time expired."
+                                    ? "The time limit for this assessment has expired, forfeiting your test."
+                                    : "You lost focus or switched tabs, which immediately forfeits your assessment test."}
                             </p>
                         )}
 
@@ -233,7 +260,9 @@ export default function AssessmentQuestionsSection({
                             ) : (
                                 <CircleCheck />
                             )}
-                            Submit Answers
+                            {isPending
+                                ? "Submitting Answers"
+                                : "Submit Answers"}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

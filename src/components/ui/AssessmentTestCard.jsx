@@ -11,6 +11,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
+import { formatDuration } from "@/utils/format-duration";
 
 export default function AssessmentTestCard({ assessmentTest }) {
     const questionCount = assessmentTest?.assessment_questions?.length || 0;
@@ -47,7 +48,7 @@ export default function AssessmentTestCard({ assessmentTest }) {
                 <Dialog>
                     <DialogTrigger asChild>
                         <Button disabled={assessmentTest.hasAttempted}>
-                            View Details
+                            Take Test
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
@@ -58,13 +59,19 @@ export default function AssessmentTestCard({ assessmentTest }) {
                                 that you read the reminders below.
                             </DialogDescription>
                         </DialogHeader>
-                        <div className="py-2">
-                            <p>
+                        <ul className="list-disc ps-6 bg-amber-500/10 p-2 rounded-md mb-3 border border-amber-500/40 space-y-2">
+                            <li className="text-amber-600 dark:text-amber-400 text-sm">
                                 Switching tabs is prohibited and may result to
-                                auto submission of the test once violation is
+                                forfeiture of the test once violation is
                                 commited.
-                            </p>
-                        </div>
+                            </li>
+                            <li className="text-amber-600 dark:text-amber-400 text-sm">
+                                Time limit :{" "}
+                                <span className="font-bold">
+                                    {formatDuration(assessmentTest?.time_limit)}
+                                </span>
+                            </li>
+                        </ul>
                         <Button asChild>
                             <Link
                                 href={`/student/assessment-test/${assessmentTest.id}/start`}

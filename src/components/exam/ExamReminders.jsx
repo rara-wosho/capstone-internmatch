@@ -49,16 +49,10 @@ export default function ExamReminders({ passing, duration, items }) {
                 </p>
                 <ul className="list-disc pl-3 text-sm text-muted-foreground space-y-1 tracking-wide">
                     <li>
-                        Switching tabs or leaving the window will result in
-                        immediate forfeit.
-                    </li>
-                    <li>
                         Avoid refreshing the page or you will lose your
                         progress.
                     </li>
-                    <li>
-                        Any violation will result in automatic disqualification.
-                    </li>
+
                     <li>Ensure stable internet connection before starting.</li>
                 </ul>
             </div>

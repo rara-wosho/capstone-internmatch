@@ -7,6 +7,7 @@ export default function TimeRemaining({
     userId,
     durationMinutes,
     onExpire,
+    variation = "default",
 }) {
     const [deadline, setDeadline] = useState(null);
     const [remainingMs, setRemainingMs] = useState(null);
@@ -59,7 +60,7 @@ export default function TimeRemaining({
                   .toString()
                   .padStart(2, "0")}`;
 
-    return (
+    return variation === "default" ? (
         <div className="rounded-xl border shadow-xs">
             <div className="bg-card flex items-center py-5 px-4 rounded-t-xl flex-col justify-center">
                 <p className="mb-4 text-sm">Remaining time</p>
@@ -71,5 +72,7 @@ export default function TimeRemaining({
                 Time Limit: {formatDuration(durationMinutes)}
             </div>
         </div>
+    ) : (
+        <span>{formattedTime}</span>
     );
 }

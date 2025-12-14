@@ -144,7 +144,7 @@ export async function getStudentProfileData(studentId) {
     const { data, error } = await supabase
         .from("students")
         .select(
-            `id, firstname, lastname, middlename, gender, age, avatar_url, barangay, city, province, course, email, school, interests(interest), groups(group_name, group_description, ojt_instructors(firstname, lastname))`
+            `id, firstname, lastname, middlename, gender, age, avatar_url, barangay, city, province, course, email, school, interests(interest), applicants(approve_status, approved_at, companies(name)), groups(group_name, group_description, ojt_instructors(firstname, lastname))`
         )
         .eq("id", studentId)
         .single();

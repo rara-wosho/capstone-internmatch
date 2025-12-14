@@ -13,7 +13,6 @@ import {
 } from "@/lib/actions/student";
 import { dateFormatter } from "@/utils/date-formatter";
 import {
-    Edit2Icon,
     FileText,
     GraduationCap,
     Mail,

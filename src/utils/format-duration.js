@@ -1,4 +1,4 @@
-export function formatDuration(minutes) {
+export function formatDuration(minutes = 0) {
     if (minutes <= 0) return "No time limit";
 
     const hrs = Math.floor(minutes / 60);

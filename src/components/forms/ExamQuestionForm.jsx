@@ -135,7 +135,7 @@ export default function ExamQuestionForm({ examinationData }) {
             // if exam submission is successful, open modal
             setIsRecorded(true);
         } catch (err) {
-            alert("Something went wrong submitting the exam.");
+            alert("Something went wrong while submitting the exam.");
         } finally {
             localStorage.removeItem(key);
             setIsSubmitting(false);

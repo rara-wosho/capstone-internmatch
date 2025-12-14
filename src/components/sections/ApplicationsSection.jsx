@@ -9,6 +9,7 @@ import { Skeleton } from "../ui/skeleton";
 
 const TABS = [
     { label: "all" },
+    { label: "approved" },
     { label: "accepted" },
     { label: "pending" },
     { label: "reviewed" },
@@ -21,6 +22,13 @@ export default function ApplicationsSection({ applications = [] }) {
     // Filter applications based on the active tab
     const filteredApplications = useMemo(() => {
         if (activeTab === "all") return applications;
+
+        if (activeTab === "approved") {
+            return applications.filter(
+                (app) => app?.approve_status === "approved"
+            );
+        }
+
         return applications.filter(
             (app) => app.status?.toLowerCase() === activeTab
         );

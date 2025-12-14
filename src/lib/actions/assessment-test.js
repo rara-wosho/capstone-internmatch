@@ -208,7 +208,7 @@ export async function getAssessmentTestsForStudent(studentId) {
     const { data, error } = await supabase
         .from("assessment_test")
         .select(
-            `id, assessment_title, assessment_description, assessment_difficulty,
+            `id, assessment_title, time_limit, assessment_description, assessment_difficulty,
             assessment_attempt!left(
                 id,
                 started_at

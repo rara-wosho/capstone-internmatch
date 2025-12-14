@@ -10,7 +10,7 @@ import { Input } from "./input";
 import { Textarea } from "./textarea";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { Loader } from "lucide-react";
+import { Award, BriefcaseBusiness, Loader } from "lucide-react";
 import {
     cancelApplication,
     resubmitApplication,
@@ -95,7 +95,12 @@ export default function ApplicationSectionCard({ application }) {
     };
 
     return (
-        <div className="border rounded-xl mb-3 shadow-xs bg-card">
+        <div
+            className={cn(
+                "border rounded-xl mb-3 shadow-xs bg-card",
+                application.approve_status === "approved" && "border-green-600"
+            )}
+        >
             <BorderBox className="border-b flex flex-wrap gap-2 items-center justify-between">
                 <div>
                     <Link
@@ -130,6 +135,23 @@ export default function ApplicationSectionCard({ application }) {
                 </div>
             </BorderBox>
             <BorderBox className="px-3 md:px-5 py-3">
+                {/* Display Intern application details  */}
+                {application?.approve_status === "approved" && (
+                    <div className="flex items-center gap-2 p-2 mb-3 border border-green-600/50 bg-green-500/10 rounded-lg">
+                        <div className="rounded-sm bg-green-600 text-green-100 p-3">
+                            <BriefcaseBusiness />
+                        </div>
+                        <div className="text-green-600 dark:text-green-500">
+                            <p>Approved</p>
+                            <p className=" text-sm">
+                                You are currently an intern at{" "}
+                                {application?.companies?.name}
+                                {" | "} Approved at{" : "}
+                                {dateFormatter(application?.approved_at)}
+                            </p>
+                        </div>
+                    </div>
+                )}
                 {isEditing ? (
                     <>
                         <div className="mb-4 flex flex-col">

@@ -48,6 +48,7 @@ export default async function AssessmentPage() {
             <div className="flex items-center gap-3 mb-3">
                 <SecondaryLabel>Assessment Test</SecondaryLabel>
 
+                {/* Hint drawer  */}
                 <Drawer>
                     <DrawerTrigger className="cursor-pointer">
                         <CircleQuestionMark size={18} />
@@ -62,11 +63,12 @@ export default async function AssessmentPage() {
                                 </DrawerTitle>
                                 <DrawerDescription className="text-left">
                                     The Assessment Test is designed to evaluate
-                                    your knowledge, technical skills, and
-                                    problem-solving ability before you begin
-                                    your internship journey. It helps both you
-                                    and potential companies understand your
-                                    strengths and areas for improvement.
+                                    your knowledge of the core subjects in the
+                                    BSIT program before you begin your
+                                    internship journey. It helps both you and
+                                    potential companies gain a clear
+                                    understanding of your strengths and the
+                                    areas where you may need improvement.
                                 </DrawerDescription>
 
                                 <div className="flex flex-col mt-6 items-start">
@@ -81,40 +83,6 @@ export default async function AssessmentPage() {
                                                 fundamentals.
                                             </span>
                                         </li>
-                                        {/* <li>
-                                            <strong>Technical Skills - </strong>
-                                            <span>
-                                                Programming, databases,
-                                                networking, or other fields
-                                                related to your chosen track.
-                                            </span>
-                                        </li> */}
-                                        <li>
-                                            <strong>
-                                                Problem-solving scenarios -{" "}
-                                            </strong>
-                                            <span>
-                                                Real-world challenges to test
-                                                how you apply your skills.
-                                            </span>
-                                        </li>
-                                    </ul>
-                                    <TertiaryLabel>
-                                        How the Test Works
-                                    </TertiaryLabel>
-                                    <ul className="text-muted-foreground list-disc ps-4 flex flex-col items-start gap-1 mb-5">
-                                        {/* <li>
-                                            The test is timed to simulate
-                                            real-world pressure.
-                                        </li> */}
-                                        <li>
-                                            You may select a difficulty level
-                                            (e.g., Moderate or Difficult).
-                                        </li>
-                                        {/* <li>
-                                            Once you start, the timer will run
-                                            until you finish or time runs out.
-                                        </li> */}
                                     </ul>
                                     <TertiaryLabel>
                                         Why Take This Test
@@ -128,12 +96,7 @@ export default async function AssessmentPage() {
                                         <li>
                                             Allows companies to match you with
                                             the right opportunities based on
-                                            your skill level.
-                                        </li>
-                                        <li>
-                                            Builds confidence by letting you
-                                            experience a structured evaluation
-                                            before real-world tasks.
+                                            your skill/knowledge level.
                                         </li>
                                     </ul>
 
@@ -155,8 +118,8 @@ export default async function AssessmentPage() {
                                             <li>
                                                 Don’t worry if it feels
                                                 challenging — the goal is to
-                                                measure your current skill
-                                                level, not perfection.
+                                                measure your current knowledge,
+                                                not perfection.
                                             </li>
                                         </ul>
                                     </div>

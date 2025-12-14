@@ -22,7 +22,7 @@ export default function StudentsTable({ students, initialFilter }) {
     // Validate status from url params
     const allowedFilters = ["all", "active", "inactive"];
     const [statusFilter, setStatusFilter] = useState(
-        allowedFilters.includes(initialFilter) ? initialFilter : "all"
+        allowedFilters.includes(initialFilter) ? initialFilter : "active"
     );
 
     const [open, setOpen] = useState(false);

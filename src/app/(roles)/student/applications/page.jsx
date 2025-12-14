@@ -25,7 +25,7 @@ export default async function ApplicationsPage() {
     const { data: applicationsData, error: applicationErr } = await supabase
         .from("applicants")
         .select(
-            "id, applied_at, status, cover_letter_url, reviewed_at, resume_link, portfolio_link, introduction , companies(name,id)"
+            "id, applied_at, approve_status, approved_at, status, cover_letter_url, reviewed_at, resume_link, portfolio_link, introduction , companies(name,id)"
         )
         .eq("student_id", user?.id)
         .order("applied_at", { ascending: false });
