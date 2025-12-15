@@ -20,6 +20,7 @@ import AboutExamModal from "@/components/exam/AboutExamModal";
 import { createClient } from "@/lib/supabase/server";
 import QuestionReportsModal from "@/components/exam/QuestionReportsModal";
 import Link from "next/link";
+import ArchiveExamButton from "@/components/features/exams/ArchiveExamButton";
 
 export default async function Page({ params }) {
     const { examId } = await params;

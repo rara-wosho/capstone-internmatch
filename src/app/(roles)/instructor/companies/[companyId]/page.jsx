@@ -88,6 +88,17 @@ export default async function Page({ params }) {
                     </p>
                 </BorderBox>
 
+                {company?.additional_details && (
+                    <BorderBox className="border-b  border-t">
+                        <h2 className="font-semibold mb-2 text-lg">
+                            Additional Informations
+                        </h2>
+                        <p className="text-muted-foreground whitespace-pre-wrap">
+                            {company?.additional_details}
+                        </p>
+                    </BorderBox>
+                )}
+
                 {/* Contact Info */}
                 <BorderBox>
                     <h2 className="font-semibold text-lg mb-2">

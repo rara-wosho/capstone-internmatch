@@ -154,6 +154,16 @@ export default async function Page({ params }) {
                                 {data?.details}
                             </p>
                         </BorderBox>
+
+                        <BorderBox className="border-b">
+                            <TertiaryLabel className="mb-2">
+                                <BookOpen className="size-3 md:size-4" /> More
+                                details about the company
+                            </TertiaryLabel>
+                            <p className="text-muted-foreground whitespace-pre-wrap">
+                                {data?.additional_details}
+                            </p>
+                        </BorderBox>
                         <BorderBox className="">
                             <div className="mb-2 flex items-center gap-2">
                                 <TertiaryLabel>

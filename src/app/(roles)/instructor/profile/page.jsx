@@ -13,6 +13,7 @@ import ChangePasswordForm from "@/components/forms/ChangePasswordForm";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import PasswordChangedEmail from "@/components/email/PasswordChangeEmail";
+import { ArrowUpRight, Eye, ScanEye } from "lucide-react";
 
 // Page metadata
 export const metadata = {
@@ -61,17 +62,31 @@ export default async function InstructorProfilePage() {
                 {/* HEADER  */}
                 <BorderBox className="flex flex-wrap items-center justify-between gap-3 border bg-card rounded-xl">
                     <div className="flex items-center gap-4">
-                        <Avatar className="w-[100px] aspect-square">
-                            <AvatarImage
-                                src={
-                                    instructor.avatar_url ||
-                                    "/images/default-avatar.jpg"
-                                }
-                            />
-                            <AvatarFallback>
-                                {instructor.name?.charAt(0)}
-                            </AvatarFallback>
-                        </Avatar>
+                        <div className="relative flex items-center justify-center rounded-full">
+                            <Avatar className="w-[100px] aspect-square">
+                                <AvatarImage
+                                    src={
+                                        instructor.avatar_url ||
+                                        "/images/default-avatar.jpg"
+                                    }
+                                />
+                                <AvatarFallback>
+                                    {instructor.name?.charAt(0)}
+                                </AvatarFallback>
+                            </Avatar>
+
+                            {instructor?.avatar_url && (
+                                <div className="absolute right-0 bottom-0">
+                                    <Link
+                                        href={instructor.avatar_url}
+                                        target="_blank"
+                                        className="aspect-square rounded-full flex items-center justify-center w-[30px] h-[30px] bg-muted text-secondary-foreground border shadow-md"
+                                    >
+                                        <Eye size={18} />
+                                    </Link>
+                                </div>
+                            )}
+                        </div>
 
                         <div>
                             <SecondaryLabel>

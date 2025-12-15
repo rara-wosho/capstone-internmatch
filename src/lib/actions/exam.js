@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "../supabase/server";
 import { revalidatePath } from "next/cache";
+import { getCurrentUser } from "./auth";
 
 export async function createExam(formData) {
     const supabase = await createClient();
@@ -141,6 +142,92 @@ export async function getExamById(examId) {
         };
     } catch (err) {
         return { data: null, error: err.message ?? "Unexpected error" };
+    }
+}
+
+// Get archived exams for the current company
+export async function getArchivedExams() {
+    const supabase = await createClient();
+    const { user, error: userError } = await getCurrentUser();
+
+    if (userError || !user?.id) {
+        return {
+            data: null,
+            error: "Unauthorized. Please sign in again.",
+        };
+    }
+
+    try {
+        const { data, error } = await supabase
+            .from("exams")
+            .select("id, title, created_at")
+            .eq("company_id", user.id)
+            .eq("is_deleted", false)
+            .eq("is_archive", true)
+            .order("created_at", { ascending: false });
+
+        if (error) {
+            console.error("Error fetching archived exams:", error);
+            return {
+                data: null,
+                error: "Failed to fetch archived exams.",
+            };
+        }
+
+        return { data: data || [], error: null };
+    } catch (error) {
+        console.error("Unexpected error:", error);
+        return {
+            data: null,
+            error: "An unexpected error occurred.",
+        };
+    }
+}
+
+// Unarchive an exam
+export async function unarchiveExam(examId) {
+    if (!examId) {
+        return { success: false, error: "Exam ID is required." };
+    }
+
+    const supabase = await createClient();
+    const { user, error: userError } = await getCurrentUser();
+
+    if (userError || !user?.id) {
+        return {
+            success: false,
+            error: "Unauthorized. Please sign in again.",
+        };
+    }
+
+    try {
+        // Unarchive the exam
+        const { error: updateError } = await supabase
+            .from("exams")
+            .update({
+                is_archive: false,
+            })
+            .eq("id", examId);
+
+        if (updateError) {
+            console.error("Error unarchiving exam:", updateError);
+            return {
+                success: false,
+                error: "Failed to unarchive exam. Please try again.",
+            };
+        }
+
+        // Revalidate relevant paths
+        revalidatePath("/company/manage-exam");
+        revalidatePath("/company/archived-exams");
+
+        return { success: true };
+    } catch (error) {
+        console.error("Unexpected error unarchiving exam:", error);
+        return {
+            success: false,
+            error: "An unexpected error occurred. Please try again.",
+        };
     }
 }
 

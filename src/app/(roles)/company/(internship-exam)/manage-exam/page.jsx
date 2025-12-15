@@ -26,6 +26,7 @@ export default async function Page() {
         .select("id, title, created_at, questions(id)")
         .eq("company_id", companyId)
         .eq("is_deleted", false)
+        .eq("is_archive", false)
         .eq("questions.is_deleted", false)
         .order("created_at", { ascending: false });
 

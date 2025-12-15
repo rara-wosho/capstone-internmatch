@@ -31,6 +31,7 @@ export default async function Page() {
         .select("id, title, is_published, exam_attempt(id)")
         .eq("company_id", companyId)
         .eq("is_deleted", false)
+        .eq("is_archive", false)
         .order("created_at", { ascending: false });
 
     if (tableErr) {

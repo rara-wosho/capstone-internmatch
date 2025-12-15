@@ -237,13 +237,14 @@ export async function getCompanyDataAndExams(companyId) {
     const { data, error } = await supabase
         .from("companies")
         .select(
-            `id, created_at, name, details, barangay, province, city, phone, email, links, website, avatar_url, accept_applicants, accept_applicants_term, 
+            `id, created_at, name, additional_details, details, barangay, province, city, phone, email, links, website, avatar_url, accept_applicants, accept_applicants_term, 
             company_offers(offers), 
-            exams(id, created_at, title, description, instruction, duration, updated_at, questions(id), exam_attempt(completed_at))`
+            exams(id, created_at, title, description, instruction, duration, updated_at, questions!inner(id), exam_attempt(completed_at))`
         )
         .eq("id", companyId)
         .eq("exams.is_published", true)
         .eq("exams.is_deleted", false)
+        .eq("exams.is_archive", false)
         .eq("exams.exam_attempt.student_id", user.id)
         .order("created_at", { referencedTable: "exams", ascending: true })
         .maybeSingle();

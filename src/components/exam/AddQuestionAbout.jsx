@@ -8,6 +8,7 @@ import DeleteExamModal from "./DeleteExamModal";
 import { Button } from "../ui/button";
 import { formatDuration } from "@/utils/format-duration";
 import { dateFormatter } from "@/utils/date-formatter";
+import ArchiveExamButton from "../features/exams/ArchiveExamButton";
 
 export default function AddQuestionAbout({ exam }) {
     return (
@@ -73,7 +74,11 @@ export default function AddQuestionAbout({ exam }) {
                 </div>
             </div>
 
-            <DeleteExamModal examId={exam.id} type="button" />
+            <div className="space-y-2">
+                <DeleteExamModal examId={exam.id} type="button" />
+
+                <ArchiveExamButton examId={exam.id} />
+            </div>
         </>
     );
 }

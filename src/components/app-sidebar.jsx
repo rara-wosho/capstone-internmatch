@@ -18,6 +18,7 @@ import {
     FileUser,
     Shield,
     Trash,
+    Package2,
 } from "lucide-react";
 
 import {
@@ -137,6 +138,11 @@ const navigationConfig = [
                         href: "/company/examinees",
                         label: "Examinees",
                         icon: <Calendar />,
+                    },
+                    {
+                        href: "/company/archived-exams",
+                        label: "Archives",
+                        icon: <Package2 />,
                     },
                 ],
             },
