@@ -221,7 +221,8 @@ export async function getAssessmentTestsForStudent(studentId) {
         )
         .eq("assessment_attempt.student_id", studentId)
         .eq("assessment_questions.is_deleted", false)
-        .eq("is_deleted", false);
+        .eq("is_deleted", false)
+        .order("created_at", { ascending: false });
 
     if (error) {
         console.error("Error fetching assessments:", error);

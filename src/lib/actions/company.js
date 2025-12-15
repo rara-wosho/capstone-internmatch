@@ -151,7 +151,8 @@ export async function getCompanies(search) {
         .from("companies")
         .select(
             "id, name, avatar_url, details, barangay, province, city, company_offers(offers)"
-        );
+        )
+        .eq("is_deleted", false);
 
     // Add search filter if provided
     if (search && search.trim() !== "") {
