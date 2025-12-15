@@ -354,7 +354,7 @@ export default async function Page({ params }) {
                     </div>
                 </div>
 
-                {studentData?.exam_attempt?.length === 0 ? (
+                {studentData?.assessment_attempt?.length === 0 ? (
                     <div className="text-center py-8">
                         <div className="p-3 rounded-full bg-muted inline-flex mb-3">
                             <BookOpen className="h-6 w-6 text-muted-foreground" />

@@ -111,6 +111,21 @@ export default function UpdateCompanyDetailsForm({ defaultFormData }) {
                 </div>
             </div>
 
+            {/* More about the company  */}
+            <div className="py-3">
+                <FormLabel>More about the company (Optional)</FormLabel>
+                <p className="text-[14px] text-muted-foreground mb-2">
+                    Give applicants a clearer picture of what it’s like to work
+                    with your company. You may include information such as
+                    responsibilities and work environment.
+                </p>
+                <Textarea
+                    defaultValue={defaultFormData.additional_details}
+                    name="additional-details"
+                    placeholder="e.g. Day to day task, team culture, work setup..."
+                />
+            </div>
+
             <div className="flex justify-end">
                 <Button type="submit" disabled={isPending}>
                     {isPending ? (

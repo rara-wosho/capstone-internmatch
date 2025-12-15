@@ -115,7 +115,8 @@ export default async function Page() {
                         <p>{companyData.website}</p>
                     </Link>
                 )}
-                <div className="space-y-2 mb-4 mt-4">
+
+                <div className="space-y-2 mb-8 mt-8">
                     <div className="flex items-center gap-2">
                         <TitleText>Company Offers</TitleText>
                         <Link
@@ -136,6 +137,16 @@ export default async function Page() {
                         ))}
                     </div>
                 </div>
+
+                {/* More about the company  */}
+                {companyData.additional_details && (
+                    <div className="space-y-2 mb-4">
+                        <TitleText>More about the company</TitleText>
+                        <p className="text-muted-foreground whitespace-pre-wrap">
+                            {companyData.additional_details}
+                        </p>
+                    </div>
+                )}
             </Wrapper>
         </div>
     );

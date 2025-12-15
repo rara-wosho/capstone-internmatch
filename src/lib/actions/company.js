@@ -96,6 +96,9 @@ export async function updateCompanyDetails(formData) {
     const barangay = (formData.get("barangay") || "").trim();
     const city = (formData.get("city") || "").trim();
     const province = (formData.get("province") || "").trim();
+    const additional_details = (
+        formData.get("additional-details") || ""
+    ).trim();
 
     // Validate websit link
     if (!website.startsWith("http") && website) {
@@ -121,6 +124,7 @@ export async function updateCompanyDetails(formData) {
         barangay,
         city,
         province,
+        additional_details,
     };
 
     const { error } = await supabase
@@ -179,7 +183,7 @@ export async function getCompanyById(id) {
     const { data, error } = await supabase
         .from("companies")
         .select(
-            "avatar_url, barangay, city, province, details, email, links, name, phone, website, accept_applicants, accept_applicants_term, company_offers(offers)"
+            "avatar_url, additional_details, barangay, city, province, details, email, links, name, phone, website, accept_applicants, accept_applicants_term, company_offers(offers)"
         )
         .eq("id", id)
         .maybeSingle();
@@ -211,6 +215,7 @@ export async function getCompanyById(id) {
         city: data.city || "",
         province: data.province || "",
         details: data.details || "",
+        additional_details: data.additional_details || "",
         links: Array.isArray(data.links) ? data.links : [],
         offers: data.company_offers?.offers.map((o) => o).filter(Boolean) || [],
     };
