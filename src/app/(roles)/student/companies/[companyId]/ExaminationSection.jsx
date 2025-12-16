@@ -71,8 +71,8 @@ export default function ExaminationSection({ companyExams }) {
 
                 console.log("Assessment data:", attempt);
 
-                // If we have at least one completed assessment
-                if (attempt?.length > 0) {
+                // If we have at least two completed assessment
+                if (attempt?.length > 1) {
                     setHasTakenAssessment(true);
                 } else {
                     setHasTakenAssessment(false);
@@ -229,9 +229,9 @@ export default function ExaminationSection({ companyExams }) {
                                                 Assessment Required
                                             </p>
                                             <p className="text-xs text-amber-600/80 mb-3">
-                                                You must complete the assessment
-                                                test before taking company
-                                                exams.
+                                                You must complete at least two
+                                                assessment tests before taking
+                                                company exams.
                                             </p>
                                             <Button
                                                 asChild
