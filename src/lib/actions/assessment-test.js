@@ -232,7 +232,7 @@ export async function getAssessmentTestsForStudent(studentId) {
     // Transform data to include hasAttempted flag
     const assessments = data.map((test) => ({
         ...test,
-        hasAttempted: test.assessment_attempt.length > 0,
+        hasAttempted: test.assessment_attempt.length > 1,
         attemptDetails: test.assessment_attempt[0] || null,
     }));
 
