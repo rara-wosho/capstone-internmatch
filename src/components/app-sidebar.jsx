@@ -19,6 +19,7 @@ import {
     Shield,
     Trash,
     Package2,
+    BriefcaseBusiness,
 } from "lucide-react";
 
 import {
@@ -161,6 +162,12 @@ const navigationConfig = [
                         label: "Schedules",
                     },
                 ],
+            },
+            {
+                icon: <BriefcaseBusiness />,
+                label: "Interns",
+                roles: ["company"],
+                href: "/company/interns",
             },
             {
                 href: "/student/applications",
