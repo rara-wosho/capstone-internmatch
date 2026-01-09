@@ -20,33 +20,36 @@ import barangays from "@/address-data/barangay.json";
 
 import { updateInstructorProfile } from "@/lib/actions/instructor";
 import { toast } from "sonner";
+import { CircleX, Edit2, PenLine, X } from "lucide-react";
 
 export default function InstructorEditProfileForm({ userId, instructorData }) {
+    const [editAddress, setEditAddress] = useState(false);
+
     const [state, formAction, isPending] = useActionState(
         updateInstructorProfile,
         null
     );
 
-    // // For data to be appended in the form
-    // const [barangay, setBarangay] = useState("");
-    // const [province, setProvince] = useState("");
-    // const [city, setCity] = useState("");
+    // For data to be appended in the form
+    const [barangay, setBarangay] = useState("");
+    const [province, setProvince] = useState("");
+    const [city, setCity] = useState("");
 
-    // // For select philippines address dropdown
-    // const [provinceCode, setProvinceCode] = useState("");
-    // const [cityCode, setCityCode] = useState("");
-    // const [barangayCode, setBarangayCode] = useState("");
+    // For select philippines address dropdown
+    const [provinceCode, setProvinceCode] = useState("");
+    const [cityCode, setCityCode] = useState("");
+    const [barangayCode, setBarangayCode] = useState("");
 
-    // // Derived filtered lists - memoized to avoid re-filtering on every render
-    // const filteredCities = useMemo(
-    //     () => cities.filter((c) => c.province_code === provinceCode),
-    //     [provinceCode]
-    // );
+    // Derived filtered lists - memoized to avoid re-filtering on every render
+    const filteredCities = useMemo(
+        () => cities.filter((c) => c.province_code === provinceCode),
+        [provinceCode]
+    );
 
-    // const filteredBarangays = useMemo(
-    //     () => barangays.filter((b) => b.city_code === cityCode),
-    //     [cityCode]
-    // );
+    const filteredBarangays = useMemo(
+        () => barangays.filter((b) => b.city_code === cityCode),
+        [cityCode]
+    );
 
     // Show success/error toast
     useEffect(() => {
@@ -57,8 +60,24 @@ export default function InstructorEditProfileForm({ userId, instructorData }) {
         }
     }, [state]);
 
+    const handleSaveChanges = async (formData) => {
+        setEditAddress(false);
+
+        if (province) {
+            formData.set("province", province || instructorData?.province);
+        }
+        if (city) {
+            formData.set("city", city || instructorData?.city);
+        }
+        if (barangay) {
+            formData.set("barangay", barangay || instructorData?.barangay);
+        }
+
+        return formAction(formData);
+    };
+
     return (
-        <Form action={formAction}>
+        <Form action={handleSaveChanges}>
             {/* Hidden input for instructor ID */}
             <input type="hidden" name="instructorId" value={userId} />
 
@@ -103,7 +122,7 @@ export default function InstructorEditProfileForm({ userId, instructorData }) {
                         <Input
                             name="middlename"
                             defaultValue={instructorData.middlename}
-                            placeholder="Brown"
+                            placeholder="Enter your middle name"
                         />
                     </div>
                     <div>
@@ -176,112 +195,137 @@ export default function InstructorEditProfileForm({ userId, instructorData }) {
                 </div>
 
                 {/* ADDRESS  */}
-                <h2 className="font-semibold text-lg mb-2">Address</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-5">
-                    {/* SELECT PROVINCE  */}
-                    {/* <div>
-                        <FormLabel>Province</FormLabel>
-                        <Select
-                            defaultValue=""
-                            onValueChange={(value) => {
-                                const province = provinces.find(
-                                    (p) => p.province_code === value
-                                );
+                <h2 className="font-semibold text-lg mb-2  border-t mt-7 pt-5 flex">
+                    Current Address{" : "}
+                    <span className="font-normal">
+                        {instructorData?.barangay}, {instructorData?.city},{" "}
+                        {instructorData?.province}
+                    </span>
+                    <button
+                        onClick={() => setEditAddress(!editAddress)}
+                        type="button"
+                        className="text-accent-foreground ms-2 cursor-pointer"
+                    >
+                        {editAddress ? (
+                            <span className="text-sm font-normal">Cancel</span>
+                        ) : (
+                            <PenLine size={16} />
+                        )}
+                    </button>
+                </h2>
 
-                                setProvinceCode(value);
-                                setCityCode("");
-                                setProvince(province?.province_name || "");
-                            }}
-                        >
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select province" />
-                            </SelectTrigger>
+                {editAddress && (
+                    <>
+                        <p className="mb-2 text-sm text-muted-foreground">
+                            You can update your address below
+                        </p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-5">
+                            {/* SELECT PROVINCE  */}
+                            <div>
+                                <FormLabel>Province</FormLabel>
+                                <Select
+                                    defaultValue=""
+                                    onValueChange={(value) => {
+                                        const province = provinces.find(
+                                            (p) => p.province_code === value
+                                        );
 
-                            <SelectContent>
-                                {provinces.map((p) => (
-                                    <SelectItem
-                                        key={p.province_code}
-                                        value={p.province_code}
-                                    >
-                                        {p.province_name}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div> */}
+                                        setProvinceCode(value);
+                                        setCityCode("");
+                                        setProvince(
+                                            province?.province_name || ""
+                                        );
+                                    }}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select province" />
+                                    </SelectTrigger>
 
-                    {/* SELECT CITY  */}
-                    {/* <div>
-                        <FormLabel>City/Municipality</FormLabel>
+                                    <SelectContent>
+                                        {provinces.map((p) => (
+                                            <SelectItem
+                                                key={p.province_code}
+                                                value={p.province_code}
+                                            >
+                                                {p.province_name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
 
-                        <Select
-                            name="city"
-                            defaultValue=""
-                            disabled={!provinceCode}
-                            onValueChange={(value) => {
-                                const city = filteredCities.find(
-                                    (c) => c.city_code === value
-                                );
+                            {/* SELECT CITY  */}
+                            <div>
+                                <FormLabel>City/Municipality</FormLabel>
 
-                                setCityCode(value);
-                                setCity(city?.city_name || "");
-                            }}
-                        >
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select City" />
-                            </SelectTrigger>
+                                <Select
+                                    name="city"
+                                    defaultValue=""
+                                    disabled={!provinceCode}
+                                    onValueChange={(value) => {
+                                        const city = filteredCities.find(
+                                            (c) => c.city_code === value
+                                        );
 
-                            <SelectContent>
-                                {filteredCities.map((c) => (
-                                    <SelectItem
-                                        key={c.city_code}
-                                        value={c.city_code}
-                                    >
-                                        {c.city_name}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div> */}
+                                        setCityCode(value);
+                                        setCity(city?.city_name || "");
+                                    }}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select City" />
+                                    </SelectTrigger>
 
-                    {/* SELECT BARANGAY  */}
-                    {/* <div>
-                        <FormLabel>Barangay</FormLabel>
-                        <Select
-                            defaultValue=""
-                            disabled={!cityCode}
-                            onValueChange={(value) => {
-                                const barangay = filteredBarangays.find(
-                                    (b) => b.brgy_code === value
-                                );
+                                    <SelectContent>
+                                        {filteredCities.map((c) => (
+                                            <SelectItem
+                                                key={c.city_code}
+                                                value={c.city_code}
+                                            >
+                                                {c.city_name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
 
-                                setBarangayCode(value);
-                                setBarangay(barangay?.brgy_name);
-                            }}
-                        >
-                            <SelectTrigger className="w-full">
-                                <SelectValue
-                                    placeholder={
-                                        cityCode
-                                            ? "Select barangay"
-                                            : "Select city first"
-                                    }
-                                />
-                            </SelectTrigger>
+                            {/* SELECT BARANGAY  */}
+                            <div>
+                                <FormLabel>Barangay</FormLabel>
+                                <Select
+                                    defaultValue=""
+                                    disabled={!cityCode}
+                                    onValueChange={(value) => {
+                                        const barangay = filteredBarangays.find(
+                                            (b) => b.brgy_code === value
+                                        );
 
-                            <SelectContent>
-                                {filteredBarangays.map((b) => (
-                                    <SelectItem
-                                        key={b.brgy_code}
-                                        value={b.brgy_code}
-                                    >
-                                        {b.brgy_name}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div> */}
-                    <div>
+                                        setBarangayCode(value);
+                                        setBarangay(barangay?.brgy_name);
+                                    }}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue
+                                            placeholder={
+                                                cityCode
+                                                    ? "Select barangay"
+                                                    : "Select city first"
+                                            }
+                                        />
+                                    </SelectTrigger>
+
+                                    <SelectContent>
+                                        {filteredBarangays.map((b) => (
+                                            <SelectItem
+                                                key={b.brgy_code}
+                                                value={b.brgy_code}
+                                            >
+                                                {b.brgy_name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            {/* <div>
                         <FormLabel>Barangay</FormLabel>
                         <Input
                             name="barangay"
@@ -325,8 +369,10 @@ export default function InstructorEditProfileForm({ userId, instructorData }) {
                                 {state.errors.province}
                             </p>
                         )}
-                    </div>
-                </div>
+                    </div> */}
+                        </div>
+                    </>
+                )}
 
                 <div className="mb-2 md:mb-0 flex justify-end">
                     <Button type="submit" disabled={isPending}>

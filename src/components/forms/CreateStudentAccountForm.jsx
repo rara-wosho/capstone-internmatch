@@ -110,7 +110,7 @@ export default function CreateStudentAccountForm9({
                     <Input
                         required
                         name="firstName"
-                        placeholder="Tyrelle"
+                        placeholder="Enter your first name"
                         value={formData.firstName}
                         onChange={handleChange}
                     />
@@ -121,7 +121,7 @@ export default function CreateStudentAccountForm9({
                     <Input
                         required
                         name="lastName"
-                        placeholder="Constello"
+                        placeholder="Enter your last name"
                         value={formData.lastName}
                         onChange={handleChange}
                     />
@@ -130,7 +130,7 @@ export default function CreateStudentAccountForm9({
                     <FormLabel>Middle Name (Optional)</FormLabel>
                     <Input
                         name="middlename"
-                        placeholder="Rivero"
+                        placeholder="Enter your middle name"
                         value={formData.middlename}
                         onChange={handleChange}
                     />
@@ -172,7 +172,7 @@ export default function CreateStudentAccountForm9({
                             required
                             name="email"
                             type="email"
-                            placeholder="tyrelle@sample.com"
+                            placeholder="e.g., tyrelle@sample.com"
                             value={formData.email}
                             onChange={handleChange}
                         />
