@@ -199,6 +199,11 @@ export default function InstructorRegistrationForm() {
             formData.set("credentialUrl", credentialUrl);
         }
 
+        if (!province || !city || !barangay) {
+            toast.error("Some address information are missing.");
+            return;
+        }
+
         if (province) {
             formData.set("province", province);
         }
@@ -275,12 +280,11 @@ export default function InstructorRegistrationForm() {
                     {/* suffix and email */}
                     <div className="mb-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div>
-                            <FormLabel>Suffix</FormLabel>
+                            <FormLabel>Suffix (Optional)</FormLabel>
                             <Input
                                 defaultValue={state?.formData?.suffix || ""}
                                 name="suffix"
                                 placeholder="e.g., Jr./Sr."
-                                required
                                 disabled={isPending}
                             />
                         </div>
