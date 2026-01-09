@@ -5,7 +5,7 @@ import BorderBox from "../ui/BorderBox";
 import FormLabel from "../ui/FormLabel";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useMemo, useState } from "react";
 import {
     Select,
     SelectContent,
@@ -13,6 +13,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from "../ui/select";
+
+import provinces from "@/address-data/province.json";
+import cities from "@/address-data/city.json";
+import barangays from "@/address-data/barangay.json";
 
 import { updateInstructorProfile } from "@/lib/actions/instructor";
 import { toast } from "sonner";
@@ -22,6 +26,27 @@ export default function InstructorEditProfileForm({ userId, instructorData }) {
         updateInstructorProfile,
         null
     );
+
+    // // For data to be appended in the form
+    // const [barangay, setBarangay] = useState("");
+    // const [province, setProvince] = useState("");
+    // const [city, setCity] = useState("");
+
+    // // For select philippines address dropdown
+    // const [provinceCode, setProvinceCode] = useState("");
+    // const [cityCode, setCityCode] = useState("");
+    // const [barangayCode, setBarangayCode] = useState("");
+
+    // // Derived filtered lists - memoized to avoid re-filtering on every render
+    // const filteredCities = useMemo(
+    //     () => cities.filter((c) => c.province_code === provinceCode),
+    //     [provinceCode]
+    // );
+
+    // const filteredBarangays = useMemo(
+    //     () => barangays.filter((b) => b.city_code === cityCode),
+    //     [cityCode]
+    // );
 
     // Show success/error toast
     useEffect(() => {
@@ -49,7 +74,7 @@ export default function InstructorEditProfileForm({ userId, instructorData }) {
                             name="firstname"
                             required
                             defaultValue={instructorData.firstname}
-                            placeholder="John"
+                            placeholder="Enter your first name"
                             aria-invalid={!!state?.errors?.firstname}
                         />
                         {state?.errors?.firstname && (
@@ -64,7 +89,7 @@ export default function InstructorEditProfileForm({ userId, instructorData }) {
                             name="lastname"
                             required
                             defaultValue={instructorData.lastname}
-                            placeholder="Doe"
+                            placeholder="Enter your last name"
                             aria-invalid={!!state?.errors?.lastname}
                         />
                         {state?.errors?.lastname && (
@@ -79,6 +104,14 @@ export default function InstructorEditProfileForm({ userId, instructorData }) {
                             name="middlename"
                             defaultValue={instructorData.middlename}
                             placeholder="Brown"
+                        />
+                    </div>
+                    <div>
+                        <FormLabel>Suffix (Optional)</FormLabel>
+                        <Input
+                            name="suffix"
+                            defaultValue={instructorData?.suffix}
+                            placeholder="e.g., Jr./Sr."
                         />
                     </div>
                     <div>
@@ -145,6 +178,109 @@ export default function InstructorEditProfileForm({ userId, instructorData }) {
                 {/* ADDRESS  */}
                 <h2 className="font-semibold text-lg mb-2">Address</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-5">
+                    {/* SELECT PROVINCE  */}
+                    {/* <div>
+                        <FormLabel>Province</FormLabel>
+                        <Select
+                            defaultValue=""
+                            onValueChange={(value) => {
+                                const province = provinces.find(
+                                    (p) => p.province_code === value
+                                );
+
+                                setProvinceCode(value);
+                                setCityCode("");
+                                setProvince(province?.province_name || "");
+                            }}
+                        >
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select province" />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                {provinces.map((p) => (
+                                    <SelectItem
+                                        key={p.province_code}
+                                        value={p.province_code}
+                                    >
+                                        {p.province_name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div> */}
+
+                    {/* SELECT CITY  */}
+                    {/* <div>
+                        <FormLabel>City/Municipality</FormLabel>
+
+                        <Select
+                            name="city"
+                            defaultValue=""
+                            disabled={!provinceCode}
+                            onValueChange={(value) => {
+                                const city = filteredCities.find(
+                                    (c) => c.city_code === value
+                                );
+
+                                setCityCode(value);
+                                setCity(city?.city_name || "");
+                            }}
+                        >
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select City" />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                {filteredCities.map((c) => (
+                                    <SelectItem
+                                        key={c.city_code}
+                                        value={c.city_code}
+                                    >
+                                        {c.city_name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div> */}
+
+                    {/* SELECT BARANGAY  */}
+                    {/* <div>
+                        <FormLabel>Barangay</FormLabel>
+                        <Select
+                            defaultValue=""
+                            disabled={!cityCode}
+                            onValueChange={(value) => {
+                                const barangay = filteredBarangays.find(
+                                    (b) => b.brgy_code === value
+                                );
+
+                                setBarangayCode(value);
+                                setBarangay(barangay?.brgy_name);
+                            }}
+                        >
+                            <SelectTrigger className="w-full">
+                                <SelectValue
+                                    placeholder={
+                                        cityCode
+                                            ? "Select barangay"
+                                            : "Select city first"
+                                    }
+                                />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                {filteredBarangays.map((b) => (
+                                    <SelectItem
+                                        key={b.brgy_code}
+                                        value={b.brgy_code}
+                                    >
+                                        {b.brgy_name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div> */}
                     <div>
                         <FormLabel>Barangay</FormLabel>
                         <Input

@@ -35,7 +35,7 @@ export default async function InstructorProfilePage() {
     const { data: instructor, error } = await supabase
         .from("ojt_instructors")
         .select(
-            "firstname, lastname, middlename, email, avatar_url, school, barangay, city, province, created_at, gender, age"
+            "firstname, lastname, suffix, middlename, email, avatar_url, school, barangay, city, province, created_at, gender, age"
         )
         .eq("id", user.id)
         .maybeSingle();
@@ -90,7 +90,8 @@ export default async function InstructorProfilePage() {
 
                         <div>
                             <SecondaryLabel>
-                                {instructor.firstname} {instructor.lastname}
+                                {instructor.firstname} {instructor.lastname}{" "}
+                                {instructor?.suffix && instructor.suffix}
                             </SecondaryLabel>
                             <p className="text-sm text-muted-foreground">
                                 {instructor.email}

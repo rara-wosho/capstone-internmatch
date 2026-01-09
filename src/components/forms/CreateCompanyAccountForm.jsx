@@ -1,7 +1,11 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { toast } from "sonner";
+
+import provinces from "@/address-data/province.json";
+import cities from "@/address-data/city.json";
+import barangays from "@/address-data/barangay.json";
 
 import FormLabel from "../ui/FormLabel";
 import { Input } from "../ui/input";
@@ -11,6 +15,14 @@ import { Textarea } from "../ui/textarea";
 
 import { createCompanyAccount } from "@/lib/actions/company";
 import { useRouter } from "next/navigation";
+
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 export default function CreateCompanyAccountForm() {
     const router = useRouter();
@@ -26,6 +38,22 @@ export default function CreateCompanyAccountForm() {
         password: "",
         confirmPassword: "",
     });
+
+    // For select philippines address dropdown
+    const [provinceCode, setProvinceCode] = useState("");
+    const [cityCode, setCityCode] = useState("");
+    const [barangayCode, setBarangayCode] = useState("");
+
+    // Derived filtered lists - memoized to avoid re-filtering on every render
+    const filteredCities = useMemo(
+        () => cities.filter((c) => c.province_code === provinceCode),
+        [provinceCode]
+    );
+
+    const filteredBarangays = useMemo(
+        () => barangays.filter((b) => b.city_code === cityCode),
+        [cityCode]
+    );
 
     const [isPending, startTransition] = useTransition();
 
@@ -88,7 +116,7 @@ export default function CreateCompanyAccountForm() {
                                 name="companyName"
                                 value={form.companyName}
                                 onChange={handleChange}
-                                placeholder="Deverian Corporation"
+                                placeholder="Enter your company name"
                             />
                         </div>
                         <div>
@@ -109,7 +137,7 @@ export default function CreateCompanyAccountForm() {
                                 name="phone"
                                 value={form.phone}
                                 onChange={handleChange}
-                                placeholder="09123456789"
+                                placeholder="Enter phone number"
                             />
                         </div>
                         <div>
@@ -118,7 +146,7 @@ export default function CreateCompanyAccountForm() {
                                 name="website"
                                 value={form.website}
                                 onChange={handleChange}
-                                placeholder="https://www.deverian.com"
+                                placeholder="e.g., https://www.deverian.com"
                             />
                         </div>
                     </div>
@@ -126,39 +154,128 @@ export default function CreateCompanyAccountForm() {
 
                 <div className="mb-8">
                     <TertiaryLabel className="mb-3">Address</TertiaryLabel>
-                    <div className=" mb-3">
-                        <FormLabel>Barangay/Street</FormLabel>
-                        <Input
-                            required
-                            name="barangay"
-                            type="text"
-                            value={form.barangay}
-                            onChange={handleChange}
-                            placeholder="Zone 2, Tipanoy Landless"
-                        />
-                    </div>
 
-                    <div className="mb-3">
-                        <FormLabel>Municipality/City</FormLabel>
-                        <Input
-                            required
-                            name="city"
-                            type="text"
-                            value={form.city}
-                            onChange={handleChange}
-                            placeholder="Iligan City"
-                        />
-                    </div>
+                    {/* Province */}
                     <div className="mb-3">
                         <FormLabel>Province</FormLabel>
-                        <Input
-                            required
-                            name="province"
-                            type="text"
-                            value={form.province}
-                            onChange={handleChange}
-                            placeholder="Lanao Del Norte"
-                        />
+                        <Select
+                            value={provinceCode}
+                            onValueChange={(value) => {
+                                const province = provinces.find(
+                                    (p) => p.province_code === value
+                                );
+
+                                setProvinceCode(value);
+                                setCityCode("");
+
+                                setForm((prev) => ({
+                                    ...prev,
+                                    province: province?.province_name || "",
+                                    city: "",
+                                    barangay: "",
+                                }));
+                            }}
+                        >
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select province" />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                {provinces.map((p) => (
+                                    <SelectItem
+                                        key={p.province_code}
+                                        value={p.province_code}
+                                    >
+                                        {p.province_name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    {/* City / Municipality */}
+                    <div className="mb-3">
+                        <FormLabel>Municipality / City</FormLabel>
+                        <Select
+                            value={cityCode}
+                            disabled={!provinceCode}
+                            onValueChange={(value) => {
+                                const city = filteredCities.find(
+                                    (c) => c.city_code === value
+                                );
+
+                                setCityCode(value);
+
+                                setForm((prev) => ({
+                                    ...prev,
+                                    city: city?.city_name || "",
+                                    barangay: "",
+                                }));
+                            }}
+                        >
+                            <SelectTrigger className="w-full">
+                                <SelectValue
+                                    placeholder={
+                                        provinceCode
+                                            ? "Select city / municipality"
+                                            : "Select province first"
+                                    }
+                                />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                {filteredCities.map((c) => (
+                                    <SelectItem
+                                        key={c.city_code}
+                                        value={c.city_code}
+                                    >
+                                        {c.city_name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    {/* Barangay */}
+                    <div className="mb-3">
+                        <FormLabel>Barangay</FormLabel>
+                        <Select
+                            value={barangayCode}
+                            disabled={!cityCode}
+                            onValueChange={(value) => {
+                                const barangay = filteredBarangays.find(
+                                    (b) => b.brgy_code === value
+                                );
+
+                                setBarangayCode(value);
+
+                                setForm((prev) => ({
+                                    ...prev,
+                                    barangay: barangay?.brgy_name || "",
+                                }));
+                            }}
+                        >
+                            <SelectTrigger className="w-full">
+                                <SelectValue
+                                    placeholder={
+                                        cityCode
+                                            ? "Select barangay"
+                                            : "Select city first"
+                                    }
+                                />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                {filteredBarangays.map((b) => (
+                                    <SelectItem
+                                        key={b.brgy_code}
+                                        value={b.brgy_code}
+                                    >
+                                        {b.brgy_name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
 

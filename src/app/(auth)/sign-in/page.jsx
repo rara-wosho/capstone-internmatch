@@ -107,7 +107,7 @@ export default function Page() {
                                         name="email"
                                         type="email"
                                         required
-                                        placeholder="zhand@gmail.com"
+                                        placeholder="Enter a valid email address"
                                     />
                                 </div>
 

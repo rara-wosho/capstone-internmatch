@@ -1,8 +1,8 @@
+"use client";
+
 import CreateCompanyAccountForm from "@/components/forms/CreateCompanyAccountForm";
 import BackButton from "@/components/ui/BackButton";
 import BorderBox from "@/components/ui/BorderBox";
-import { Button } from "@/components/ui/button";
-import Logo from "@/components/ui/Logo";
 import SecondaryLabel from "@/components/ui/SecondaryLabel";
 import Wrapper from "@/components/Wrapper";
 import { ChevronLeft } from "lucide-react";

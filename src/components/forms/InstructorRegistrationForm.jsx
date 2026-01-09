@@ -1,7 +1,7 @@
 "use client";
 
 import { submitRegistration } from "@/lib/actions/instructor";
-import { useActionState, useEffect, useRef, useState } from "react";
+import { useActionState, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import Form from "next/form";
 import FormLabel from "../ui/FormLabel";
@@ -17,6 +17,18 @@ import {
     AccordionTrigger,
 } from "../ui/accordion";
 
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+
+import provinces from "@/address-data/province.json";
+import cities from "@/address-data/city.json";
+import barangays from "@/address-data/barangay.json";
+
 export default function InstructorRegistrationForm() {
     const formRef = useRef(null);
 
@@ -27,6 +39,27 @@ export default function InstructorRegistrationForm() {
         formData: null,
     });
 
+    // For data to be appended in the form
+    const [barangay, setBarangay] = useState("");
+    const [province, setProvince] = useState("");
+    const [city, setCity] = useState("");
+
+    // For select philippines address dropdown
+    const [provinceCode, setProvinceCode] = useState("");
+    const [cityCode, setCityCode] = useState("");
+    const [barangayCode, setBarangayCode] = useState("");
+
+    // Derived filtered lists - memoized to avoid re-filtering on every render
+    const filteredCities = useMemo(
+        () => cities.filter((c) => c.province_code === provinceCode),
+        [provinceCode]
+    );
+
+    const filteredBarangays = useMemo(
+        () => barangays.filter((b) => b.city_code === cityCode),
+        [cityCode]
+    );
+
     // File states
     const [validIdFile, setValidIdFile] = useState(null);
     const [credentialFile, setCredentialFile] = useState(null);
@@ -35,6 +68,7 @@ export default function InstructorRegistrationForm() {
     const [validIdUrl, setValidIdUrl] = useState("");
     const [credentialUrl, setCredentialUrl] = useState("");
 
+    // Upload the file to supabase storage
     const uploadFileToSupabase = async (file, fileType) => {
         try {
             const supabase = createClient();
@@ -165,6 +199,16 @@ export default function InstructorRegistrationForm() {
             formData.set("credentialUrl", credentialUrl);
         }
 
+        if (province) {
+            formData.set("province", province);
+        }
+        if (city) {
+            formData.set("city", city);
+        }
+        if (barangay) {
+            formData.set("barangay", barangay);
+        }
+
         return formAction(formData);
     };
 
@@ -203,13 +247,15 @@ export default function InstructorRegistrationForm() {
                     <p className="text-sm text-muted-foreground mb-3">
                         All fields are required
                     </p>
+
+                    {/* FIrst names  */}
                     <div className="mb-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div>
                             <FormLabel>First Name</FormLabel>
                             <Input
                                 defaultValue={state?.formData?.firstname || ""}
                                 name="firstName"
-                                placeholder="Mark"
+                                placeholder="Enter your first name"
                                 required
                                 disabled={isPending}
                             />
@@ -219,30 +265,43 @@ export default function InstructorRegistrationForm() {
                             <Input
                                 defaultValue={state?.formData?.lastname || ""}
                                 name="lastName"
-                                placeholder="Reyes"
+                                placeholder="Enter your last name"
                                 required
                                 disabled={isPending}
                             />
                         </div>
                     </div>
 
-                    <div className="mb-3">
-                        <FormLabel>Valid Email Address</FormLabel>
-                        <Input
-                            defaultValue={state?.formData?.email || ""}
-                            name="email"
-                            type="email"
-                            placeholder="sample@gmail.com"
-                            required
-                            disabled={isPending}
-                        />
+                    {/* suffix and email */}
+                    <div className="mb-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div>
+                            <FormLabel>Suffix</FormLabel>
+                            <Input
+                                defaultValue={state?.formData?.suffix || ""}
+                                name="suffix"
+                                placeholder="e.g., Jr./Sr."
+                                required
+                                disabled={isPending}
+                            />
+                        </div>
+                        <div>
+                            <FormLabel>Email Address</FormLabel>
+                            <Input
+                                defaultValue={state?.formData?.email || ""}
+                                name="email"
+                                type="email"
+                                placeholder="Enter a valid email address"
+                                required
+                                disabled={isPending}
+                            />
+                        </div>
                     </div>
                     <div className="mb-3">
                         <FormLabel>Institution/School</FormLabel>
                         <Input
                             defaultValue={state?.formData?.school || ""}
                             name="school"
-                            placeholder="Montello High College"
+                            placeholder="Enter your current institution"
                             required
                             disabled={isPending}
                         />
@@ -250,35 +309,104 @@ export default function InstructorRegistrationForm() {
                 </div>
                 <div className="bg-card p-3 md:p-5 lg:p-8 border-b">
                     <div className="mb-3">
-                        <FormLabel>Barangay</FormLabel>
-                        <Input
-                            defaultValue={state?.formData?.barangay || ""}
-                            name="barangay"
-                            placeholder="San Isidro"
-                            required
-                            disabled={isPending}
-                        />
+                        <FormLabel>Province</FormLabel>
+                        <Select
+                            defaultValue=""
+                            onValueChange={(value) => {
+                                const province = provinces.find(
+                                    (p) => p.province_code === value
+                                );
+
+                                setProvinceCode(value);
+                                setCityCode("");
+                                setProvince(province?.province_name || "");
+                            }}
+                        >
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select province" />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                {provinces.map((p) => (
+                                    <SelectItem
+                                        key={p.province_code}
+                                        value={p.province_code}
+                                    >
+                                        {p.province_name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
 
                     <div className="mb-3">
                         <FormLabel>City/Municipality</FormLabel>
-                        <Input
-                            defaultValue={state?.formData?.city || ""}
+
+                        <Select
                             name="city"
-                            placeholder="Davao City"
-                            required
-                            disabled={isPending}
-                        />
+                            defaultValue=""
+                            disabled={!provinceCode}
+                            onValueChange={(value) => {
+                                const city = filteredCities.find(
+                                    (c) => c.city_code === value
+                                );
+
+                                setCityCode(value);
+                                setCity(city?.city_name || "");
+                            }}
+                        >
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select City" />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                {filteredCities.map((c) => (
+                                    <SelectItem
+                                        key={c.city_code}
+                                        value={c.city_code}
+                                    >
+                                        {c.city_name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
+
                     <div className="mb-3">
-                        <FormLabel>Province</FormLabel>
-                        <Input
-                            defaultValue={state?.formData?.province || ""}
-                            name="province"
-                            placeholder="Davao del Sur"
-                            required
-                            disabled={isPending}
-                        />
+                        <FormLabel>Barangay</FormLabel>
+                        <Select
+                            defaultValue=""
+                            disabled={!cityCode}
+                            onValueChange={(value) => {
+                                const barangay = filteredBarangays.find(
+                                    (b) => b.brgy_code === value
+                                );
+
+                                setBarangayCode(value);
+                                setBarangay(barangay?.brgy_name);
+                            }}
+                        >
+                            <SelectTrigger className="w-full">
+                                <SelectValue
+                                    placeholder={
+                                        cityCode
+                                            ? "Select barangay"
+                                            : "Select city first"
+                                    }
+                                />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                {filteredBarangays.map((b) => (
+                                    <SelectItem
+                                        key={b.brgy_code}
+                                        value={b.brgy_code}
+                                    >
+                                        {b.brgy_name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
                 <div className="bg-card p-3 md:p-5 lg:p-8 rounded-b-xl">

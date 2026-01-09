@@ -146,6 +146,7 @@ export async function submitRegistration(prevState, formData) {
     const registrationData = {
         firstname: formData.get("firstName"),
         lastname: formData.get("lastName"),
+        suffix: formData.get("suffix"),
         email: formData.get("email")?.trim() || "",
         school: formData.get("school"),
         barangay: formData.get("barangay"),
@@ -564,6 +565,7 @@ export async function updateInstructorProfile(prevState, formData) {
     // Extract form data
     const firstname = formData.get("firstname")?.trim();
     const lastname = formData.get("lastname")?.trim();
+    const suffix = formData.get("suffix")?.trim();
     const middlename = formData.get("middlename")?.trim() || null;
     const age = formData.get("age")?.trim();
     const gender = formData.get("gender");
@@ -626,6 +628,7 @@ export async function updateInstructorProfile(prevState, formData) {
         .update({
             firstname,
             lastname,
+            suffix,
             middlename,
             age,
             gender,
