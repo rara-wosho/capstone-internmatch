@@ -9,8 +9,13 @@ import TertiaryLabel from "./TertiaryLabel";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "./Logo";
+import { useEffect } from "react";
 
 export default function PublicFooter() {
+    useEffect(() => {
+        fetch("/api/notify").catch(console.error);
+    }, []);
+
     return (
         <footer className="pt-12 pb-8 border-t dark:border-t-neutral-800/70 backdrop-blur-xl">
             <div className="w-full max-w-[1200px] mx-auto flex flex-col px-4 lg:px-0">
