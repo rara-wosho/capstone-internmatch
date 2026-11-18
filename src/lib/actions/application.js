@@ -123,7 +123,7 @@ export async function submitApplication(formData) {
             sendEmailAsync(companyEmail, student_name, application.id).catch(
                 (error) => {
                     console.error("Email failed (non-blocking):", error);
-                }
+                },
             );
         }
 
@@ -206,7 +206,7 @@ export async function updateApplicationStatus({
         if (error) {
             console.error(
                 "Error inserting notification about accepted application: ",
-                error.message
+                error.message,
             );
         }
     }
@@ -223,7 +223,7 @@ export async function updateApplicationStatus({
         if (error) {
             console.error(
                 'Error sending "Accepted" application status. ',
-                error?.message
+                error?.message,
             );
         }
     }
@@ -240,7 +240,7 @@ export async function updateApplicationStatus({
         if (error) {
             console.error(
                 'Error sending "Rejected" application status. ',
-                error?.message
+                error?.message,
             );
         }
     }
@@ -399,7 +399,7 @@ export async function getApprovedApplicantsByCompany(companyId, search) {
                 province,
                 email
             )
-            `
+            `,
         )
         .eq("company_id", companyId)
         .eq("status", "accepted")
@@ -413,7 +413,7 @@ export async function getApprovedApplicantsByCompany(companyId, search) {
         // Use the correct syntax for filtering on joined tables
         query = query.or(
             `firstname.ilike.${searchTerm},middlename.ilike.${searchTerm},lastname.ilike.${searchTerm},school.ilike.${searchTerm},course.ilike.${searchTerm}`,
-            { foreignTable: "students" }
+            { foreignTable: "students" },
         );
     }
 
@@ -557,7 +557,7 @@ export async function approveStudentApplication({
         if (notificationResult.error) {
             console.error(
                 "Notification creation error:",
-                notificationResult.error
+                notificationResult.error,
             );
         }
 
@@ -619,9 +619,9 @@ async function sendApprovalEmails({
                 .catch((error) => {
                     console.error(
                         "Error sending approval email to student:",
-                        error.message
+                        error.message,
                     );
-                })
+                }),
         );
     }
 
@@ -638,9 +638,9 @@ async function sendApprovalEmails({
                 .catch((error) => {
                     console.error(
                         "Error sending approval email to company:",
-                        error.message
+                        error.message,
                     );
-                })
+                }),
         );
     }
 
@@ -655,7 +655,7 @@ export async function submitCannotProceedStatus(
     applicationId,
     message = "",
     companyName,
-    studentEmail
+    studentEmail,
 ) {
     const supabase = await createClient();
 
@@ -689,7 +689,7 @@ export async function submitCannotProceedStatus(
         if (emailError) {
             console.log(
                 "Error sending email for password change: ",
-                emailError.message
+                emailError.message,
             );
         }
     }
